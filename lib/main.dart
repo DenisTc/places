@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MySecondWidget(),
     );
   }
 }
@@ -59,6 +59,40 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class MyFirstWidget extends StatelessWidget {
+  int counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    print(++counter);
+    return Container(
+      child: Center( 
+          child: Text('Hello!'),
+      ),
+    );
+  }
+}
+
+class MySecondWidget extends StatefulWidget {
+  @override
+  createState() => new MySecondWidgetState();
+}
+
+class MySecondWidgetState extends State<MySecondWidget> {
+  int counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    print(++counter);
+    return Container(
+      child: Center( 
+          child: Text('Hello!', textDirection: TextDirection.ltr),
       ),
     );
   }
