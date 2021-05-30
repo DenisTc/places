@@ -63,3 +63,54 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Surf',
+      home: MyFirstWidget()
+    );
+  }
+}
+
+class MyFirstWidget extends StatelessWidget {
+  int counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    print(++counter);
+    return Container(
+      child: Center( 
+          child: Text('Hello!'),
+      ),
+    );
+  }
+
+  getContextRunType() {
+    //return context.runtimeType;
+  }
+}
+
+class MySecondWidget extends StatefulWidget {
+  @override
+  createState() => new MySecondWidgetState();
+}
+
+class MySecondWidgetState extends State<MySecondWidget> {
+  int counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    print(++counter);
+    return Container(
+      child: Center( 
+          child: Text('Hello!', textDirection: TextDirection.ltr),
+      ),
+    );
+  }
+
+  getContextRunType() {
+    return context.runtimeType;
+  }
+} 
