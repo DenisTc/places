@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(App());
 }
 
 class MyApp extends StatelessWidget {
@@ -64,6 +64,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+class App extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Surf',
+      home: MyFirstWidget()
+    );
+  }
+}
+
 // ignore: must_be_immutable
 class MyFirstWidget extends StatelessWidget {
   int counter = 0;
@@ -76,6 +86,10 @@ class MyFirstWidget extends StatelessWidget {
           child: Text('Hello!'),
       ),
     );
+  }
+
+  getContextRunType() {
+    //return context.runtimeType;
   }
 }
 
@@ -96,4 +110,8 @@ class MySecondWidgetState extends State<MySecondWidget> {
       ),
     );
   }
-}
+
+  getContextRunType() {
+    return context.runtimeType;
+  }
+} 
