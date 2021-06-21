@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/screen/sight_card.dart';
 
 class SightDetails extends StatelessWidget {
-  //final Sight sight;
-
-  //const SightDetails(this.sight);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
