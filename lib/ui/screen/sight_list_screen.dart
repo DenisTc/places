@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
+import 'package:places/ui/colors.dart';
 import 'package:places/ui/screen/sight_card.dart';
 
 class SightListScreen extends StatefulWidget {
@@ -45,7 +46,7 @@ class SightAppBar extends StatelessWidget implements PreferredSizeWidget{
                   fontStyle: FontStyle.normal,
                   fontWeight: FontWeight.w700,
                   fontSize: 32,
-                  color: "#252849".toColor())),
+                  color: textColorPrimary)),
         );
   }
 }

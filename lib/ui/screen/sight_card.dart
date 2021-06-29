@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/domains/sight.dart';
+import 'package:places/ui/colors.dart';
 
 class SightCard extends StatelessWidget {
   final Sight sight;
@@ -25,7 +26,7 @@ class SightCard extends StatelessWidget {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.blue,
-                      "#F5F5F5".toColor(),
+                      cardBackgroundColor,
                     ],
                   )),
               height: 96,
@@ -58,7 +59,7 @@ class SightCard extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                       bottomLeft: const Radius.circular(16),
                       bottomRight: const Radius.circular(16)),
-                  color: "#F5F5F5".toColor()),
+                  color: cardBackgroundColor),
               width: double.infinity,
               height: 92,
               padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
@@ -77,7 +78,7 @@ class SightCard extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 2),
                     child: Text(sight.details,
                         maxLines: 2,
-                        style: TextStyle(color: "#7C7E92".toColor()),
+                        style: TextStyle(color: textColorSecondary),
                         overflow: TextOverflow.ellipsis),
                   )
                 ],
@@ -87,17 +88,5 @@ class SightCard extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-extension ColorExtension on String {
-  toColor() {
-    var hexColor = this.replaceAll("#", "");
-    if (hexColor.length == 6) {
-      hexColor = "FF" + hexColor;
-    }
-    if (hexColor.length == 8) {
-      return Color(int.parse("0x$hexColor"));
-    }
   }
 }

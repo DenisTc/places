@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/colors.dart';
 import 'package:places/ui/screen/sight_card.dart';
 
 class SightDetails extends StatelessWidget {
@@ -32,7 +33,7 @@ class SightDetails extends StatelessWidget {
                           fontSize: 24,
                           fontWeight: FontWeight.w700,
                           height: 1.2,
-                          color: "#3B3E5B".toColor()))
+                          color: textColorPrimary))
                 ]),
                 Padding(
                   padding: const EdgeInsets.only(top: 2),
@@ -40,6 +41,7 @@ class SightDetails extends StatelessWidget {
                     Text('ресторан',
                         style: TextStyle(
                             fontFamily: 'Roboto',
+                            color: textColorPrimary,
                             fontWeight: FontWeight.w700,
                             height: 1.3,
                             fontSize: 14)),
@@ -48,7 +50,7 @@ class SightDetails extends StatelessWidget {
                       child: Text('закрыто до 09:00',
                           style: TextStyle(
                               fontFamily: 'Roboto',
-                              color: "#7C7E92".toColor(),
+                              color: textColorSecondary,
                               fontWeight: FontWeight.w400,
                               height: 1.3,
                               fontSize: 14)),
@@ -61,7 +63,7 @@ class SightDetails extends StatelessWidget {
                       'Пряный вкус радостной жизни вместе с шеф-поваром Изо Дзандзава, благодаря которой у гостей ресторана есть возможность выбирать из двух направлений: европейского и восточного',
                       style: TextStyle(
                           fontFamily: 'Roboto',
-                          color: "#3B3E5B".toColor(),
+                          color: textColorPrimary,
                           fontWeight: FontWeight.w400,
                           height: 1.3,
                           fontSize: 14))),
@@ -73,7 +75,7 @@ class SightDetails extends StatelessWidget {
                       width: 328,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: "#4CAF50".toColor()),
+                          color: cardGreebBtnColor),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -105,7 +107,7 @@ class SightDetails extends StatelessWidget {
                                   child: Row(
                                     children: [
                                       Container(
-                                          child: Icon(Icons.calendar_today, color: Color.fromRGBO(59, 62, 91, 1))),
+                                          child: Icon(Icons.calendar_today, color: Color.fromRGBO(59, 62, 91, 0.56))),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 9),                                          child: Text(
                                           'Запланировать',
@@ -128,14 +130,13 @@ class SightDetails extends StatelessWidget {
                                   child: Row(
                                     children: [
                                       Container(
-                                        child: Icon(Icons.favorite_border, color: Color.fromRGBO(59, 62, 91, 1))),
+                                        child: Icon(Icons.favorite_border, color: textColorPrimary)),
                                       Padding(
                                         padding: const EdgeInsets.only(left: 9),
                                             child: Text(
                                           'В избранное',
                                           style: TextStyle(
-                                              color: Color.fromRGBO(
-                                                  124, 126, 146, 0.56),
+                                              color: textColorPrimary,
                                               fontSize: 14,
                                               height: 1.2),
                                         ),
