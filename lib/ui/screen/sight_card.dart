@@ -17,12 +17,14 @@ class SightCard extends StatelessWidget {
         child: Column(
           children: [
             Container(
-                height: 96,
-                child: Stack(children: [
+              height: 96,
+              child: Stack(
+                children: [
                   ClipRRect(
                     borderRadius: BorderRadius.only(
-                        topLeft: const Radius.circular(16),
-                        topRight: const Radius.circular(16)),
+                      topLeft: const Radius.circular(16),
+                      topRight: const Radius.circular(16),
+                    ),
                     child: Image.network(
                       sight.url,
                       fit: BoxFit.cover,
@@ -59,12 +61,15 @@ class SightCard extends StatelessWidget {
                           )
                         ]),
                   )
-                ])),
+                ],
+              ),
+            ),
             Container(
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                      bottomLeft: const Radius.circular(16),
-                      bottomRight: const Radius.circular(16)),
+                    bottomLeft: const Radius.circular(16),
+                    bottomRight: const Radius.circular(16),
+                  ),
                   color: cardBackgroundColor),
               width: double.infinity,
               height: 92,
