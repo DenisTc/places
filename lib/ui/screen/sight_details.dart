@@ -102,7 +102,7 @@ class SightDetails extends StatelessWidget {
                       width: 328,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: cardGreebBtnColor),
+                          color: lightGreen),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
