@@ -121,7 +121,10 @@ class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
             borderRadius: BorderRadius.circular(25),
             color: lightGrey,
           ),
-          margin: EdgeInsets.symmetric(vertical: 6, horizontal: 16),
+          margin: EdgeInsets.symmetric(
+            vertical: 6,
+            horizontal: 16,
+          ),
           child: TabBar(
             tabs: [
               Tab(
@@ -148,11 +151,12 @@ class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
         child: Text(
           'Избранное',
           style: TextStyle(
-              fontFamily: "Roboto",
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
-              color: textColorPrimary),
+            fontFamily: "Roboto",
+            fontStyle: FontStyle.normal,
+            fontWeight: FontWeight.w500,
+            fontSize: 18,
+            color: textColorPrimary,
+          ),
         ),
       ),
     );

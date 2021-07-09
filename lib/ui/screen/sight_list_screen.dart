@@ -45,14 +45,17 @@ class SightAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: false,
       toolbarHeight: height,
-      title: Text(title,
-          textAlign: TextAlign.left,
-          style: TextStyle(
-              fontFamily: "Roboto",
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w700,
-              fontSize: 32,
-              color: textColorPrimary)),
+      title: Text(
+        title,
+        textAlign: TextAlign.left,
+        style: TextStyle(
+          fontFamily: "Roboto",
+          fontStyle: FontStyle.normal,
+          fontWeight: FontWeight.w700,
+          fontSize: 32,
+          color: textColorPrimary,
+        ),
+      ),
     );
   }
 }

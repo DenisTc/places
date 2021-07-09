@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/ui/colors.dart';
@@ -53,8 +52,9 @@ class FavoriteSightCard extends SightCard {
                           child: Text(
                             sight.type,
                             style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                         visited
@@ -66,7 +66,9 @@ class FavoriteSightCard extends SightCard {
                                 Icons.calendar_today_outlined,
                                 color: Colors.white,
                               ),
-                        SizedBox(width: 23),
+                        SizedBox(
+                          width: 23,
+                        ),
                         Icon(
                           Icons.clear_outlined,
                           color: Colors.white,
@@ -85,20 +87,27 @@ class FavoriteSightCard extends SightCard {
                   ),
                   color: cardBackgroundColor),
               width: double.infinity,
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+                bottom: 16,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
                     height: 16,
                   ),
-                  Text(sight.name,
-                      maxLines: 2,
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                      textAlign: TextAlign.left,
-                      overflow: TextOverflow.ellipsis),
-                  SizedBox(height: 2),
+                  Text(
+                    sight.name,
+                    maxLines: 2,
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.left,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(
+                    height: 2,
+                  ),
                   visited
                       ? Text(
                           'Цель достигнута 12 окт. 2020',
@@ -116,7 +125,9 @@ class FavoriteSightCard extends SightCard {
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                  SizedBox(height: 16),
+                  SizedBox(
+                    height: 16,
+                  ),
                   Text(
                     'закрыто до 09:00',
                     maxLines: 2,

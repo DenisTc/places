@@ -15,7 +15,10 @@ class SightCard extends StatelessWidget {
         margin: EdgeInsets.all(20),
         alignment: Alignment.topLeft,
         child: Column(
-          children: [SightCardTop(sight: sight), SightCardBottom(sight: sight)],
+          children: [
+            SightCardTop(sight: sight),
+            SightCardBottom(sight: sight),
+          ],
         ),
       ),
     );
@@ -34,30 +37,45 @@ class SightCardBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-            bottomLeft: const Radius.circular(16),
-            bottomRight: const Radius.circular(16),
-          ),
-          color: cardBackgroundColor),
+        borderRadius: BorderRadius.only(
+          bottomLeft: const Radius.circular(16),
+          bottomRight: const Radius.circular(16),
+        ),
+        color: cardBackgroundColor,
+      ),
       width: double.infinity,
       height: 92,
-      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+        bottom: 16,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
             height: 16,
           ),
-          Text(sight.name,
-              maxLines: 2,
-              style: TextStyle(fontSize: 16),
-              textAlign: TextAlign.left,
-              overflow: TextOverflow.ellipsis),
-          SizedBox(height: 2),
-          Text(sight.details,
-              maxLines: 2,
-              style: TextStyle(color: textColorSecondary),
-              overflow: TextOverflow.ellipsis)
+          Text(
+            sight.name,
+            maxLines: 2,
+            style: TextStyle(
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(
+            height: 2,
+          ),
+          Text(
+            sight.details,
+            maxLines: 2,
+            style: TextStyle(
+              color: textColorSecondary,
+            ),
+            overflow: TextOverflow.ellipsis,
+          )
         ],
       ),
     );
@@ -105,18 +123,21 @@ class SightCardTop extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    sight.type,
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w700),
-                  ),
-                  Icon(
-                    Icons.favorite_border,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  sight.type,
+                  style: TextStyle(
                     color: Colors.white,
-                  )
-                ]),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Icon(
+                  Icons.favorite_border,
+                  color: Colors.white,
+                )
+              ],
+            ),
           )
         ],
       ),

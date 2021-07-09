@@ -14,19 +14,27 @@ class SightBottomNavBar extends StatelessWidget {
       unselectedItemColor: textColorPrimary,
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.list_alt_sharp),
+          icon: Icon(
+            Icons.list_alt_sharp,
+          ),
           label: '',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.map),
+          icon: Icon(
+            Icons.map,
+          ),
           label: '',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.favorite),
+          icon: Icon(
+            Icons.favorite,
+          ),
           label: '',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.settings),
+          icon: Icon(
+            Icons.settings,
+          ),
           label: '',
         ),
       ],
