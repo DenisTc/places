@@ -16,87 +16,130 @@ class SightCard extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: Column(
           children: [
-            Container(
-              height: 96,
-              child: Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(16),
-                      topRight: const Radius.circular(16),
-                    ),
-                    child: Image.network(
-                      sight.url,
-                      fit: BoxFit.cover,
-                      height: double.infinity,
-                      width: double.infinity,
-                      loadingBuilder: (BuildContext context, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            sight.type,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700),
-                          ),
-                          Icon(
-                            Icons.favorite_border,
-                            color: Colors.white,
-                          )
-                        ]),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: const Radius.circular(16),
-                    bottomRight: const Radius.circular(16),
-                  ),
-                  color: cardBackgroundColor),
-              width: double.infinity,
-              height: 92,
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Text(sight.name,
-                      maxLines: 2,
-                      style: TextStyle(fontSize: 16),
-                      textAlign: TextAlign.left,
-                      overflow: TextOverflow.ellipsis),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Text(sight.details,
-                        maxLines: 2,
-                        style: TextStyle(color: textColorSecondary),
-                        overflow: TextOverflow.ellipsis),
-                  )
-                ],
-              ),
-            )
+            SightCardTop(sight: sight),
+            SightCardBottom(sight: sight),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SightCardBottom extends StatelessWidget {
+  const SightCardBottom({
+    Key? key,
+    required this.sight,
+  }) : super(key: key);
+
+  final Sight sight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          bottomLeft: const Radius.circular(16),
+          bottomRight: const Radius.circular(16),
+        ),
+        color: cardBackgroundColor,
+      ),
+      width: double.infinity,
+      height: 92,
+      padding: const EdgeInsets.only(
+        left: 16,
+        right: 16,
+        bottom: 16,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 16,
+          ),
+          Text(
+            sight.name,
+            maxLines: 2,
+            style: TextStyle(
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.ellipsis,
+          ),
+          SizedBox(
+            height: 2,
+          ),
+          Text(
+            sight.details,
+            maxLines: 2,
+            style: TextStyle(
+              color: textColorSecondary,
+            ),
+            overflow: TextOverflow.ellipsis,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class SightCardTop extends StatelessWidget {
+  const SightCardTop({
+    Key? key,
+    required this.sight,
+  }) : super(key: key);
+
+  final Sight sight;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 96,
+      child: Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: const Radius.circular(16),
+              topRight: const Radius.circular(16),
+            ),
+            child: Image.network(
+              sight.url,
+              fit: BoxFit.cover,
+              height: double.infinity,
+              width: double.infinity,
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  sight.type,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Icon(
+                  Icons.favorite_border,
+                  color: Colors.white,
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }
