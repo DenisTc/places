@@ -4,6 +4,7 @@ import 'package:places/ui/colors.dart';
 import 'package:places/ui/screen/sight_bottom_nav_bar.dart';
 import 'package:places/ui/screen/sight_card_favorite.dart';
 
+/// Screen for displaying planned and visited places
 class VisitingScreen extends StatelessWidget {
   const VisitingScreen({Key? key}) : super(key: key);
 
