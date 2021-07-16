@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
-import 'package:places/ui/screen/sight_bottom_nav_bar.dart';
-import 'package:places/ui/screen/sight_card_favorite.dart';
+import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
+import 'package:places/ui/screens/sight_card_favorite.dart';
 
 /// Screen for displaying planned and visited places
 class VisitingScreen extends StatelessWidget {
@@ -103,6 +103,8 @@ class _FavoritesEmpty extends StatelessWidget {
 }
 
 class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
+  final bool isDarkMode = false;
+
   const _FavoriteAppbar({
     Key? key,
   }) : super(key: key);
@@ -120,7 +122,7 @@ class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: lightGrey,
+            color: isDarkMode ? blackRussian : whiteSmoke,
           ),
           margin: EdgeInsets.symmetric(
             vertical: 6,
@@ -136,14 +138,15 @@ class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
               ),
             ],
             indicator: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              color: textColorPrimary,
-            ),
+                borderRadius: BorderRadius.circular(25),
+                color: isDarkMode ? Colors.white : textColorPrimary
+                ),
             labelStyle: TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 14,
             ),
-            unselectedLabelColor: textColorSecondary,
+            unselectedLabelColor: textColorSecondary.withOpacity(0.56),
+            labelColor: isDarkMode ? textColorPrimary : Colors.white,
           ),
         ),
       ),
@@ -151,13 +154,10 @@ class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
         padding: const EdgeInsets.all(16),
         child: Text(
           'Избранное',
-          style: TextStyle(
-            fontFamily: "Roboto",
-            fontStyle: FontStyle.normal,
-            fontWeight: FontWeight.w500,
-            fontSize: 18,
-            color: textColorPrimary,
-          ),
+          style: Theme.of(context).textTheme.headline1?.copyWith(
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+              ),
         ),
       ),
     );

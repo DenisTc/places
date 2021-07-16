@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/colors.dart';
 import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
 import 'package:places/ui/screens/sight_card.dart';
 
@@ -13,7 +12,7 @@ class SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: SightAppBar("Список\nинтересных мест", 128),
+      appBar: _SightAppBar("Список\nинтересных мест", 128),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -29,11 +28,11 @@ class SightListScreenState extends State<SightListScreen> {
   }
 }
 
-class SightAppBar extends StatelessWidget implements PreferredSizeWidget {
+class _SightAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final double height;
 
-  const SightAppBar(this.title, this.height);
+  const _SightAppBar(this.title, this.height);
 
   @override
   Size get preferredSize => Size.fromHeight(height);
@@ -48,13 +47,7 @@ class SightAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         textAlign: TextAlign.left,
-        style: TextStyle(
-          fontFamily: "Roboto",
-          fontStyle: FontStyle.normal,
-          fontWeight: FontWeight.w700,
-          fontSize: 32,
-          color: textColorPrimary,
-        ),
+        style: Theme.of(context).textTheme.headline1,
       ),
     );
   }

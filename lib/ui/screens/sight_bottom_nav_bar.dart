@@ -11,8 +11,9 @@ class SightBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomNavigationBar(
       currentIndex: 2,
-      selectedItemColor: textColorPrimary,
-      unselectedItemColor: textColorPrimary,
+      type: BottomNavigationBarType.fixed,
+      selectedItemColor: Theme.of(context).bottomNavigationBarTheme.selectedItemColor,
+      unselectedItemColor: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(
