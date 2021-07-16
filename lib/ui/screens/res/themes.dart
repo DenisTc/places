@@ -3,7 +3,9 @@ import 'package:places/ui/colors.dart';
 import 'package:places/ui/styles.dart';
 
 final lightTheme = ThemeData(
-  accentColor: whiteSmoke,
+  accentColor: Colors.white,
+  primaryColor: whiteSmoke,
+  primaryColorLight: textColorSecondary.withOpacity(0),
   textTheme: TextTheme(
     headline1: mainText,
     bodyText1: cardTextDesc.copyWith(color: textColorPrimary),
@@ -19,7 +21,9 @@ final lightTheme = ThemeData(
 final darkTheme = ThemeData(
   iconTheme: IconThemeData(color: Colors.white),
   scaffoldBackgroundColor: nightRider,
-  accentColor: blackRussian,
+  accentColor: darkColorSecondary,
+  primaryColor: darkColorPrimary,
+  primaryColorLight: textColorSecondary.withOpacity(0.2),
   primaryTextTheme: TextTheme(headline6: mainText),
   textTheme: TextTheme(
     headline1: mainText.copyWith(color: Colors.white),
@@ -28,7 +32,7 @@ final darkTheme = ThemeData(
     subtitle1: cardTextType.copyWith(color: textColorSecondary, fontWeight: FontWeight.w700),
   ),
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    backgroundColor: blackRussian,
+    backgroundColor: darkColorSecondary,
     selectedItemColor: Colors.white,
     unselectedItemColor: Colors.white,
   ),

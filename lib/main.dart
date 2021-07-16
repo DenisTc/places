@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: isDarkMode ? darkTheme : lightTheme,
-      home: SightListScreen() //SightDetails(),//VisitingScreen(),//SightListScreen(),
+      home: VisitingScreen() //SightDetails(),//VisitingScreen(),//SightListScreen(),
     );
   }
 }

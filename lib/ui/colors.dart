@@ -8,7 +8,8 @@ const Color textColorPrimary = _blueZodiac,
             lightGreen = _fruitSalad,
             favoriteColor = _luckyPoint,
             whiteSmoke = _whiteSmoke,
-            blackRussian = _blackRussian,
+            darkColorPrimary = _darkColorPrimary,
+            darkColorSecondary = _darkColorSecondary,
             nightRider = _nightRider;
 
 // Основная палитра (http://www.color-blindness.com/color-name-hue/)
@@ -17,5 +18,6 @@ const Color _blueZodiac = Color(0xFF3B3E5B),
             _fruitSalad = Color(0xFF4CAF50),
             _luckyPoint = Color(0xFF252849),
             _whiteSmoke = Color(0xFFF5F5F5),
-            _blackRussian = Color(0xFF1A1A20),
+            _darkColorPrimary = Color(0xFF1A1A20),
+            _darkColorSecondary = Color(0xFF21222C),
             _nightRider = Color(0xFF2E2E2E);

@@ -13,6 +13,7 @@ class VisitingScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: Theme.of(context).accentColor,
         appBar: _FavoriteAppbar(),
         body: _FavoriteTabBarView(),
         bottomNavigationBar: SightBottomNavBar(),
@@ -122,31 +123,35 @@ class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: isDarkMode ? blackRussian : whiteSmoke,
+            color: isDarkMode ? darkColorPrimary : whiteSmoke,
           ),
           margin: EdgeInsets.symmetric(
             vertical: 6,
             horizontal: 16,
           ),
-          child: TabBar(
-            tabs: [
-              Tab(
-                text: 'Хочу посетить',
-              ),
-              Tab(
-                text: 'Посетил',
+          child: Stack(
+            children: [
+              TabBar(
+                tabs: [
+                  Tab(
+                    text: 'Хочу посетить',
+                  ),
+                  Tab(
+                    text: 'Посетил',
+                  ),
+                ],
+                indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(25),
+                    color: isDarkMode ? Colors.white : textColorPrimary
+                    ),
+                labelStyle: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                ),
+                unselectedLabelColor: textColorSecondary.withOpacity(0.56),
+                labelColor: isDarkMode ? textColorPrimary : Colors.white,
               ),
             ],
-            indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: isDarkMode ? Colors.white : textColorPrimary
-                ),
-            labelStyle: TextStyle(
-              fontWeight: FontWeight.w700,
-              fontSize: 14,
-            ),
-            unselectedLabelColor: textColorSecondary.withOpacity(0.56),
-            labelColor: isDarkMode ? textColorPrimary : Colors.white,
           ),
         ),
       ),

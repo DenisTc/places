@@ -41,7 +41,7 @@ class _SightCardBottom extends StatelessWidget {
           bottomLeft: const Radius.circular(16),
           bottomRight: const Radius.circular(16),
         ),
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).primaryColor,
       ),
       width: double.infinity,
       height: 92,

@@ -88,7 +88,7 @@ class SightDetails extends StatelessWidget {
                                   Icons.calendar_today,
                                   color: Theme.of(context)
                                       .iconTheme
-                                      .color, //Color.fromRGBO(59, 62, 91, 0.56),
+                                      .color, 
                                 ),
                               ),
                               SizedBox(width: 9),
@@ -112,7 +112,7 @@ class SightDetails extends StatelessWidget {
                                   Icons.favorite_border,
                                   color: Theme.of(context)
                                       .iconTheme
-                                      .color, //textColorPrimary,
+                                      .color,
                                 ),
                               ),
                               Padding(
