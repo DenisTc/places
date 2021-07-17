@@ -104,7 +104,7 @@ class _FavoritesEmpty extends StatelessWidget {
 }
 
 class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
-  final bool isDarkMode = false;
+  final bool isDarkMode = true;
 
   const _FavoriteAppbar({
     Key? key,
