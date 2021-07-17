@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/colors.dart';
 
-/// Creates a custom bottom navigation bar
+/// Custom bottom navigation bar.
 class SightBottomNavBar extends StatelessWidget {
   const SightBottomNavBar({
     Key? key,

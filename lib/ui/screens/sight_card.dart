@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/domains/sight.dart';
-import 'package:places/ui/colors.dart';
 
+/// A card of an interesting place to be displayed on the main screen of the application.
 class SightCard extends StatelessWidget {
   final Sight sight;
 

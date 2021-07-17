@@ -3,7 +3,7 @@ import 'package:places/domains/sight.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/screens/sight_card.dart';
 
-/// Creates a card of place with image and description for favorites screen
+/// A card of an interesting place to display on the favourites' screen
 class FavoriteSightCard extends SightCard {
   final bool visited;
   FavoriteSightCard(Sight sight, this.visited) : super(sight);
