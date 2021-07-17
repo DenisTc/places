@@ -1,4 +1,2 @@
 # places
-
-A project within the framework of a training course on Flutter from the Surf company
-
+Mobile application with a list of interesting places and for traveling around the world.
