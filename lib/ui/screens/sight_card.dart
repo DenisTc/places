@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/domains/sight.dart';
-import 'package:places/ui/colors.dart';
 
+/// A card of an interesting place to be displayed on the main screen of the application.
 class SightCard extends StatelessWidget {
   final Sight sight;
 
@@ -10,14 +10,14 @@ class SightCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.5,
+      aspectRatio: 1.9,
       child: Container(
-        margin: EdgeInsets.all(20),
+        margin: EdgeInsets.symmetric(horizontal: 20),
         alignment: Alignment.topLeft,
         child: Column(
           children: [
-            SightCardTop(sight: sight),
-            SightCardBottom(sight: sight),
+            _SightCardTop(sight: sight),
+            _SightCardBottom(sight: sight),
           ],
         ),
       ),
@@ -25,8 +25,8 @@ class SightCard extends StatelessWidget {
   }
 }
 
-class SightCardBottom extends StatelessWidget {
-  const SightCardBottom({
+class _SightCardBottom extends StatelessWidget {
+  const _SightCardBottom({
     Key? key,
     required this.sight,
   }) : super(key: key);
@@ -41,7 +41,7 @@ class SightCardBottom extends StatelessWidget {
           bottomLeft: const Radius.circular(16),
           bottomRight: const Radius.circular(16),
         ),
-        color: cardBackgroundColor,
+        color: Theme.of(context).primaryColor,
       ),
       width: double.infinity,
       height: 92,
@@ -59,9 +59,10 @@ class SightCardBottom extends StatelessWidget {
           Text(
             sight.name,
             maxLines: 2,
-            style: TextStyle(
-              fontSize: 16,
-            ),
+            style: Theme.of(context).textTheme.headline1?.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
             textAlign: TextAlign.left,
             overflow: TextOverflow.ellipsis,
           ),
@@ -71,9 +72,7 @@ class SightCardBottom extends StatelessWidget {
           Text(
             sight.details,
             maxLines: 2,
-            style: TextStyle(
-              color: textColorSecondary,
-            ),
+            style: Theme.of(context).textTheme.bodyText2,
             overflow: TextOverflow.ellipsis,
           )
         ],
@@ -82,8 +81,8 @@ class SightCardBottom extends StatelessWidget {
   }
 }
 
-class SightCardTop extends StatelessWidget {
-  const SightCardTop({
+class _SightCardTop extends StatelessWidget {
+  const _SightCardTop({
     Key? key,
     required this.sight,
   }) : super(key: key);

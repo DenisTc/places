@@ -3,8 +3,7 @@ import 'package:places/domains/sight.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/screens/sight_card.dart';
 
-
-/// Creates a card of place with image and description for favorites screen
+/// A card of an interesting place to display on the favourites' screen
 class FavoriteSightCard extends SightCard {
   final bool visited;
   FavoriteSightCard(Sight sight, this.visited) : super(sight);
@@ -83,11 +82,12 @@ class FavoriteSightCard extends SightCard {
             ),
             Container(
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: const Radius.circular(16),
-                    bottomRight: const Radius.circular(16),
-                  ),
-                  color: cardBackgroundColor),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: const Radius.circular(16),
+                  bottomRight: const Radius.circular(16),
+                ),
+                color: Theme.of(context).primaryColor,
+              ),
               width: double.infinity,
               padding: const EdgeInsets.only(
                 left: 16,
@@ -103,7 +103,7 @@ class FavoriteSightCard extends SightCard {
                   Text(
                     sight.name,
                     maxLines: 2,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                     textAlign: TextAlign.left,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -114,15 +114,13 @@ class FavoriteSightCard extends SightCard {
                       ? Text(
                           'Цель достигнута 12 окт. 2020',
                           maxLines: 2,
-                          style: TextStyle(
-                            color: textColorSecondary,
-                          ),
+                          style: Theme.of(context).textTheme.bodyText2,
                           overflow: TextOverflow.ellipsis,
                         )
                       : Text(
                           'Запланировано на 12 окт. 2020',
                           maxLines: 2,
-                          style: TextStyle(
+                          style: Theme.of(context).textTheme.bodyText2?.copyWith(
                             color: lightGreen,
                           ),
                           overflow: TextOverflow.ellipsis,
@@ -133,9 +131,7 @@ class FavoriteSightCard extends SightCard {
                   Text(
                     'закрыто до 09:00',
                     maxLines: 2,
-                    style: TextStyle(
-                      color: textColorSecondary,
-                    ),
+                    style: Theme.of(context).textTheme.bodyText2,
                     overflow: TextOverflow.ellipsis,
                   )
                 ],
