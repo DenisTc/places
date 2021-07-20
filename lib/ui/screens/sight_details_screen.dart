@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:places/mocks.dart';
+import 'package:places/domains/sight.dart';
 import 'package:places/ui/colors.dart';
 
+/// A screen with a detailed description of the place
 class SightDetails extends StatelessWidget {
+  final Sight sight;
+
+  const SightDetails({Key? key, required this.sight}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +19,7 @@ class SightDetails extends StatelessWidget {
             color: Colors.brown,
             child: Stack(
               children: [
-                _PlaceImage(),
+                _PlaceImage(imgUrl: sight.url),
                 _ArrowBackButton(),
               ],
             ),
@@ -29,11 +34,11 @@ class SightDetails extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Row(
                       children: [
                         Text(
-                          mocks[0].name,
+                          sight.name,
                           style: Theme.of(context)
                               .textTheme
                               .headline1
@@ -41,11 +46,11 @@ class SightDetails extends StatelessWidget {
                         )
                       ],
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Row(
                       children: [
                         Text(
-                          mocks[0].type,
+                          sight.type,
                           style: Theme.of(context).textTheme.subtitle1,
                         ),
                         Padding(
@@ -62,19 +67,19 @@ class SightDetails extends StatelessWidget {
                         )
                       ],
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Text(
-                      mocks[0].details,
+                      sight.details,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     _CreateRouteButton(),
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                     Divider(
                       height: 4,
                       color: textColorSecondary,
                     ),
-                    SizedBox(height: 19),
+                    const SizedBox(height: 19),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -91,13 +96,13 @@ class SightDetails extends StatelessWidget {
                                       .color, 
                                 ),
                               ),
-                              SizedBox(width: 9),
+                              const SizedBox(width: 9),
                               Text(
                                 'Запланировать',
                                 style:
                                     Theme.of(context).textTheme.bodyText1,
                               ),
-                              SizedBox(width: 14),
+                              const SizedBox(width: 14),
                             ],
                           ),
                         ),
@@ -106,7 +111,7 @@ class SightDetails extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              SizedBox(width: 14),
+                              const SizedBox(width: 14),
                               Container(
                                 child: Icon(
                                   Icons.favorite_border,
@@ -128,7 +133,7 @@ class SightDetails extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 11)
+                    const SizedBox(height: 11)
                   ],
                 ),
               ),
@@ -181,14 +186,16 @@ class _CreateRouteButton extends StatelessWidget {
 }
 
 class _PlaceImage extends StatelessWidget {
+final String imgUrl;
+
   const _PlaceImage({
-    Key? key,
+    Key? key, required this.imgUrl,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Image.network(
-      mocks[0].url,
+      imgUrl,
       fit: BoxFit.cover,
       height: double.infinity,
       width: double.infinity,
