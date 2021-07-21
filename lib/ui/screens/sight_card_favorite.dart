@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/ui/colors.dart';
+import 'package:places/ui/icons.dart';
 import 'package:places/ui/screens/sight_card.dart';
 
 /// A card of an interesting place to display on the favourites' screen
@@ -59,20 +61,29 @@ class FavoriteSightCard extends SightCard {
                           ),
                         ),
                         visited
-                            ? Icon(
-                                Icons.share,
-                                color: Colors.white,
+                            ? InkWell(
+                                onTap: () {
+                                  print('Нажата кнопка "Поделиться"');
+                                },
+                                child: SvgPicture.asset(iconShare, color: Colors.white),
                               )
-                            : Icon(
-                                Icons.calendar_today_outlined,
-                                color: Colors.white,
+                            : InkWell(
+                                onTap: () {
+                                  print('Нажата кнопка "Календарь"');
+                                },
+                                child: SvgPicture.asset(iconCalendar, color: Colors.white),
                               ),
-                        SizedBox(
-                          width: 23,
+                        const SizedBox(
+                          width: 15,
                         ),
-                        Icon(
-                          Icons.clear_outlined,
-                          color: Colors.white,
+                        InkWell(
+                          onTap: () {
+                            print('Нажата кнопка "Удалить"');
+                          },
+                          child: Icon(
+                            Icons.clear_outlined,
+                            color: Colors.white,
+                          ),
                         )
                       ],
                     ),
@@ -97,17 +108,20 @@ class FavoriteSightCard extends SightCard {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Text(
                     sight.name,
                     maxLines: 2,
-                    style: Theme.of(context).textTheme.headline1?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1
+                        ?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
                     textAlign: TextAlign.left,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 2,
                   ),
                   visited
@@ -120,12 +134,13 @@ class FavoriteSightCard extends SightCard {
                       : Text(
                           'Запланировано на 12 окт. 2020',
                           maxLines: 2,
-                          style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                            color: lightGreen,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyText2?.copyWith(
+                                    color: lightGreen,
+                                  ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   Text(
