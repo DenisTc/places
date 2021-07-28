@@ -1,0 +1,418 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/domains/sight.dart';
+import 'package:places/mocks.dart';
+import 'package:places/ui/colors.dart';
+import 'package:places/ui/icons.dart';
+
+class Location {
+  late double lat;
+  late double lng;
+
+  Location(this.lat, this.lng);
+}
+
+final Location userPosition = Location(57.814183984654186, 28.347436646133506);
+
+RangeValues currentRangeValues = const RangeValues(100, 10000);
+
+late int countPlaces = 0;
+
+Map<String, bool?> filters = {
+  'отель': false,
+  'ресторан': false,
+  'особое место': false,
+  'парк': false,
+  'музей': false,
+  'кафе': false,
+};
+
+bool calculateDistance(
+    Sight place, double myLat, double myLon, double mMin, double mMax) {
+  double ky = 40000 / 360;
+  double kx = cos(pi * myLat / 180.0) * ky;
+  double dx = (myLon - place.lon).abs() * kx;
+  double dy = (myLat - place.lat).abs() * ky;
+  double distance = sqrt(dx * dx + dy * dy) * 1000;
+
+  return (mMin <= distance) && (distance <= mMax);
+}
+
+int countPlacesNear() {
+  int cnt = 0;
+  for (Sight place in mocks) {
+    if (calculateDistance(place, userPosition.lat, userPosition.lng,
+            currentRangeValues.start, currentRangeValues.end) &&
+        filters[place.type.toLowerCase()]!) cnt++;
+  }
+  return cnt;
+}
+
+class FiltersScreen extends StatefulWidget {
+  const FiltersScreen({Key? key}) : super(key: key);
+
+  @override
+  _FiltersScreenState createState() => _FiltersScreenState();
+}
+
+class _FiltersScreenState extends State<FiltersScreen> {
+  refresh() {
+    setState(() {
+      countPlaces = countPlacesNear();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Icon(
+          Icons.arrow_back_ios_new_rounded,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              setState(() {
+                filters.updateAll((key, value) => value = false);
+                countPlaces = countPlacesNear();
+              });
+            },
+            child: Text(
+              'Очистить',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: lightGreen,
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Категории'.toUpperCase(),
+                    style: TextStyle(
+                      color: textColorSecondary.withOpacity(0.56),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              _FiltersCategory(
+                notifyParent: () {
+                  refresh();
+                },
+              ),
+              const SizedBox(height: 60),
+              _Distance(
+                notifyParent: () {
+                  refresh();
+                },
+              ),
+              const SizedBox(height: 50),
+              _ShowButton(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Distance extends StatefulWidget {
+  final Function() notifyParent;
+  const _Distance({
+    Key? key,
+    required this.notifyParent,
+  }) : super(key: key);
+
+  @override
+  __DistanceState createState() => __DistanceState();
+}
+
+class __DistanceState extends State<_Distance> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+              flex: 1,
+              child: Text(
+                'Расстояние',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: RichText(
+                textAlign: TextAlign.end,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: 'от ',
+                        style: TextStyle(color: textColorSecondary)),
+                    TextSpan(
+                        text: currentRangeValues.start.round().toString(),
+                        style: TextStyle(color: textColorSecondary)),
+                    TextSpan(
+                        text: ' до ',
+                        style: TextStyle(color: textColorSecondary)),
+                    TextSpan(
+                        text: currentRangeValues.end.round().toString(),
+                        style: TextStyle(color: textColorSecondary)),
+                    TextSpan(
+                        text: ' м',
+                        style: TextStyle(color: textColorSecondary)),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Container(
+          width: MediaQuery.of(context).size.width - 32,
+          child: RangeSlider(
+            values: currentRangeValues,
+            min: 100,
+            max: 10000,
+            divisions: 100,
+            onChanged: (RangeValues values) {
+              setState(
+                () {
+                  currentRangeValues = values;
+                  widget.notifyParent();
+                },
+              );
+            },
+          ),
+        )
+      ],
+    );
+  }
+}
+
+class _ShowButton extends StatefulWidget {
+  const _ShowButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  __ShowButtonState createState() => __ShowButtonState();
+}
+
+class __ShowButtonState extends State<_ShowButton> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 48,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+        color: lightGreen,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Text(
+              'Показать ('.toUpperCase() + countPlaces.toString() + ')',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _FiltersCategory extends StatefulWidget {
+  final Function() notifyParent;
+  const _FiltersCategory({
+    Key? key,
+    required this.notifyParent,
+  }) : super(key: key);
+
+  @override
+  _FiltersCategoryState createState() => _FiltersCategoryState();
+}
+
+class _FiltersCategoryState extends State<_FiltersCategory> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _CategoryCircle(
+              title: 'Отель',
+              icon: SvgPicture.asset(
+                iconHotel,
+                height: 40,
+                width: 40,
+                color: lightGreen,
+              ),
+              notifyParent: widget.notifyParent,
+            ),
+            _CategoryCircle(
+              title: 'Ресторан',
+              icon: SvgPicture.asset(
+                iconCafe,
+                height: 40,
+                width: 40,
+                color: lightGreen,
+              ),
+              notifyParent: widget.notifyParent,
+            ),
+            _CategoryCircle(
+              title: 'Особое место',
+              icon: SvgPicture.asset(
+                iconParticularPlace,
+                height: 40,
+                width: 40,
+                color: lightGreen,
+              ),
+              notifyParent: widget.notifyParent,
+            ),
+          ],
+        ),
+        const SizedBox(height: 50),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _CategoryCircle(
+              title: 'Парк',
+              icon: SvgPicture.asset(
+                iconPark,
+                height: 40,
+                width: 40,
+                color: lightGreen,
+              ),
+              notifyParent: widget.notifyParent,
+            ),
+            _CategoryCircle(
+              title: 'Музей',
+              icon: SvgPicture.asset(
+                iconMuseum,
+                height: 40,
+                width: 40,
+                color: lightGreen,
+              ),
+              notifyParent: widget.notifyParent,
+            ),
+            _CategoryCircle(
+              title: 'Кафе',
+              icon: SvgPicture.asset(
+                iconCafe,
+                height: 40,
+                width: 40,
+                color: lightGreen,
+              ),
+              notifyParent: widget.notifyParent,
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _CategoryCircle extends StatefulWidget {
+  final String title;
+  final SvgPicture icon;
+  final Function() notifyParent;
+
+  const _CategoryCircle({
+    Key? key,
+    required this.title,
+    required this.icon,
+    required this.notifyParent,
+  }) : super(key: key);
+
+  @override
+  __CategoryCircleState createState() => __CategoryCircleState();
+}
+
+class __CategoryCircleState extends State<_CategoryCircle> {
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      onTap: () {
+        setState(() {
+          filters[widget.title.toLowerCase()] =
+              !filters[widget.title.toLowerCase()]!;
+          widget.notifyParent();
+        });
+      },
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            height: 90,
+            width: 90,
+            decoration: BoxDecoration(
+              color: lightGreen.withOpacity(0.16),
+              shape: BoxShape.circle,
+            ),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: widget.icon,
+                  ),
+                ),
+                if (filters[widget.title.toLowerCase()]!)
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      padding: EdgeInsets.all(3),
+                      height: 22,
+                      width: 22,
+                      decoration: BoxDecoration(
+                        color: favoriteColor,
+                        shape: BoxShape.circle,
+                      ),
+                      child: SvgPicture.asset(
+                        iconCheck,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(widget.title, style: TextStyle(fontSize: 16))
+        ],
+      ),
+    );
+  }
+}
