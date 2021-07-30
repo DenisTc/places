@@ -361,8 +361,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
+      borderRadius: BorderRadius.all(Radius.circular(40)),
       onTap: () {
         setState(() {
           filters[widget.title.toLowerCase()] =
