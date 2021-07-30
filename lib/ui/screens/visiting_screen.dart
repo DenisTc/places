@@ -29,23 +29,37 @@ class _FavoriteTabBarView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TabBarView(
-      children: [
-        mocks.isNotEmpty
-            ? FavoriteSightCard(mocks[0], false)
-            : _FavoritesEmpty(
-                icon: Icons.add_photo_alternate_outlined,
-                title: 'Пусто',
-                desc: 'Отмечайте понравившиеся\nместа и они появятся здесь.',
-              ),
-        mocks.isNotEmpty
-            ? FavoriteSightCard(mocks[2], true)
-            : _FavoritesEmpty(
-                icon: Icons.earbuds_rounded,
-                title: 'Пусто',
-                desc: 'Завершите маршрут,\nчтобы место попало сюда.',
-              ),
-      ],
+    return Container(
+      margin: EdgeInsets.only(top: 28),
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: TabBarView(
+        children: [
+          if (mocks.isNotEmpty)
+            Column(
+              children: [
+                FavoriteSightCard(mocks[0], false),
+              ],
+            )
+          else
+            _FavoritesEmpty(
+              icon: Icons.add_photo_alternate_outlined,
+              title: 'Пусто',
+              desc: 'Отмечайте понравившиеся\nместа и они появятся здесь.',
+            ),
+          if (mocks.isNotEmpty)
+            Column(
+              children: [
+                FavoriteSightCard(mocks[2], true),
+              ],
+            )
+          else
+            _FavoritesEmpty(
+              icon: Icons.earbuds_rounded,
+              title: 'Пусто',
+              desc: 'Завершите маршрут,\nчтобы место попало сюда.',
+            ),
+        ],
+      ),
     );
   }
 }
@@ -129,29 +143,31 @@ class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
             vertical: 6,
             horizontal: 16,
           ),
-          child: Stack(
-            children: [
-              TabBar(
-                tabs: [
-                  Tab(
-                    text: 'Хочу посетить',
-                  ),
-                  Tab(
-                    text: 'Посетил',
-                  ),
-                ],
-                indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: isDarkMode ? Colors.white : textColorPrimary
-                    ),
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
+          child: Theme(
+            data: ThemeData(
+              highlightColor: Colors.transparent,
+              splashColor: Colors.transparent,
+            ),
+            child: TabBar(
+              tabs: [
+                Tab(
+                  text: 'Хочу посетить',
                 ),
-                unselectedLabelColor: textColorSecondary.withOpacity(0.56),
-                labelColor: isDarkMode ? textColorPrimary : Colors.white,
+                Tab(
+                  text: 'Посетил',
+                ),
+              ],
+              indicator: BoxDecoration(
+                borderRadius: BorderRadius.circular(25),
+                color: isDarkMode ? Colors.white : textColorPrimary,
               ),
-            ],
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+              ),
+              unselectedLabelColor: textColorSecondary.withOpacity(0.56),
+              labelColor: isDarkMode ? textColorPrimary : Colors.white,
+            ),
           ),
         ),
       ),

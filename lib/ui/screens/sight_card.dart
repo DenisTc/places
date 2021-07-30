@@ -9,17 +9,25 @@ class SightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.9,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 20),
-        alignment: Alignment.topLeft,
-        child: Column(
-          children: [
-            _SightCardTop(sight: sight),
-            _SightCardBottom(sight: sight),
-          ],
-        ),
+    return Container(
+      height: 188,
+      child: Stack(
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _SightCardTop(sight: sight),
+              _SightCardBottom(sight: sight),
+            ],
+          ),
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+              onTap: () {},
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -36,6 +44,7 @@ class _SightCardBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 92,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.only(
           bottomLeft: const Radius.circular(16),
@@ -44,18 +53,11 @@ class _SightCardBottom extends StatelessWidget {
         color: Theme.of(context).primaryColor,
       ),
       width: double.infinity,
-      height: 92,
-      padding: const EdgeInsets.only(
-        left: 16,
-        right: 16,
-        bottom: 16,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 16,
-          ),
+          const SizedBox(height: 16),
           Text(
             sight.name,
             maxLines: 2,
@@ -66,15 +68,14 @@ class _SightCardBottom extends StatelessWidget {
             textAlign: TextAlign.left,
             overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(
-            height: 2,
-          ),
+          const SizedBox(height: 2),
           Text(
             sight.details,
             maxLines: 2,
             style: Theme.of(context).textTheme.bodyText2,
             overflow: TextOverflow.ellipsis,
-          )
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );
@@ -137,7 +138,8 @@ class _SightCardTop extends StatelessWidget {
                 )
               ],
             ),
-          )
+          ),
+          //const SizedBox(height: 16),
         ],
       ),
     );
