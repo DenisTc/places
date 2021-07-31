@@ -63,9 +63,7 @@ class _FavoriteCardBottom extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
-            height: 16,
-          ),
+          const SizedBox(height: 16),
           Text(
             sight.name,
             maxLines: 2,
@@ -76,9 +74,7 @@ class _FavoriteCardBottom extends StatelessWidget {
             textAlign: TextAlign.left,
             overflow: TextOverflow.ellipsis,
           ),
-          SizedBox(
-            height: 2,
-          ),
+          const SizedBox(height: 2),
           visited
               ? Text(
                   'Цель достигнута 12 окт. 2020',
@@ -89,15 +85,12 @@ class _FavoriteCardBottom extends StatelessWidget {
               : Text(
                   'Запланировано на 12 окт. 2020',
                   maxLines: 2,
-                  style:
-                      Theme.of(context).textTheme.bodyText2?.copyWith(
-                            color: lightGreen,
-                          ),
+                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        color: lightGreen,
+                      ),
                   overflow: TextOverflow.ellipsis,
                 ),
-          SizedBox(
-            height: 16,
-          ),
+          const SizedBox(height: 16),
           Text(
             'закрыто до 09:00',
             maxLines: 2,
@@ -163,18 +156,11 @@ class _FavoriteCardTop extends StatelessWidget {
                     ),
                   ),
                 ),
-                visited
-                    ? Icon(
-                        Icons.share,
-                        color: Colors.white,
-                      )
-                    : Icon(
-                        Icons.calendar_today_outlined,
-                        color: Colors.white,
-                      ),
-                SizedBox(
-                  width: 23,
+                Icon(
+                  visited ? Icons.share : Icons.calendar_today_outlined,
+                  color: Colors.white,
                 ),
+                const SizedBox(width: 23),
                 Icon(
                   Icons.clear_outlined,
                   color: Colors.white,
