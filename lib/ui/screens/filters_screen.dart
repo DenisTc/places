@@ -14,42 +14,6 @@ class Location {
   Location(this.lat, this.lng);
 }
 
-final Location userPosition = Location(57.814183984654186, 28.347436646133506);
-
-RangeValues currentRangeValues = const RangeValues(100, 10000);
-
-late int countPlaces = 0;
-
-Map<String, bool?> filters = {
-  'отель': false,
-  'ресторан': false,
-  'особое место': false,
-  'парк': false,
-  'музей': false,
-  'кафе': false,
-};
-
-bool calculateDistance(
-    Sight place, double myLat, double myLon, double mMin, double mMax) {
-  double ky = 40000 / 360;
-  double kx = cos(pi * myLat / 180.0) * ky;
-  double dx = (myLon - place.lon).abs() * kx;
-  double dy = (myLat - place.lat).abs() * ky;
-  double distance = sqrt(dx * dx + dy * dy) * 1000;
-
-  return (mMin <= distance) && (distance <= mMax);
-}
-
-int countPlacesNear() {
-  int cnt = 0;
-  for (Sight place in mocks) {
-    if (calculateDistance(place, userPosition.lat, userPosition.lng,
-            currentRangeValues.start, currentRangeValues.end) &&
-        filters[place.type.toLowerCase()]!) cnt++;
-  }
-  return cnt;
-}
-
 class FiltersScreen extends StatefulWidget {
   const FiltersScreen({Key? key}) : super(key: key);
 
@@ -58,9 +22,57 @@ class FiltersScreen extends StatefulWidget {
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
+  final Location userPosition =
+      Location(57.814183984654186, 28.347436646133506);
+
+  late RangeValues currentRangeValues = const RangeValues(100, 10000);
+
+  late int countPlaces = 0;
+
+  Map<String, bool> filters = {
+    'отель': false,
+    'ресторан': false,
+    'особое место': false,
+    'парк': false,
+    'музей': false,
+    'кафе': false,
+  };
+
+  bool calculateDistance(
+    Sight place,
+    double myLat,
+    double myLon,
+    double mMin,
+    double mMax,
+  ) {
+    double ky = 40000 / 360;
+    double kx = cos(pi * myLat / 180.0) * ky;
+    double dx = (myLon - place.lon).abs() * kx;
+    double dy = (myLat - place.lat).abs() * ky;
+    double distance = sqrt(dx * dx + dy * dy) * 1000;
+
+    return (mMin <= distance) && (distance <= mMax);
+  }
+
+  int countPlacesNear() {
+    int cnt = 0;
+    for (Sight place in mocks) {
+      if (calculateDistance(place, userPosition.lat, userPosition.lng,
+              currentRangeValues.start, currentRangeValues.end) &&
+          filters[place.type.toLowerCase()]!) cnt++;
+    }
+    return cnt;
+  }
+
   refresh() {
     setState(() {
       countPlaces = countPlacesNear();
+    });
+  }
+
+  updateRangeVal(newRangeValues) {
+    setState(() {
+      currentRangeValues = newRangeValues;
     });
   }
 
@@ -117,15 +129,20 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 notifyParent: () {
                   refresh();
                 },
+                filters: filters,
               ),
               const SizedBox(height: 60),
               _Distance(
                 notifyParent: () {
                   refresh();
                 },
+                currentRangeValues: currentRangeValues,
+                updateRangeVal: (currentRangeValues) {
+                  updateRangeVal(currentRangeValues);
+                },
               ),
               const SizedBox(height: 50),
-              _ShowButton(),
+              _ShowButton(countPlaces: countPlaces),
             ],
           ),
         ),
@@ -136,9 +153,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
 class _Distance extends StatefulWidget {
   final Function() notifyParent;
+  final Function(RangeValues rangeValues) updateRangeVal;
+  final RangeValues currentRangeValues;
+
   const _Distance({
     Key? key,
     required this.notifyParent,
+    required this.updateRangeVal,
+    required this.currentRangeValues,
   }) : super(key: key);
 
   @override
@@ -170,13 +192,14 @@ class __DistanceState extends State<_Distance> {
                         text: 'от ',
                         style: TextStyle(color: textColorSecondary)),
                     TextSpan(
-                        text: currentRangeValues.start.round().toString(),
+                        text:
+                            widget.currentRangeValues.start.round().toString(),
                         style: TextStyle(color: textColorSecondary)),
                     TextSpan(
                         text: ' до ',
                         style: TextStyle(color: textColorSecondary)),
                     TextSpan(
-                        text: currentRangeValues.end.round().toString(),
+                        text: widget.currentRangeValues.end.round().toString(),
                         style: TextStyle(color: textColorSecondary)),
                     TextSpan(
                         text: ' м',
@@ -191,14 +214,15 @@ class __DistanceState extends State<_Distance> {
         Container(
           width: MediaQuery.of(context).size.width - 32,
           child: RangeSlider(
-            values: currentRangeValues,
+            values: widget.currentRangeValues,
             min: 100,
             max: 10000,
             divisions: 100,
             onChanged: (RangeValues values) {
               setState(
                 () {
-                  currentRangeValues = values;
+                  //widget.currentRangeValues = values;
+                  widget.updateRangeVal(values);
                   widget.notifyParent();
                 },
               );
@@ -211,8 +235,10 @@ class __DistanceState extends State<_Distance> {
 }
 
 class _ShowButton extends StatefulWidget {
+  final int countPlaces;
   const _ShowButton({
     Key? key,
+    required this.countPlaces,
   }) : super(key: key);
 
   @override
@@ -236,7 +262,7 @@ class __ShowButtonState extends State<_ShowButton> {
           Padding(
             padding: const EdgeInsets.only(left: 10),
             child: Text(
-              'Показать ('.toUpperCase() + countPlaces.toString() + ')',
+              'Показать ('.toUpperCase() + widget.countPlaces.toString() + ')',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -251,9 +277,12 @@ class __ShowButtonState extends State<_ShowButton> {
 
 class _FiltersCategory extends StatefulWidget {
   final Function() notifyParent;
+  final Map<String, bool> filters;
+
   const _FiltersCategory({
     Key? key,
     required this.notifyParent,
+    required this.filters,
   }) : super(key: key);
 
   @override
@@ -277,6 +306,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                 color: lightGreen,
               ),
               notifyParent: widget.notifyParent,
+              filters: widget.filters,
             ),
             _CategoryCircle(
               title: 'Ресторан',
@@ -287,6 +317,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                 color: lightGreen,
               ),
               notifyParent: widget.notifyParent,
+              filters: widget.filters,
             ),
             _CategoryCircle(
               title: 'Особое место',
@@ -297,6 +328,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                 color: lightGreen,
               ),
               notifyParent: widget.notifyParent,
+              filters: widget.filters,
             ),
           ],
         ),
@@ -313,6 +345,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                 color: lightGreen,
               ),
               notifyParent: widget.notifyParent,
+              filters: widget.filters,
             ),
             _CategoryCircle(
               title: 'Музей',
@@ -323,6 +356,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                 color: lightGreen,
               ),
               notifyParent: widget.notifyParent,
+              filters: widget.filters,
             ),
             _CategoryCircle(
               title: 'Кафе',
@@ -333,6 +367,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                 color: lightGreen,
               ),
               notifyParent: widget.notifyParent,
+              filters: widget.filters,
             ),
           ],
         ),
@@ -345,12 +380,14 @@ class _CategoryCircle extends StatefulWidget {
   final String title;
   final SvgPicture icon;
   final Function() notifyParent;
+  final Map<String, bool> filters;
 
   const _CategoryCircle({
     Key? key,
     required this.title,
     required this.icon,
     required this.notifyParent,
+    required this.filters,
   }) : super(key: key);
 
   @override
@@ -364,8 +401,8 @@ class __CategoryCircleState extends State<_CategoryCircle> {
       borderRadius: BorderRadius.all(Radius.circular(40)),
       onTap: () {
         setState(() {
-          filters[widget.title.toLowerCase()] =
-              !filters[widget.title.toLowerCase()]!;
+          widget.filters[widget.title.toLowerCase()] =
+              !widget.filters[widget.title.toLowerCase()]!;
           widget.notifyParent();
         });
       },
@@ -387,7 +424,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
                     child: widget.icon,
                   ),
                 ),
-                if (filters[widget.title.toLowerCase()]!)
+                if (widget.filters[widget.title.toLowerCase()]!)
                   Positioned(
                     right: 0,
                     bottom: 0,
