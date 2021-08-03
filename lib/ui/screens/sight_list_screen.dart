@@ -15,11 +15,15 @@ class SightListScreenState extends State<SightListScreen> {
       backgroundColor: Theme.of(context).accentColor,
       appBar: _SightAppBar("Список\nинтересных мест", 128),
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
             SightCard(mocks[0]),
+            const SizedBox(height: 16),
             SightCard(mocks[1]),
+            const SizedBox(height: 16),
             SightCard(mocks[2]),
+            const SizedBox(height: 16),
             SightCard(mocks[3])
           ],
         ),
