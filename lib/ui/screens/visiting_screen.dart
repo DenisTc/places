@@ -44,7 +44,7 @@ class _FavoriteTabBarView extends StatelessWidget {
             )
           else
             _FavoritesEmpty(
-              icon: 'add_photo_alternate_outlined',
+              icon: iconRoute,
               title: 'Пусто',
               desc: 'Отмечайте понравившиеся\nместа и они появятся здесь.',
             ),
@@ -56,7 +56,7 @@ class _FavoriteTabBarView extends StatelessWidget {
             )
           else
             _FavoritesEmpty(
-              icon: 'earbuds_rounded',
+              icon: iconAddCard,
               title: 'Пусто',
               desc: 'Завершите маршрут,\nчтобы место попало сюда.',
             ),
