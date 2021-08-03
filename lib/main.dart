@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: settings.getTheme,
-      home: SettingsScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
+      home: FiltersScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
     );
   }
 }
