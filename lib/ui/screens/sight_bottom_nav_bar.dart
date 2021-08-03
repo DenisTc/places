@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/ui/icons.dart';
 
 /// Custom bottom navigation bar.
 class SightBottomNavBar extends StatelessWidget {
@@ -19,29 +22,21 @@ class SightBottomNavBar extends StatelessWidget {
               Theme.of(context).bottomNavigationBarTheme.selectedItemColor,
           unselectedItemColor:
               Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(
-                  Icons.list_alt_sharp,
-                ),
+              icon: SvgPicture.asset(iconList, color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.map,
-              ),
+              icon: SvgPicture.asset(iconMap, color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.favorite,
-              ),
+              icon: SvgPicture.asset(iconFavoriteSolid, color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: Icon(
-                Icons.settings,
-              ),
+              icon: SvgPicture.asset(iconSettings, color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor),
               label: '',
             ),
           ],

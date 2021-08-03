@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
+import 'package:places/ui/icons.dart';
 import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
 import 'package:places/ui/screens/sight_card_favorite.dart';
 
@@ -65,7 +67,7 @@ class _FavoriteTabBarView extends StatelessWidget {
 }
 
 class _FavoritesEmpty extends StatelessWidget {
-  final IconData icon;
+  final String icon;
   final String title;
   final String desc;
 
@@ -86,9 +88,10 @@ class _FavoritesEmpty extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              SvgPicture.asset(
                 icon,
-                size: 64,
+                height: 64,
+                width: 64,
                 color: Color.fromRGBO(124, 126, 146, 0.56),
               ),
               SizedBox(height: 32),
@@ -118,7 +121,7 @@ class _FavoritesEmpty extends StatelessWidget {
 }
 
 class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
-  final bool isDarkMode = true;
+  final bool isDarkMode = false;
 
   const _FavoriteAppbar({
     Key? key,

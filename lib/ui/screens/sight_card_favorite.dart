@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/ui/colors.dart';
+import 'package:places/ui/icons.dart';
 import 'package:places/ui/screens/sight_card.dart';
 
 /// A card of an interesting place to display on the favourites' screen
