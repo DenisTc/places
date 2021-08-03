@@ -122,7 +122,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   },
                   controllerDesc: _controllerDesc,
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 50),
                 _CreateSightButton(
                   enable: _isButtonEnabled,
                   formKey: _formKey,

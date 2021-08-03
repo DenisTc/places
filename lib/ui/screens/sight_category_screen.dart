@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
+import 'package:places/ui/icons.dart';
 
 List selectedCategory = [];
 int? indexCategory;
@@ -46,10 +48,12 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                                 ),
                               ),
                               if (indexCategory == index)
-                                Icon(
-                                  Icons.check,
+                                SvgPicture.asset(
+                                  iconCheck,
+                                  height: 15,
+                                  width: 15,
                                   color: lightGreen,
-                                )
+                                ),
                             ],
                           ),
                           const SizedBox(height: 14),
