@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
+import 'package:places/ui/icons.dart';
 
 /// A card of an interesting place to be displayed on the main screen of the application.
 class SightCard extends StatelessWidget {
@@ -131,10 +133,7 @@ class _SightCardTop extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Icon(
-                  Icons.favorite_border,
-                  color: Colors.white,
-                )
+                SvgPicture.asset(iconFavorite, color: Colors.white),
               ],
             ),
           )

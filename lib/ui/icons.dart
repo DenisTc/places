@@ -1,12 +1,12 @@
-
-
-
-
-
-
-
-
-
+const iconFavoriteSolid = "res/icons/favorite_solid.svg";
+const iconCalendar = "res/icons/calendar.svg";
+const iconShare = "res/icons/share.svg";
+const iconSettings = "res/icons/settings.svg";
+const iconMap = "res/icons/map.svg";
+const iconList = "res/icons/list.svg";
+const iconRoute = "res/icons/route.svg";
+const iconFavorite = "res/icons/favorite.svg";
+const iconAddCard = "res/icons/add_card.svg";
 const iconCafe = "res/icons/cafe.svg";
 const iconHotel = "res/icons/hotel.svg";
 const iconMuseum = "res/icons/museum.svg";
