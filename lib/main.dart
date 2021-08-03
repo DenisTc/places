@@ -10,13 +10,13 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final bool isDarkMode = true;
+  final bool isDarkMode = false;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: isDarkMode ? darkTheme : lightTheme,
-      home: SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
+      home: VisitingScreen(),//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
     );
   }
 }
