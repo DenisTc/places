@@ -16,6 +16,12 @@ final lightTheme = ThemeData(
     selectedItemColor: favoriteColor,
     unselectedItemColor: favoriteColor,
   ),
+  sliderTheme: SliderThemeData(
+    trackHeight: 1,
+    activeTrackColor: lightGreen,
+    inactiveTrackColor: textColorSecondary.withOpacity(0.56),
+    thumbColor: Colors.white
+  ),
 );
 
 final darkTheme = ThemeData(

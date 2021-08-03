@@ -27,3 +27,5 @@ flutter:
 
   assets:
     - res/
+    - res/fonts/
+    - res/icons/
