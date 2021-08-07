@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
 import 'package:places/ui/screens/sight_card.dart';
+import 'package:places/ui/widgets/main_list_screen/search_bar.dart';
+import 'package:places/ui/widgets/main_list_screen/sight_app_bar.dart';
 
 class SightListScreen extends StatefulWidget {
   @override
@@ -13,11 +15,13 @@ class SightListScreenState extends State<SightListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
-      appBar: _SightAppBar("Список\nинтересных мест", 128),
+      appBar: SightAppBar(),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
+            SearchBar(),
+            SizedBox(height: 22),
             SightCard(mocks[0]),
             const SizedBox(height: 16),
             SightCard(mocks[1]),
@@ -29,31 +33,6 @@ class SightListScreenState extends State<SightListScreen> {
         ),
       ),
       bottomNavigationBar: SightBottomNavBar(),
-    );
-  }
-}
-
-class _SightAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-  final double height;
-
-  const _SightAppBar(this.title, this.height);
-
-  @override
-  Size get preferredSize => Size.fromHeight(height);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      centerTitle: false,
-      toolbarHeight: height,
-      title: Text(
-        title,
-        textAlign: TextAlign.left,
-        style: Theme.of(context).textTheme.headline1,
-      ),
     );
   }
 }

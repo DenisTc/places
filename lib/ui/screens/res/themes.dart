@@ -4,6 +4,7 @@ import 'package:places/ui/styles.dart';
 
 final lightTheme = ThemeData(
   accentColor: Colors.white,
+  scaffoldBackgroundColor: Colors.white,
   primaryColor: whiteSmoke,
   primaryColorLight: textColorSecondary.withOpacity(0),
   textTheme: TextTheme(

@@ -5,6 +5,7 @@ import 'package:places/ui/screens/settings_screen.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/sight_list_screen.dart';
+import 'package:places/ui/screens/sight_search_screen.dart';
 import 'package:places/ui/screens/visiting_screen.dart';
 
 final settings = Settings();
@@ -31,7 +32,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: settings.getTheme,
-      home: FiltersScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
+      home: SightListScreen(),//SightListScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
     );
   }
 }

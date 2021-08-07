@@ -257,24 +257,29 @@ class _ArrowBackButton extends StatelessWidget {
       },
       child: Align(
         alignment: Alignment.topLeft,
-        child: Container(
-          margin: const EdgeInsets.only(
-            left: 16,
-            top: 36,
-          ),
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 17,
-            color: Theme.of(context).iconTheme.color,
-          ),
-          decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            margin: const EdgeInsets.only(
+              left: 16,
+              top: 36,
             ),
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 17,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            decoration: BoxDecoration(
+              color: Theme.of(context).accentColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            width: 32,
+            height: 32,
           ),
-          width: 32,
-          height: 32,
         ),
       ),
     );

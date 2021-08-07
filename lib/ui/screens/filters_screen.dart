@@ -82,8 +82,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Icon(
-          Icons.arrow_back_ios_new_rounded,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
         ),
         actions: [
           TextButton(
