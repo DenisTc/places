@@ -14,3 +14,5 @@ const iconPark = "res/icons/park.svg";
 const iconParticularPlace = "res/icons/particular_place.svg";
 const iconRestourant = "res/icons/restourant.svg";
 const iconCheck = "res/icons/check.svg";
+const iconSearch = "res/icons/search.svg";
+const iconOptions = "res/icons/options.svg";
