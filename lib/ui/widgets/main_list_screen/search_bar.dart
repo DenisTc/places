@@ -20,15 +20,13 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  List<Sight> filteredList = [];
+  List<Sight> filteredList = mocks;
   _navigateGetDataFromFilters(BuildContext context) async {
     final result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => FiltersScreen()));
+        context, MaterialPageRoute(builder: (context) => FiltersScreen(filters: filters)));
 
     if (result != null) {
       filteredList = result;
-    } else {
-      print('fail');
     }
   }
 
@@ -41,7 +39,7 @@ class _SearchBarState extends State<SearchBar> {
             context,
             MaterialPageRoute(
               builder: (context) => SightSearchScreen(
-                filteredList: filteredList.isNotEmpty ? filteredList : mocks,
+                filteredList: filteredList,
               ),
             ),
           );

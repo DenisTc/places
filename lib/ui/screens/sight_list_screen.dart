@@ -16,21 +16,39 @@ class SightListScreenState extends State<SightListScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
       appBar: SightAppBar(),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            SearchBar(),
-            SizedBox(height: 22),
-            SightCard(mocks[0]),
-            const SizedBox(height: 16),
-            SightCard(mocks[1]),
-            const SizedBox(height: 16),
-            SightCard(mocks[2]),
-            const SizedBox(height: 16),
-            SightCard(mocks[3])
-          ],
-        ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: EdgeInsets.only(
+              left: 16,
+              top: 70,
+              right: 16,
+            ),
+            child: Column(
+              children: [
+                SightCard(mocks[0]),
+                const SizedBox(height: 16),
+                SightCard(mocks[1]),
+                const SizedBox(height: 16),
+                SightCard(mocks[2]),
+                const SizedBox(height: 16),
+                SightCard(mocks[3])
+              ],
+            ),
+          ),
+          ColoredBox(
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                top: 0,
+                right: 16,
+                bottom: 10,
+              ),
+              child: SearchBar(),
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: SightBottomNavBar(),
     );

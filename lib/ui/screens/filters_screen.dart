@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
+import 'package:places/models/filters.dart';
 import 'package:places/models/location.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
 
 class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({Key? key}) : super(key: key);
+  final Filters filters;
+  const FiltersScreen({Key? key, required this.filters}) : super(key: key);
 
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
@@ -19,18 +21,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
   final Location userPosition =
       Location(57.814183984654186, 28.347436646133506);
 
-  late RangeValues currentRangeValues = const RangeValues(100, 10000);
+  RangeValues currentRangeValues = const RangeValues(100, 10000);
   List<Sight> filteredPlaces = [];
   int countPlaces = 0;
 
-  Map<String, bool> filters = {
-    'отель': false,
-    'ресторан': false,
-    'особое место': false,
-    'парк': false,
-    'музей': false,
-    'кафе': false,
-  };
+  Map<String, bool> filters = {};
 
   bool calculateDistance(
     Sight place,
@@ -60,7 +55,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
         filteredPlaces.remove(place);
       }
     }
-
+    print(filteredPlaces.length);
     return filteredPlaces.length;
   }
 
@@ -72,12 +67,16 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   updateRangeVal(newRangeValues) {
     setState(() {
-      currentRangeValues = newRangeValues;
+      widget.filters.currentRangeValues = newRangeValues;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    filters = widget.filters.categories;
+    currentRangeValues = widget.filters.currentRangeValues;
+    refresh();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -85,7 +84,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () {
-            //Navigator.pop(context, filteredPlaces);
+            filters.updateAll((key, value) => value = false);
+            widget.filters.currentRangeValues = RangeValues(100, 10000);
+            countPlaces = countPlacesNear();
             Navigator.pop(context, mocks);
           },
         ),
@@ -94,6 +95,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             onPressed: () {
               setState(() {
                 filters.updateAll((key, value) => value = false);
+                widget.filters.currentRangeValues = RangeValues(100, 10000);
                 countPlaces = countPlacesNear();
               });
             },
@@ -228,7 +230,6 @@ class __DistanceState extends State<_Distance> {
             onChanged: (RangeValues values) {
               setState(
                 () {
-                  //widget.currentRangeValues = values;
                   widget.updateRangeVal(values);
                   widget.notifyParent();
                 },
@@ -263,7 +264,7 @@ class __ShowButtonState extends State<_ShowButton> {
         borderRadius: BorderRadius.all(
           Radius.circular(10),
         ),
-        color: lightGreen,
+        color: widget.countPlaces != 0 ? lightGreen : whiteSmoke,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -276,13 +277,14 @@ class __ShowButtonState extends State<_ShowButton> {
                     widget.countPlaces.toString() +
                     ')',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: widget.countPlaces != 0 ? Colors.white : textColorSecondary.withOpacity(0.56),
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ),
             onTap: () {
-              Navigator.pop(context, widget.filteredPlaces);
+              if (widget.countPlaces != 0)
+                Navigator.pop(context, widget.filteredPlaces);
             },
           )
         ],
