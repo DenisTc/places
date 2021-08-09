@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/domains/sight.dart';
+import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/sight_search_screen.dart';
+import 'package:places/models/filters.dart';
+
+final filters = Filters();
 
 class SearchBar extends StatefulWidget {
   SearchBar({
@@ -15,14 +20,31 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  //final textFieldFocusNode = FocusNode();
+  List<Sight> filteredList = [];
+  _navigateGetDataFromFilters(BuildContext context) async {
+    final result = await Navigator.push(
+        context, MaterialPageRoute(builder: (context) => FiltersScreen()));
+
+    if (result != null) {
+      filteredList = result;
+    } else {
+      print('fail');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextField(
       onTap: () {
         if (widget.textFieldFocusNode.canRequestFocus) {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => SightSearchScreen()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SightSearchScreen(
+                filteredList: filteredList.isNotEmpty ? filteredList : mocks,
+              ),
+            ),
+          );
         }
       },
       enabled: true,
@@ -61,8 +83,7 @@ class _SearchBarState extends State<SearchBar> {
             onPressed: () {
               widget.textFieldFocusNode.unfocus();
               widget.textFieldFocusNode.canRequestFocus = false;
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => FiltersScreen()));
+              _navigateGetDataFromFilters(context);
               Future.delayed(Duration(milliseconds: 100), () {
                 widget.textFieldFocusNode.canRequestFocus = true;
               });

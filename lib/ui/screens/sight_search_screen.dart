@@ -18,7 +18,9 @@ List<String> historyList = [
 ];
 
 class SightSearchScreen extends StatefulWidget {
-  const SightSearchScreen({Key? key}) : super(key: key);
+  final List<Sight> filteredList;
+  const SightSearchScreen({Key? key, required this.filteredList})
+      : super(key: key);
 
   @override
   _SightSearchScreenState createState() => _SightSearchScreenState();
@@ -26,15 +28,14 @@ class SightSearchScreen extends StatefulWidget {
 
 class _SightSearchScreenState extends State<SightSearchScreen> {
   final _controllerSearch = TextEditingController();
-
-  final List<Sight> _sights = mocks;
+  late List<Sight> sights = mocks;
   List<Sight> _filteredSights = [];
 
   void _searchSights() {
     final query = _controllerSearch.text;
 
     if (query.isNotEmpty) {
-      _filteredSights = _sights.where((Sight sight) {
+      _filteredSights = sights.where((Sight sight) {
         return sight.name.toLowerCase().startsWith(query.toLowerCase());
         //return sight.name.toLowerCase().contains(query.toLowerCase());
       }).toList();
@@ -62,6 +63,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    sights = widget.filteredList;
     return Scaffold(
       appBar: SightAppBar(),
       body: Column(
@@ -98,10 +100,13 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                 ),
                 _HistoryList(
                   historyList: historyList.toList(),
-                  notifyParent: refresh,
+                  notifyParent: () {
+                    refresh();
+                  },
                   updateHistory: (history) {
                     updateHistory(history);
                   },
+                  controllerSearch: _controllerSearch,
                 ),
                 _ClearHistoryButton(
                   historyList: historyList.toList(),
@@ -124,6 +129,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
 class _HistoryList extends StatefulWidget {
   final List<String> historyList;
   final Function() notifyParent;
+  final TextEditingController controllerSearch;
   final Function(List<String>) updateHistory;
 
   const _HistoryList({
@@ -131,6 +137,7 @@ class _HistoryList extends StatefulWidget {
     required this.historyList,
     required this.notifyParent,
     required this.updateHistory,
+    required this.controllerSearch,
   }) : super(key: key);
 
   @override
@@ -156,11 +163,26 @@ class _HistoryListState extends State<_HistoryList> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    widget.historyList[index],
-                    style: TextStyle(
-                      color: favoriteColor,
-                      fontSize: 16,
+                  Expanded(
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          widget.controllerSearch.text =
+                              widget.historyList[index];
+                          widget.controllerSearch.selection =
+                              TextSelection.fromPosition(TextPosition(
+                                  offset: widget.controllerSearch.text.length));
+                        });
+
+                        widget.notifyParent();
+                      },
+                      child: Text(
+                        widget.historyList[index],
+                        style: TextStyle(
+                          color: favoriteColor,
+                          fontSize: 16,
+                        ),
+                      ),
                     ),
                   ),
                   Container(
@@ -176,6 +198,7 @@ class _HistoryListState extends State<_HistoryList> {
                             widget.updateHistory(widget.historyList);
                           },
                         );
+                        widget.notifyParent();
                       },
                       icon: SvgPicture.asset(
                         iconClose,

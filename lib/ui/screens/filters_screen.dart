@@ -4,15 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
+import 'package:places/models/location.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
-
-class Location {
-  late double lat;
-  late double lng;
-
-  Location(this.lat, this.lng);
-}
 
 class FiltersScreen extends StatefulWidget {
   const FiltersScreen({Key? key}) : super(key: key);
@@ -26,8 +20,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
       Location(57.814183984654186, 28.347436646133506);
 
   late RangeValues currentRangeValues = const RangeValues(100, 10000);
-
-  late int countPlaces = 0;
+  List<Sight> filteredPlaces = [];
+  int countPlaces = 0;
 
   Map<String, bool> filters = {
     'отель': false,
@@ -40,28 +34,34 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   bool calculateDistance(
     Sight place,
-    double myLat,
-    double myLon,
-    double mMin,
-    double mMax,
   ) {
     double ky = 40000 / 360;
-    double kx = cos(pi * myLat / 180.0) * ky;
-    double dx = (myLon - place.lon).abs() * kx;
-    double dy = (myLat - place.lat).abs() * ky;
+    double kx = cos(pi * userPosition.lat / 180.0) * ky;
+    double dx = (userPosition.lon - place.lon).abs() * kx;
+    double dy = (userPosition.lat - place.lat).abs() * ky;
     double distance = sqrt(dx * dx + dy * dy) * 1000;
 
-    return (mMin <= distance) && (distance <= mMax);
+    return (currentRangeValues.start <= distance) &&
+        (distance <= currentRangeValues.end);
   }
 
   int countPlacesNear() {
-    int cnt = 0;
+    filteredPlaces = [];
+    bool inAria = false;
+    bool inCategory = false;
+
     for (Sight place in mocks) {
-      if (calculateDistance(place, userPosition.lat, userPosition.lng,
-              currentRangeValues.start, currentRangeValues.end) &&
-          filters[place.type.toLowerCase()]!) cnt++;
+      inAria = calculateDistance(place);
+      inCategory = filters[place.type.toLowerCase()]!;
+
+      if (inAria && inCategory) {
+        filteredPlaces.add(place);
+      } else if (filteredPlaces.contains(place) && !inCategory) {
+        filteredPlaces.remove(place);
+      }
     }
-    return cnt;
+
+    return filteredPlaces.length;
   }
 
   refresh() {
@@ -85,7 +85,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () {
-            Navigator.of(context).pop();
+            //Navigator.pop(context, filteredPlaces);
+            Navigator.pop(context, mocks);
           },
         ),
         actions: [
@@ -145,7 +146,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 },
               ),
               const SizedBox(height: 50),
-              _ShowButton(countPlaces: countPlaces),
+              _ShowButton(
+                countPlaces: countPlaces,
+                filteredPlaces: filteredPlaces,
+              ),
             ],
           ),
         ),
@@ -239,9 +243,11 @@ class __DistanceState extends State<_Distance> {
 
 class _ShowButton extends StatefulWidget {
   final int countPlaces;
+  final List<Sight> filteredPlaces;
   const _ShowButton({
     Key? key,
     required this.countPlaces,
+    required this.filteredPlaces,
   }) : super(key: key);
 
   @override
@@ -262,15 +268,22 @@ class __ShowButtonState extends State<_ShowButton> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Text(
-              'Показать ('.toUpperCase() + widget.countPlaces.toString() + ')',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
+          InkWell(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                'Показать ('.toUpperCase() +
+                    widget.countPlaces.toString() +
+                    ')',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
+            onTap: () {
+              Navigator.pop(context, widget.filteredPlaces);
+            },
           )
         ],
       ),
@@ -408,6 +421,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
               !widget.filters[widget.title.toLowerCase()]!;
           widget.notifyParent();
         });
+        //print(widget.filters);
       },
       child: Column(
         children: [
