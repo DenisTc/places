@@ -4,18 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
+import 'package:places/models/filters.dart';
+import 'package:places/models/location.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
 
-class Location {
-  late double lat;
-  late double lng;
-
-  Location(this.lat, this.lng);
-}
-
 class FiltersScreen extends StatefulWidget {
-  const FiltersScreen({Key? key}) : super(key: key);
+  final Filters filters;
+  const FiltersScreen({Key? key, required this.filters}) : super(key: key);
 
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
@@ -23,77 +19,87 @@ class FiltersScreen extends StatefulWidget {
 
 class _FiltersScreenState extends State<FiltersScreen> {
   final Location userPosition =
-      Location(57.814183984654186, 28.347436646133506);
+      const Location(57.814183984654186, 28.347436646133506);
 
-  late RangeValues currentRangeValues = const RangeValues(100, 10000);
+  RangeValues currentRangeValues = const RangeValues(100, 10000);
+  List<Sight> filteredPlaces = [];
+  int countPlaces = 0;
 
-  late int countPlaces = 0;
-
-  Map<String, bool> filters = {
-    'отель': false,
-    'ресторан': false,
-    'особое место': false,
-    'парк': false,
-    'музей': false,
-    'кафе': false,
-  };
+  Map<String, bool> filters = {};
 
   bool calculateDistance(
     Sight place,
-    double myLat,
-    double myLon,
-    double mMin,
-    double mMax,
   ) {
     double ky = 40000 / 360;
-    double kx = cos(pi * myLat / 180.0) * ky;
-    double dx = (myLon - place.lon).abs() * kx;
-    double dy = (myLat - place.lat).abs() * ky;
+    double kx = cos(pi * userPosition.lat / 180.0) * ky;
+    double dx = (userPosition.lon - place.lon).abs() * kx;
+    double dy = (userPosition.lat - place.lat).abs() * ky;
     double distance = sqrt(dx * dx + dy * dy) * 1000;
 
-    return (mMin <= distance) && (distance <= mMax);
+    return (currentRangeValues.start <= distance) &&
+        (distance <= currentRangeValues.end);
   }
 
   int countPlacesNear() {
-    int cnt = 0;
+    filteredPlaces = [];
+    bool inAria = false;
+    bool inCategory = false;
+
     for (Sight place in mocks) {
-      if (calculateDistance(place, userPosition.lat, userPosition.lng,
-              currentRangeValues.start, currentRangeValues.end) &&
-          filters[place.type.toLowerCase()]!) cnt++;
+      inAria = calculateDistance(place);
+      inCategory = filters[place.type.toLowerCase()]!;
+
+      if (inAria && inCategory) {
+        filteredPlaces.add(place);
+      } else if (filteredPlaces.contains(place) && !inCategory) {
+        filteredPlaces.remove(place);
+      }
     }
-    return cnt;
+    return filteredPlaces.length;
   }
 
-  refresh() {
+  void refresh() {
     setState(() {
       countPlaces = countPlacesNear();
     });
   }
 
-  updateRangeVal(newRangeValues) {
+  void updateRangeVal(RangeValues newRangeValues) {
     setState(() {
-      currentRangeValues = newRangeValues;
+      widget.filters.currentRangeValues = newRangeValues;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    filters = widget.filters.categories;
+    currentRangeValues = widget.filters.currentRangeValues;
+    refresh();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Icon(
-          Icons.arrow_back_ios_new_rounded,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () {
+            filters.updateAll((key, value) => value = false);
+            widget.filters.currentRangeValues = const RangeValues(100, 10000);
+            countPlaces = countPlacesNear();
+            Navigator.pop(context, mocks);
+          },
         ),
         actions: [
           TextButton(
             onPressed: () {
               setState(() {
                 filters.updateAll((key, value) => value = false);
+                widget.filters.currentRangeValues =
+                    const RangeValues(100, 10000);
                 countPlaces = countPlacesNear();
               });
             },
-            child: Text(
+            child: const Text(
               'Очистить',
               style: TextStyle(
                 fontSize: 16,
@@ -114,7 +120,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
             children: [
               const SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     'Категории'.toUpperCase(),
@@ -142,7 +147,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 },
               ),
               const SizedBox(height: 50),
-              _ShowButton(countPlaces: countPlaces),
+              _ShowButton(
+                countPlaces: countPlaces,
+                filteredPlaces: filteredPlaces,
+              ),
             ],
           ),
         ),
@@ -175,35 +183,37 @@ class __DistanceState extends State<_Distance> {
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Expanded(
-              flex: 1,
+            const Expanded(
               child: Text(
                 'Расстояние',
                 style: TextStyle(fontSize: 16),
               ),
             ),
             Expanded(
-              flex: 1,
               child: RichText(
                 textAlign: TextAlign.end,
                 text: TextSpan(
                   children: [
+                    const TextSpan(
+                      text: 'от ',
+                      style: TextStyle(color: textColorSecondary),
+                    ),
                     TextSpan(
-                        text: 'от ',
-                        style: TextStyle(color: textColorSecondary)),
+                      text: widget.currentRangeValues.start.round().toString(),
+                      style: const TextStyle(color: textColorSecondary),
+                    ),
+                    const TextSpan(
+                      text: ' до ',
+                      style: TextStyle(color: textColorSecondary),
+                    ),
                     TextSpan(
-                        text:
-                            widget.currentRangeValues.start.round().toString(),
-                        style: TextStyle(color: textColorSecondary)),
-                    TextSpan(
-                        text: ' до ',
-                        style: TextStyle(color: textColorSecondary)),
-                    TextSpan(
-                        text: widget.currentRangeValues.end.round().toString(),
-                        style: TextStyle(color: textColorSecondary)),
-                    TextSpan(
-                        text: ' м',
-                        style: TextStyle(color: textColorSecondary)),
+                      text: widget.currentRangeValues.end.round().toString(),
+                      style: const TextStyle(color: textColorSecondary),
+                    ),
+                    const TextSpan(
+                      text: ' м',
+                      style: TextStyle(color: textColorSecondary),
+                    ),
                   ],
                 ),
               ),
@@ -218,17 +228,16 @@ class __DistanceState extends State<_Distance> {
             min: 100,
             max: 10000,
             divisions: 100,
-            onChanged: (RangeValues values) {
+            onChanged: (values) {
               setState(
                 () {
-                  //widget.currentRangeValues = values;
                   widget.updateRangeVal(values);
                   widget.notifyParent();
                 },
               );
             },
           ),
-        )
+        ),
       ],
     );
   }
@@ -236,9 +245,11 @@ class __DistanceState extends State<_Distance> {
 
 class _ShowButton extends StatefulWidget {
   final int countPlaces;
+  final List<Sight> filteredPlaces;
   const _ShowButton({
     Key? key,
     required this.countPlaces,
+    required this.filteredPlaces,
   }) : super(key: key);
 
   @override
@@ -251,23 +262,32 @@ class __ShowButtonState extends State<_ShowButton> {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
-        color: lightGreen,
+        color: widget.countPlaces != 0 ? lightGreen : whiteSmoke,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Text(
-              'Показать ('.toUpperCase() + widget.countPlaces.toString() + ')',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
+          InkWell(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Text(
+                'ПОКАЗАТЬ (${widget.countPlaces})',
+                style: TextStyle(
+                  color: widget.countPlaces != 0
+                      ? Colors.white
+                      : textColorSecondary.withOpacity(0.56),
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
+            onTap: () {
+              if (widget.countPlaces != 0) {
+                Navigator.pop(context, widget.filteredPlaces);
+              }
+            },
           )
         ],
       ),
@@ -398,7 +418,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.all(Radius.circular(40)),
+      borderRadius: const BorderRadius.all(Radius.circular(40)),
       onTap: () {
         setState(() {
           widget.filters[widget.title.toLowerCase()] =
@@ -409,7 +429,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 20),
+            margin: const EdgeInsets.symmetric(horizontal: 20),
             height: 90,
             width: 90,
             decoration: BoxDecoration(
@@ -420,7 +440,6 @@ class __CategoryCircleState extends State<_CategoryCircle> {
               children: [
                 Positioned.fill(
                   child: Align(
-                    alignment: Alignment.center,
                     child: widget.icon,
                   ),
                 ),
@@ -429,10 +448,10 @@ class __CategoryCircleState extends State<_CategoryCircle> {
                     right: 0,
                     bottom: 0,
                     child: Container(
-                      padding: EdgeInsets.all(3),
+                      padding: const EdgeInsets.all(3),
                       height: 22,
                       width: 22,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: favoriteColor,
                         shape: BoxShape.circle,
                       ),
@@ -446,7 +465,10 @@ class __CategoryCircleState extends State<_CategoryCircle> {
             ),
           ),
           const SizedBox(height: 12),
-          Text(widget.title, style: TextStyle(fontSize: 16))
+          Text(
+            widget.title,
+            style: const TextStyle(fontSize: 16),
+          ),
         ],
       ),
     );

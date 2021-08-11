@@ -117,9 +117,6 @@ class _FunctionButtons extends StatelessWidget {
         Expanded(
           flex: 1,
           child: InkWell(
-            onTap: () {
-              print('Нажата кнопка "Запланировать"');
-            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -142,9 +139,6 @@ class _FunctionButtons extends StatelessWidget {
         Expanded(
           flex: 1,
           child: InkWell(
-            onTap: () {
-              print('Нажата кнопка "В избранное"');
-            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -161,7 +155,7 @@ class _FunctionButtons extends StatelessWidget {
                     'В избранное',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -179,13 +173,10 @@ class _CreateRouteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        print('Нажата кнопка "Построить маршрут"');
-      },
       child: Container(
         height: 48,
         width: 328,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
@@ -201,11 +192,11 @@ class _CreateRouteButton extends StatelessWidget {
               padding: const EdgeInsets.only(left: 10),
               child: Text(
                 'Построить маршрут'.toUpperCase(),
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -228,8 +219,11 @@ class _PlaceImage extends StatelessWidget {
       fit: BoxFit.cover,
       height: double.infinity,
       width: double.infinity,
-      loadingBuilder: (BuildContext context, Widget child,
-          ImageChunkEvent? loadingProgress) {
+      loadingBuilder: (
+        BuildContext context,
+        Widget child,
+        ImageChunkEvent? loadingProgress,
+      ) {
         if (loadingProgress == null) return child;
         return Center(
           child: CircularProgressIndicator(
@@ -252,29 +246,31 @@ class _ArrowBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        print('Нажата кнопка "Вернуться назад"');
-      },
       child: Align(
         alignment: Alignment.topLeft,
-        child: Container(
-          margin: const EdgeInsets.only(
-            left: 16,
-            top: 36,
-          ),
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 17,
-            color: Theme.of(context).iconTheme.color,
-          ),
-          decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            margin: const EdgeInsets.only(
+              left: 16,
+              top: 36,
             ),
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              size: 17,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            decoration: BoxDecoration(
+              color: Theme.of(context).accentColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(10),
+              ),
+            ),
+            width: 32,
+            height: 32,
           ),
-          width: 32,
-          height: 32,
         ),
       ),
     );

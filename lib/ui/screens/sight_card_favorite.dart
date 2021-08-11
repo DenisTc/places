@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
 import 'package:places/ui/screens/sight_card.dart';
 
 /// A card of an interesting place to display on the favourites' screen
 class FavoriteSightCard extends SightCard {
+  //const FavoriteSightCard(Sight sight, this.visited) : super(sight);
   final bool visited;
+  // ignore: prefer_const_constructors_in_immutables
   FavoriteSightCard(Sight sight, this.visited) : super(sight);
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class FavoriteSightCard extends SightCard {
             mainAxisSize: MainAxisSize.min,
             children: [
               _FavoriteCardTop(sight: sight, visited: visited),
-              _FavoriteCardBottom(sight: sight, visited: visited)
+              _FavoriteCardBottom(sight: sight, visited: visited),
             ],
           ),
           Material(
@@ -98,7 +99,7 @@ class _FavoriteCardBottom extends StatelessWidget {
             maxLines: 2,
             style: Theme.of(context).textTheme.bodyText2,
             overflow: TextOverflow.ellipsis,
-          )
+          ),
         ],
       ),
     );
@@ -131,8 +132,11 @@ class _FavoriteCardTop extends StatelessWidget {
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent? loadingProgress) {
+              loadingBuilder: (
+                BuildContext context,
+                Widget child,
+                ImageChunkEvent? loadingProgress,
+              ) {
                 if (loadingProgress == null) return child;
                 return Center(
                   child: CircularProgressIndicator(
@@ -166,7 +170,7 @@ class _FavoriteCardTop extends StatelessWidget {
                 Icon(
                   Icons.clear_outlined,
                   color: Colors.white,
-                )
+                ),
               ],
             ),
           ),

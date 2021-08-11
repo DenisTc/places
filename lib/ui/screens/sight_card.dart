@@ -6,7 +6,7 @@ import 'package:places/ui/icons.dart';
 /// A card of an interesting place to be displayed on the main screen of the application.
 class SightCard extends StatelessWidget {
   final Sight sight;
-
+  //const SightCard({Key? key, required this.sight}) : super(key: key);
   const SightCard(this.sight);
 
   @override
@@ -25,7 +25,7 @@ class SightCard extends StatelessWidget {
           Material(
             color: Colors.transparent,
             child: InkWell(
-              borderRadius: BorderRadius.all(Radius.circular(16)),
+              borderRadius: const BorderRadius.all(Radius.circular(16)),
               onTap: () {},
             ),
           ),
@@ -48,9 +48,9 @@ class _SightCardBottom extends StatelessWidget {
     return Container(
       height: 92,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          bottomLeft: const Radius.circular(16),
-          bottomRight: const Radius.circular(16),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(16),
         ),
         color: Theme.of(context).primaryColor,
       ),
@@ -99,17 +99,20 @@ class _SightCardTop extends StatelessWidget {
       child: Stack(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: const Radius.circular(16),
-              topRight: const Radius.circular(16),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
             ),
             child: Image.network(
               sight.url,
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,
-              loadingBuilder: (BuildContext context, Widget child,
-                  ImageChunkEvent? loadingProgress) {
+              loadingBuilder: (
+                context,
+                child,
+                loadingProgress,
+              ) {
                 if (loadingProgress == null) return child;
                 return Center(
                   child: CircularProgressIndicator(
@@ -129,7 +132,7 @@ class _SightCardTop extends StatelessWidget {
               children: [
                 Text(
                   sight.type,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                   ),
@@ -138,7 +141,6 @@ class _SightCardTop extends StatelessWidget {
               ],
             ),
           ),
-          //const SizedBox(height: 16),
         ],
       ),
     );

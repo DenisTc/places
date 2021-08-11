@@ -45,7 +45,7 @@ class SightBottomNavBar extends StatelessWidget {
           height: 1,
           width: double.infinity,
           color: Theme.of(context).primaryColorLight,
-        )
+        ),
       ],
     );
   }

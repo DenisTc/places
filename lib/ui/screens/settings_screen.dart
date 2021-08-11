@@ -29,9 +29,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   child: Text(
                     'Тёмная тема',
                     style: Theme.of(context).textTheme.headline1?.copyWith(
-                        fontSize: 16,
-                        fontWeight: FontWeight
-                            .w400), //TextStyle(fontSize: 16, color: favoriteColor),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
                   ),
                 ),
                 FlutterSwitch(
@@ -46,7 +46,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       settings.changeTheme(value);
                     });
                   },
-                )
+                ),
               ],
             ),
             Divider(color: textColorSecondary.withOpacity(0.56)),
@@ -55,17 +55,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
-                    child: Text(
-                  'Смотреть туториал',
-                  style: Theme.of(context).textTheme.headline1?.copyWith(
-                      fontSize: 16,
-                      fontWeight: FontWeight
-                          .w400), //TextStyle(fontSize: 16, color: favoriteColor),
-                )),
-                Icon(
+                  child: Text(
+                    'Смотреть туториал',
+                    style: Theme.of(context).textTheme.headline1?.copyWith(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
+                  ),
+                ),
+                const Icon(
                   Icons.info_outline_rounded,
                   color: lightGreen,
-                )
+                ),
               ],
             ),
             const SizedBox(height: 6),
