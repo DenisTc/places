@@ -37,7 +37,7 @@ final List<Sight> mocks = [
     'Ресторан HELGA',
     57.82090523332626,
     28.320911696511036,
-    'https://planetofhotels.com/sites/default/files/attracrions/grand-canyon-1.jpg',
+    'https://borisstars.ru/img/upload/summer/11535/DSC02400_1561905293.JPG',
     'Средневековый ресторан «Helga» расположился в районе ближнего Завеличья, и предлагает гостям большой выбор русских и европейских блюд, приготовленных на средневековый манер.',
     'Ресторан',
   ),

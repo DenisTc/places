@@ -4,7 +4,6 @@ import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
 
-List selectedCategory = [];
 int? indexCategory;
 
 class SightCategoryScreen extends StatefulWidget {
@@ -18,7 +17,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _AppBar(),
+      appBar: const _AppBar(),
       body: Column(
         children: [
           const SizedBox(height: 24),
@@ -42,7 +41,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                               Text(
                                 mocks[index].type[0].toUpperCase() +
                                     mocks[index].type.substring(1),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: favoriteColor,
                                   fontSize: 16,
                                 ),
@@ -77,7 +76,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
               ),
             ),
           ),
-          _SaveButton(),
+          const _SaveButton(),
           const SizedBox(height: 30),
         ],
       ),
@@ -108,7 +107,7 @@ class _SaveButton extends StatelessWidget {
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
               (indexCategory == null) ? whiteSmoke : lightGreen),
-          minimumSize: MaterialStateProperty.all(Size(double.infinity, 48)),
+          minimumSize: MaterialStateProperty.all(const Size(double.infinity, 48)),
           shadowColor: MaterialStateProperty.all(Colors.transparent),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
@@ -127,7 +126,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
 
   @override
-  Size get preferredSize => Size.fromHeight(56.0);
+  Size get preferredSize => const Size.fromHeight(56.0);
 
   @override
   Widget build(BuildContext context) {
@@ -135,9 +134,9 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      title: Text('Категория'),
+      title: const Text('Категория'),
       leading: IconButton(
-        icon: Icon(Icons.navigate_before_rounded),
+        icon: const Icon(Icons.navigate_before_rounded),
         onPressed: () => Navigator.of(context).pop(),
         iconSize: 35,
       ),

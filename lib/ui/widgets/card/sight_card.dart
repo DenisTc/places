@@ -6,8 +6,7 @@ import 'package:places/ui/icons.dart';
 /// A card of an interesting place to be displayed on the main screen of the application.
 class SightCard extends StatelessWidget {
   final Sight sight;
-  //const SightCard({Key? key, required this.sight}) : super(key: key);
-  const SightCard(this.sight);
+  const SightCard({required this.sight, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

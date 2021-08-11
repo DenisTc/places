@@ -32,9 +32,11 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
   List<Sight> _filteredSights = [];
 
   void refresh() {
-    setState(() {
-      _searchSights();
-    });
+    setState(
+      () {
+        _searchSights();
+      },
+    );
   }
 
   void updateHistory(List<String> newHistoryList) {
@@ -64,7 +66,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
   Widget build(BuildContext context) {
     sights = widget.filteredList;
     return Scaffold(
-      appBar: SightAppBar(),
+      appBar: const SightAppBar(),
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -76,7 +78,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
           ),
           const SizedBox(height: 38),
           if (_controllerSearch.text.isNotEmpty && _filteredSights.isEmpty)
-            EmptySearchResult()
+            const EmptySearchResult()
           else
             SearchResultList(
               filteredSights: _filteredSights,
@@ -119,7 +121,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
             ),
         ],
       ),
-      bottomNavigationBar: SightBottomNavBar(),
+      bottomNavigationBar: const SightBottomNavBar(),
     );
   }
 }

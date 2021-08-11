@@ -22,13 +22,13 @@ class SightDetails extends StatelessWidget {
             child: Stack(
               children: [
                 _PlaceImage(imgUrl: sight.url),
-                _ArrowBackButton(),
+                const _ArrowBackButton(),
               ],
             ),
           ),
           Container(
             child: Padding(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 left: 16,
                 right: 16,
               ),
@@ -90,14 +90,14 @@ class _Description extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyText1,
         ),
         const SizedBox(height: 24),
-        _CreateRouteButton(),
+        const _CreateRouteButton(),
         const SizedBox(height: 24),
-        Divider(
+        const Divider(
           height: 4,
           color: textColorSecondary,
         ),
         const SizedBox(height: 19),
-        _FunctionButtons(),
+        const _FunctionButtons(),
         const SizedBox(height: 11)
       ],
     );
@@ -264,7 +264,7 @@ class _ArrowBackButton extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: Theme.of(context).accentColor,
-              borderRadius: BorderRadius.all(
+              borderRadius: const BorderRadius.all(
                 Radius.circular(10),
               ),
             ),
