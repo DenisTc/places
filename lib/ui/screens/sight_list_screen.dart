@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
+import 'package:places/ui/colors.dart';
+import 'package:places/ui/icons.dart';
 import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
 import 'package:places/ui/screens/sight_card.dart';
 import 'package:places/ui/widgets/main_list_screen/search_bar.dart';

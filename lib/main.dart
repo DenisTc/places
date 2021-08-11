@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
 import 'package:places/models/settings.dart';
+import 'package:places/ui/screens/add_sight_screen.dart';
 import 'package:places/ui/screens/settings_screen.dart';
+import 'package:places/ui/screens/sight_category_screen.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/sight_list_screen.dart';
