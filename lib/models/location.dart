@@ -1,6 +1,6 @@
 class Location {
-  late double lat;
-  late double lon;
+  final double lat;
+  final double lon;
 
-  Location(this.lat, this.lon);
+  const Location(this.lat, this.lon);
 }

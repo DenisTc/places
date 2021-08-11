@@ -19,7 +19,7 @@ class FiltersScreen extends StatefulWidget {
 
 class _FiltersScreenState extends State<FiltersScreen> {
   final Location userPosition =
-      Location(57.814183984654186, 28.347436646133506);
+      const Location(57.814183984654186, 28.347436646133506);
 
   RangeValues currentRangeValues = const RangeValues(100, 10000);
   List<Sight> filteredPlaces = [];
@@ -55,17 +55,16 @@ class _FiltersScreenState extends State<FiltersScreen> {
         filteredPlaces.remove(place);
       }
     }
-    print(filteredPlaces.length);
     return filteredPlaces.length;
   }
 
-  refresh() {
+  void refresh() {
     setState(() {
       countPlaces = countPlacesNear();
     });
   }
 
-  updateRangeVal(newRangeValues) {
+  void updateRangeVal(RangeValues newRangeValues) {
     setState(() {
       widget.filters.currentRangeValues = newRangeValues;
     });
@@ -82,10 +81,10 @@ class _FiltersScreenState extends State<FiltersScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () {
             filters.updateAll((key, value) => value = false);
-            widget.filters.currentRangeValues = RangeValues(100, 10000);
+            widget.filters.currentRangeValues = const RangeValues(100, 10000);
             countPlaces = countPlacesNear();
             Navigator.pop(context, mocks);
           },
@@ -95,11 +94,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
             onPressed: () {
               setState(() {
                 filters.updateAll((key, value) => value = false);
-                widget.filters.currentRangeValues = RangeValues(100, 10000);
+                widget.filters.currentRangeValues =
+                    const RangeValues(100, 10000);
                 countPlaces = countPlacesNear();
               });
             },
-            child: Text(
+            child: const Text(
               'Очистить',
               style: TextStyle(
                 fontSize: 16,
@@ -120,7 +120,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
             children: [
               const SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
                     'Категории'.toUpperCase(),
@@ -184,35 +183,37 @@ class __DistanceState extends State<_Distance> {
         Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Expanded(
-              flex: 1,
+            const Expanded(
               child: Text(
                 'Расстояние',
                 style: TextStyle(fontSize: 16),
               ),
             ),
             Expanded(
-              flex: 1,
               child: RichText(
                 textAlign: TextAlign.end,
                 text: TextSpan(
                   children: [
+                    const TextSpan(
+                      text: 'от ',
+                      style: TextStyle(color: textColorSecondary),
+                    ),
                     TextSpan(
-                        text: 'от ',
-                        style: TextStyle(color: textColorSecondary)),
+                      text: widget.currentRangeValues.start.round().toString(),
+                      style: const TextStyle(color: textColorSecondary),
+                    ),
+                    const TextSpan(
+                      text: ' до ',
+                      style: TextStyle(color: textColorSecondary),
+                    ),
                     TextSpan(
-                        text:
-                            widget.currentRangeValues.start.round().toString(),
-                        style: TextStyle(color: textColorSecondary)),
-                    TextSpan(
-                        text: ' до ',
-                        style: TextStyle(color: textColorSecondary)),
-                    TextSpan(
-                        text: widget.currentRangeValues.end.round().toString(),
-                        style: TextStyle(color: textColorSecondary)),
-                    TextSpan(
-                        text: ' м',
-                        style: TextStyle(color: textColorSecondary)),
+                      text: widget.currentRangeValues.end.round().toString(),
+                      style: const TextStyle(color: textColorSecondary),
+                    ),
+                    const TextSpan(
+                      text: ' м',
+                      style: TextStyle(color: textColorSecondary),
+                    ),
                   ],
                 ),
               ),
@@ -227,7 +228,7 @@ class __DistanceState extends State<_Distance> {
             min: 100,
             max: 10000,
             divisions: 100,
-            onChanged: (RangeValues values) {
+            onChanged: (values) {
               setState(
                 () {
                   widget.updateRangeVal(values);
@@ -236,7 +237,7 @@ class __DistanceState extends State<_Distance> {
               );
             },
           ),
-        )
+        ),
       ],
     );
   }
@@ -261,7 +262,7 @@ class __ShowButtonState extends State<_ShowButton> {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
         color: widget.countPlaces != 0 ? lightGreen : whiteSmoke,
@@ -273,18 +274,19 @@ class __ShowButtonState extends State<_ShowButton> {
             child: Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                'Показать ('.toUpperCase() +
-                    widget.countPlaces.toString() +
-                    ')',
+                'ПОКАЗАТЬ (${widget.countPlaces})',
                 style: TextStyle(
-                  color: widget.countPlaces != 0 ? Colors.white : textColorSecondary.withOpacity(0.56),
+                  color: widget.countPlaces != 0
+                      ? Colors.white
+                      : textColorSecondary.withOpacity(0.56),
                   fontWeight: FontWeight.w700,
                 ),
               ),
             ),
             onTap: () {
-              if (widget.countPlaces != 0)
+              if (widget.countPlaces != 0) {
                 Navigator.pop(context, widget.filteredPlaces);
+              }
             },
           )
         ],
@@ -416,19 +418,18 @@ class __CategoryCircleState extends State<_CategoryCircle> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.all(Radius.circular(40)),
+      borderRadius: const BorderRadius.all(Radius.circular(40)),
       onTap: () {
         setState(() {
           widget.filters[widget.title.toLowerCase()] =
               !widget.filters[widget.title.toLowerCase()]!;
           widget.notifyParent();
         });
-        //print(widget.filters);
       },
       child: Column(
         children: [
           Container(
-            margin: EdgeInsets.symmetric(horizontal: 20),
+            margin: const EdgeInsets.symmetric(horizontal: 20),
             height: 90,
             width: 90,
             decoration: BoxDecoration(
@@ -439,7 +440,6 @@ class __CategoryCircleState extends State<_CategoryCircle> {
               children: [
                 Positioned.fill(
                   child: Align(
-                    alignment: Alignment.center,
                     child: widget.icon,
                   ),
                 ),
@@ -448,10 +448,10 @@ class __CategoryCircleState extends State<_CategoryCircle> {
                     right: 0,
                     bottom: 0,
                     child: Container(
-                      padding: EdgeInsets.all(3),
+                      padding: const EdgeInsets.all(3),
                       height: 22,
                       width: 22,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: favoriteColor,
                         shape: BoxShape.circle,
                       ),
@@ -465,7 +465,10 @@ class __CategoryCircleState extends State<_CategoryCircle> {
             ),
           ),
           const SizedBox(height: 12),
-          Text(widget.title, style: TextStyle(fontSize: 16))
+          Text(
+            widget.title,
+            style: const TextStyle(fontSize: 16),
+          ),
         ],
       ),
     );

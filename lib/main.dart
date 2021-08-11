@@ -11,19 +11,23 @@ import 'package:places/ui/screens/visiting_screen.dart';
 final settings = Settings();
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({ Key? key }) : super(key: key);
+  
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
-    settings.addListener(() => setState(() {}));
+    settings.addListener(
+      () => setState(() {}),
+    );
+    
     super.initState();
   }
 
@@ -32,7 +36,8 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: settings.getTheme,
-      home: SightListScreen(),//SightListScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
+      home:
+          SightListScreen(), //SightListScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
     );
   }
 }

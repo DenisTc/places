@@ -21,9 +21,13 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   List<Sight> filteredList = mocks;
-  _navigateGetDataFromFilters(BuildContext context) async {
-    final result = await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => FiltersScreen(filters: filters)));
+  void _navigateGetDataFromFilters(BuildContext context) async {
+    final List<Sight>? result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FiltersScreen(filters: filters),
+      ),
+    );
 
     if (result != null) {
       filteredList = result;
@@ -35,7 +39,7 @@ class _SearchBarState extends State<SearchBar> {
     return TextField(
       onTap: () {
         if (widget.textFieldFocusNode.canRequestFocus) {
-          Navigator.push(
+          Navigator.push<List>(
             context,
             MaterialPageRoute(
               builder: (context) => SightSearchScreen(
@@ -50,13 +54,13 @@ class _SearchBarState extends State<SearchBar> {
       enableInteractiveSelection: false,
       focusNode: widget.textFieldFocusNode,
       cursorColor: favoriteColor,
-      style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+      style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
       decoration: InputDecoration(
         filled: true,
         contentPadding: EdgeInsets.all(0),
         fillColor: whiteSmoke,
         hintText: 'Поиск',
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           color: textColorSecondary,
           fontSize: 16,
           fontWeight: FontWeight.w400,

@@ -6,8 +6,10 @@ import 'package:places/ui/widgets/main_list_screen/search_bar.dart';
 import 'package:places/ui/widgets/main_list_screen/sight_app_bar.dart';
 
 class SightListScreen extends StatefulWidget {
+  const SightListScreen({ Key? key }) : super(key: key);
+
   @override
-  createState() => new SightListScreenState();
+  SightListScreenState createState() => SightListScreenState();
 }
 
 class SightListScreenState extends State<SightListScreen> {
@@ -15,11 +17,11 @@ class SightListScreenState extends State<SightListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
-      appBar: SightAppBar(),
+      appBar: const SightAppBar(),
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               left: 16,
               top: 70,
               right: 16,
@@ -32,7 +34,7 @@ class SightListScreenState extends State<SightListScreen> {
                 const SizedBox(height: 16),
                 SightCard(mocks[2]),
                 const SizedBox(height: 16),
-                SightCard(mocks[3])
+                SightCard(mocks[3]),
               ],
             ),
           ),

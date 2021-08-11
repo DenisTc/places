@@ -31,13 +31,24 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
   late List<Sight> sights = mocks;
   List<Sight> _filteredSights = [];
 
+  void refresh() {
+    setState(() {
+      _searchSights();
+    });
+  }
+
+  void updateHistory(List<String> newHistoryList) {
+    setState(() {
+      historyList = newHistoryList;
+    });
+  }
+
   void _searchSights() {
     final query = _controllerSearch.text;
 
     if (query.isNotEmpty) {
       _filteredSights = sights.where((Sight sight) {
         return sight.name.toLowerCase().startsWith(query.toLowerCase());
-        //return sight.name.toLowerCase().contains(query.toLowerCase());
       }).toList();
 
       if (_filteredSights.isNotEmpty) {
@@ -49,25 +60,12 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
     }
   }
 
-  refresh() {
-    setState(() {
-      _searchSights();
-    });
-  }
-
-  updateHistory(newHistoryList) {
-    setState(() {
-      historyList = newHistoryList;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     sights = widget.filteredList;
     return Scaffold(
       appBar: SightAppBar(),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: [
           SearchBar(
@@ -77,14 +75,14 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
             },
           ),
           const SizedBox(height: 38),
-          if (_controllerSearch.text.isNotEmpty && _filteredSights.length == 0)
+          if (_controllerSearch.text.isNotEmpty && _filteredSights.isEmpty)
             EmptySearchResult()
           else
             SearchResultList(
               filteredSights: _filteredSights,
               searchString: _controllerSearch.text,
             ),
-          if (historyList.length > 0 && _controllerSearch.text == '')
+          if (historyList.isNotEmpty && _controllerSearch.text == '')
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -170,15 +168,17 @@ class _HistoryListState extends State<_HistoryList> {
                           widget.controllerSearch.text =
                               widget.historyList[index];
                           widget.controllerSearch.selection =
-                              TextSelection.fromPosition(TextPosition(
-                                  offset: widget.controllerSearch.text.length));
+                              TextSelection.fromPosition(
+                            TextPosition(
+                                offset: widget.controllerSearch.text.length),
+                          );
                         });
 
                         widget.notifyParent();
                       },
                       child: Text(
                         widget.historyList[index],
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: favoriteColor,
                           fontSize: 16,
                         ),
@@ -186,7 +186,7 @@ class _HistoryListState extends State<_HistoryList> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.all(0.0),
+                    padding: EdgeInsets.zero,
                     height: 15,
                     child: IconButton(
                       padding: EdgeInsets.zero,
@@ -249,10 +249,13 @@ class __ClearHistoryButtonState extends State<_ClearHistoryButton> {
             },
           );
         },
-        child: Text(
+        child: const Text(
           'Очистить историю',
           style: TextStyle(
-              color: lightGreen, fontSize: 16, fontWeight: FontWeight.w500),
+            color: lightGreen,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );

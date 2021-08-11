@@ -14,7 +14,7 @@ class Filters {
     'кафе': false,
   };
 
-  setRangeValues(double lat, double lon){
+  void setRangeValues(double lat, double lon){
     currentRangeValues = RangeValues(lat, lon);
   }
 }
