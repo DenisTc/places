@@ -208,7 +208,7 @@ class _HistoryListState extends State<_HistoryList> {
                         color: textColorSecondary,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 14),

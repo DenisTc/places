@@ -69,7 +69,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                         {
                           indexCategory = null,
                         },
-                      setState(() {})
+                      setState(() {}),
                     },
                   );
                 },
@@ -107,7 +107,8 @@ class _SaveButton extends StatelessWidget {
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
               (indexCategory == null) ? whiteSmoke : lightGreen),
-          minimumSize: MaterialStateProperty.all(const Size(double.infinity, 48)),
+          minimumSize:
+              MaterialStateProperty.all(const Size(double.infinity, 48)),
           shadowColor: MaterialStateProperty.all(Colors.transparent),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(

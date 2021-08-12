@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Flutter Demo',
       theme: settings.getTheme,
       home:
-          SightListScreen(), //SightListScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
+          VisitingScreen(), //SightListScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
     );
   }
 }
