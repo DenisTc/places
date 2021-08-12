@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
+import 'package:places/ui/icons.dart';
 
 /// A card of an interesting place to display on the favourites' screen
 class FavoriteSightCard extends StatefulWidget {
@@ -34,7 +36,9 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
               children: [
                 _FavoriteCardTop(sight: widget.sight, visited: widget.visited),
                 _FavoriteCardBottom(
-                    sight: widget.sight, visited: widget.visited),
+                  sight: widget.sight,
+                  visited: widget.visited,
+                ),
               ],
             ),
             Material(
@@ -50,13 +54,12 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(
-                    widget.visited
-                        ? Icons.share
-                        : Icons.calendar_today_outlined,
+                  SvgPicture.asset(
+                    widget.visited ? iconShare : iconCalendar,
+                    width: 25,
                     color: Colors.white,
                   ),
-                  const SizedBox(width: 20),
+                  const SizedBox(width: 16),
                   InkWell(
                     child: const Icon(
                       Icons.clear_outlined,
