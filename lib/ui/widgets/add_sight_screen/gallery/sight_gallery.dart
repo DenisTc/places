@@ -36,11 +36,20 @@ class _SightGalleryState extends State<SightGallery> {
             scrollDirection: Axis.horizontal,
             itemCount: images.length,
             itemBuilder: (BuildContext context, int index) {
-              return SightImage(
-                image: images[index],
-                notifyParent: (imgUrl) {
-                  deleteImage(imgUrl);
+              return Dismissible(
+                key: UniqueKey(),
+                onDismissed: (direction){
+                  images.remove(images[index]);
                 },
+                direction: DismissDirection.up,
+                background: Container(),
+                child: SightImage(
+                  image: images[index],
+                  notifyParent: (imgUrl) {
+                    deleteImage(imgUrl);
+                  },
+                ),
+                
               );
             },
           ),
