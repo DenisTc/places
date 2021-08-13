@@ -51,7 +51,9 @@ class _AddSightScreenState extends State<AddSightScreen> {
         title: const Text('Новое место'),
         leadingWidth: 100,
         leading: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
           child: const Text(
             'Отмена',
             style: TextStyle(

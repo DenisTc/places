@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
 import 'package:places/ui/widgets/card/sight_card.dart';
+import 'package:places/ui/widgets/main_list_screen/add_sight_button.dart';
 import 'package:places/ui/widgets/main_list_screen/search_bar.dart';
 import 'package:places/ui/widgets/main_list_screen/sight_app_bar.dart';
 
@@ -19,6 +20,7 @@ class SightListScreenState extends State<SightListScreen> {
       backgroundColor: Theme.of(context).accentColor,
       appBar: const SightAppBar(),
       body: Stack(
+        alignment: AlignmentDirectional.topCenter,
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 70),
@@ -47,9 +49,10 @@ class SightListScreenState extends State<SightListScreen> {
               child: SearchBar(),
             ),
           ),
+          const AddSightButton(),
         ],
       ),
-      bottomNavigationBar: SightBottomNavBar(),
+      bottomNavigationBar: const SightBottomNavBar(),
     );
   }
 }
