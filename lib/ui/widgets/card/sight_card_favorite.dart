@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
+import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
-import 'package:places/ui/widgets/card/sight_card.dart';
+import 'package:places/ui/icons.dart';
 
 /// A card of an interesting place to display on the favourites' screen
-class FavoriteSightCard extends SightCard {
+class FavoriteSightCard extends StatefulWidget {
   final bool visited;
   final Sight sight;
-  const FavoriteSightCard(
-      {required this.visited, required this.sight, Key? key})
-      : super(key: key, sight: sight);
+  final Function() notifyParent;
 
+  const FavoriteSightCard({
+    required this.visited,
+    required this.sight,
+    Key? key,
+    required this.notifyParent,
+  }) : super(key: key);
+
+  @override
+  _FavoriteSightCardState createState() => _FavoriteSightCardState();
+}
+
+class _FavoriteSightCardState extends State<FavoriteSightCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,8 +34,11 @@ class FavoriteSightCard extends SightCard {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _FavoriteCardTop(sight: sight, visited: visited),
-                _FavoriteCardBottom(sight: sight, visited: visited),
+                _FavoriteCardTop(sight: widget.sight, visited: widget.visited),
+                _FavoriteCardBottom(
+                  sight: widget.sight,
+                  visited: widget.visited,
+                ),
               ],
             ),
             Material(
@@ -31,6 +46,33 @@ class FavoriteSightCard extends SightCard {
               child: InkWell(
                 borderRadius: const BorderRadius.all(Radius.circular(16)),
                 onTap: () {},
+              ),
+            ),
+            Positioned(
+              right: 16,
+              top: 10,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    widget.visited ? iconShare : iconCalendar,
+                    width: 25,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(width: 16),
+                  InkWell(
+                    child: const Icon(
+                      Icons.clear_outlined,
+                      color: Colors.white,
+                    ),
+                    onTap: () {
+                      setState(() {
+                        mocks.remove(widget.sight);
+                        widget.notifyParent();
+                      });
+                    },
+                  ),
+                ],
               ),
             ),
           ],
@@ -110,7 +152,7 @@ class _FavoriteCardBottom extends StatelessWidget {
   }
 }
 
-class _FavoriteCardTop extends StatelessWidget {
+class _FavoriteCardTop extends StatefulWidget {
   const _FavoriteCardTop({
     Key? key,
     required this.sight,
@@ -120,6 +162,11 @@ class _FavoriteCardTop extends StatelessWidget {
   final Sight sight;
   final bool visited;
 
+  @override
+  __FavoriteCardTopState createState() => __FavoriteCardTopState();
+}
+
+class __FavoriteCardTopState extends State<_FavoriteCardTop> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -132,7 +179,7 @@ class _FavoriteCardTop extends StatelessWidget {
               topRight: Radius.circular(16),
             ),
             child: Image.network(
-              sight.url,
+              widget.sight.url,
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,
@@ -159,21 +206,12 @@ class _FavoriteCardTop extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    sight.type,
+                    widget.sight.type,
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                ),
-                Icon(
-                  visited ? Icons.share : Icons.calendar_today_outlined,
-                  color: Colors.white,
-                ),
-                const SizedBox(width: 23),
-                const Icon(
-                  Icons.clear_outlined,
-                  color: Colors.white,
                 ),
               ],
             ),

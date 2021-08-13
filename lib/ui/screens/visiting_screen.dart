@@ -24,10 +24,19 @@ class VisitingScreen extends StatelessWidget {
   }
 }
 
-class _FavoriteTabBarView extends StatelessWidget {
+class _FavoriteTabBarView extends StatefulWidget {
   const _FavoriteTabBarView({
     Key? key,
   }) : super(key: key);
+
+  @override
+  __FavoriteTabBarViewState createState() => __FavoriteTabBarViewState();
+}
+
+class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
+  void refresh() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +51,13 @@ class _FavoriteTabBarView extends StatelessWidget {
               itemCount: mocks.length,
               itemBuilder: (BuildContext context, int index) {
                 final sight = mocks[index];
-                return FavoriteSightCard(sight: sight, visited: false);
+                return FavoriteSightCard(
+                  sight: sight,
+                  visited: false,
+                  notifyParent: () {
+                    refresh();
+                  },
+                );
               },
             )
           else
@@ -52,10 +67,20 @@ class _FavoriteTabBarView extends StatelessWidget {
               desc: 'Отмечайте понравившиеся\nместа и они появятся здесь.',
             ),
           if (mocks.isNotEmpty)
-            Column(
-              children: [
-                FavoriteSightCard(sight: mocks[2], visited: true),
-              ],
+            ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              shrinkWrap: true,
+              itemCount: mocks.length,
+              itemBuilder: (BuildContext context, int index) {
+                final sight = mocks[index];
+                return FavoriteSightCard(
+                  sight: sight,
+                  visited: true,
+                  notifyParent: () {
+                    refresh();
+                  },
+                );
+              },
             )
           else
             const _FavoritesEmpty(
@@ -114,10 +139,10 @@ class _FavoritesEmpty extends StatelessWidget {
                   fontSize: 14,
                   color: Color.fromRGBO(124, 126, 146, 0.56),
                 ),
-              )
+              ),
             ],
           ),
-        )
+        ),
       ],
     );
   }

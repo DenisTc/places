@@ -34,7 +34,7 @@ class SightDetails extends StatelessWidget {
               ),
               child: _Description(sight: sight),
             ),
-          )
+          ),
         ],
       ),
     );
