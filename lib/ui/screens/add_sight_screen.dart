@@ -4,6 +4,8 @@ import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
+import 'package:places/ui/widgets/add_sight_screen/gallery/sight_gallery.dart';
+import 'package:places/ui/widgets/add_sight_screen/new_sight_app_bar.dart';
 
 class AddSightScreen extends StatefulWidget {
   const AddSightScreen({Key? key}) : super(key: key);
@@ -13,17 +15,17 @@ class AddSightScreen extends StatefulWidget {
 }
 
 class _AddSightScreenState extends State<AddSightScreen> {
-  late FocusNode nodeLat = FocusNode();
-  late FocusNode nodeLng = FocusNode();
-  late FocusNode nodeDesc = FocusNode();
-  late bool _isButtonEnabled = false;
-
-  late GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _controllerCat = TextEditingController();
   final _controllerName = TextEditingController();
   final _controllerLat = TextEditingController();
   final _controllerLng = TextEditingController();
   final _controllerDesc = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  late FocusNode nodeLat = FocusNode();
+  late FocusNode nodeLng = FocusNode();
+  late FocusNode nodeDesc = FocusNode();
+  late bool _isButtonEnabled = false;
 
   void refresh() {
     setState(
@@ -44,104 +46,96 @@ class _AddSightScreenState extends State<AddSightScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text('Новое место'),
-        leadingWidth: 100,
-        leading: TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text(
-            'Отмена',
-            style: TextStyle(
-              color: textColorSecondary,
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
+      appBar: const NewSightAppBar(),
+      body: ListView(
+        shrinkWrap: true,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 24),
+                  Text(
+                    'Галерея'.toUpperCase(),
+                    style: const TextStyle(color: textColorSecondary),
+                  ),
+                  const SizedBox(height: 24),
+                  SightGallery(),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Категория'.toUpperCase(),
+                    style: const TextStyle(color: textColorSecondary),
+                  ),
+                  const SizedBox(height: 5),
+                  _CategoryField(
+                    controllerCat: _controllerCat,
+                    notifyParent: () {
+                      refresh();
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  Text(
+                    'Название'.toUpperCase(),
+                    style: const TextStyle(color: textColorSecondary),
+                  ),
+                  const SizedBox(height: 12),
+                  _NameField(
+                    formKey: _formKey,
+                    focusNodeLat: nodeLat,
+                    controllerName: _controllerName,
+                    notifyParent: () {
+                      refresh();
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  _CoordinatesFields(
+                    focusNodeLat: nodeLat,
+                    focusNodeLng: nodeLng,
+                    focusNodeDesc: nodeDesc,
+                    controllerLat: _controllerLat,
+                    controllerLng: _controllerLng,
+                    notifyParent: () {
+                      refresh();
+                    },
+                  ),
+                  const _SelectOnMapButton(),
+                  const SizedBox(height: 30),
+                  Text(
+                    'Описание'.toUpperCase(),
+                    style: const TextStyle(color: textColorSecondary),
+                  ),
+                  const SizedBox(height: 12),
+                  _DescriptionField(
+                    focusNode: nodeDesc,
+                    notifyParent: () {
+                      refresh();
+                    },
+                    controllerDesc: _controllerDesc,
+                  ),
+                  const SizedBox(height: 50),
+                  _CreateSightButton(
+                    enable: _isButtonEnabled,
+                    formKey: _formKey,
+                    controllerCat: _controllerCat,
+                    controllerName: _controllerName,
+                    controllerDesc: _controllerDesc,
+                    controllerLat: _controllerLat,
+                    controllerLng: _controllerLng,
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 24),
-                Text(
-                  'Категория'.toUpperCase(),
-                  style: const TextStyle(color: textColorSecondary),
-                ),
-                const SizedBox(height: 5),
-                _CategoryField(
-                  controllerCat: _controllerCat,
-                  notifyParent: () {
-                    refresh();
-                  },
-                ),
-                const SizedBox(height: 24),
-                Text(
-                  'Название'.toUpperCase(),
-                  style: const TextStyle(color: textColorSecondary),
-                ),
-                const SizedBox(height: 12),
-                _NameField(
-                  formKey: _formKey,
-                  focusNodeLat: nodeLat,
-                  controllerName: _controllerName,
-                  notifyParent: () {
-                    refresh();
-                  },
-                ),
-                const SizedBox(height: 24),
-                _CoordinatesFields(
-                  focusNodeLat: nodeLat,
-                  focusNodeLng: nodeLng,
-                  focusNodeDesc: nodeDesc,
-                  controllerLat: _controllerLat,
-                  controllerLng: _controllerLng,
-                  notifyParent: () {
-                    refresh();
-                  },
-                ),
-                const _SelectOnMapButton(),
-                const SizedBox(height: 30),
-                Text(
-                  'Описание'.toUpperCase(),
-                  style: const TextStyle(color: textColorSecondary),
-                ),
-                const SizedBox(height: 12),
-                _DescriptionField(
-                  focusNode: nodeDesc,
-                  notifyParent: () {
-                    refresh();
-                  },
-                  controllerDesc: _controllerDesc,
-                ),
-                const SizedBox(height: 50),
-                _CreateSightButton(
-                  enable: _isButtonEnabled,
-                  formKey: _formKey,
-                  controllerCat: _controllerCat,
-                  controllerName: _controllerName,
-                  controllerDesc: _controllerDesc,
-                  controllerLat: _controllerLat,
-                  controllerLng: _controllerLng,
-                ),
-              ],
-            ),
-          ),
-        ),
+        ],
       ),
     );
   }
 }
+
+
 
 class _SelectOnMapButton extends StatelessWidget {
   const _SelectOnMapButton({

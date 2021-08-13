@@ -19,3 +19,4 @@ const iconClearField = "res/icons/clear_field.svg";
 const iconOptions = "res/icons/options.svg";
 const iconClose = "res/icons/close.svg";
 const iconPlus = "res/icons/plus.svg";
+const iconCloseRound = "res/icons/close_round.svg";

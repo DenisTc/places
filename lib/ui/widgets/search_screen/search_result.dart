@@ -79,7 +79,7 @@ class _SightDesc extends StatelessWidget {
 class RichName extends StatefulWidget {
   final String name;
   final String searchString;
-  
+
   const RichName({
     Key? key,
     required this.name,
@@ -124,12 +124,12 @@ class _RichNameState extends State<RichName> {
 }
 
 class _SightImage extends StatelessWidget {
+  final Sight sight;
+
   const _SightImage({
     Key? key,
     required this.sight,
   }) : super(key: key);
-
-  final Sight sight;
 
   @override
   Widget build(BuildContext context) {
