@@ -14,7 +14,9 @@ class SearchBar extends StatefulWidget {
   SearchBar({
     Key? key,
   }) : super(key: key);
+
   final textFieldFocusNode = FocusNode();
+  
   @override
   _SearchBarState createState() => _SearchBarState();
 }
@@ -92,28 +94,28 @@ class _SearchBarState extends State<SearchBar> {
             },
           ),
         ),
-        border: OutlineInputBorder(
+        border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
             color: whiteSmoke,
           ),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
             color: whiteSmoke,
           ),
         ),
-        disabledBorder: OutlineInputBorder(
+        disabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
             color: whiteSmoke,
           ),
         ),
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
