@@ -10,12 +10,7 @@ class SightGallery extends StatefulWidget {
 }
 
 class _SightGalleryState extends State<SightGallery> {
-  List<String> images = [
-    mocks[0].url,
-    mocks[0].url,
-    mocks[0].url,
-    mocks[0].url,
-  ];
+  List<String> images = [];
 
   void deleteImage(String imgUrl) {
     setState(() {
@@ -23,13 +18,23 @@ class _SightGalleryState extends State<SightGallery> {
     });
   }
 
+  void addImage() {
+    setState(() {
+      images.add(mocks[0].url);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        const AddSightImageButton(),
+        AddSightImageButton(
+          addImage: () {
+            addImage();
+          },
+        ),
         Container(
-          padding: EdgeInsets.only(left: 5),
+          padding: const EdgeInsets.only(left: 5),
           width: MediaQuery.of(context).size.width * .75,
           height: 72,
           child: ListView.builder(
@@ -38,7 +43,7 @@ class _SightGalleryState extends State<SightGallery> {
             itemBuilder: (BuildContext context, int index) {
               return Dismissible(
                 key: UniqueKey(),
-                onDismissed: (direction){
+                onDismissed: (direction) {
                   images.remove(images[index]);
                 },
                 direction: DismissDirection.up,
@@ -49,7 +54,6 @@ class _SightGalleryState extends State<SightGallery> {
                     deleteImage(imgUrl);
                   },
                 ),
-                
               );
             },
           ),

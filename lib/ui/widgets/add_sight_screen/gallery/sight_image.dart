@@ -5,16 +5,18 @@ import 'package:places/ui/icons.dart';
 class SightImage extends StatelessWidget {
   final Function(String imgUrl) notifyParent;
   final String image;
-  const SightImage({Key? key, required this.image, required this.notifyParent}) : super(key: key);
+  const SightImage({
+    Key? key,
+    required this.image,
+    required this.notifyParent,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 16),
       child: GestureDetector(
-        onTap: (){
-                    notifyParent(image);
-                },
+        onTap: () {},
         child: Stack(
           alignment: AlignmentDirectional.center,
           children: [
@@ -37,10 +39,15 @@ class SightImage extends StatelessWidget {
             Positioned(
               top: 6,
               right: 6,
-              child: SvgPicture.asset(
-                iconCloseRound,
-                width: 20,
-                color: Colors.white,
+              child: InkWell(
+                onTap: (){
+                  notifyParent(image);
+                },
+                child: SvgPicture.asset(
+                  iconCloseRound,
+                  width: 20,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
