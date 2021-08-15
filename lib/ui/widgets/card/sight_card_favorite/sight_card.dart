@@ -29,9 +29,68 @@ class __SightCardState extends State<SightCard> {
       borderRadius: const BorderRadius.all(Radius.circular(16)),
       child: Container(
         key: widget.globalKey,
-        height: 216,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 16),
+        height: 199,
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+        child: Dismissible(
+          key: ValueKey(widget.sight),
+          direction: DismissDirection.endToStart,
+          onDismissed: (direction) {
+            widget.removeSight(widget.sight, widget.visited);
+          },
+          background: Container(
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      iconBasket,
+                      width: 25,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      'Удалить',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     Column(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         SvgPicture.asset(
+            //           iconBasket,
+            //           width: 25,
+            //           color: Colors.white,
+            //         ),
+            //         const SizedBox(height: 10),
+            //         const Text(
+            //           'Удалить',
+            //           style: TextStyle(
+            //             color: Colors.white,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ],
+            // ),
+          ),
           child: Stack(
             children: [
               Column(
@@ -58,7 +117,6 @@ class __SightCardState extends State<SightCard> {
                 right: 16,
                 top: 10,
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SvgPicture.asset(
                       widget.visited ? iconShare : iconCalendar,

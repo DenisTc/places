@@ -20,3 +20,4 @@ const iconOptions = "res/icons/options.svg";
 const iconClose = "res/icons/close.svg";
 const iconPlus = "res/icons/plus.svg";
 const iconCloseRound = "res/icons/close_round.svg";
+const iconBasket = "res/icons/basket.svg";

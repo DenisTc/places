@@ -77,15 +77,18 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
               itemCount: notVisited.length,
               itemBuilder: (BuildContext context, int index) {
                 final sight = notVisited[index];
-                return FavoriteSightCard(
-                  sight: sight,
-                  visited: false,
-                  moveItemInList: (data, sight, visited) {
-                    moveItemInList(data, sight, visited);
-                  },
-                  removeSight: (sight, visited) {
-                    removeSight(sight, visited);
-                  },
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: FavoriteSightCard(
+                    sight: sight,
+                    visited: false,
+                    moveItemInList: (data, sight, visited) {
+                      moveItemInList(data, sight, visited);
+                    },
+                    removeSight: (sight, visited) {
+                      removeSight(sight, visited);
+                    },
+                  ),
                 );
               },
             )
