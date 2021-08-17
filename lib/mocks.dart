@@ -1,4 +1,5 @@
 import 'package:places/domains/sight.dart';
+import 'package:places/ui/icons.dart';
 
 final List<Sight> mocks = [
   const Sight(
@@ -8,6 +9,7 @@ final List<Sight> mocks = [
     'https://putidorogi-nn.ru/images/stories/evropa/rossiya/troickiy_sobor_v_pskove_4.jpg',
     'Свято-Троицкий собор - православный храм во Пскове, кафедральный собор Псковской епархии. Входит в состав архитектурного ансамбля Псковского крома и является главным его строением.',
     'Особое место',
+    null //iconParticularPlace,
   ),
   const Sight(
     'Финский парк (Парк Куопио)',
@@ -16,6 +18,7 @@ final List<Sight> mocks = [
     'https://allmyworld.ru/wp-content/uploads/2021/06/dostoprimechatelnosti-pskova-Finskij-park-Kuopio.jpg',
     'Финский парк расположен в центральной части города, на левом берегу реки Псковы, от пешеходного до Кузнецкого моста.Парк для прогулок в долине реки Псковы был заложен в начале 1990-х годов по проекту архитекторов из финского города-побратима Куопио.',
     'Парк',
+    iconPark,
   ),
   const Sight(
     'Old Estate Hotel & SPA',
@@ -24,6 +27,7 @@ final List<Sight> mocks = [
     'https://cf.bstatic.com/xdata/images/hotel/max1024x768/6864006.jpg?k=48875e6401c714da45566bdb7f7214313d467f259fb8b946af6dc4bf69701a11&o=&hp=1',
     'Идеальный отель для бизнеса и отдыха: высококлассный сервис, респектабельные интерьеры, 50 номеров повышенной комфортности... Является современной реконструкцией памятников архитектуры XVII-XIX веков. В трех минутах от исторического центра города.',
     'Отель',
+    iconHotel,
   ),
   const Sight(
     'Михайловское',
@@ -32,6 +36,7 @@ final List<Sight> mocks = [
     'https://tur-mobile.ru/wp-content/uploads/2020/10/pushkinskie-gory.-2.jpg',
     '«Миха́йловское» — действующий музей-заповедник Александра Сергеевича Пушкина в Пушкиногорском районе Псковской области Российской Федерации, основанный в 1922 году. Является объектом культурного наследия федерального значения.',
     'Музей',
+    iconMuseum,
   ),
   const Sight(
     'Ресторан HELGA',
@@ -40,5 +45,6 @@ final List<Sight> mocks = [
     'https://borisstars.ru/img/upload/summer/11535/DSC02400_1561905293.JPG',
     'Средневековый ресторан «Helga» расположился в районе ближнего Завеличья, и предлагает гостям большой выбор русских и европейских блюд, приготовленных на средневековый манер.',
     'Ресторан',
+    iconCafe,
   ),
 ];

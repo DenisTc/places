@@ -166,16 +166,18 @@ class _HistoryListState extends State<_HistoryList> {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                        setState(() {
-                          widget.controllerSearch.text =
-                              widget.historyList[index];
-                          widget.controllerSearch.selection =
-                              TextSelection.fromPosition(
-                            TextPosition(
-                                offset: widget.controllerSearch.text.length),
-                          );
-                        });
-
+                        setState(
+                          () {
+                            widget.controllerSearch.text =
+                                widget.historyList[index];
+                            widget.controllerSearch.selection =
+                                TextSelection.fromPosition(
+                              TextPosition(
+                                offset: widget.controllerSearch.text.length,
+                              ),
+                            );
+                          },
+                        );
                         widget.notifyParent();
                       },
                       child: Text(
