@@ -59,14 +59,14 @@ class _AddSightScreenState extends State<AddSightScreen> {
                 children: [
                   const SizedBox(height: 24),
                   Text(
-                    'Галерея'.toUpperCase(),
+                    'ГАЛЕРЕЯ',
                     style: const TextStyle(color: textColorSecondary),
                   ),
                   const SizedBox(height: 24),
                   SightGallery(),
                   const SizedBox(height: 24),
                   Text(
-                    'Категория'.toUpperCase(),
+                    'КАТЕГОРИЯ',
                     style: const TextStyle(color: textColorSecondary),
                   ),
                   const SizedBox(height: 5),
@@ -78,7 +78,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Название'.toUpperCase(),
+                    'НАЗВАНИЕ',
                     style: const TextStyle(color: textColorSecondary),
                   ),
                   const SizedBox(height: 12),
@@ -104,7 +104,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   const _SelectOnMapButton(),
                   const SizedBox(height: 30),
                   Text(
-                    'Описание'.toUpperCase(),
+                    'ОПИСАНИЕ',
                     style: const TextStyle(color: textColorSecondary),
                   ),
                   const SizedBox(height: 12),
@@ -316,7 +316,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Широта'.toUpperCase(),
+                'ШИРОТА',
                 style: TextStyle(color: textColorSecondary),
               ),
               const SizedBox(height: 12),
@@ -383,7 +383,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Долгота'.toUpperCase(),
+                'ДОЛГОТА',
                 style: TextStyle(color: textColorSecondary),
               ),
               const SizedBox(height: 12),
@@ -557,7 +557,7 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
         }
       },
       child: Text(
-        'Создать'.toUpperCase(),
+        'СОЗДАТЬ',
         style: TextStyle(
           color: widget.enable
               ? Colors.white
