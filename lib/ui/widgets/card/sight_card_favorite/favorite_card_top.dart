@@ -28,7 +28,7 @@ class _FavoriteCardTopState extends State<FavoriteCardTop> {
               topRight: Radius.circular(16),
             ),
             child: Image.network(
-              widget.sight.url,
+              widget.sight.url[0],
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,

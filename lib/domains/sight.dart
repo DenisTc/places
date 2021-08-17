@@ -1,7 +1,7 @@
 class Sight {
   final String name;
   final double lat, lon;
-  final String url;
+  final List<String> url;
   final String details;
   final String type;
 

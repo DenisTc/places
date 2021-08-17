@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/sight_details_screen.dart';
 
 /// A card of an interesting place to be displayed on the main screen of the application.
 class SightCard extends StatefulWidget {
@@ -30,7 +31,14 @@ class _SightCardState extends State<SightCard> {
             color: Colors.transparent,
             child: InkWell(
               borderRadius: const BorderRadius.all(Radius.circular(16)),
-              onTap: () {},
+              onTap: () {
+                Navigator.push<List>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SightDetails(sight: widget.sight),
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -108,7 +116,7 @@ class _SightCardTop extends StatelessWidget {
               topRight: Radius.circular(16),
             ),
             child: Image.network(
-              sight.url,
+              sight.url[0],
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,
