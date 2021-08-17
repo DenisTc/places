@@ -58,16 +58,16 @@ class _AddSightScreenState extends State<AddSightScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 24),
-                  Text(
+                  const Text(
                     'ГАЛЕРЕЯ',
-                    style: const TextStyle(color: textColorSecondary),
+                    style: TextStyle(color: textColorSecondary),
                   ),
                   const SizedBox(height: 24),
                   SightGallery(),
                   const SizedBox(height: 24),
-                  Text(
+                  const Text(
                     'КАТЕГОРИЯ',
-                    style: const TextStyle(color: textColorSecondary),
+                    style: TextStyle(color: textColorSecondary),
                   ),
                   const SizedBox(height: 5),
                   _CategoryField(
@@ -77,9 +77,9 @@ class _AddSightScreenState extends State<AddSightScreen> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  Text(
+                  const Text(
                     'НАЗВАНИЕ',
-                    style: const TextStyle(color: textColorSecondary),
+                    style: TextStyle(color: textColorSecondary),
                   ),
                   const SizedBox(height: 12),
                   _NameField(
@@ -103,9 +103,9 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   ),
                   const _SelectOnMapButton(),
                   const SizedBox(height: 30),
-                  Text(
+                  const Text(
                     'ОПИСАНИЕ',
-                    style: const TextStyle(color: textColorSecondary),
+                    style: TextStyle(color: textColorSecondary),
                   ),
                   const SizedBox(height: 12),
                   _DescriptionField(
@@ -315,7 +315,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'ШИРОТА',
                 style: TextStyle(color: textColorSecondary),
               ),
@@ -382,7 +382,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'ДОЛГОТА',
                 style: TextStyle(color: textColorSecondary),
               ),
