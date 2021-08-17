@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
 import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
-import 'package:places/ui/widgets/card/sight_card_favorite.dart';
+import 'package:places/ui/widgets/card/sight_card_favorite/sight_card_favorite.dart';
 
 /// Screen for displaying planned and visited places
 class VisitingScreen extends StatelessWidget {
@@ -34,8 +35,33 @@ class _FavoriteTabBarView extends StatefulWidget {
 }
 
 class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
+  List<Sight> isVisited = [...mocks];
+  List<Sight> notVisited = [...mocks];
+
   void refresh() {
     setState(() {});
+  }
+
+  void moveItemInList(Sight data, Sight sight, bool visited) {
+    setState(() {
+      if (visited) {
+        isVisited.remove(data);
+        isVisited.insert(isVisited.indexOf(sight), data);
+      } else {
+        notVisited.remove(data);
+        notVisited.insert(notVisited.indexOf(sight), data);
+      }
+    });
+  }
+
+  void removeSight(Sight sight, bool visited) {
+    setState(() {
+      if (visited) {
+        isVisited.remove(sight);
+      } else {
+        notVisited.remove(sight);
+      }
+    });
   }
 
   @override
@@ -44,19 +70,25 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
       margin: const EdgeInsets.only(top: 28),
       child: TabBarView(
         children: [
-          if (mocks.isNotEmpty)
+          if (notVisited.isNotEmpty)
             ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               shrinkWrap: true,
-              itemCount: mocks.length,
+              itemCount: notVisited.length,
               itemBuilder: (BuildContext context, int index) {
-                final sight = mocks[index];
-                return FavoriteSightCard(
-                  sight: sight,
-                  visited: false,
-                  notifyParent: () {
-                    refresh();
-                  },
+                final sight = notVisited[index];
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: FavoriteSightCard(
+                    sight: sight,
+                    visited: false,
+                    moveItemInList: (data, sight, visited) {
+                      moveItemInList(data, sight, visited);
+                    },
+                    removeSight: (sight, visited) {
+                      removeSight(sight, visited);
+                    },
+                  ),
                 );
               },
             )
@@ -66,19 +98,25 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
               title: 'Пусто',
               desc: 'Отмечайте понравившиеся\nместа и они появятся здесь.',
             ),
-          if (mocks.isNotEmpty)
+          if (isVisited.isNotEmpty)
             ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               shrinkWrap: true,
-              itemCount: mocks.length,
+              itemCount: isVisited.length,
               itemBuilder: (BuildContext context, int index) {
-                final sight = mocks[index];
-                return FavoriteSightCard(
-                  sight: sight,
-                  visited: true,
-                  notifyParent: () {
-                    refresh();
-                  },
+                final sight = isVisited[index];
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: FavoriteSightCard(
+                    sight: sight,
+                    visited: true,
+                    moveItemInList: (data, sight, visited) {
+                      moveItemInList(data, sight, visited);
+                    },
+                    removeSight: (notVisited, sight) {
+                      removeSight(notVisited, sight);
+                    },
+                  ),
                 );
               },
             )
@@ -151,12 +189,12 @@ class _FavoritesEmpty extends StatelessWidget {
 class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
   final bool isDarkMode = false;
 
+  @override
+  Size get preferredSize => const Size.fromHeight(116);
+
   const _FavoriteAppbar({
     Key? key,
   }) : super(key: key);
-
-  @override
-  Size get preferredSize => const Size.fromHeight(116);
 
   @override
   Widget build(BuildContext context) {

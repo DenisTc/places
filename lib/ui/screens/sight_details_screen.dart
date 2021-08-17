@@ -60,7 +60,7 @@ class _Description extends StatelessWidget {
               sight.name,
               style:
                   Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
-            )
+            ),
           ],
         ),
         const SizedBox(height: 2),
@@ -81,7 +81,7 @@ class _Description extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               ),
-            )
+            ),
           ],
         ),
         const SizedBox(height: 24),
