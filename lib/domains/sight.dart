@@ -6,5 +6,5 @@ class Sight {
   final String type;
   final String? icon;
 
-  const Sight(this.name,this.lat, this.lon, this.urls, this.details, this.type);
+  const Sight(this.name,this.lat, this.lon, this.urls, this.details, this.type, this.icon);
 }
