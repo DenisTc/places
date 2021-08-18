@@ -556,7 +556,7 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
               widget.controllerName.text,
               double.parse(widget.controllerLat.text),
               double.parse(widget.controllerLng.text),
-              '',
+              [''],
               widget.controllerDesc.text,
               widget.controllerCat.text,
               'iconParticularPlace',

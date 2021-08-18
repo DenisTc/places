@@ -5,10 +5,24 @@ import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
 
 /// A screen with a detailed description of the place
-class SightDetails extends StatelessWidget {
+class SightDetails extends StatefulWidget {
   final Sight sight;
 
   const SightDetails({Key? key, required this.sight}) : super(key: key);
+
+  @override
+  _SightDetailsState createState() => _SightDetailsState();
+}
+
+class _SightDetailsState extends State<SightDetails> {
+  final PageController _pageController = PageController();
+  double currentPage = 0;
+
+  void setCurrentPage(double page) {
+    setState(() {
+      currentPage = page;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +35,24 @@ class SightDetails extends StatelessWidget {
             color: Colors.brown,
             child: Stack(
               children: [
-                _PlaceImage(imgUrl: sight.url),
+                PageView.builder(
+                  onPageChanged: (int page) {
+                    setState(() {
+                      setCurrentPage(page.toDouble());
+                    });
+                  },
+                  controller: _pageController,
+                  itemCount: widget.sight.urls.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return _PlaceImage(imgUrl: widget.sight.urls[index]);
+                  },
+                ),
                 const _ArrowBackButton(),
+                if (widget.sight.urls.length > 1)
+                  PageIndicator(
+                    widget: widget,
+                    currentPage: currentPage,
+                  ),
               ],
             ),
           ),
@@ -32,9 +62,59 @@ class SightDetails extends StatelessWidget {
                 left: 16,
                 right: 16,
               ),
-              child: _Description(sight: sight),
+              child: _Description(sight: widget.sight),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class PageIndicator extends StatelessWidget {
+  const PageIndicator({
+    Key? key,
+    required this.widget,
+    required this.currentPage,
+  }) : super(key: key);
+
+  final SightDetails widget;
+  final double currentPage;
+
+  @override
+  Widget build(BuildContext context) {
+    const startIndicator = BorderRadius.only(
+      topRight: Radius.circular(10),
+      bottomRight: Radius.circular(10),
+    );
+
+    const endIndicator = BorderRadius.only(
+      topLeft: Radius.circular(10),
+      bottomLeft: Radius.circular(10),
+    );
+
+    const middleIndicator = BorderRadius.all(
+      Radius.circular(10),
+    );
+
+    return Positioned(
+      bottom: 0,
+      child: Row(
+        children: [
+          for (int i = 0; i < widget.sight.urls.length; i++)
+            Container(
+              height: 10,
+              decoration: BoxDecoration(
+                borderRadius: (currentPage == 0)
+                    ? startIndicator
+                    : (currentPage == widget.sight.urls.length - 1)
+                        ? endIndicator
+                        : middleIndicator,
+                color: i == currentPage ? favoriteColor : Colors.transparent,
+              ),
+              width:
+                  MediaQuery.of(context).size.width / widget.sight.urls.length,
+            ),
         ],
       ),
     );
@@ -188,11 +268,11 @@ class _CreateRouteButton extends StatelessWidget {
             Container(
               child: SvgPicture.asset(iconRoute, color: Colors.white),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10),
+            const Padding(
+              padding: EdgeInsets.only(left: 10),
               child: Text(
-                'Построить маршрут'.toUpperCase(),
-                style: const TextStyle(
+                'ПОСТРОИТЬ МАРШРУТ',
+                style: TextStyle(
                   color: Colors.white,
                 ),
               ),
@@ -245,32 +325,30 @@ class _ArrowBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      child: Align(
-        alignment: Alignment.topLeft,
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Container(
-            margin: const EdgeInsets.only(
-              left: 16,
-              top: 36,
-            ),
-            child: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              size: 17,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).accentColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
-            ),
-            width: 32,
-            height: 32,
+    return Align(
+      alignment: Alignment.topLeft,
+      child: InkWell(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Container(
+          margin: const EdgeInsets.only(
+            left: 16,
+            top: 36,
           ),
+          child: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            size: 17,
+            color: Theme.of(context).iconTheme.color,
+          ),
+          decoration: BoxDecoration(
+            color: Theme.of(context).accentColor,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(10),
+            ),
+          ),
+          width: 32,
+          height: 32,
         ),
       ),
     );

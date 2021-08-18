@@ -68,28 +68,6 @@ class __SightCardState extends State<SightCard> {
                 ),
               ),
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.end,
-            //   children: [
-            //     Column(
-            //       mainAxisAlignment: MainAxisAlignment.center,
-            //       children: [
-            //         SvgPicture.asset(
-            //           iconBasket,
-            //           width: 25,
-            //           color: Colors.white,
-            //         ),
-            //         const SizedBox(height: 10),
-            //         const Text(
-            //           'Удалить',
-            //           style: TextStyle(
-            //             color: Colors.white,
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ],
-            // ),
           ),
           child: Stack(
             children: [
@@ -110,7 +88,9 @@ class __SightCardState extends State<SightCard> {
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  onTap: () {},
+                  onTap: () {
+                    
+                  },
                 ),
               ),
               Positioned(
