@@ -1,0 +1,58 @@
+import 'package:flutter/material.dart';
+import 'package:places/ui/icons.dart';
+import 'package:places/ui/widgets/onboarding_screen/page_indicator.dart';
+import 'package:places/ui/widgets/onboarding_screen/screen.dart';
+
+class OnboardingScreens extends StatefulWidget {
+  final PageController pageController;
+  final Function(double page) setCurrentPage;
+  final double currentPage;
+
+  const OnboardingScreens({
+    Key? key,
+    required this.pageController,
+    required this.setCurrentPage,
+    required this.currentPage,
+  }) : super(key: key);
+
+  @override
+  _OnboardingScreensState createState() => _OnboardingScreensState();
+}
+
+class _OnboardingScreensState extends State<OnboardingScreens> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        PageView(
+          onPageChanged: (int page) {
+            setState(() {
+              widget.setCurrentPage(page.toDouble());
+            });
+          },
+          controller: widget.pageController,
+          children: [
+            const Screen(
+              icon: iconPointer,
+              title: 'Добро пожаловать\nв Путеводитель',
+              description: 'Ищи новые локации и сохраняй\nсамые любимые.',
+            ),
+            const Screen(
+              icon: iconBackpack,
+              title: 'Построй маршрут\nи отправляйся в путь',
+              description: 'Достигай цели максимально\nбыстро и комфортно.',
+            ),
+            const Screen(
+              icon: iconHandTouch,
+              title: 'Добавляй места,\nкоторые нашёл сам',
+              description:
+                  'Делись самыми интересными\nи помоги нам стать лучше!',
+            ),
+          ],
+        ),
+        PageIndicator(currentPage: widget.currentPage),
+      ],
+    );
+  }
+}
