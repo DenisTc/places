@@ -191,7 +191,7 @@ class _CreateRouteButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(
-                'Построить маршрут'.toUpperCase(),
+                'ПОСТРОИТЬ МАРШРУТ',
                 style: const TextStyle(
                   color: Colors.white,
                 ),
