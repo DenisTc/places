@@ -122,7 +122,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               Row(
                 children: [
                   Text(
-                    'Категории'.toUpperCase(),
+                    'КАТЕГОРИИ',
                     style: TextStyle(
                       color: textColorSecondary.withOpacity(0.56),
                     ),
@@ -136,7 +136,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 },
                 filters: filters,
               ),
-              const SizedBox(height: 60),
+              const SizedBox(height: 20),
               _Distance(
                 notifyParent: () {
                   refresh();
@@ -310,86 +310,35 @@ class _FiltersCategory extends StatefulWidget {
 }
 
 class _FiltersCategoryState extends State<_FiltersCategory> {
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _CategoryCircle(
-              title: 'Отель',
+        GridView.builder(
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: MediaQuery.of(context).size.width / 3,
+            //maxCrossAxisExtent: 10,
+            //childAspectRatio: 3 / 2,
+            //crossAxisSpacing: 20,
+            mainAxisSpacing: 30,
+          ),
+          itemCount: mocks.length,
+          itemBuilder: (BuildContext context, int index) {
+            final category = mocks[index];
+            return _CategoryCircle(
+              title: category.type,
               icon: SvgPicture.asset(
-                iconHotel,
+                category.icon != null ? category.icon! : iconParticularPlace,
                 height: 40,
                 width: 40,
                 color: lightGreen,
               ),
               notifyParent: widget.notifyParent,
               filters: widget.filters,
-            ),
-            _CategoryCircle(
-              title: 'Ресторан',
-              icon: SvgPicture.asset(
-                iconCafe,
-                height: 40,
-                width: 40,
-                color: lightGreen,
-              ),
-              notifyParent: widget.notifyParent,
-              filters: widget.filters,
-            ),
-            _CategoryCircle(
-              title: 'Особое место',
-              icon: SvgPicture.asset(
-                iconParticularPlace,
-                height: 40,
-                width: 40,
-                color: lightGreen,
-              ),
-              notifyParent: widget.notifyParent,
-              filters: widget.filters,
-            ),
-          ],
-        ),
-        const SizedBox(height: 50),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _CategoryCircle(
-              title: 'Парк',
-              icon: SvgPicture.asset(
-                iconPark,
-                height: 40,
-                width: 40,
-                color: lightGreen,
-              ),
-              notifyParent: widget.notifyParent,
-              filters: widget.filters,
-            ),
-            _CategoryCircle(
-              title: 'Музей',
-              icon: SvgPicture.asset(
-                iconMuseum,
-                height: 40,
-                width: 40,
-                color: lightGreen,
-              ),
-              notifyParent: widget.notifyParent,
-              filters: widget.filters,
-            ),
-            _CategoryCircle(
-              title: 'Кафе',
-              icon: SvgPicture.asset(
-                iconCafe,
-                height: 40,
-                width: 40,
-                color: lightGreen,
-              ),
-              notifyParent: widget.notifyParent,
-              filters: widget.filters,
-            ),
-          ],
+            );
+          },
         ),
       ],
     );

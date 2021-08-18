@@ -4,6 +4,7 @@ class Sight {
   final List<String> urls;
   final String details;
   final String type;
+  final String? icon;
 
   const Sight(this.name,this.lat, this.lon, this.urls, this.details, this.type);
 }
