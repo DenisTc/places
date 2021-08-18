@@ -4,6 +4,7 @@ import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/sight_category_screen.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/sight_gallery.dart';
 import 'package:places/ui/widgets/add_sight_screen/new_sight_app_bar.dart';
 
@@ -135,8 +136,6 @@ class _AddSightScreenState extends State<AddSightScreen> {
   }
 }
 
-
-
 class _SelectOnMapButton extends StatelessWidget {
   const _SelectOnMapButton({
     Key? key,
@@ -185,7 +184,7 @@ class __CategoryFieldState extends State<_CategoryField> {
           widget.notifyParent();
         });
       },
-      initialValue: 'Кафе',
+      //initialValue: 'Кафе',
       readOnly: true,
       textInputAction: TextInputAction.next,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
@@ -197,7 +196,15 @@ class __CategoryFieldState extends State<_CategoryField> {
           fontWeight: FontWeight.w400,
         ),
         suffixIcon: IconButton(
-          onPressed: () {},
+          //onPressed: () {},
+          onPressed: () {
+            Navigator.push<List>(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SightCategoryScreen(),
+            ),
+          );
+          },
           icon: const Icon(Icons.navigate_next_rounded),
           color: favoriteColor,
         ),
@@ -552,6 +559,7 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
               '',
               widget.controllerDesc.text,
               widget.controllerCat.text,
+              'iconParticularPlace',
             ),
           );
         }
