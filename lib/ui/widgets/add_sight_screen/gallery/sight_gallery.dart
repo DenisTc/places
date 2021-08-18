@@ -20,7 +20,7 @@ class _SightGalleryState extends State<SightGallery> {
 
   void addImage() {
     setState(() {
-      images.add(mocks[0].url);
+      images.add(mocks[0].urls.first);
     });
   }
 

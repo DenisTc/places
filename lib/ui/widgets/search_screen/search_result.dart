@@ -139,7 +139,7 @@ class _SightImage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(12.0)),
         child: Image.network(
-          sight.url,
+          sight.urls.first,
           fit: BoxFit.cover,
         ),
       ),
