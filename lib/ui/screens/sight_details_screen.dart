@@ -15,16 +15,13 @@ class SightDetails extends StatefulWidget {
 }
 
 class _SightDetailsState extends State<SightDetails> {
-  PageController _pageController = PageController();
+  final PageController _pageController = PageController();
   double currentPage = 0;
 
-  void initState() {
-    _pageController.addListener(() {
-      setState(() {
-        currentPage = _pageController.page!;
-      });
+  void setCurrentPage(double page) {
+    setState(() {
+      currentPage = page;
     });
-    super.initState();
   }
 
   @override
@@ -39,17 +36,23 @@ class _SightDetailsState extends State<SightDetails> {
             child: Stack(
               children: [
                 PageView.builder(
+                  onPageChanged: (int page) {
+                    setState(() {
+                      setCurrentPage(page.toDouble());
+                    });
+                  },
                   controller: _pageController,
-                  itemCount: widget.sight.url.length,
+                  itemCount: widget.sight.urls.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return _PlaceImage(imgUrl: widget.sight.url[index]);
+                    return _PlaceImage(imgUrl: widget.sight.urls[index]);
                   },
                 ),
                 const _ArrowBackButton(),
-                PageIndicator(
-                  widget: widget,
-                  currentPage: currentPage,
-                ),
+                if (widget.sight.urls.length > 1)
+                  PageIndicator(
+                    widget: widget,
+                    currentPage: currentPage,
+                  ),
               ],
             ),
           ),
@@ -98,20 +101,20 @@ class PageIndicator extends StatelessWidget {
       bottom: 0,
       child: Row(
         children: [
-          for (int i = 0; i < widget.sight.url.length; i++)
+          for (int i = 0; i < widget.sight.urls.length; i++)
             Container(
               height: 10,
               decoration: BoxDecoration(
                 borderRadius: (currentPage == 0)
                     ? startIndicator
-                    : (currentPage == widget.sight.url.length - 1)
+                    : (currentPage == widget.sight.urls.length - 1)
                         ? endIndicator
                         : middleIndicator,
                 color: i == currentPage ? favoriteColor : Colors.transparent,
               ),
               width:
-                  MediaQuery.of(context).size.width / widget.sight.url.length,
-            )
+                  MediaQuery.of(context).size.width / widget.sight.urls.length,
+            ),
         ],
       ),
     );

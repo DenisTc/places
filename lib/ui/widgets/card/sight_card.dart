@@ -116,7 +116,7 @@ class _SightCardTop extends StatelessWidget {
               topRight: Radius.circular(16),
             ),
             child: Image.network(
-              sight.url[0],
+              sight.urls.first,
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,

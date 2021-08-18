@@ -29,7 +29,7 @@ final List<Sight> mocks = [
     'Михайловское',
     57.06104067105939,
     28.919454220496746,
-    ['https://tur-mobile.ru/wp-content/uploads/2020/10/pushkinskie-gory.-2.jpg', 'https://cdn21.img.ria.ru/images/59598/22/595982261_0:0:0:0_600x0_80_0_0_b80572b2857d0dd6e6d1ae7bfea1a9d2.jpg','https://lh3.googleusercontent.com/proxy/qahLFlFGMeZSujbjS928w6i5bAIbVB66Rnjj6uEBVukiNCcWMoDo5HqgeIxd_0dOyTh_AiYjOlSeYcpnof-8z6M_PC-N28M','https://www.advantour.com/russia/images/pskov/pskov-mikhaylovskoye.jpg','https://putidorogi-nn.ru/images/stories/evropa/usadba_mihaylovskoe_v_pskovskoy_oblasti_7.jpg'],
+    ['https://tur-mobile.ru/wp-content/uploads/2020/10/pushkinskie-gory.-2.jpg', 'https://cdn21.img.ria.ru/images/59598/22/595982261_0:0:0:0_600x0_80_0_0_b80572b2857d0dd6e6d1ae7bfea1a9d2.jpg','https://www.advantour.com/russia/images/pskov/pskov-mikhaylovskoye.jpg','https://putidorogi-nn.ru/images/stories/evropa/usadba_mihaylovskoe_v_pskovskoy_oblasti_7.jpg'],
     '«Миха́йловское» — действующий музей-заповедник Александра Сергеевича Пушкина в Пушкиногорском районе Псковской области Российской Федерации, основанный в 1922 году. Является объектом культурного наследия федерального значения.',
     'Музей',
   ),
