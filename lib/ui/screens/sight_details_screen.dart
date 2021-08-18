@@ -272,7 +272,7 @@ class _CreateRouteButton extends StatelessWidget {
               padding: EdgeInsets.only(left: 10),
               child: Text(
                 'ПОСТРОИТЬ МАРШРУТ',
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),

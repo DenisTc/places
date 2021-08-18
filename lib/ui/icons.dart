@@ -21,3 +21,6 @@ const iconClose = "res/icons/close.svg";
 const iconPlus = "res/icons/plus.svg";
 const iconCloseRound = "res/icons/close_round.svg";
 const iconBasket = "res/icons/basket.svg";
+const iconBackpack = "res/icons/backpack.svg";
+const iconHandTouch = "res/icons/hand_touch.svg";
+const iconPointer = "res/icons/pointer.svg";
