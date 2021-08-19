@@ -7,7 +7,7 @@ import 'package:places/ui/icons.dart';
 import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
 import 'package:places/ui/widgets/search_screen/empty_search_result.dart';
 import 'package:places/ui/widgets/search_screen/search_bar.dart';
-import 'package:places/ui/widgets/main_list_screen/sight_app_bar.dart';
+import 'package:places/ui/widgets/list_screen/sight_app_bar.dart';
 import 'package:places/ui/widgets/search_screen/search_result_list.dart';
 
 List<String> historyList = [

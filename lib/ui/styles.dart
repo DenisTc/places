@@ -8,7 +8,7 @@ const TextStyle _text = TextStyle(
 
 TextStyle mainText = _text.copyWith(
   fontSize: 18,
-  fontWeight: FontWeight.w700,
+  fontWeight: FontWeight.w500,
   color: textColorPrimary,
 );
 
