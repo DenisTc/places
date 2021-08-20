@@ -28,43 +28,50 @@ class _SightDetailsState extends State<SightDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
-      body: Column(
-        children: [
-          Container(
-            height: 360,
-            color: Colors.brown,
-            child: Stack(
-              children: [
-                PageView.builder(
-                  onPageChanged: (int page) {
-                    setState(() {
-                      setCurrentPage(page.toDouble());
-                    });
-                  },
-                  controller: _pageController,
-                  itemCount: widget.sight.urls.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return _PlaceImage(imgUrl: widget.sight.urls[index]);
-                  },
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 360,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                height: 360,
+                color: Colors.brown,
+                child: Stack(
+                  children: [
+                    PageView.builder(
+                      onPageChanged: (int page) {
+                        setState(() {
+                          setCurrentPage(page.toDouble());
+                        });
+                      },
+                      controller: _pageController,
+                      itemCount: widget.sight.urls.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return _PlaceImage(imgUrl: widget.sight.urls[index]);
+                      },
+                    ),
+                    const _ArrowBackButton(),
+                    if (widget.sight.urls.length > 1)
+                      PageIndicator(
+                        widget: widget,
+                        currentPage: currentPage,
+                      ),
+                  ],
                 ),
-                const _ArrowBackButton(),
-                if (widget.sight.urls.length > 1)
-                  PageIndicator(
-                    widget: widget,
-                    currentPage: currentPage,
-                  ),
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: _Description(sight: widget.sight),
+                ),
               ],
             ),
           ),
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 16,
-                right: 16,
-              ),
-              child: _Description(sight: widget.sight),
-            ),
-          ),
+          
         ],
       ),
     );

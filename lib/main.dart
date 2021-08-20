@@ -39,9 +39,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Sights',
       theme: settings.getTheme,
-      home: SightDetails(
-          sight: mocks[
-              0]), //SightListScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
+      home: SightListScreen(), //SightListScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
     );
   }
 }

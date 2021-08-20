@@ -13,7 +13,7 @@ class SightAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
-      centerTitle: true,
+      centerTitle: false,
       toolbarHeight: 56,
       title: Text(
         'Список интересных мест',
