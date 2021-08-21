@@ -23,8 +23,9 @@ class _SplashScreenState extends State<SplashScreen> {
           MaterialPageRoute(builder: (context) => SightListScreen()),
           ModalRoute.withName('/Home'),
         ),
-        print('Переход на следующий экран'),
       },
+    ).then(
+      (_) => print('Переход на следующий экран'),
     );
   }
 
