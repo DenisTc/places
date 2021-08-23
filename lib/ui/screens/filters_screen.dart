@@ -319,9 +319,6 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
             maxCrossAxisExtent: MediaQuery.of(context).size.width / 3,
-            //maxCrossAxisExtent: 10,
-            //childAspectRatio: 3 / 2,
-            //crossAxisSpacing: 20,
             mainAxisSpacing: 30,
           ),
           itemCount: mocks.length,

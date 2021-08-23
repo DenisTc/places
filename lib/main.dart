@@ -9,6 +9,7 @@ import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/sight_list_screen.dart';
 import 'package:places/ui/screens/sight_search_screen.dart';
+import 'package:places/ui/screens/splash_screen.dart';
 import 'package:places/ui/screens/visiting_screen.dart';
 
 final settings = Settings();
@@ -39,7 +40,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Sights',
       theme: settings.getTheme,
-      home: SightListScreen(), //SightListScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
+      home: SplashScreen(), //SightListScreen()//SightDetails(sight: mocks[0]) //SightDetails(),//VisitingScreen(),//SightListScreen(),
     );
   }
 }
