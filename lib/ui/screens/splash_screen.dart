@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       },
     ).then(
-      (_) => print('Переход на следующий экран'),
+      (_) => debugPrint('Переход на следующий экран'),
     );
   }
 
@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       _navigateToNext();
     } catch (e) {
-      print('Ошибка при переходе на следующий экран: $e');
+      debugPrint('Ошибка при переходе на следующий экран: $e');
     }
   }
 
