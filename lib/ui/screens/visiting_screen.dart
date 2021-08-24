@@ -19,7 +19,6 @@ class VisitingScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).accentColor,
         appBar: const _FavoriteAppbar(),
         body: const _FavoriteTabBarView(),
-        //bottomNavigationBar: const SightBottomNavBar(),
       ),
     );
   }

@@ -28,8 +28,6 @@ class SightListScreenState extends State<SightListScreen> {
           AddSightButton(),
         ],
       ),
-      //bottomNavigationBar: const SightBottomNavBar(),
     );
   }
 }
-
