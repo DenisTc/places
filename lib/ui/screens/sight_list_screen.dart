@@ -18,17 +18,17 @@ class SightListScreenState extends State<SightListScreen> {
       backgroundColor: Theme.of(context).accentColor,
       body: Stack(
         alignment: AlignmentDirectional.topCenter,
-        children: [
+        children: const [
           CustomScrollView(
             slivers: [
               SliverAppBarList(),
               SliverSights(),
             ],
           ),
-          const AddSightButton(),
+          AddSightButton(),
         ],
       ),
-      bottomNavigationBar: const SightBottomNavBar(),
+      //bottomNavigationBar: const SightBottomNavBar(),
     );
   }
 }

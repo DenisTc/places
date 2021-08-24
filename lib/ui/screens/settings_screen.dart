@@ -74,7 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: SightBottomNavBar(),
+      //bottomNavigationBar: SightBottomNavBar(),
     );
   }
 }

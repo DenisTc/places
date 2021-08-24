@@ -121,7 +121,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
             ),
         ],
       ),
-      bottomNavigationBar: const SightBottomNavBar(),
+      //bottomNavigationBar: const SightBottomNavBar(),
     );
   }
 }

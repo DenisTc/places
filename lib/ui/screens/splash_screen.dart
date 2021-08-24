@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
-import 'package:places/ui/screens/sight_list_screen.dart';
+import 'package:places/ui/screens/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,13 +15,14 @@ class _SplashScreenState extends State<SplashScreen> {
   late Future<void> isInitialized;
 
   Future<void> _navigateToNext() async {
-    return await Future.delayed(
-      Duration(seconds: 2),
+    return Future.delayed(
+      const Duration(seconds: 2),
       () => {
-        Navigator.pushAndRemoveUntil<SightListScreen>(
+        Navigator.pushReplacement<void, void>(
           context,
-          MaterialPageRoute(builder: (context) => SightListScreen()),
-          ModalRoute.withName('/Home'),
+          MaterialPageRoute(
+            builder: (context) => const OnboardingScreen(),
+          ),
         ),
       },
     ).then(
@@ -44,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerRight,
             end: Alignment.centerLeft,

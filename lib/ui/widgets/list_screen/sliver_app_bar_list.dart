@@ -18,7 +18,7 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
       pinned: true,
       elevation: 0.0,
       expandedHeight: 170.0,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).primaryColorLight,
       flexibleSpace: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           appBarHeight = constraints.biggest.height;
