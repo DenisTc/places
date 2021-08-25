@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/colors.dart';
-import 'package:places/ui/screens/sight_list_screen.dart';
+import 'package:places/ui/screens/main_screen.dart';
 
 class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
   const OnboardingAppBar({
@@ -24,10 +24,11 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Center(
               child: InkWell(
                 onTap: () {
-                  Navigator.pushAndRemoveUntil<SightListScreen>(
+                  Navigator.pushReplacement<void, void>(
                     context,
-                    MaterialPageRoute(builder: (context) => SightListScreen()),
-                    ModalRoute.withName('/Home'),
+                    MaterialPageRoute(
+                      builder: (context) => const MainScreen(),
+                    ),
                   );
                 },
                 child: const Text(

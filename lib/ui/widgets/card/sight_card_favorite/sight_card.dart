@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
+import 'package:places/mocks.dart';
 import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/widgets/card/sight_card_favorite/favorite_card_bottom.dart';
 import 'package:places/ui/widgets/card/sight_card_favorite/favorite_card_top.dart';
 
@@ -89,7 +91,12 @@ class __SightCardState extends State<SightCard> {
                 child: InkWell(
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
                   onTap: () {
-                    
+                    Navigator.push<List>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SightDetails(id: mocks.indexOf(widget.sight)),
+                      ),
+                    );
                   },
                 ),
               ),

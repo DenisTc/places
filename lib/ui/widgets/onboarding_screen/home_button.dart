@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/colors.dart';
-import 'package:places/ui/screens/sight_list_screen.dart';
+import 'package:places/ui/screens/main_screen.dart';
 
 class HomeButton extends StatelessWidget {
   const HomeButton({
@@ -11,10 +11,11 @@ class HomeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushAndRemoveUntil<SightListScreen>(
+        Navigator.pushReplacement<void, void>(
           context,
-          MaterialPageRoute(builder: (context) => SightListScreen()),
-          ModalRoute.withName('/Home'),
+          MaterialPageRoute(
+            builder: (context) => const MainScreen(),
+          ),
         );
       },
       child: Container(
@@ -28,8 +29,8 @@ class HomeButton extends StatelessWidget {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Padding(
+          children: const [
+             Padding(
               padding: EdgeInsets.only(left: 10),
               child: Text(
                 'НА СТАРТ',

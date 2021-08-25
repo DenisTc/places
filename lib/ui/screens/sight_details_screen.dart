@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
+import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/sight_map_screen.dart';
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
-  final Sight sight;
+  final int id;
 
-  const SightDetails({Key? key, required this.sight}) : super(key: key);
+  const SightDetails({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   _SightDetailsState createState() => _SightDetailsState();
@@ -31,6 +36,7 @@ class _SightDetailsState extends State<SightDetails> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            automaticallyImplyLeading: false,
             expandedHeight: 360,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
@@ -45,13 +51,13 @@ class _SightDetailsState extends State<SightDetails> {
                         });
                       },
                       controller: _pageController,
-                      itemCount: widget.sight.urls.length,
+                      itemCount: mocks[widget.id].urls.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return _PlaceImage(imgUrl: widget.sight.urls[index]);
+                        return _PlaceImage(imgUrl: mocks[widget.id].urls[index]);
                       },
                     ),
                     const _ArrowBackButton(),
-                    if (widget.sight.urls.length > 1)
+                    if (mocks[widget.id].urls.length > 1)
                       PageIndicator(
                         widget: widget,
                         currentPage: currentPage,
@@ -66,12 +72,11 @@ class _SightDetailsState extends State<SightDetails> {
               [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: _Description(sight: widget.sight),
+                  child: _Description(sight: mocks[widget.id]),
                 ),
               ],
             ),
           ),
-          
         ],
       ),
     );
@@ -108,19 +113,19 @@ class PageIndicator extends StatelessWidget {
       bottom: 0,
       child: Row(
         children: [
-          for (int i = 0; i < widget.sight.urls.length; i++)
+          for (int i = 0; i < mocks[widget.id].urls.length; i++)
             Container(
               height: 10,
               decoration: BoxDecoration(
                 borderRadius: (currentPage == 0)
                     ? startIndicator
-                    : (currentPage == widget.sight.urls.length - 1)
+                    : (currentPage == mocks[widget.id].urls.length - 1)
                         ? endIndicator
                         : middleIndicator,
                 color: i == currentPage ? favoriteColor : Colors.transparent,
               ),
               width:
-                  MediaQuery.of(context).size.width / widget.sight.urls.length,
+                  MediaQuery.of(context).size.width / mocks[widget.id].urls.length,
             ),
         ],
       ),
@@ -260,6 +265,15 @@ class _CreateRouteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () {
+        Navigator.of(context).push<StatefulWidget>(
+          MaterialPageRoute(
+            builder: (context) {
+              return SightMapScreen();
+            },
+          ),
+        );
+      },
       child: Container(
         height: 48,
         width: 328,
@@ -279,7 +293,7 @@ class _CreateRouteButton extends StatelessWidget {
               padding: EdgeInsets.only(left: 10),
               child: Text(
                 'ПОСТРОИТЬ МАРШРУТ',
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
                 ),
               ),

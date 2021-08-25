@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
+import 'package:places/mocks.dart';
 import 'package:places/ui/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 
@@ -35,7 +36,7 @@ class _SightCardState extends State<SightCard> {
                 Navigator.push<List>(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => SightDetails(sight: widget.sight),
+                    builder: (context) => SightDetails(id: mocks.indexOf(widget.sight)),
                   ),
                 );
               },
