@@ -23,63 +23,69 @@ class _SightDetailsState extends State<SightDetails> {
   final PageController _pageController = PageController();
   double currentPage = 0;
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Theme.of(context).accentColor,
+      child: ConstrainedBox(
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
+        child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              automaticallyImplyLeading: false,
+              expandedHeight: 360,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Container(
+                  height: 360,
+                  color: Colors.brown,
+                  child: Stack(
+                    children: [
+                      PageView.builder(
+                        onPageChanged: (int page) {
+                          setState(() {
+                            setCurrentPage(page.toDouble());
+                          });
+                        },
+                        controller: _pageController,
+                        itemCount: mocks[widget.id].urls.length,
+                        itemBuilder: (context, index) {
+                          return _PlaceImage(
+                            imgUrl: mocks[widget.id].urls[index],
+                          );
+                        },
+                      ),
+                      const _ArrowBackButton(),
+                      if (mocks[widget.id].urls.length > 1)
+                        PageIndicator(
+                          widget: widget,
+                          currentPage: currentPage,
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: _Description(sight: mocks[widget.id]),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void setCurrentPage(double page) {
     setState(() {
       currentPage = page;
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            expandedHeight: 360,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                height: 360,
-                color: Colors.brown,
-                child: Stack(
-                  children: [
-                    PageView.builder(
-                      onPageChanged: (int page) {
-                        setState(() {
-                          setCurrentPage(page.toDouble());
-                        });
-                      },
-                      controller: _pageController,
-                      itemCount: mocks[widget.id].urls.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return _PlaceImage(imgUrl: mocks[widget.id].urls[index]);
-                      },
-                    ),
-                    const _ArrowBackButton(),
-                    if (mocks[widget.id].urls.length > 1)
-                      PageIndicator(
-                        widget: widget,
-                        currentPage: currentPage,
-                      ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: _Description(sight: mocks[widget.id]),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }
 
@@ -124,8 +130,8 @@ class PageIndicator extends StatelessWidget {
                         : middleIndicator,
                 color: i == currentPage ? favoriteColor : Colors.transparent,
               ),
-              width:
-                  MediaQuery.of(context).size.width / mocks[widget.id].urls.length,
+              width: MediaQuery.of(context).size.width /
+                  mocks[widget.id].urls.length,
             ),
         ],
       ),
@@ -207,7 +213,6 @@ class _FunctionButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
-          flex: 1,
           child: InkWell(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -286,9 +291,7 @@ class _CreateRouteButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              child: SvgPicture.asset(iconRoute, color: Colors.white),
-            ),
+            SvgPicture.asset(iconRoute, color: Colors.white),
             const Padding(
               padding: EdgeInsets.only(left: 10),
               child: Text(
@@ -320,11 +323,7 @@ class _PlaceImage extends StatelessWidget {
       fit: BoxFit.cover,
       height: double.infinity,
       width: double.infinity,
-      loadingBuilder: (
-        BuildContext context,
-        Widget child,
-        ImageChunkEvent? loadingProgress,
-      ) {
+      loadingBuilder: (context, child, loadingProgress) {
         if (loadingProgress == null) return child;
         return Center(
           child: CircularProgressIndicator(
@@ -346,30 +345,28 @@ class _ArrowBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topLeft,
+    return Positioned(
+      top: 16.0,
+      right: 16.0,
       child: InkWell(
         onTap: () {
           Navigator.of(context).pop();
         },
         child: Container(
-          margin: const EdgeInsets.only(
-            left: 16,
-            top: 36,
+          width: 40,
+          height: 40,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
           ),
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 17,
-            color: Theme.of(context).iconTheme.color,
-          ),
-          decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
-            borderRadius: const BorderRadius.all(
-              Radius.circular(10),
+          child: Align(
+            child: SvgPicture.asset(
+              iconClose,
+              height: 20,
+              width: 20,
+              color: favoriteColor,
             ),
           ),
-          width: 32,
-          height: 32,
         ),
       ),
     );
