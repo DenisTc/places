@@ -32,18 +32,28 @@ class _SightCardState extends State<SightCard> {
             color: Colors.transparent,
             child: InkWell(
               borderRadius: const BorderRadius.all(Radius.circular(16)),
-              onTap: () {
-                Navigator.push<List>(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SightDetails(id: mocks.indexOf(widget.sight)),
-                  ),
-                );
-              },
+              onTap: _showSight,
             ),
           ),
         ],
       ),
+    );
+  }
+
+  void _showSight() async {
+    await showModalBottomSheet<Sight>(
+      context: context,
+      builder: (_) {
+        return SightDetails(id: mocks.indexOf(widget.sight));
+      },
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      
     );
   }
 }

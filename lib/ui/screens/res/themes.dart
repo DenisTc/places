@@ -10,9 +10,12 @@ final lightTheme = ThemeData(
   textTheme: TextTheme(
     headline1: mainText,
     bodyText1: cardTextDesc.copyWith(color: textColorPrimary),
-    subtitle1: cardTextType.copyWith(color: textColorPrimary, fontWeight: FontWeight.w700),
+    subtitle1: cardTextType.copyWith(
+      color: textColorPrimary,
+      fontWeight: FontWeight.w700,
+    ),
   ),
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: Colors.white,
     selectedItemColor: favoriteColor,
     unselectedItemColor: favoriteColor,
@@ -21,7 +24,10 @@ final lightTheme = ThemeData(
     trackHeight: 1,
     activeTrackColor: lightGreen,
     inactiveTrackColor: textColorSecondary.withOpacity(0.56),
-    thumbColor: Colors.white
+    thumbColor: Colors.white,
+  ),
+  bottomSheetTheme: const BottomSheetThemeData(
+    backgroundColor: Colors.transparent,
   ),
 );
 
@@ -36,9 +42,12 @@ final darkTheme = ThemeData(
     headline1: mainText.copyWith(color: Colors.white),
     bodyText1: cardTextDesc.copyWith(color: Colors.white),
     bodyText2: cardTextShortDesc,
-    subtitle1: cardTextType.copyWith(color: textColorSecondary, fontWeight: FontWeight.w700),
+    subtitle1: cardTextType.copyWith(
+      color: textColorSecondary,
+      fontWeight: FontWeight.w700,
+    ),
   ),
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData(
     backgroundColor: darkColorSecondary,
     selectedItemColor: Colors.white,
     unselectedItemColor: Colors.white,

@@ -25,3 +25,6 @@ const iconBackpack = "res/icons/backpack.svg";
 const iconHandTouch = "res/icons/hand_touch.svg";
 const iconPointer = "res/icons/pointer.svg";
 const iconSplash = "res/icons/splash.svg";
+const iconCamera = "res/icons/camera.svg";
+const iconPhoto = "res/icons/photo.svg";
+const iconFile = "res/icons/file.svg";
