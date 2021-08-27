@@ -5,6 +5,7 @@ import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
+import 'package:places/ui/styles.dart';
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
@@ -269,40 +270,38 @@ class _CreateRouteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push<StatefulWidget>(
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.pushReplacement<void, void>(
+          context,
           MaterialPageRoute(
-            builder: (context) {
-              return SightMapScreen();
-            },
+            builder: (context) => const SightMapScreen(),
           ),
         );
       },
-      child: Container(
-        height: 48,
-        width: 328,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
+      style: ElevatedButton.styleFrom(
+        primary: myLightGreen,
+        fixedSize: const Size(double.infinity, 48),
+        elevation: 0.0,
+        shadowColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset(
+            iconRoute,
+            width: 22,
+            color: Colors.white,
           ),
-          color: myLightGreen,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(iconRoute, color: Colors.white),
-            const Padding(
-              padding: EdgeInsets.only(left: 10),
-              child: Text(
-                'ПОСТРОИТЬ МАРШРУТ',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ],
-        ),
+          const SizedBox(width: 10),
+          Text(
+            'ПОСТРОИТЬ МАРШРУТ',
+            style: activeBtnTextStyle,
+          ),
+        ],
       ),
     );
   }

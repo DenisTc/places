@@ -36,3 +36,15 @@ TextStyle cardTextType = _text.copyWith(
   color: myLightSecondaryTwo,
 );
 
+TextStyle activeBtnTextStyle = _text.copyWith(
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+);
+
+TextStyle disableBtnTextStyle = _text.copyWith(
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
+  color: myInactiveBlack.withOpacity(0.56),
+);
+

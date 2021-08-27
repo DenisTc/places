@@ -259,36 +259,33 @@ class _ShowButton extends StatefulWidget {
 class __ShowButtonState extends State<_ShowButton> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 48,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(10),
+    return ElevatedButton(
+      onPressed: () {
+        if (widget.countPlaces != 0) {
+          Navigator.pop(context, widget.filteredPlaces);
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        primary: widget.countPlaces != 0 ? myLightGreen : myLightBackground,
+        fixedSize: const Size(double.infinity, 48),
+        elevation: 0.0,
+        shadowColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-        color: widget.countPlaces != 0 ? myLightGreen : myLightBackground,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          InkWell(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: Text(
-                'ПОКАЗАТЬ (${widget.countPlaces})',
-                style: TextStyle(
-                  color: widget.countPlaces != 0
-                      ? Colors.white
-                      : myLightSecondaryTwo.withOpacity(0.56),
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+          Text(
+            'ПОКАЗАТЬ (${widget.countPlaces})',
+            style: TextStyle(
+              color: widget.countPlaces != 0
+                  ? Colors.white
+                  : myLightSecondaryTwo.withOpacity(0.56),
+              fontWeight: FontWeight.w700,
             ),
-            onTap: () {
-              if (widget.countPlaces != 0) {
-                Navigator.pop(context, widget.filteredPlaces);
-              }
-            },
-          )
+          ),
         ],
       ),
     );
@@ -310,7 +307,6 @@ class _FiltersCategory extends StatefulWidget {
 }
 
 class _FiltersCategoryState extends State<_FiltersCategory> {
-
   @override
   Widget build(BuildContext context) {
     return Column(
