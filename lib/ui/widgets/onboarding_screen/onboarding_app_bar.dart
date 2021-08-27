@@ -19,25 +19,20 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       actions: [
         if (currentPage != 2)
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Center(
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushReplacement<void, void>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MainScreen(),
-                    ),
-                  );
-                },
-                child: const Text(
-                  'Пропустить',
-                  style: TextStyle(
-                    color: myLightGreen,
-                    fontWeight: FontWeight.w500,
-                  ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacement<void, void>(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MainScreen(),
                 ),
+              );
+            },
+            child: const Text(
+              'Пропустить',
+              style: TextStyle(
+                color: myLightGreen,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
