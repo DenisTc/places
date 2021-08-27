@@ -32,7 +32,7 @@ final lightTheme = ThemeData(
 );
 
 final darkTheme = ThemeData(
-  iconTheme: IconThemeData(color: Colors.white),
+  iconTheme: const IconThemeData(color: Colors.white),
   scaffoldBackgroundColor: nightRider,
   accentColor: myDarkMain,
   primaryColor: myDark,
