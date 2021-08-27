@@ -14,7 +14,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: settings.getThemeValue ? myDarkMain : myLightBackground,
+      backgroundColor: settings.getThemeValue ? myDarkMain : Colors.white,
       appBar: const _AppBarSettings(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -38,6 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   padding: 2.0,
                   toggleSize: 28.0,
                   borderRadius: 16.0,
+                  inactiveColor: myInactiveBlack.withOpacity(0.56),
                   activeColor: myDarkGreen,
                   value: settings.getThemeValue,
                   onToggle: (value) {
