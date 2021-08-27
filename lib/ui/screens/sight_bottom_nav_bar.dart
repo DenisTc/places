@@ -7,7 +7,7 @@ import 'package:places/ui/icons.dart';
 class SightBottomNavBar extends StatefulWidget {
   final int currentIndex;
   final Function(int index) onSelectTab;
-  
+
   const SightBottomNavBar({
     Key? key,
     required this.currentIndex,
@@ -24,7 +24,7 @@ class _SightBottomNavBarState extends State<SightBottomNavBar> {
     return Stack(
       children: [
         BottomNavigationBar(
-          onTap: (int index) {
+          onTap: (index) {
             setState(() {
               widget.onSelectTab(index);
             });
@@ -39,31 +39,63 @@ class _SightBottomNavBarState extends State<SightBottomNavBar> {
               Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(iconList,
-                  color: Theme.of(context)
-                      .bottomNavigationBarTheme
-                      .unselectedItemColor),
+              icon: SvgPicture.asset(
+                iconList,
+                color: Theme.of(context)
+                    .bottomNavigationBarTheme
+                    .unselectedItemColor,
+              ),
+              activeIcon: SvgPicture.asset(
+                iconListSelected,
+                color: Theme.of(context)
+                    .bottomNavigationBarTheme
+                    .unselectedItemColor,
+              ),
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(iconMap,
-                  color: Theme.of(context)
-                      .bottomNavigationBarTheme
-                      .unselectedItemColor),
+              icon: SvgPicture.asset(
+                iconMap,
+                color: Theme.of(context)
+                    .bottomNavigationBarTheme
+                    .unselectedItemColor,
+              ),
+              activeIcon: SvgPicture.asset(
+                iconMapSelected,
+                color: Theme.of(context)
+                    .bottomNavigationBarTheme
+                    .unselectedItemColor,
+              ),
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(iconFavoriteSolid,
-                  color: Theme.of(context)
-                      .bottomNavigationBarTheme
-                      .unselectedItemColor),
+              icon: SvgPicture.asset(
+                iconFavorite,
+                color: Theme.of(context)
+                    .bottomNavigationBarTheme
+                    .unselectedItemColor,
+              ),
+              activeIcon: SvgPicture.asset(
+                iconFavoriteSelected,
+                color: Theme.of(context)
+                    .bottomNavigationBarTheme
+                    .unselectedItemColor,
+              ),
               label: '',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(iconSettings,
-                  color: Theme.of(context)
-                      .bottomNavigationBarTheme
-                      .unselectedItemColor),
+              icon: SvgPicture.asset(
+                iconSettings,
+                color: Theme.of(context)
+                    .bottomNavigationBarTheme
+                    .unselectedItemColor,
+              ),
+              activeIcon: SvgPicture.asset(
+                iconSettingsSelected,
+                color: Theme.of(context)
+                    .bottomNavigationBarTheme
+                    .unselectedItemColor,
+              ),
               label: '',
             ),
           ],
