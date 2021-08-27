@@ -15,7 +15,7 @@ class AddSightButton extends StatelessWidget {
       bottom: 16,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(colors: [gorse, lightGreen]),
+          gradient: const LinearGradient(colors: [myLightYellow, myLightGreen]),
           borderRadius: BorderRadius.circular(24.0),
         ),
         child: ElevatedButton(

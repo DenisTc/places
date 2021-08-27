@@ -42,7 +42,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                                 mocks[index].type[0].toUpperCase() +
                                     mocks[index].type.substring(1),
                                 style: const TextStyle(
-                                  color: favoriteColor,
+                                  color: myLightMain,
                                   fontSize: 16,
                                 ),
                               ),
@@ -51,7 +51,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                                   iconCheck,
                                   height: 15,
                                   width: 15,
-                                  color: lightGreen,
+                                  color: myLightGreen,
                                 ),
                             ],
                           ),
@@ -99,14 +99,14 @@ class _SaveButton extends StatelessWidget {
           'Сохранить'.toUpperCase(),
           style: TextStyle(
             color: (indexCategory == null)
-                ? textColorSecondary.withOpacity(0.56)
+                ? myLightSecondaryTwo.withOpacity(0.56)
                 : Colors.white,
             fontWeight: FontWeight.w700,
           ),
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
-              (indexCategory == null) ? whiteSmoke : lightGreen),
+              (indexCategory == null) ? myLightBackground : myLightGreen),
           minimumSize:
               MaterialStateProperty.all(const Size(double.infinity, 48)),
           shadowColor: MaterialStateProperty.all(Colors.transparent),

@@ -25,7 +25,7 @@ class HomeButton extends StatelessWidget {
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
-          color: lightGreen,
+          color: myLightGreen,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

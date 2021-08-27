@@ -28,14 +28,14 @@ class SelectImageDialog extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       iconCamera,
-                      color: textColorSecondary,
+                      color: myLightSecondaryTwo,
                     ),
                     const SizedBox(width: 15),
                     const Text(
                       'Камера',
                       style: TextStyle(
                         fontSize: 16,
-                        color: textColorSecondary,
+                        color: myLightSecondaryTwo,
                       ),
                     ),
                   ],
@@ -45,14 +45,14 @@ class SelectImageDialog extends StatelessWidget {
                   children: [
                     SvgPicture.asset(
                       iconPhoto,
-                      color: textColorSecondary,
+                      color: myLightSecondaryTwo,
                     ),
                     const SizedBox(width: 14),
                     const Text(
                       'Фотография',
                       style: TextStyle(
                         fontSize: 16,
-                        color: textColorSecondary,
+                        color: myLightSecondaryTwo,
                       ),
                     ),
                   ],
@@ -63,14 +63,14 @@ class SelectImageDialog extends StatelessWidget {
                     const SizedBox(width: 4),
                     SvgPicture.asset(
                       iconFile,
-                      color: textColorSecondary,
+                      color: myLightSecondaryTwo,
                     ),
                     const SizedBox(width: 16),
                     const Text(
                       'Файл',
                       style: TextStyle(
                         fontSize: 16,
-                        color: textColorSecondary,
+                        color: myLightSecondaryTwo,
                       ),
                     ),
                   ],
@@ -98,7 +98,7 @@ class SelectImageDialog extends StatelessWidget {
                 'ОТМЕНА',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  color: lightGreen,
+                  color: myLightGreen,
                 ),
               ),
             ),

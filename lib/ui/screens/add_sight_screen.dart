@@ -28,22 +28,6 @@ class _AddSightScreenState extends State<AddSightScreen> {
   late FocusNode nodeDesc = FocusNode();
   late bool _isButtonEnabled = false;
 
-  void refresh() {
-    setState(
-      () {
-        if ( //_controllerCat.text.isNotEmpty &&
-            _controllerName.text.isNotEmpty &&
-                _controllerLat.text.isNotEmpty &&
-                _controllerLng.text.isNotEmpty &&
-                _controllerDesc.text.isNotEmpty) {
-          _isButtonEnabled = true;
-        } else {
-          _isButtonEnabled = false;
-        }
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,14 +45,14 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   const SizedBox(height: 24),
                   const Text(
                     'ГАЛЕРЕЯ',
-                    style: TextStyle(color: textColorSecondary),
+                    style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 24),
                   SightGallery(),
                   const SizedBox(height: 24),
                   const Text(
                     'КАТЕГОРИЯ',
-                    style: TextStyle(color: textColorSecondary),
+                    style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 5),
                   _CategoryField(
@@ -80,7 +64,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   const SizedBox(height: 24),
                   const Text(
                     'НАЗВАНИЕ',
-                    style: TextStyle(color: textColorSecondary),
+                    style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 12),
                   _NameField(
@@ -106,7 +90,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   const SizedBox(height: 30),
                   const Text(
                     'ОПИСАНИЕ',
-                    style: TextStyle(color: textColorSecondary),
+                    style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 12),
                   _DescriptionField(
@@ -134,6 +118,22 @@ class _AddSightScreenState extends State<AddSightScreen> {
       ),
     );
   }
+
+  void refresh() {
+    setState(
+      () {
+        if ( //_controllerCat.text.isNotEmpty &&
+            _controllerName.text.isNotEmpty &&
+                _controllerLat.text.isNotEmpty &&
+                _controllerLng.text.isNotEmpty &&
+                _controllerDesc.text.isNotEmpty) {
+          _isButtonEnabled = true;
+        } else {
+          _isButtonEnabled = false;
+        }
+      },
+    );
+  }
 }
 
 class _SelectOnMapButton extends StatelessWidget {
@@ -148,7 +148,7 @@ class _SelectOnMapButton extends StatelessWidget {
       child: const Text(
         'Указать на карте',
         style: TextStyle(
-          color: lightGreen,
+          color: myLightGreen,
           fontSize: 16,
         ),
       ),
@@ -191,7 +191,7 @@ class __CategoryFieldState extends State<_CategoryField> {
       decoration: InputDecoration(
         hintText: 'Не выбрано',
         hintStyle: const TextStyle(
-          color: textColorSecondary,
+          color: myLightSecondaryTwo,
           fontSize: 16,
           fontWeight: FontWeight.w400,
         ),
@@ -199,18 +199,18 @@ class __CategoryFieldState extends State<_CategoryField> {
           //onPressed: () {},
           onPressed: () {
             Navigator.push<List>(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SightCategoryScreen(),
-            ),
-          );
+              context,
+              MaterialPageRoute(
+                builder: (context) => SightCategoryScreen(),
+              ),
+            );
           },
           icon: const Icon(Icons.navigate_next_rounded),
-          color: favoriteColor,
+          color: myLightMain,
         ),
         focusedBorder: UnderlineInputBorder(
           borderSide:
-              BorderSide(color: lightGreen.withOpacity(0.4), width: 2.0),
+              BorderSide(color: myLightGreen.withOpacity(0.4), width: 2.0),
         ),
       ),
     );
@@ -255,18 +255,18 @@ class _NameFieldState extends State<_NameField> {
       controller: widget.controllerName,
       textInputAction: TextInputAction.next,
       keyboardType: TextInputType.text,
-      cursorColor: favoriteColor,
+      cursorColor: myLightMain,
       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         border: OutlineInputBorder(),
         enabledBorder: OutlineInputBorder(
           borderSide:
-              BorderSide(color: lightGreen.withOpacity(0.4), width: 1.0),
+              BorderSide(color: myLightGreen.withOpacity(0.4), width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide:
-              BorderSide(color: lightGreen.withOpacity(0.4), width: 2.0),
+              BorderSide(color: myLightGreen.withOpacity(0.4), width: 2.0),
         ),
         suffixIcon: IconButton(
           onPressed: () {
@@ -280,7 +280,7 @@ class _NameFieldState extends State<_NameField> {
             height: 20,
             width: 20,
             color: widget.controllerName.text.isNotEmpty
-                ? favoriteColor
+                ? myLightMain
                 : Colors.transparent,
           ),
         ),
@@ -324,7 +324,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
             children: [
               const Text(
                 'ШИРОТА',
-                style: TextStyle(color: textColorSecondary),
+                style: TextStyle(color: myLightSecondaryTwo),
               ),
               const SizedBox(height: 12),
               TextFormField(
@@ -345,20 +345,20 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.numberWithOptions(signed: true),
                 controller: widget.controllerLat,
-                cursorColor: favoriteColor,
+                cursorColor: myLightMain,
                 decoration: InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                   border: OutlineInputBorder(),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: lightGreen.withOpacity(0.4),
+                      color: myLightGreen.withOpacity(0.4),
                       width: 1.0,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: lightGreen.withOpacity(0.4),
+                      color: myLightGreen.withOpacity(0.4),
                       width: 2.0,
                     ),
                   ),
@@ -374,7 +374,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                       height: 20,
                       width: 20,
                       color: widget.controllerLat.text.isNotEmpty
-                          ? favoriteColor
+                          ? myLightMain
                           : Colors.transparent,
                     ),
                   ),
@@ -391,7 +391,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
             children: [
               const Text(
                 'ДОЛГОТА',
-                style: TextStyle(color: textColorSecondary),
+                style: TextStyle(color: myLightSecondaryTwo),
               ),
               const SizedBox(height: 12),
               TextFormField(
@@ -412,20 +412,20 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.numberWithOptions(signed: true),
                 controller: widget.controllerLng,
-                cursorColor: favoriteColor,
+                cursorColor: myLightMain,
                 decoration: InputDecoration(
                   contentPadding:
                       EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                   border: OutlineInputBorder(),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: lightGreen.withOpacity(0.4),
+                      color: myLightGreen.withOpacity(0.4),
                       width: 1.0,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: lightGreen.withOpacity(0.4),
+                      color: myLightGreen.withOpacity(0.4),
                       width: 2.0,
                     ),
                   ),
@@ -441,7 +441,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                       height: 20,
                       width: 20,
                       color: widget.controllerLng.text.isNotEmpty
-                          ? favoriteColor
+                          ? myLightMain
                           : Colors.transparent,
                     ),
                   ),
@@ -491,13 +491,13 @@ class __DescriptionFieldState extends State<_DescriptionField> {
       keyboardType: TextInputType.text,
       minLines: 4,
       maxLines: 4,
-      cursorColor: favoriteColor,
+      cursorColor: myLightMain,
       decoration: InputDecoration(
         hintText: 'введите текст',
         hintStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w400,
-          color: textColorSecondary,
+          color: myLightSecondaryTwo,
         ),
         contentPadding: const EdgeInsets.symmetric(
           vertical: 10,
@@ -506,13 +506,13 @@ class __DescriptionFieldState extends State<_DescriptionField> {
         border: const OutlineInputBorder(),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: lightGreen.withOpacity(0.4),
+            color: myLightGreen.withOpacity(0.4),
             width: 1.0,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: lightGreen.withOpacity(0.4),
+            color: myLightGreen.withOpacity(0.4),
             width: 2.0,
           ),
         ),
@@ -569,13 +569,13 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
         style: TextStyle(
           color: widget.enable
               ? Colors.white
-              : textColorSecondary.withOpacity(0.56),
+              : myLightSecondaryTwo.withOpacity(0.56),
           fontWeight: FontWeight.w700,
         ),
       ),
       style: ButtonStyle(
         backgroundColor:
-            MaterialStateProperty.all(widget.enable ? lightGreen : whiteSmoke),
+            MaterialStateProperty.all(widget.enable ? myLightGreen : myLightBackground),
         minimumSize: MaterialStateProperty.all(const Size(double.infinity, 48)),
         shadowColor: MaterialStateProperty.all(Colors.transparent),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(

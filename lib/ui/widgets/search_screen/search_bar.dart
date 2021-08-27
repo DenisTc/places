@@ -24,7 +24,7 @@ class _SearchBarState extends State<SearchBar> {
       margin: EdgeInsets.symmetric(horizontal: 16.0),
       decoration: new BoxDecoration(
         borderRadius: new BorderRadius.all(new Radius.circular(12.0)),
-        color: whiteSmoke,
+        color: myLightBackground,
       ),
       child: TextFormField(
         onChanged: (value) {
@@ -33,7 +33,7 @@ class _SearchBarState extends State<SearchBar> {
           });
         },
         controller: widget.controllerSearch,
-        cursorColor: favoriteColor,
+        cursorColor: myLightMain,
         autofocus: true,
         cursorHeight: 20,
         style: TextStyle(
@@ -44,7 +44,7 @@ class _SearchBarState extends State<SearchBar> {
           hintText: 'Поиск',
           contentPadding: EdgeInsets.only(top: 15),
           hintStyle: TextStyle(
-            color: textColorSecondary,
+            color: myLightSecondaryTwo,
             fontSize: 16,
             fontWeight: FontWeight.w400,
           ),
@@ -53,7 +53,7 @@ class _SearchBarState extends State<SearchBar> {
             icon: SvgPicture.asset(
               iconSearch,
               height: 20,
-              color: textColorSecondary.withOpacity(0.56),
+              color: myLightSecondaryTwo.withOpacity(0.56),
             ),
           ),
           suffixIcon: IconButton(
@@ -67,7 +67,7 @@ class _SearchBarState extends State<SearchBar> {
               iconClearField,
               height: 20,
               color: widget.controllerSearch.text.isNotEmpty
-                  ? favoriteColor
+                  ? myLightMain
                   : Colors.transparent,
             ),
           ),

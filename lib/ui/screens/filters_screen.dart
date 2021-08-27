@@ -104,7 +104,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: lightGreen,
+                color: myLightGreen,
               ),
             ),
           ),
@@ -124,7 +124,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                   Text(
                     'КАТЕГОРИИ',
                     style: TextStyle(
-                      color: textColorSecondary.withOpacity(0.56),
+                      color: myLightSecondaryTwo.withOpacity(0.56),
                     ),
                   ),
                 ],
@@ -196,23 +196,23 @@ class __DistanceState extends State<_Distance> {
                   children: [
                     const TextSpan(
                       text: 'от ',
-                      style: TextStyle(color: textColorSecondary),
+                      style: TextStyle(color: myLightSecondaryTwo),
                     ),
                     TextSpan(
                       text: widget.currentRangeValues.start.round().toString(),
-                      style: const TextStyle(color: textColorSecondary),
+                      style: const TextStyle(color: myLightSecondaryTwo),
                     ),
                     const TextSpan(
                       text: ' до ',
-                      style: TextStyle(color: textColorSecondary),
+                      style: TextStyle(color: myLightSecondaryTwo),
                     ),
                     TextSpan(
                       text: widget.currentRangeValues.end.round().toString(),
-                      style: const TextStyle(color: textColorSecondary),
+                      style: const TextStyle(color: myLightSecondaryTwo),
                     ),
                     const TextSpan(
                       text: ' м',
-                      style: TextStyle(color: textColorSecondary),
+                      style: TextStyle(color: myLightSecondaryTwo),
                     ),
                   ],
                 ),
@@ -265,7 +265,7 @@ class __ShowButtonState extends State<_ShowButton> {
         borderRadius: const BorderRadius.all(
           Radius.circular(10),
         ),
-        color: widget.countPlaces != 0 ? lightGreen : whiteSmoke,
+        color: widget.countPlaces != 0 ? myLightGreen : myLightBackground,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -278,7 +278,7 @@ class __ShowButtonState extends State<_ShowButton> {
                 style: TextStyle(
                   color: widget.countPlaces != 0
                       ? Colors.white
-                      : textColorSecondary.withOpacity(0.56),
+                      : myLightSecondaryTwo.withOpacity(0.56),
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -330,7 +330,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                 category.icon != null ? category.icon! : iconParticularPlace,
                 height: 40,
                 width: 40,
-                color: lightGreen,
+                color: myLightGreen,
               ),
               notifyParent: widget.notifyParent,
               filters: widget.filters,
@@ -379,7 +379,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
             height: 90,
             width: 90,
             decoration: BoxDecoration(
-              color: lightGreen.withOpacity(0.16),
+              color: myLightGreen.withOpacity(0.16),
               shape: BoxShape.circle,
             ),
             child: Stack(
@@ -398,7 +398,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
                       height: 22,
                       width: 22,
                       decoration: const BoxDecoration(
-                        color: favoriteColor,
+                        color: myLightMain,
                         shape: BoxShape.circle,
                       ),
                       child: SvgPicture.asset(

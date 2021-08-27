@@ -55,7 +55,7 @@ class FavoriteCardBottom extends StatelessWidget {
               'Запланировано на 12 окт. 2020',
               maxLines: 2,
               style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                    color: lightGreen,
+                    color: myLightGreen,
                   ),
               overflow: TextOverflow.ellipsis,
             ),

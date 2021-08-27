@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:places/ui/colors.dart';
-import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
 import 'package:places/main.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -15,7 +14,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: settings.getThemeValue ? darkColorSecondary : whiteSmoke,
+      backgroundColor: settings.getThemeValue ? myDarkMain : myLightBackground,
       appBar: _AppBarSettings(),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -49,7 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ],
             ),
-            Divider(color: textColorSecondary.withOpacity(0.56)),
+            Divider(color: myLightSecondaryTwo.withOpacity(0.56)),
             const SizedBox(height: 3),
             Row(
               mainAxisSize: MainAxisSize.max,
@@ -65,12 +64,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const Icon(
                   Icons.info_outline_rounded,
-                  color: lightGreen,
+                  color: myLightGreen,
                 ),
               ],
             ),
             const SizedBox(height: 6),
-            Divider(color: textColorSecondary.withOpacity(0.56)),
+            Divider(color: myLightSecondaryTwo.withOpacity(0.56)),
           ],
         ),
       ),

@@ -204,7 +204,7 @@ class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: isDarkMode ? darkColorPrimary : whiteSmoke,
+            color: isDarkMode ? myDark : myLightBackground,
           ),
           margin: const EdgeInsets.symmetric(
             vertical: 6,
@@ -226,14 +226,14 @@ class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
               ],
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(25),
-                color: isDarkMode ? Colors.white : textColorPrimary,
+                color: isDarkMode ? Colors.white : myLightSecondaryOne,
               ),
               labelStyle: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
-              unselectedLabelColor: textColorSecondary.withOpacity(0.56),
-              labelColor: isDarkMode ? textColorPrimary : Colors.white,
+              unselectedLabelColor: myLightSecondaryTwo.withOpacity(0.56),
+              labelColor: isDarkMode ? myLightSecondaryOne : Colors.white,
             ),
           ),
         ),

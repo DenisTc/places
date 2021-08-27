@@ -22,7 +22,7 @@ class Screen extends StatelessWidget {
         SvgPicture.asset(
           icon,
           height: 98,
-          color: favoriteColor,
+          color: myLightMain,
         ),
         const SizedBox(height: 40),
         Text(
@@ -37,7 +37,7 @@ class Screen extends StatelessWidget {
         Text(
           description,
           textAlign: TextAlign.center,
-          style: const TextStyle(color: textColorSecondary),
+          style: const TextStyle(color: myLightSecondaryTwo),
         ),
       ],
     );

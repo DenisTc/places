@@ -70,7 +70,7 @@ class _SightDesc extends StatelessWidget {
           children: [
             Text(
               sight.type,
-              style: const TextStyle(color: textColorSecondary),
+              style: const TextStyle(color: myLightSecondaryTwo),
             ),
           ],
         ),
@@ -119,7 +119,7 @@ class _RichNameState extends State<RichName> {
             text: text,
             style: const TextStyle(
               fontSize: 16,
-              color: favoriteColor,
+              color: myLightMain,
             ),
           ),
         ],

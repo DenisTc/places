@@ -55,15 +55,15 @@ class _SearchBarState extends State<SearchBar> {
       readOnly: true,
       enableInteractiveSelection: false,
       focusNode: widget.textFieldFocusNode,
-      cursorColor: favoriteColor,
+      cursorColor: myLightMain,
       style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
       decoration: InputDecoration(
         filled: true,
         contentPadding: EdgeInsets.all(0),
-        fillColor: whiteSmoke,
+        fillColor: myLightBackground,
         hintText: 'Поиск',
         hintStyle: const TextStyle(
-          color: textColorSecondary,
+          color: myLightSecondaryTwo,
           fontSize: 16,
           fontWeight: FontWeight.w400,
         ),
@@ -73,7 +73,7 @@ class _SearchBarState extends State<SearchBar> {
             iconSearch,
             height: 20,
             width: 20,
-            color: textColorSecondary.withOpacity(0.56),
+            color: myLightSecondaryTwo.withOpacity(0.56),
           ),
         ),
         suffixIcon: GestureDetector(
@@ -82,7 +82,7 @@ class _SearchBarState extends State<SearchBar> {
               iconOptions,
               height: 15,
               width: 15,
-              color: lightGreen,
+              color: myLightGreen,
             ),
             onPressed: () {
               widget.textFieldFocusNode.unfocus();
@@ -98,28 +98,28 @@ class _SearchBarState extends State<SearchBar> {
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: whiteSmoke,
+            color: myLightBackground,
           ),
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: whiteSmoke,
+            color: myLightBackground,
           ),
         ),
         disabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: whiteSmoke,
+            color: myLightBackground,
           ),
         ),
         enabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: whiteSmoke,
+            color: myLightBackground,
           ),
         ),
       ),

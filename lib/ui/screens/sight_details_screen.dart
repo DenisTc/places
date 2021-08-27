@@ -128,7 +128,7 @@ class PageIndicator extends StatelessWidget {
                     : (currentPage == mocks[widget.id].urls.length - 1)
                         ? endIndicator
                         : middleIndicator,
-                color: i == currentPage ? favoriteColor : Colors.transparent,
+                color: i == currentPage ? myLightMain : Colors.transparent,
               ),
               width: MediaQuery.of(context).size.width /
                   mocks[widget.id].urls.length,
@@ -192,7 +192,7 @@ class _Description extends StatelessWidget {
         const SizedBox(height: 24),
         const Divider(
           height: 4,
-          color: textColorSecondary,
+          color: myLightSecondaryTwo,
         ),
         const SizedBox(height: 19),
         const _FunctionButtons(),
@@ -286,7 +286,7 @@ class _CreateRouteButton extends StatelessWidget {
           borderRadius: BorderRadius.all(
             Radius.circular(10),
           ),
-          color: lightGreen,
+          color: myLightGreen,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -364,7 +364,7 @@ class _ArrowBackButton extends StatelessWidget {
               iconClose,
               height: 20,
               width: 20,
-              color: favoriteColor,
+              color: myLightMain,
             ),
           ),
         ),

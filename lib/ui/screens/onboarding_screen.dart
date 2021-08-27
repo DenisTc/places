@@ -19,12 +19,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _pageController = PageController();
   }
 
-  void setCurrentPage(double page) {
-    setState(() {
-      currentPage = page;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,5 +31,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         currentPage: currentPage,
       ),
     );
+  }
+
+  void setCurrentPage(double page) {
+    setState(() {
+      currentPage = page;
+    });
   }
 }

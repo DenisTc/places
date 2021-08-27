@@ -9,7 +9,7 @@ const TextStyle _text = TextStyle(
 TextStyle mainText = _text.copyWith(
   fontSize: 18,
   fontWeight: FontWeight.w500,
-  color: textColorPrimary,
+  color: myLightSecondaryOne,
 );
 
 TextStyle cardTextTitle = _text.copyWith(
@@ -21,18 +21,18 @@ TextStyle cardTextTitle = _text.copyWith(
 TextStyle cardTextDesc = _text.copyWith(
   fontSize: 14,
   fontWeight: FontWeight.w400,
-  color: textColorSecondary,
+  color: myLightSecondaryTwo,
 );
 
 TextStyle cardTextShortDesc = _text.copyWith(
   fontSize: 14,
   fontWeight: FontWeight.w400,
-  color: textColorSecondary,
+  color: myLightSecondaryTwo,
 );
 
 TextStyle cardTextType = _text.copyWith(
   fontSize: 14,
   fontWeight: FontWeight.w700,
-  color: textColorSecondary,
+  color: myLightSecondaryTwo,
 );
 

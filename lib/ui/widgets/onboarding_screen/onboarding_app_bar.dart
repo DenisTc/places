@@ -34,7 +34,7 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
                 child: const Text(
                   'Пропустить',
                   style: TextStyle(
-                    color: lightGreen,
+                    color: myLightGreen,
                     fontWeight: FontWeight.w500,
                   ),
                 ),

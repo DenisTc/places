@@ -24,7 +24,7 @@ class NewSightAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: const Text(
           'Отмена',
           style: TextStyle(
-            color: textColorSecondary,
+            color: myLightSecondaryTwo,
             fontWeight: FontWeight.w500,
             fontSize: 16,
           ),

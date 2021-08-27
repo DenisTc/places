@@ -28,8 +28,8 @@ class PageIndicator extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: i == currentPage
-                            ? lightGreen
-                            : textColorSecondary.withOpacity(0.56),
+                            ? myLightGreen
+                            : myLightSecondaryTwo.withOpacity(0.56),
                       ),
                     ),
                     const SizedBox(width: 8),

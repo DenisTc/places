@@ -32,14 +32,14 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                 Radius.circular(12.0),
               ),
               border: Border.all(
-                color: lightGreen.withOpacity(0.56),
+                color: myLightGreen.withOpacity(0.56),
               ),
             ),
           ),
           SvgPicture.asset(
             iconPlus,
             width: 25,
-            color: lightGreen,
+            color: myLightGreen,
           ),
         ],
       ),

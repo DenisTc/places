@@ -120,7 +120,7 @@ class __SightCardState extends State<SightCard> {
                               return Theme(
                                 data: ThemeData.light().copyWith(
                                   colorScheme: const ColorScheme.light(
-                                    primary: lightGreen,
+                                    primary: myLightGreen,
                                   ),
                                 ),
                                 child: child!,

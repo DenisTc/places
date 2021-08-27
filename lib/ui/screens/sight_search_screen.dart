@@ -93,7 +93,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                   child: Text(
                     'ВЫ ИСКАЛИ',
                     style: TextStyle(
-                      color: textColorSecondary.withOpacity(0.56),
+                      color: myLightSecondaryTwo.withOpacity(0.56),
                       fontSize: 12,
                     ),
                   ),
@@ -182,7 +182,7 @@ class _HistoryListState extends State<_HistoryList> {
                       child: Text(
                         widget.historyList[index],
                         style: const TextStyle(
-                          color: favoriteColor,
+                          color: myLightMain,
                           fontSize: 16,
                         ),
                       ),
@@ -206,7 +206,7 @@ class _HistoryListState extends State<_HistoryList> {
                       icon: SvgPicture.asset(
                         iconClose,
                         height: 15,
-                        color: textColorSecondary,
+                        color: myLightSecondaryTwo,
                       ),
                     ),
                   ),
@@ -255,7 +255,7 @@ class __ClearHistoryButtonState extends State<_ClearHistoryButton> {
         child: const Text(
           'Очистить историю',
           style: TextStyle(
-            color: lightGreen,
+            color: myLightGreen,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),

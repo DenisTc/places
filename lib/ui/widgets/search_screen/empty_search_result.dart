@@ -19,14 +19,14 @@ class EmptySearchResult extends StatelessWidget {
           SvgPicture.asset(
             iconSearch,
             height: 70,
-            color: textColorSecondary,
+            color: myLightSecondaryTwo,
           ),
           SizedBox(height: 32),
           Text(
             'Ничего не найдено.',
             style: TextStyle(
               fontSize: 18,
-              color: textColorSecondary.withOpacity(0.56),
+              color: myLightSecondaryTwo.withOpacity(0.56),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -36,7 +36,7 @@ class EmptySearchResult extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
-              color: textColorSecondary.withOpacity(0.56),
+              color: myLightSecondaryTwo.withOpacity(0.56),
               fontWeight: FontWeight.w500,
             ),
           ),
