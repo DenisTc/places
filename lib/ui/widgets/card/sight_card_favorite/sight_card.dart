@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
+import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/widgets/card/sight_card_favorite/favorite_card_bottom.dart';
@@ -94,7 +95,8 @@ class __SightCardState extends State<SightCard> {
                     Navigator.push<List>(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SightDetails(id: mocks.indexOf(widget.sight)),
+                        builder: (context) =>
+                            SightDetails(id: mocks.indexOf(widget.sight)),
                       ),
                     );
                   },
@@ -105,10 +107,33 @@ class __SightCardState extends State<SightCard> {
                 top: 10,
                 child: Row(
                   children: [
-                    SvgPicture.asset(
-                      widget.visited ? iconShare : iconCalendar,
-                      width: 25,
-                      color: Colors.white,
+                    InkWell(
+                      onTap: () async {
+                        if (widget.visited) {
+                        } else {
+                          await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2101),
+                            builder: (context, child) {
+                              return Theme(
+                                data: ThemeData.light().copyWith(
+                                  colorScheme: const ColorScheme.light(
+                                    primary: lightGreen,
+                                  ),
+                                ),
+                                child: child!,
+                              );
+                            },
+                          );
+                        }
+                      },
+                      child: SvgPicture.asset(
+                        widget.visited ? iconShare : iconCalendar,
+                        width: 25,
+                        color: Colors.white,
+                      ),
                     ),
                     const SizedBox(width: 16),
                     InkWell(

@@ -60,7 +60,7 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
               child: SightCard(
                 globalKey: globalKey,
                 sight: widget.sight,
-                visited: true,
+                visited: widget.visited,
                 removeSight: (sight, visited) {
                   widget.removeSight(
                     widget.sight,
@@ -75,7 +75,7 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
               : SightCard(
                   globalKey: globalKey,
                   sight: widget.sight,
-                  visited: true,
+                  visited: widget.visited,
                   removeSight: (sight, visited) {
                     widget.removeSight(
                       widget.sight,

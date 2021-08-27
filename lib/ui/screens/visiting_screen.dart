@@ -4,7 +4,6 @@ import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/colors.dart';
 import 'package:places/ui/icons.dart';
-import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
 import 'package:places/ui/widgets/card/sight_card_favorite/sight_card_favorite.dart';
 
 /// Screen for displaying planned and visited places
