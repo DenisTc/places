@@ -15,14 +15,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: settings.getThemeValue ? myDarkMain : myLightBackground,
-      appBar: _AppBarSettings(),
+      appBar: const _AppBarSettings(),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
             const SizedBox(height: 20),
             Row(
-              mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
                   child: Text(
@@ -39,6 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   padding: 2.0,
                   toggleSize: 28.0,
                   borderRadius: 16.0,
+                  activeColor: myDarkGreen,
                   value: settings.getThemeValue,
                   onToggle: (value) {
                     setState(() {
@@ -51,7 +51,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Divider(color: myLightSecondaryTwo.withOpacity(0.56)),
             const SizedBox(height: 3),
             Row(
-              mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
                   child: Text(
@@ -83,7 +82,7 @@ class _AppBarSettings extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
 
   @override
-  Size get preferredSize => Size.fromHeight(56);
+  Size get preferredSize => const Size.fromHeight(56);
 
   @override
   Widget build(BuildContext context) {
