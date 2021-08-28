@@ -19,7 +19,7 @@ class SearchResultList extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       shrinkWrap: true,
       itemCount: _filteredSights.length,
-      itemBuilder: (BuildContext context, int index) {
+      itemBuilder: (context, index) {
         final sight = _filteredSights[index];
         return SearchResult(
           sight: sight,

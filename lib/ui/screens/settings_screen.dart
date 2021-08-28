@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:places/ui/colors.dart';
 import 'package:places/main.dart';
+import 'package:places/ui/screens/res/colors.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -62,9 +62,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.info_outline_rounded,
-                  color: myLightGreen,
+                  color: Theme.of(context).buttonColor,
                 ),
               ],
             ),

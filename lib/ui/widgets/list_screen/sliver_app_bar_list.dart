@@ -44,7 +44,7 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
                   title: isNotCollapsed
                       ? Text(
                           'Список\nинтересных мест',
-                          style: Theme.of(context).textTheme.headline1!.copyWith(fontWeight: FontWeight.w700),
+                          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 24,fontWeight: FontWeight.w700),
                         )
                       : Text(
                           'Список интересных мест',

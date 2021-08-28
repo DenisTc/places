@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
-import 'package:places/ui/styles.dart';
+import 'package:places/ui/screens/res/styles.dart';
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
@@ -280,7 +280,7 @@ class _CreateRouteButton extends StatelessWidget {
         );
       },
       style: ElevatedButton.styleFrom(
-        primary: myLightGreen,
+        primary: Theme.of(context).buttonColor,
         fixedSize: const Size(double.infinity, 48),
         elevation: 0.0,
         shadowColor: Colors.transparent,

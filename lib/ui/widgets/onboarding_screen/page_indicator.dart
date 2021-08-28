@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/colors.dart';
+import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/widgets/onboarding_screen/home_button.dart';
 
 class PageIndicator extends StatelessWidget {
@@ -28,7 +28,7 @@ class PageIndicator extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: i == currentPage
-                            ? myLightGreen
+                            ? Theme.of(context).buttonColor
                             : myLightSecondaryTwo.withOpacity(0.56),
                       ),
                     ),

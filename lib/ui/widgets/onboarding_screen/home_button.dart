@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/colors.dart';
+import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/main_screen.dart';
 
 class HomeButton extends StatelessWidget {
@@ -19,7 +19,7 @@ class HomeButton extends StatelessWidget {
         );
       },
       style: ElevatedButton.styleFrom(
-        primary: myLightGreen,
+        primary: Theme.of(context).buttonColor,
         fixedSize: const Size(328, 48),
         elevation: 0.0,
         shadowColor: Colors.transparent,

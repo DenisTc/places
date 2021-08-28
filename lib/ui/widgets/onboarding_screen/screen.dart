@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/ui/colors.dart';
+import 'package:places/ui/screens/res/colors.dart';
 
 class Screen extends StatelessWidget {
   final String icon;

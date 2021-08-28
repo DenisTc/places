@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/colors.dart';
+import 'package:places/ui/screens/res/colors.dart';
 
 const TextStyle _text = TextStyle(
   fontFamily: "Roboto",
@@ -7,9 +7,9 @@ const TextStyle _text = TextStyle(
 );
 
 TextStyle mainText = _text.copyWith(
-  fontSize: 32,
+  fontSize: 18,
   fontWeight: FontWeight.w500,
-  color: myLightSecondaryOne,
+  color: myLightMain,
 );
 
 TextStyle cardTextTitle = _text.copyWith(

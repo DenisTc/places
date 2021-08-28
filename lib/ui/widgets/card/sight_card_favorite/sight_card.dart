@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/widgets/card/sight_card_favorite/favorite_card_bottom.dart';
 import 'package:places/ui/widgets/card/sight_card_favorite/favorite_card_top.dart';
@@ -111,8 +111,8 @@ class __SightCardState extends State<SightCard> {
                             builder: (context, child) {
                               return Theme(
                                 data: ThemeData.light().copyWith(
-                                  colorScheme: const ColorScheme.light(
-                                    primary: myLightGreen,
+                                  colorScheme: ColorScheme.light(
+                                    primary: Theme.of(context).buttonColor,
                                   ),
                                 ),
                                 child: child!,

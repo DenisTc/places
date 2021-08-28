@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/colors.dart';
+import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/main_screen.dart';
 
 class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -28,10 +28,10 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               );
             },
-            child: const Text(
+            child: Text(
               'Пропустить',
               style: TextStyle(
-                color: myLightGreen,
+                color: Theme.of(context).buttonColor,
                 fontWeight: FontWeight.w500,
               ),
             ),

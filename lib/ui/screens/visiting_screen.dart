@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
+
 import 'package:places/ui/widgets/card/sight_card_favorite/sight_card_favorite.dart';
 
 /// Screen for displaying planned and visited places
@@ -101,7 +102,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               shrinkWrap: true,
               itemCount: isVisited.length,
-              itemBuilder: (BuildContext context, int index) {
+              itemBuilder: (context, index) {
                 final sight = isVisited[index];
                 return Container(
                   margin: const EdgeInsets.only(bottom: 16),

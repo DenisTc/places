@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_category_screen.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/sight_gallery.dart';
 import 'package:places/ui/widgets/add_sight_screen/new_sight_app_bar.dart';
@@ -59,6 +59,9 @@ class _AddSightScreenState extends State<AddSightScreen> {
                     controllerCat: _controllerCat,
                     notifyParent: () {
                       refresh();
+                    },
+                    setValue: (id) {
+                      setCategory(id);
                     },
                   ),
                   const SizedBox(height: 24),
@@ -122,15 +125,23 @@ class _AddSightScreenState extends State<AddSightScreen> {
   void refresh() {
     setState(
       () {
-        if ( //_controllerCat.text.isNotEmpty &&
+        if (_controllerCat.text.isNotEmpty &&
             _controllerName.text.isNotEmpty &&
-                _controllerLat.text.isNotEmpty &&
-                _controllerLng.text.isNotEmpty &&
-                _controllerDesc.text.isNotEmpty) {
+            _controllerLat.text.isNotEmpty &&
+            _controllerLng.text.isNotEmpty &&
+            _controllerDesc.text.isNotEmpty) {
           _isButtonEnabled = true;
         } else {
           _isButtonEnabled = false;
         }
+      },
+    );
+  }
+
+  void setCategory(int id) {
+    setState(
+      () {
+        _controllerCat.text = mocks[id].type;
       },
     );
   }
@@ -145,10 +156,10 @@ class _SelectOnMapButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {},
-      child: const Text(
+      child: Text(
         'Указать на карте',
         style: TextStyle(
-          color: myLightGreen,
+          color: Theme.of(context).buttonColor,
           fontSize: 16,
         ),
       ),
@@ -159,11 +170,13 @@ class _SelectOnMapButton extends StatelessWidget {
 class _CategoryField extends StatefulWidget {
   final TextEditingController controllerCat;
   final Function() notifyParent;
+  final Function(int id) setValue;
 
   const _CategoryField({
     Key? key,
     required this.controllerCat,
     required this.notifyParent,
+    required this.setValue,
   }) : super(key: key);
 
   @override
@@ -171,6 +184,8 @@ class _CategoryField extends StatefulWidget {
 }
 
 class __CategoryFieldState extends State<_CategoryField> {
+  int? categoryid;
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
@@ -184,7 +199,7 @@ class __CategoryFieldState extends State<_CategoryField> {
           widget.notifyParent();
         });
       },
-      //initialValue: 'Кафе',
+      controller: widget.controllerCat,
       readOnly: true,
       textInputAction: TextInputAction.next,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
@@ -196,21 +211,25 @@ class __CategoryFieldState extends State<_CategoryField> {
           fontWeight: FontWeight.w400,
         ),
         suffixIcon: IconButton(
-          //onPressed: () {},
-          onPressed: () {
-            Navigator.push<List>(
+          onPressed: () async {
+            categoryid = await Navigator.push<int>(
               context,
               MaterialPageRoute(
                 builder: (context) => SightCategoryScreen(),
               ),
             );
+            setState(() {
+              widget.controllerCat.text = mocks[categoryid!].type;
+            });
           },
           icon: const Icon(Icons.navigate_next_rounded),
           color: myLightMain,
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide:
-              BorderSide(color: myLightGreen.withOpacity(0.4), width: 2.0),
+          borderSide: BorderSide(
+            color: Theme.of(context).buttonColor.withOpacity(0.4),
+            width: 2.0,
+          ),
         ),
       ),
     );
@@ -256,17 +275,20 @@ class _NameFieldState extends State<_NameField> {
       textInputAction: TextInputAction.next,
       keyboardType: TextInputType.text,
       cursorColor: myLightMain,
-      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-        border: OutlineInputBorder(),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        border: const OutlineInputBorder(),
         enabledBorder: OutlineInputBorder(
-          borderSide:
-              BorderSide(color: myLightGreen.withOpacity(0.4), width: 1.0),
+          borderSide: BorderSide(
+              color: Theme.of(context).buttonColor.withOpacity(0.4),
+              width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide:
-              BorderSide(color: myLightGreen.withOpacity(0.4), width: 2.0),
+          borderSide: BorderSide(
+              color: Theme.of(context).buttonColor.withOpacity(0.4),
+              width: 2.0),
         ),
         suffixIcon: IconButton(
           onPressed: () {
@@ -352,13 +374,13 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                   border: OutlineInputBorder(),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: myLightGreen.withOpacity(0.4),
+                      color: Theme.of(context).buttonColor.withOpacity(0.4),
                       width: 1.0,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: myLightGreen.withOpacity(0.4),
+                      color: Theme.of(context).buttonColor.withOpacity(0.4),
                       width: 2.0,
                     ),
                   ),
@@ -386,7 +408,6 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
         const SizedBox(width: 16),
         Expanded(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
@@ -410,22 +431,23 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                   });
                 },
                 textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.numberWithOptions(signed: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(signed: true),
                 controller: widget.controllerLng,
                 cursorColor: myLightMain,
                 decoration: InputDecoration(
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
                   border: OutlineInputBorder(),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: myLightGreen.withOpacity(0.4),
+                      color: Theme.of(context).buttonColor.withOpacity(0.4),
                       width: 1.0,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
-                      color: myLightGreen.withOpacity(0.4),
+                      color: Theme.of(context).buttonColor.withOpacity(0.4),
                       width: 2.0,
                     ),
                   ),
@@ -506,13 +528,13 @@ class __DescriptionFieldState extends State<_DescriptionField> {
         border: const OutlineInputBorder(),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: myLightGreen.withOpacity(0.4),
+            color: Theme.of(context).buttonColor.withOpacity(0.4),
             width: 1.0,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: myLightGreen.withOpacity(0.4),
+            color: Theme.of(context).buttonColor.withOpacity(0.4),
             width: 2.0,
           ),
         ),
@@ -574,8 +596,8 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
         ),
       ),
       style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all(widget.enable ? myLightGreen : myLightBackground),
+        backgroundColor: MaterialStateProperty.all(
+            widget.enable ? Theme.of(context).buttonColor : myLightBackground),
         minimumSize: MaterialStateProperty.all(const Size(double.infinity, 48)),
         shadowColor: MaterialStateProperty.all(Colors.transparent),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(

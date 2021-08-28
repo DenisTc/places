@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
 
 class SearchBar extends StatefulWidget {
   final TextEditingController controllerSearch;
@@ -21,9 +21,9 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 16.0),
-      decoration: new BoxDecoration(
-        borderRadius: new BorderRadius.all(new Radius.circular(12.0)),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(12.0)),
         color: myLightBackground,
       ),
       child: TextFormField(
@@ -36,14 +36,14 @@ class _SearchBarState extends State<SearchBar> {
         cursorColor: myLightMain,
         autofocus: true,
         cursorHeight: 20,
-        style: TextStyle(
+        style: const TextStyle(
           fontWeight: FontWeight.w400,
           fontSize: 16,
         ),
         decoration: InputDecoration(
           hintText: 'Поиск',
-          contentPadding: EdgeInsets.only(top: 15),
-          hintStyle: TextStyle(
+          contentPadding: const EdgeInsets.only(top: 15),
+          hintStyle: const TextStyle(
             color: myLightSecondaryTwo,
             fontSize: 16,
             fontWeight: FontWeight.w400,

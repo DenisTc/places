@@ -32,11 +32,7 @@ class _FavoriteCardTopState extends State<FavoriteCardTop> {
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,
-              loadingBuilder: (
-                BuildContext context,
-                Widget child,
-                ImageChunkEvent? loadingProgress,
-              ) {
+              loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
                 return Center(
                   child: CircularProgressIndicator(

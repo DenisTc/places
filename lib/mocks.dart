@@ -1,5 +1,5 @@
 import 'package:places/domains/sight.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/icons.dart';
 
 final List<Sight> mocks = [
   const Sight(

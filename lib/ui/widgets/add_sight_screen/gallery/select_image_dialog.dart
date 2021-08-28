@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
 
 class SelectImageDialog extends StatelessWidget {
   const SelectImageDialog({Key? key}) : super(key: key);
@@ -94,11 +94,11 @@ class SelectImageDialog extends StatelessWidget {
                 color: Colors.white,
               ),
               width: MediaQuery.of(context).size.width,
-              child: const Text(
+              child: Text(
                 'ОТМЕНА',
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
-                  color: myLightGreen,
+                  color: Theme.of(context).buttonColor,
                 ),
               ),
             ),

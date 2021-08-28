@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/icons.dart';
 
 /// Custom bottom navigation bar.
 class SightBottomNavBar extends StatefulWidget {

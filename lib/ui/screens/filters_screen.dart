@@ -6,8 +6,8 @@ import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/models/filters.dart';
 import 'package:places/models/location.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
 
 class FiltersScreen extends StatefulWidget {
   final Filters filters;
@@ -99,12 +99,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 countPlaces = countPlacesNear();
               });
             },
-            child: const Text(
+            child: Text(
               'Очистить',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: myLightGreen,
+                color: Theme.of(context).buttonColor,
               ),
             ),
           ),
@@ -266,7 +266,7 @@ class __ShowButtonState extends State<_ShowButton> {
         }
       },
       style: ElevatedButton.styleFrom(
-        primary: widget.countPlaces != 0 ? myLightGreen : myLightBackground,
+        primary: widget.countPlaces != 0 ? Theme.of(context).buttonColor : myLightBackground,
         fixedSize: const Size(double.infinity, 48),
         elevation: 0.0,
         shadowColor: Colors.transparent,
@@ -326,7 +326,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                 category.icon != null ? category.icon! : iconParticularPlace,
                 height: 40,
                 width: 40,
-                color: myLightGreen,
+                color: Theme.of(context).buttonColor,
               ),
               notifyParent: widget.notifyParent,
               filters: widget.filters,
@@ -375,7 +375,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
             height: 90,
             width: 90,
             decoration: BoxDecoration(
-              color: myLightGreen.withOpacity(0.16),
+              color: Theme.of(context).buttonColor.withOpacity(0.16),
               shape: BoxShape.circle,
             ),
             child: Stack(
