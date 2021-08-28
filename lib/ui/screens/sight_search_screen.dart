@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
-import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/search_screen/empty_search_result.dart';
 import 'package:places/ui/widgets/search_screen/search_bar.dart';
 import 'package:places/ui/widgets/list_screen/sight_app_bar.dart';
@@ -68,7 +67,6 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
     return Scaffold(
       appBar: const SightAppBar(),
       body: Column(
-        mainAxisSize: MainAxisSize.max,
         children: [
           SearchBar(
             controllerSearch: _controllerSearch,
@@ -150,11 +148,10 @@ class _HistoryListState extends State<_HistoryList> {
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       itemCount: widget.historyList.length,
-      itemBuilder: (BuildContext context, int index) {
+      itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
-            vertical: 0,
           ),
           child: Column(
             children: [
@@ -252,10 +249,10 @@ class __ClearHistoryButtonState extends State<_ClearHistoryButton> {
             },
           );
         },
-        child: const Text(
+        child: Text(
           'Очистить историю',
           style: TextStyle(
-            color: myLightGreen,
+            color: Theme.of(context).buttonColor,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),

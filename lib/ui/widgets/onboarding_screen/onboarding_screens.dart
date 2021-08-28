@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/onboarding_screen/page_indicator.dart';
 import 'package:places/ui/widgets/onboarding_screen/screen.dart';
 
@@ -26,24 +26,24 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
       alignment: AlignmentDirectional.center,
       children: [
         PageView(
-          onPageChanged: (int page) {
+          onPageChanged: (page) {
             setState(() {
               widget.setCurrentPage(page.toDouble());
             });
           },
           controller: widget.pageController,
-          children: [
-            const Screen(
+          children: const [
+            Screen(
               icon: iconPointer,
               title: 'Добро пожаловать\nв Путеводитель',
               description: 'Ищи новые локации и сохраняй\nсамые любимые.',
             ),
-            const Screen(
+            Screen(
               icon: iconBackpack,
               title: 'Построй маршрут\nи отправляйся в путь',
               description: 'Достигай цели максимально\nбыстро и комфортно.',
             ),
-            const Screen(
+            Screen(
               icon: iconHandTouch,
               title: 'Добавляй места,\nкоторые нашёл сам',
               description:

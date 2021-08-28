@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/icons.dart';
 
 class SightImage extends StatelessWidget {
   final Function(String imgUrl) notifyParent;

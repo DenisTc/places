@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/colors.dart';
+import 'package:places/ui/screens/res/colors.dart';
 
 const TextStyle _text = TextStyle(
   fontFamily: "Roboto",
@@ -9,7 +9,7 @@ const TextStyle _text = TextStyle(
 TextStyle mainText = _text.copyWith(
   fontSize: 18,
   fontWeight: FontWeight.w500,
-  color: myLightSecondaryOne,
+  color: myLightMain,
 );
 
 TextStyle cardTextTitle = _text.copyWith(
@@ -34,5 +34,17 @@ TextStyle cardTextType = _text.copyWith(
   fontSize: 14,
   fontWeight: FontWeight.w700,
   color: myLightSecondaryTwo,
+);
+
+TextStyle activeBtnTextStyle = _text.copyWith(
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
+  color: Colors.white,
+);
+
+TextStyle disableBtnTextStyle = _text.copyWith(
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
+  color: myInactiveBlack.withOpacity(0.56),
 );
 

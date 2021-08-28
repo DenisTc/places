@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/domains/sight.dart';
-import 'package:places/ui/colors.dart';
+import 'package:places/ui/screens/res/colors.dart';
 
 class FavoriteCardBottom extends StatelessWidget {
   final Sight sight;
@@ -55,7 +55,7 @@ class FavoriteCardBottom extends StatelessWidget {
               'Запланировано на 12 окт. 2020',
               maxLines: 2,
               style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                    color: myLightGreen,
+                    color: Theme.of(context).buttonColor,
                   ),
               overflow: TextOverflow.ellipsis,
             ),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/widgets/card/sight_card_favorite/favorite_card_bottom.dart';
 import 'package:places/ui/widgets/card/sight_card_favorite/favorite_card_top.dart';
@@ -91,15 +91,7 @@ class __SightCardState extends State<SightCard> {
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  onTap: () {
-                    Navigator.push<List>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            SightDetails(id: mocks.indexOf(widget.sight)),
-                      ),
-                    );
-                  },
+                  onTap: _showSight,
                 ),
               ),
               Positioned(
@@ -119,8 +111,8 @@ class __SightCardState extends State<SightCard> {
                             builder: (context, child) {
                               return Theme(
                                 data: ThemeData.light().copyWith(
-                                  colorScheme: const ColorScheme.light(
-                                    primary: myLightGreen,
+                                  colorScheme: ColorScheme.light(
+                                    primary: Theme.of(context).buttonColor,
                                   ),
                                 ),
                                 child: child!,
@@ -157,6 +149,23 @@ class __SightCardState extends State<SightCard> {
           ),
         ),
       ),
+    );
+  }
+
+  void _showSight() async {
+    await showModalBottomSheet<Sight>(
+      context: context,
+      builder: (_) {
+        return SightDetails(id: mocks.indexOf(widget.sight));
+      },
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      
     );
   }
 }

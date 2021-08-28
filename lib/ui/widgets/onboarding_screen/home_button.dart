@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/colors.dart';
+import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/main_screen.dart';
 
 class HomeButton extends StatelessWidget {
@@ -9,8 +9,8 @@ class HomeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
+    return ElevatedButton(
+      onPressed: () {
         Navigator.pushReplacement<void, void>(
           context,
           MaterialPageRoute(
@@ -18,29 +18,20 @@ class HomeButton extends StatelessWidget {
           ),
         );
       },
-      child: Container(
-        height: 48,
-        width: 328,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(10),
-          ),
-          color: myLightGreen,
+      style: ElevatedButton.styleFrom(
+        primary: Theme.of(context).buttonColor,
+        fixedSize: const Size(328, 48),
+        elevation: 0.0,
+        shadowColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-             Padding(
-              padding: EdgeInsets.only(left: 10),
-              child: Text(
-                'НА СТАРТ',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-          ],
+      ),
+      child: const Text(
+        'НА СТАРТ',
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );

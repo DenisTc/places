@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:places/ui/colors.dart';
 import 'package:places/main.dart';
+import 'package:places/ui/screens/onboarding_screen.dart';
+import 'package:places/ui/screens/res/colors.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -14,15 +15,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: settings.getThemeValue ? myDarkMain : myLightBackground,
-      appBar: _AppBarSettings(),
+      backgroundColor: Theme.of(context).accentColor,//settings.getThemeValue ? myDarkMain : Colors.white,
+      appBar: const _AppBarSettings(),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
             const SizedBox(height: 20),
             Row(
-              mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
                   child: Text(
@@ -39,6 +39,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   padding: 2.0,
                   toggleSize: 28.0,
                   borderRadius: 16.0,
+                  inactiveColor: myInactiveBlack.withOpacity(0.56),
+                  activeColor: myDarkGreen,
                   value: settings.getThemeValue,
                   onToggle: (value) {
                     setState(() {
@@ -51,7 +53,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
             Divider(color: myLightSecondaryTwo.withOpacity(0.56)),
             const SizedBox(height: 3),
             Row(
-              mainAxisSize: MainAxisSize.max,
               children: [
                 Expanded(
                   child: Text(
@@ -62,9 +63,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                   ),
                 ),
-                const Icon(
-                  Icons.info_outline_rounded,
-                  color: myLightGreen,
+                IconButton(
+                  onPressed: () {
+                    Navigator.pushReplacement<void, void>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const OnboardingScreen(),
+                      ),
+                    );
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  icon: Icon(
+                    Icons.info_outline_rounded,
+                    color: Theme.of(context).buttonColor,
+                  ),
                 ),
               ],
             ),
@@ -83,7 +96,7 @@ class _AppBarSettings extends StatelessWidget implements PreferredSizeWidget {
   }) : super(key: key);
 
   @override
-  Size get preferredSize => Size.fromHeight(56);
+  Size get preferredSize => const Size.fromHeight(56);
 
   @override
   Widget build(BuildContext context) {

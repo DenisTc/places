@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/colors.dart';
+import 'package:places/ui/screens/res/colors.dart';
 
 class NewSightAppBar extends StatelessWidget implements PreferredSizeWidget {
   const NewSightAppBar({

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/sight_search_screen.dart';
 import 'package:places/models/filters.dart';
@@ -16,25 +16,13 @@ class SearchBar extends StatefulWidget {
   }) : super(key: key);
 
   final textFieldFocusNode = FocusNode();
-  
+
   @override
   _SearchBarState createState() => _SearchBarState();
 }
 
 class _SearchBarState extends State<SearchBar> {
   List<Sight> filteredList = mocks;
-  void _navigateGetDataFromFilters(BuildContext context) async {
-    final List<Sight>? result = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => FiltersScreen(filters: filters),
-      ),
-    );
-
-    if (result != null) {
-      filteredList = result;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,13 +70,13 @@ class _SearchBarState extends State<SearchBar> {
               iconOptions,
               height: 15,
               width: 15,
-              color: myLightGreen,
+              color: Theme.of(context).buttonColor,
             ),
             onPressed: () {
               widget.textFieldFocusNode.unfocus();
               widget.textFieldFocusNode.canRequestFocus = false;
               _navigateGetDataFromFilters(context);
-              Future.delayed(Duration(milliseconds: 100), () {
+              Future.delayed(const Duration(milliseconds: 100), () {
                 widget.textFieldFocusNode.canRequestFocus = true;
               });
             },
@@ -124,5 +112,18 @@ class _SearchBarState extends State<SearchBar> {
         ),
       ),
     );
+  }
+
+  void _navigateGetDataFromFilters(BuildContext context) async {
+    final List<Sight>? result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FiltersScreen(filters: filters),
+      ),
+    );
+
+    if (result != null) {
+      filteredList = result;
+    }
   }
 }

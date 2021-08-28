@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
 
 int? indexCategory;
 
@@ -25,13 +25,10 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
             child: Scrollbar(
               child: ListView.builder(
                 itemCount: mocks.length,
-                itemBuilder: (BuildContext context, int index) {
+                itemBuilder: (context, index) {
                   return InkWell(
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 0,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Column(
                         children: [
                           const SizedBox(height: 14),
@@ -51,7 +48,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                                   iconCheck,
                                   height: 15,
                                   width: 15,
-                                  color: myLightGreen,
+                                  color: Theme.of(context).buttonColor,
                                 ),
                             ],
                           ),
@@ -61,22 +58,20 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                       ),
                     ),
                     onTap: () => {
-                      if (indexCategory != index)
-                        {
-                          indexCategory = index,
+                      setState(() {
+                        if (indexCategory != index) {
+                          indexCategory = index;
+                        } else {
+                          indexCategory = null;
                         }
-                      else
-                        {
-                          indexCategory = null,
-                        },
-                      setState(() {}),
+                      }),
                     },
                   );
                 },
               ),
             ),
           ),
-          const _SaveButton(),
+          _SaveButton(),
           const SizedBox(height: 30),
         ],
       ),
@@ -84,17 +79,24 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
   }
 }
 
-class _SaveButton extends StatelessWidget {
+class _SaveButton extends StatefulWidget {
   const _SaveButton({
     Key? key,
   }) : super(key: key);
 
   @override
+  __SaveButtonState createState() => __SaveButtonState();
+}
+
+class __SaveButtonState extends State<_SaveButton> {
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pop(context, indexCategory);//mocks[indexCategory!].type[0]);
+        },
         child: Text(
           'Сохранить'.toUpperCase(),
           style: TextStyle(
@@ -106,7 +108,10 @@ class _SaveButton extends StatelessWidget {
         ),
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
-              (indexCategory == null) ? myLightBackground : myLightGreen),
+            (indexCategory == null)
+                ? myLightBackground
+                : Theme.of(context).buttonColor,
+          ),
           minimumSize:
               MaterialStateProperty.all(const Size(double.infinity, 48)),
           shadowColor: MaterialStateProperty.all(Colors.transparent),

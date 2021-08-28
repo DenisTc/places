@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/ui/colors.dart';
-import 'package:places/ui/icons.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
 
 class EmptySearchResult extends StatelessWidget {
   const EmptySearchResult({
@@ -21,7 +21,7 @@ class EmptySearchResult extends StatelessWidget {
             height: 70,
             color: myLightSecondaryTwo,
           ),
-          SizedBox(height: 32),
+          const SizedBox(height: 32),
           Text(
             'Ничего не найдено.',
             style: TextStyle(
@@ -30,7 +30,7 @@ class EmptySearchResult extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             'Попробуйте изменить параметры\nпоиска',
             textAlign: TextAlign.center,

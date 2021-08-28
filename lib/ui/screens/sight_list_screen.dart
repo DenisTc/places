@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/screens/sight_bottom_nav_bar.dart';
 import 'package:places/ui/widgets/list_screen/add_sight_button.dart';
 import 'package:places/ui/widgets/list_screen/sliver_app_bar_list.dart';
 import 'package:places/ui/widgets/list_screen/sliver_sights.dart';

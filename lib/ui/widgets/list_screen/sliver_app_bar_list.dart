@@ -18,9 +18,9 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
       pinned: true,
       elevation: 0.0,
       expandedHeight: 170.0,
-      backgroundColor: Theme.of(context).primaryColorLight,
+      backgroundColor: Theme.of(context).accentColor,
       flexibleSpace: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
+        builder: ( context,  constraints) {
           appBarHeight = constraints.biggest.height;
           isNotCollapsed = appBarHeight > 140 ? true : false;
           return Container(
@@ -42,13 +42,14 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
                     top: isNotCollapsed ? 40 : 15,
                   ),
                   title: isNotCollapsed
-                      ? const Text(
+                      ? Text(
                           'Список\nинтересных мест',
-                          style: TextStyle(fontWeight: FontWeight.w700),
+                          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 24,fontWeight: FontWeight.w700),
                         )
-                      : const Text(
+                      : Text(
                           'Список интересных мест',
                           textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.headline1,
                         ),
                 ),
                 if (appBarHeight > 190)

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/colors.dart';
 import 'package:places/ui/screens/main_screen.dart';
 
 class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final double currentPage;
+
   const OnboardingAppBar({
     Key? key,
     required this.currentPage,
   }) : super(key: key);
 
-  final double currentPage;
   @override
   Size get preferredSize => const Size.fromHeight(56);
 
@@ -19,25 +19,20 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       actions: [
         if (currentPage != 2)
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: Center(
-              child: InkWell(
-                onTap: () {
-                  Navigator.pushReplacement<void, void>(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const MainScreen(),
-                    ),
-                  );
-                },
-                child: const Text(
-                  'Пропустить',
-                  style: TextStyle(
-                    color: myLightGreen,
-                    fontWeight: FontWeight.w500,
-                  ),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacement<void, void>(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MainScreen(),
                 ),
+              );
+            },
+            child: Text(
+              'Пропустить',
+              style: TextStyle(
+                color: Theme.of(context).buttonColor,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
