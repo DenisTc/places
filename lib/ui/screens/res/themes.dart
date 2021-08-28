@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/styles.dart';
 
-
 final lightTheme = ThemeData(
   accentColor: Colors.white,
   scaffoldBackgroundColor: Colors.white,
@@ -10,6 +9,8 @@ final lightTheme = ThemeData(
   primaryColorLight: myLightSecondaryTwo.withOpacity(0),
   errorColor: myLightRed,
   buttonColor: myLightGreen,
+  secondaryHeaderColor: myLightMain,
+  iconTheme: const IconThemeData(color: myLightMain),
   textTheme: TextTheme(
     headline1: mainText,
     bodyText1: cardTextDesc.copyWith(color: myLightSecondaryOne),
@@ -42,6 +43,7 @@ final darkTheme = ThemeData(
   errorColor: myDarkRed,
   primaryColorLight: myDarkSecondaryTwo.withOpacity(0.2),
   buttonColor: myDarkGreen,
+  secondaryHeaderColor: Colors.white,
   primaryTextTheme: TextTheme(headline6: mainText),
   textTheme: TextTheme(
     headline1: mainText.copyWith(color: Colors.white),

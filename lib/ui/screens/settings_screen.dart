@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:places/main.dart';
+import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -14,7 +15,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: settings.getThemeValue ? myDarkMain : Colors.white,
+      backgroundColor: Theme.of(context).accentColor,//settings.getThemeValue ? myDarkMain : Colors.white,
       appBar: const _AppBarSettings(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -62,9 +63,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                   ),
                 ),
-                Icon(
-                  Icons.info_outline_rounded,
-                  color: Theme.of(context).buttonColor,
+                IconButton(
+                  onPressed: () {
+                    Navigator.pushReplacement<void, void>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const OnboardingScreen(),
+                      ),
+                    );
+                  },
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                  icon: Icon(
+                    Icons.info_outline_rounded,
+                    color: Theme.of(context).buttonColor,
+                  ),
                 ),
               ],
             ),

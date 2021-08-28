@@ -15,13 +15,6 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int selectedTab = 0;
 
-  void onSelectTab(int index) {
-    if (selectedTab == index) return;
-    setState(() {
-      selectedTab = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,5 +34,12 @@ class _MainScreenState extends State<MainScreen> {
         },
       ),
     );
+  }
+
+  void onSelectTab(int index) {
+    if (selectedTab == index) return;
+    setState(() {
+      selectedTab = index;
+    });
   }
 }

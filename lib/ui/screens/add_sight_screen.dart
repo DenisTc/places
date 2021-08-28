@@ -282,13 +282,15 @@ class _NameFieldState extends State<_NameField> {
         border: const OutlineInputBorder(),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-              color: Theme.of(context).buttonColor.withOpacity(0.4),
-              width: 1.0),
+            color: Theme.of(context).buttonColor.withOpacity(0.4),
+            width: 1.0,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-              color: Theme.of(context).buttonColor.withOpacity(0.4),
-              width: 2.0),
+            color: Theme.of(context).buttonColor.withOpacity(0.4),
+            width: 2.0,
+          ),
         ),
         suffixIcon: IconButton(
           onPressed: () {
@@ -365,13 +367,14 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 },
                 focusNode: widget.focusNodeLat,
                 textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.numberWithOptions(signed: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(signed: true),
                 controller: widget.controllerLat,
                 cursorColor: myLightMain,
                 decoration: InputDecoration(
                   contentPadding:
-                      EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                  border: OutlineInputBorder(),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+                  border: const OutlineInputBorder(),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Theme.of(context).buttonColor.withOpacity(0.4),
@@ -597,7 +600,8 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
       ),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(
-            widget.enable ? Theme.of(context).buttonColor : myLightBackground),
+          widget.enable ? Theme.of(context).buttonColor : myLightBackground,
+        ),
         minimumSize: MaterialStateProperty.all(const Size(double.infinity, 48)),
         shadowColor: MaterialStateProperty.all(Colors.transparent),
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(

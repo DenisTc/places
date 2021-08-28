@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/main_screen.dart';
 
 class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final double currentPage;
+
   const OnboardingAppBar({
     Key? key,
     required this.currentPage,
   }) : super(key: key);
 
-  final double currentPage;
   @override
   Size get preferredSize => const Size.fromHeight(56);
 

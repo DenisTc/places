@@ -22,15 +22,16 @@ class Screen extends StatelessWidget {
         SvgPicture.asset(
           icon,
           height: 98,
-          color: myLightMain,
+          color: Theme.of(context).iconTheme.color,
         ),
         const SizedBox(height: 40),
         Text(
           title,
           textAlign: TextAlign.center,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w700,
+            color: Theme.of(context).secondaryHeaderColor,
           ),
         ),
         const SizedBox(height: 8),
