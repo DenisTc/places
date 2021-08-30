@@ -17,6 +17,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
     return Scaffold(
       body: IndexedStack(
         index: selectedTab,
@@ -27,12 +29,14 @@ class _MainScreenState extends State<MainScreen> {
           SettingsScreen(),
         ],
       ),
-      bottomNavigationBar: SightBottomNavBar(
-        currentIndex: selectedTab,
-        onSelectTab: (index) {
-          onSelectTab(index);
-        },
-      ),
+      bottomNavigationBar: isPortrait
+          ? SightBottomNavBar(
+              currentIndex: selectedTab,
+              onSelectTab: (index) {
+                onSelectTab(index);
+              },
+            )
+          : const SizedBox.shrink(),
     );
   }
 

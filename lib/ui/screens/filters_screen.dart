@@ -58,18 +58,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
     return filteredPlaces.length;
   }
 
-  void refresh() {
-    setState(() {
-      countPlaces = countPlacesNear();
-    });
-  }
-
-  void updateRangeVal(RangeValues newRangeValues) {
-    setState(() {
-      widget.filters.currentRangeValues = newRangeValues;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     filters = widget.filters.categories;
@@ -156,6 +144,18 @@ class _FiltersScreenState extends State<FiltersScreen> {
         ),
       ),
     );
+  }
+
+    void refresh() {
+    setState(() {
+      countPlaces = countPlacesNear();
+    });
+  }
+
+  void updateRangeVal(RangeValues newRangeValues) {
+    setState(() {
+      widget.filters.currentRangeValues = newRangeValues;
+    });
   }
 }
 
