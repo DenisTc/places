@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/ui/widgets/list_screen/search_bar.dart';
 
@@ -15,51 +16,46 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      centerTitle: false,
       pinned: true,
       elevation: 0.0,
-      expandedHeight: 170.0,
+      expandedHeight: 160.0,
       backgroundColor: Theme.of(context).accentColor,
       flexibleSpace: LayoutBuilder(
-        builder: ( context,  constraints) {
-          appBarHeight = constraints.biggest.height;
-          isNotCollapsed = appBarHeight > 140 ? true : false;
-          return Container(
-            padding: const EdgeInsets.only(
-              top: 50,
-              left: 16,
-              right: 16,
+        builder: (context, constraints) {
+          var top = constraints.biggest.height;
+          debugPrint(top.toString());
+          return FlexibleSpaceBar(
+            title: Opacity(
+              opacity: top < 110 ? 1.0 : 0.0,
+              child: Text(
+                'Список интересных мест',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.headline1,
+              ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            background: Column(
               mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: isNotCollapsed
-                  ? CrossAxisAlignment.start
-                  : CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                FlexibleSpaceBar(
-                  centerTitle: isNotCollapsed ? false : true,
-                  titlePadding: EdgeInsets.only(
-                    top: isNotCollapsed ? 40 : 15,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    'Список\nинтересных мест',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1!
+                        .copyWith(fontSize: 32, fontWeight: FontWeight.w700),
                   ),
-                  title: isNotCollapsed
-                      ? Text(
-                          'Список\nинтересных мест',
-                          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 24,fontWeight: FontWeight.w700),
-                        )
-                      : Text(
-                          'Список интересных мест',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline1,
-                        ),
                 ),
-                if (appBarHeight > 190)
-                  const SizedBox(height: 10)
-                else
-                  const SizedBox(height: 0),
-                if (appBarHeight > 200)
-                  SearchBar()
-                else
-                  const SizedBox(height: 0),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SizedBox(
+                    height: 46.0,
+                    width: double.infinity,
+                    child: SearchBar(),
+                  ),
+                ),
               ],
             ),
           );
