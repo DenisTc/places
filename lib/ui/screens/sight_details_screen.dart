@@ -197,7 +197,7 @@ class _Description extends StatelessWidget {
         ),
         const SizedBox(height: 19),
         const _FunctionButtons(),
-        const SizedBox(height: 11)
+        const SizedBox(height: 11),
       ],
     );
   }

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/colors.dart';
 
 const TextStyle _text = TextStyle(
-  fontFamily: "Roboto",
+  fontFamily: 'Roboto',
   fontStyle: FontStyle.normal,
 );
 
 TextStyle mainText = _text.copyWith(
-  fontSize: 18,
+  fontSize: 20,
   fontWeight: FontWeight.w500,
   color: myLightMain,
 );
