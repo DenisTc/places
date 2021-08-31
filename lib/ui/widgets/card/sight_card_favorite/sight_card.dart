@@ -33,8 +33,9 @@ class __SightCardState extends State<SightCard> {
       child: Container(
         key: widget.globalKey,
         height: 199,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
+        decoration:BoxDecoration(
+          color: Theme.of(context).accentColor,
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
         ),
         child: Dismissible(
           key: ValueKey(widget.sight),
@@ -43,11 +44,17 @@ class __SightCardState extends State<SightCard> {
             widget.removeSight(widget.sight, widget.visited);
           },
           background: Container(
-            //height: 200,
             width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.all(Radius.circular(16)),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
+                colors: [
+                  Colors.red,
+                  Theme.of(context).accentColor,
+                ],
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(16)),
             ),
             child: Padding(
               padding: const EdgeInsets.only(right: 16),
@@ -166,7 +173,6 @@ class __SightCardState extends State<SightCard> {
         ),
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:places/domains/sight.dart';
 import 'package:places/ui/widgets/visiting_screen/sight_card_favorite.dart';
 
 // Widget for displaying a list of places in horizontal orientation
-class SightVisitingLandscapeWidget extends StatefulWidget {
+class SightVisitingLandscapeWidget extends StatelessWidget {
   final List<Sight> sights;
   final bool visited;
   final Function(Sight data, Sight sight, bool visited) moveItemInList;
@@ -17,13 +17,6 @@ class SightVisitingLandscapeWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SightVisitingLandscapeWidgetState createState() =>
-      _SightVisitingLandscapeWidgetState();
-}
-
-class _SightVisitingLandscapeWidgetState
-    extends State<SightVisitingLandscapeWidget> {
-  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -32,22 +25,22 @@ class _SightVisitingLandscapeWidgetState
           SliverGrid(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                final sight = widget.sights[index];
+                final sight = sights[index];
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: FavoriteSightCard(
                     sight: sight,
-                    visited: widget.visited,
+                    visited: visited,
                     moveItemInList: (data, sight, visited) {
-                      widget.moveItemInList(data, sight, visited);
+                      moveItemInList(data, sight, visited);
                     },
                     removeSight: (sight, visited) {
-                      widget.removeSight(sight, visited);
+                      removeSight(sight, visited);
                     },
                   ),
                 );
               },
-              childCount: widget.sights.length,
+              childCount: sights.length,
             ),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,

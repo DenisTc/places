@@ -50,12 +50,13 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
               isPortrait
                   ? SightVisitingPortrainWidget(
                       sights: notVisited,
+                      visited: false,
                       moveItemInList: (data, sight, visited) {
                         moveItemInList(data, sight, visited);
                       },
                       removeSight: (sight, visited) {
                         removeSight(sight, visited);
-                      },
+                      }, 
                     )
                   : SightVisitingLandscapeWidget(
                       sights: notVisited,
@@ -77,6 +78,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
               isPortrait
                   ? SightVisitingPortrainWidget(
                       sights: isVisited,
+                      visited: true,
                       moveItemInList: (data, sight, visited) {
                         moveItemInList(data, sight, visited);
                       },
@@ -85,7 +87,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                       },
                     )
                   : SightVisitingLandscapeWidget(
-                      sights: notVisited,
+                      sights: isVisited,
                       visited: true,
                       moveItemInList: (data, sight, visited) {
                         moveItemInList(data, sight, visited);
@@ -113,13 +115,13 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
   void moveItemInList(Sight data, Sight sight, bool visited) {
     setState(
       () {
-          if (visited) {
-            isVisited.remove(data);
-            isVisited.insert(isVisited.indexOf(sight), data);
-          } else {
-            notVisited.remove(data);
-            notVisited.insert(notVisited.indexOf(sight), data);
-          }
+        if (visited && isVisited.indexOf(data) != isVisited.indexOf(sight)) {
+          isVisited.remove(data);
+          isVisited.insert(isVisited.indexOf(sight), data);
+        } else if (notVisited.indexOf(data) != notVisited.indexOf(sight)) {
+          notVisited.remove(data);
+          notVisited.insert(notVisited.indexOf(sight), data);
+        }
       },
     );
   }

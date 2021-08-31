@@ -46,9 +46,7 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
             scale: 0.9,
             child: Container(
               width: isPortrait ? MediaQuery.of(context).size.width : 328,
-              height: 216,
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: const BorderRadius.all(Radius.circular(16)),
                 boxShadow: [
                   BoxShadow(

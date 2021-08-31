@@ -5,6 +5,7 @@ import 'package:places/ui/widgets/visiting_screen/sight_card_favorite.dart';
 // Widget for displaying a list of places in a vertical orientation
 class SightVisitingPortrainWidget extends StatelessWidget {
   final List<Sight> sights;
+  final bool visited;
   final Function(Sight data, Sight sight, bool visited) moveItemInList;
   final Function(Sight sight, bool visited) removeSight;
   const SightVisitingPortrainWidget({
@@ -12,6 +13,7 @@ class SightVisitingPortrainWidget extends StatelessWidget {
     required this.sights,
     required this.moveItemInList,
     required this.removeSight,
+    required this.visited,
   }) : super(key: key);
 
   @override
@@ -26,7 +28,7 @@ class SightVisitingPortrainWidget extends StatelessWidget {
           margin: const EdgeInsets.only(bottom: 16),
           child: FavoriteSightCard(
             sight: sight,
-            visited: false,
+            visited: visited,
             moveItemInList: (data, sight, visited) {
               moveItemInList(data, sight, visited);
             },
