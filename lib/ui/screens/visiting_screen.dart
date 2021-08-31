@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
-
-import 'package:places/ui/widgets/card/sight_card_favorite/sight_card_favorite.dart';
+import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
+import 'package:places/ui/widgets/visiting_screen/sight_visiting_landscape_widget.dart';
+import 'package:places/ui/widgets/visiting_screen/sight_visiting_portrain_widget.dart';
+import 'package:places/ui/widgets/visiting_screen/visiting_app_bar.dart';
 
 /// Screen for displaying planned and visited places
 class VisitingScreen extends StatelessWidget {
@@ -17,7 +17,7 @@ class VisitingScreen extends StatelessWidget {
       length: 2,
       child: Scaffold(
         backgroundColor: Theme.of(context).accentColor,
-        appBar: const _FavoriteAppbar(),
+        appBar: const VisitingAppbar(),
         body: const _FavoriteTabBarView(),
       ),
     );
@@ -37,20 +37,91 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
   List<Sight> isVisited = [...mocks];
   List<Sight> notVisited = [...mocks];
 
+  @override
+  Widget build(BuildContext context) {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+    return Container(
+      margin: const EdgeInsets.only(top: 28),
+      child: SafeArea(
+        child: TabBarView(
+          children: [
+            if (notVisited.isNotEmpty)
+              isPortrait
+                  ? SightVisitingPortrainWidget(
+                      sights: notVisited,
+                      moveItemInList: (data, sight, visited) {
+                        moveItemInList(data, sight, visited);
+                      },
+                      removeSight: (sight, visited) {
+                        removeSight(sight, visited);
+                      },
+                    )
+                  : SightVisitingLandscapeWidget(
+                      sights: notVisited,
+                      visited: false,
+                      moveItemInList: (data, sight, visited) {
+                        moveItemInList(data, sight, visited);
+                      },
+                      removeSight: (sight, visited) {
+                        removeSight(sight, visited);
+                      },
+                    )
+            else
+              const FavoritesEmpty(
+                icon: iconRoute,
+                title: 'Пусто',
+                desc: 'Отмечайте понравившиеся\nместа и они появятся здесь.',
+              ),
+            if (isVisited.isNotEmpty)
+              isPortrait
+                  ? SightVisitingPortrainWidget(
+                      sights: isVisited,
+                      moveItemInList: (data, sight, visited) {
+                        moveItemInList(data, sight, visited);
+                      },
+                      removeSight: (sight, visited) {
+                        removeSight(sight, visited);
+                      },
+                    )
+                  : SightVisitingLandscapeWidget(
+                      sights: notVisited,
+                      visited: true,
+                      moveItemInList: (data, sight, visited) {
+                        moveItemInList(data, sight, visited);
+                      },
+                      removeSight: (sight, visited) {
+                        removeSight(sight, visited);
+                      },
+                    )
+            else
+              const FavoritesEmpty(
+                icon: iconAddCard,
+                title: 'Пусто',
+                desc: 'Завершите маршрут,\nчтобы место попало сюда.',
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+
   void refresh() {
     setState(() {});
   }
 
   void moveItemInList(Sight data, Sight sight, bool visited) {
-    setState(() {
-      if (visited) {
-        isVisited.remove(data);
-        isVisited.insert(isVisited.indexOf(sight), data);
-      } else {
-        notVisited.remove(data);
-        notVisited.insert(notVisited.indexOf(sight), data);
-      }
-    });
+    setState(
+      () {
+          if (visited) {
+            isVisited.remove(data);
+            isVisited.insert(isVisited.indexOf(sight), data);
+          } else {
+            notVisited.remove(data);
+            notVisited.insert(notVisited.indexOf(sight), data);
+          }
+      },
+    );
   }
 
   void removeSight(Sight sight, bool visited) {
@@ -61,194 +132,5 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
         notVisited.remove(sight);
       }
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 28),
-      child: TabBarView(
-        children: [
-          if (notVisited.isNotEmpty)
-            ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              shrinkWrap: true,
-              itemCount: notVisited.length,
-              itemBuilder: (BuildContext context, int index) {
-                final sight = notVisited[index];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: FavoriteSightCard(
-                    sight: sight,
-                    visited: false,
-                    moveItemInList: (data, sight, visited) {
-                      moveItemInList(data, sight, visited);
-                    },
-                    removeSight: (sight, visited) {
-                      removeSight(sight, visited);
-                    },
-                  ),
-                );
-              },
-            )
-          else
-            const _FavoritesEmpty(
-              icon: iconRoute,
-              title: 'Пусто',
-              desc: 'Отмечайте понравившиеся\nместа и они появятся здесь.',
-            ),
-          if (isVisited.isNotEmpty)
-            ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              shrinkWrap: true,
-              itemCount: isVisited.length,
-              itemBuilder: (context, index) {
-                final sight = isVisited[index];
-                return Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  child: FavoriteSightCard(
-                    sight: sight,
-                    visited: true,
-                    moveItemInList: (data, sight, visited) {
-                      moveItemInList(data, sight, visited);
-                    },
-                    removeSight: (notVisited, sight) {
-                      removeSight(notVisited, sight);
-                    },
-                  ),
-                );
-              },
-            )
-          else
-            const _FavoritesEmpty(
-              icon: iconAddCard,
-              title: 'Пусто',
-              desc: 'Завершите маршрут,\nчтобы место попало сюда.',
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FavoritesEmpty extends StatelessWidget {
-  final String icon;
-  final String title;
-  final String desc;
-
-  const _FavoritesEmpty({
-    Key? key,
-    required this.icon,
-    required this.title,
-    required this.desc,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 253.5,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                icon,
-                height: 64,
-                width: 64,
-                color: const Color.fromRGBO(124, 126, 146, 0.56),
-              ),
-              const SizedBox(height: 32),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                  color: Color.fromRGBO(124, 126, 146, 0.56),
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                desc,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 14,
-                  color: Color.fromRGBO(124, 126, 146, 0.56),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _FavoriteAppbar extends StatelessWidget with PreferredSizeWidget {
-  final bool isDarkMode = false;
-
-  @override
-  Size get preferredSize => const Size.fromHeight(116);
-
-  const _FavoriteAppbar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(52),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color: isDarkMode ? myDark : myLightBackground,
-          ),
-          margin: const EdgeInsets.symmetric(
-            vertical: 6,
-            horizontal: 16,
-          ),
-          child: Theme(
-            data: ThemeData(
-              highlightColor: Colors.transparent,
-              splashColor: Colors.transparent,
-            ),
-            child: TabBar(
-              tabs: const [
-                Tab(
-                  text: 'Хочу посетить',
-                ),
-                Tab(
-                  text: 'Посетил',
-                ),
-              ],
-              indicator: BoxDecoration(
-                borderRadius: BorderRadius.circular(25),
-                color: isDarkMode ? Colors.white : myLightSecondaryOne,
-              ),
-              labelStyle: const TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 14,
-              ),
-              unselectedLabelColor: myLightSecondaryTwo.withOpacity(0.56),
-              labelColor: isDarkMode ? myLightSecondaryOne : Colors.white,
-            ),
-          ),
-        ),
-      ),
-      title: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Text(
-          'Избранное',
-          style: Theme.of(context).textTheme.headline1?.copyWith(
-                fontWeight: FontWeight.w500,
-                fontSize: 18,
-              ),
-        ),
-      ),
-    );
   }
 }

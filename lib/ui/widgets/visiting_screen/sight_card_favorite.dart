@@ -26,6 +26,8 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
   bool isDrag = false;
   @override
   Widget build(BuildContext context) {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
     return DragTarget<Sight>(
       builder: (context, candidateItems, rejectedItems) {
         return LongPressDraggable<Sight>(
@@ -43,7 +45,7 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
           feedback: Transform.scale(
             scale: 0.9,
             child: Container(
-              width: MediaQuery.of(context).size.width,
+              width: isPortrait ? MediaQuery.of(context).size.width : 328,
               height: 216,
               decoration: BoxDecoration(
                 color: Colors.white,

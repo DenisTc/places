@@ -43,6 +43,7 @@ class __SightCardState extends State<SightCard> {
             widget.removeSight(widget.sight, widget.visited);
           },
           background: Container(
+            //height: 200,
             width: MediaQuery.of(context).size.width,
             decoration: const BoxDecoration(
               color: Colors.red,
