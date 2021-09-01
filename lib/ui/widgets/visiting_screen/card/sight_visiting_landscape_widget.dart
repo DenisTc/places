@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/domains/sight.dart';
-import 'package:places/ui/widgets/visiting_screen/sight_card_favorite.dart';
+import 'package:places/ui/widgets/visiting_screen/card/sight_card_favorite.dart';
 
 // Widget for displaying a list of places in horizontal orientation
 class SightVisitingLandscapeWidget extends StatelessWidget {

@@ -5,12 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
-import 'package:places/ui/widgets/card/sight_card_favorite/favorite_card_bottom.dart';
-import 'package:places/ui/widgets/card/sight_card_favorite/favorite_card_top.dart';
-import 'package:places/ui/widgets/card/sight_cupertino_date_picker.dart';
+import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
+import 'package:places/ui/widgets/visiting_screen/card/favorite_card_bottom.dart';
+import 'package:places/ui/widgets/visiting_screen/card/favorite_card_top.dart';
 
 class SightCard extends StatefulWidget {
   final GlobalKey globalKey;

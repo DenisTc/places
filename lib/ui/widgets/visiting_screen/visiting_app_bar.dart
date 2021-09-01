@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/colors.dart';
 
 class VisitingAppbar extends StatelessWidget with PreferredSizeWidget {
-  final bool isDarkMode = false;
-
   @override
   Size get preferredSize => const Size.fromHeight(116);
 
@@ -21,7 +19,7 @@ class VisitingAppbar extends StatelessWidget with PreferredSizeWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(25),
-            color: isDarkMode ? myDark : myLightBackground,
+            color: Theme.of(context).primaryColor,
           ),
           margin: const EdgeInsets.symmetric(
             vertical: 6,
@@ -43,14 +41,14 @@ class VisitingAppbar extends StatelessWidget with PreferredSizeWidget {
               ],
               indicator: BoxDecoration(
                 borderRadius: BorderRadius.circular(25),
-                color: isDarkMode ? Colors.white : myLightSecondaryOne,
+                color: Theme.of(context).secondaryHeaderColor,
               ),
               labelStyle: const TextStyle(
                 fontWeight: FontWeight.w700,
                 fontSize: 14,
               ),
               unselectedLabelColor: myLightSecondaryTwo.withOpacity(0.56),
-              labelColor: isDarkMode ? myLightSecondaryOne : Colors.white,
+              labelColor: Theme.of(context).accentColor,
             ),
           ),
         ),

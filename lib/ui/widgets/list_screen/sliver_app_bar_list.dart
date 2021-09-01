@@ -27,7 +27,7 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
         builder: (context, constraints) {
           final top = constraints.biggest.height;
           return FlexibleSpaceBar(
-            title: top < 110 ? const MiniTitle() : const SizedBox.shrink(),
+            title: top < 60 ? const MiniTitle() : const SizedBox.shrink(),
             background: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
