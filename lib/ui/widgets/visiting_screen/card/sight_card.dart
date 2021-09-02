@@ -1,12 +1,15 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domains/sight.dart';
 import 'package:places/mocks.dart';
-import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
-import 'package:places/ui/widgets/card/sight_card_favorite/favorite_card_bottom.dart';
-import 'package:places/ui/widgets/card/sight_card_favorite/favorite_card_top.dart';
+import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
+import 'package:places/ui/widgets/visiting_screen/card/favorite_card_bottom.dart';
+import 'package:places/ui/widgets/visiting_screen/card/favorite_card_top.dart';
 
 class SightCard extends StatefulWidget {
   final GlobalKey globalKey;
@@ -33,8 +36,9 @@ class __SightCardState extends State<SightCard> {
       child: Container(
         key: widget.globalKey,
         height: 199,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
+        decoration: BoxDecoration(
+          color: Theme.of(context).accentColor,
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
         ),
         child: Dismissible(
           key: ValueKey(widget.sight),
@@ -44,9 +48,16 @@ class __SightCardState extends State<SightCard> {
           },
           background: Container(
             width: MediaQuery.of(context).size.width,
-            decoration: const BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.all(Radius.circular(16)),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
+                colors: [
+                  Colors.red,
+                  Theme.of(context).accentColor,
+                ],
+              ),
+              borderRadius: const BorderRadius.all(Radius.circular(16)),
             ),
             child: Padding(
               padding: const EdgeInsets.only(right: 16),
@@ -103,22 +114,31 @@ class __SightCardState extends State<SightCard> {
                       onTap: () async {
                         if (widget.visited) {
                         } else {
-                          await showDatePicker(
-                            context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(2101),
-                            builder: (context, child) {
-                              return Theme(
-                                data: ThemeData.light().copyWith(
-                                  colorScheme: ColorScheme.light(
-                                    primary: Theme.of(context).buttonColor,
+                          if (Platform.isAndroid) {
+                            await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime.now(),
+                              lastDate: DateTime(2101),
+                              builder: (context, child) {
+                                return Theme(
+                                  data: ThemeData.light().copyWith(
+                                    colorScheme: ColorScheme.light(
+                                      primary: Theme.of(context).buttonColor,
+                                    ),
                                   ),
-                                ),
-                                child: child!,
-                              );
-                            },
-                          );
+                                  child: child!,
+                                );
+                              },
+                            );
+                          } else {
+                            await showModalBottomSheet<void>(
+                              context: context,
+                              builder: (builder) {
+                                return SightCupertinoDatePicker();
+                              },
+                            );
+                          }
                         }
                       },
                       child: SvgPicture.asset(
@@ -165,7 +185,6 @@ class __SightCardState extends State<SightCard> {
         ),
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      
     );
   }
 }

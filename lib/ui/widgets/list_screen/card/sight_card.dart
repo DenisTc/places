@@ -17,7 +17,7 @@ class SightCard extends StatefulWidget {
 class _SightCardState extends State<SightCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 188,
       child: Stack(
         children: [
@@ -53,18 +53,16 @@ class _SightCardState extends State<SightCard> {
         ),
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      
     );
   }
 }
 
 class _SightCardBottom extends StatelessWidget {
+  final Sight sight;
   const _SightCardBottom({
     Key? key,
     required this.sight,
   }) : super(key: key);
-
-  final Sight sight;
 
   @override
   Widget build(BuildContext context) {
@@ -108,12 +106,11 @@ class _SightCardBottom extends StatelessWidget {
 }
 
 class _SightCardTop extends StatelessWidget {
+  final Sight sight;
   const _SightCardTop({
     Key? key,
     required this.sight,
   }) : super(key: key);
-
-  final Sight sight;
 
   @override
   Widget build(BuildContext context) {

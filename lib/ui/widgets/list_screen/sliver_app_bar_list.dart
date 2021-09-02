@@ -21,16 +21,13 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
       centerTitle: false,
       pinned: true,
       elevation: 0.0,
-      expandedHeight: isPortrait ? 160.0 : 130,
+      expandedHeight: isPortrait ? 176.0 : 130,
       backgroundColor: Theme.of(context).accentColor,
       flexibleSpace: LayoutBuilder(
         builder: (context, constraints) {
           final top = constraints.biggest.height;
           return FlexibleSpaceBar(
-            title: Opacity(
-              opacity: top < 110 ? 1.0 : 0.0,
-              child: const MiniTitle(),
-            ),
+            title: top < 60 ? const MiniTitle() : const SizedBox.shrink(),
             background: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,12 +37,9 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
                   child: isPortrait ? const BigTitle() : const MiniTitle(),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: SizedBox(
-                    height: 46.0,
-                    width: double.infinity,
-                    child: SearchBar(),
-                  ),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: SearchBar(),
                 ),
               ],
             ),

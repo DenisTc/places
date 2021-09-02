@@ -18,11 +18,13 @@ class SightListScreenState extends State<SightListScreen> {
       body: Stack(
         alignment: AlignmentDirectional.topCenter,
         children: const [
-          CustomScrollView(
-            slivers: [
-              SliverAppBarList(),
-              SliverSights(),
-            ],
+          SafeArea(
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBarList(),
+                SliverSights(),
+              ],
+            ),
           ),
           AddSightButton(),
         ],

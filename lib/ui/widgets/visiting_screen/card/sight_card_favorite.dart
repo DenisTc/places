@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/domains/sight.dart';
-import 'package:places/ui/widgets/card/sight_card_favorite/sight_card.dart';
+import 'package:places/ui/widgets/visiting_screen/card/sight_card.dart';
 
 /// A card of an interesting place to display on the favourites' screen
 class FavoriteSightCard extends StatefulWidget {
@@ -26,6 +26,8 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
   bool isDrag = false;
   @override
   Widget build(BuildContext context) {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
     return DragTarget<Sight>(
       builder: (context, candidateItems, rejectedItems) {
         return LongPressDraggable<Sight>(
@@ -43,10 +45,8 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
           feedback: Transform.scale(
             scale: 0.9,
             child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 216,
+              width: isPortrait ? MediaQuery.of(context).size.width : 328,
               decoration: BoxDecoration(
-                color: Colors.white,
                 borderRadius: const BorderRadius.all(Radius.circular(16)),
                 boxShadow: [
                   BoxShadow(

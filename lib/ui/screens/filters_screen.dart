@@ -146,7 +146,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
     );
   }
 
-    void refresh() {
+  void refresh() {
     setState(() {
       countPlaces = countPlacesNear();
     });
@@ -266,7 +266,9 @@ class __ShowButtonState extends State<_ShowButton> {
         }
       },
       style: ElevatedButton.styleFrom(
-        primary: widget.countPlaces != 0 ? Theme.of(context).buttonColor : myLightBackground,
+        primary: widget.countPlaces != 0
+            ? Theme.of(context).buttonColor
+            : myLightBackground,
         fixedSize: const Size(double.infinity, 48),
         elevation: 0.0,
         shadowColor: Colors.transparent,
@@ -309,30 +311,57 @@ class _FiltersCategory extends StatefulWidget {
 class _FiltersCategoryState extends State<_FiltersCategory> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final displayHeight = MediaQuery.of(context).size.height;
+    return 
+    Column(
       children: [
-        GridView.builder(
-          shrinkWrap: true,
-          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: MediaQuery.of(context).size.width / 3,
-            mainAxisSpacing: 30,
+        if (displayHeight > 580)
+          GridView.builder(
+            shrinkWrap: true,
+            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: MediaQuery.of(context).size.width / 3,
+              mainAxisSpacing: 30,
+            ),
+            itemCount: mocks.length,
+            itemBuilder: (context, index) {
+              final category = mocks[index];
+              return _CategoryCircle(
+                title: category.type,
+                icon: SvgPicture.asset(
+                  category.icon != null ? category.icon! : iconParticularPlace,
+                  height: 40,
+                  width: 40,
+                  color: Theme.of(context).buttonColor,
+                ),
+                notifyParent: widget.notifyParent,
+                filters: widget.filters,
+              );
+            },
+          )
+        else
+          SizedBox(
+            height: 100,
+            width: MediaQuery.of(context).size.width,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: mocks.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                final category = mocks[index];
+                return _CategoryCircle(
+                  title: category.type,
+                  icon: SvgPicture.asset(
+                    category.icon != null ? category.icon! : iconParticularPlace,
+                    height: 40,
+                    width: 40,
+                    color: Theme.of(context).buttonColor,
+                  ),
+                  notifyParent: widget.notifyParent,
+                  filters: widget.filters,
+                );
+              },
+            ),
           ),
-          itemCount: mocks.length,
-          itemBuilder: (BuildContext context, int index) {
-            final category = mocks[index];
-            return _CategoryCircle(
-              title: category.type,
-              icon: SvgPicture.asset(
-                category.icon != null ? category.icon! : iconParticularPlace,
-                height: 40,
-                width: 40,
-                color: Theme.of(context).buttonColor,
-              ),
-              notifyParent: widget.notifyParent,
-              filters: widget.filters,
-            );
-          },
-        ),
       ],
     );
   }
@@ -359,6 +388,9 @@ class _CategoryCircle extends StatefulWidget {
 class __CategoryCircleState extends State<_CategoryCircle> {
   @override
   Widget build(BuildContext context) {
+    final displayHeight = MediaQuery.of(context).size.height;
+    final double iconSize = displayHeight > 600 ? 90 : 60;
+    final double checkSize = displayHeight > 600 ? 22 : 17;
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(40)),
       onTap: () {
@@ -372,8 +404,8 @@ class __CategoryCircleState extends State<_CategoryCircle> {
         children: [
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
-            height: 90,
-            width: 90,
+            height: iconSize,
+            width: iconSize,
             decoration: BoxDecoration(
               color: Theme.of(context).buttonColor.withOpacity(0.16),
               shape: BoxShape.circle,
@@ -391,8 +423,8 @@ class __CategoryCircleState extends State<_CategoryCircle> {
                     bottom: 0,
                     child: Container(
                       padding: const EdgeInsets.all(3),
-                      height: 22,
-                      width: 22,
+                      height: checkSize,
+                      width: checkSize,
                       decoration: const BoxDecoration(
                         color: myLightMain,
                         shape: BoxShape.circle,
@@ -409,7 +441,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
           const SizedBox(height: 12),
           Text(
             widget.title,
-            style: const TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 12),
           ),
         ],
       ),

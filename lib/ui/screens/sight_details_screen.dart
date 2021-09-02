@@ -6,6 +6,7 @@ import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/screens/res/styles.dart';
+import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
@@ -215,6 +216,14 @@ class _FunctionButtons extends StatelessWidget {
       children: [
         Expanded(
           child: InkWell(
+            onTap: () async {
+              await showModalBottomSheet<void>(
+                context: context,
+                builder: (builder) {
+                  return SightCupertinoDatePicker();
+                },
+              );
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
