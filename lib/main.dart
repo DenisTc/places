@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:places/dio.dart';
-import 'package:places/models/settings.dart';
+import 'package:places/data/repository/dio.dart';
+import 'package:places/data/interactor/settings.dart';
 import 'package:places/ui/screens/splash_screen.dart';
 
 final settings = Settings();
@@ -27,12 +27,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  void testNetworkCall() async{
-    final dynamic response = await getDioPosts();
-
-    debugPrint('Response HTTP call = $response');
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -40,5 +34,11 @@ class _MyAppState extends State<MyApp> {
       theme: settings.getTheme,
       home: const SplashScreen(),
     );
+  }
+
+  void testNetworkCall() async {
+    final dynamic response = await getUsers();
+
+    debugPrint('Response HTTP call = $response');
   }
 }

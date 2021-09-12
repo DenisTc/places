@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domains/sight.dart';
+import 'package:places/data/model/sight.dart';
 
 class FavoriteCardTop extends StatefulWidget {
   const FavoriteCardTop({

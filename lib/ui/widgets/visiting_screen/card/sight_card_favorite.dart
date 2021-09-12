@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domains/sight.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/ui/widgets/visiting_screen/card/sight_card.dart';
 
 /// A card of an interesting place to display on the favourites' screen
