@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/dio.dart';
 import 'package:places/models/settings.dart';
 import 'package:places/ui/screens/splash_screen.dart';
 
@@ -18,11 +19,18 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+    testNetworkCall();
     settings.addListener(
       () => setState(() {}),
     );
 
     super.initState();
+  }
+
+  void testNetworkCall() async{
+    final dynamic response = await getDioPosts();
+
+    debugPrint('Response HTTP call = $response');
   }
 
   @override
