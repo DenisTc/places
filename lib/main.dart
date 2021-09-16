@@ -39,10 +39,10 @@ class _MyAppState extends State<MyApp> {
 
   void testNetworkCall() async {
     final placeRepository = PlaceRepository();
-    final response = await placeRepository.getPlace(id: 172);
-    debugPrint('Response HTTP call = ${response.name}');
+    // final response = await placeRepository.getPlace(id: 172);
+    // debugPrint('Response HTTP call = ${response.name}');
 
-    //final response = await placeRepository.getListPlaces();
-    // debugPrint('Response HTTP call = ${response.places.length}');
+    final response = await placeRepository.getListPlacesByPost();
+    debugPrint('Response HTTP call = ${response.places.length}');
   }
 }
