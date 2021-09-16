@@ -44,7 +44,7 @@ class SightPortraitWidget extends StatelessWidget {
             child: SightCard(place: place),
           );
         },
-        childCount: mocks.length,
+        childCount: places.length,
       ),
     );
   }
