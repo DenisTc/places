@@ -15,7 +15,7 @@ BaseOptions baseOptions = BaseOptions(
 
 class PlaceRepository {
   Future<Places> getListPlaces() async {
-    final response = await dio.get<List<dynamic>>('/place');
+    final response = await dio.get<List<dynamic>>('/places');
 
     if (response.statusCode == 200) {
       return Places.fromJson(response.data!);

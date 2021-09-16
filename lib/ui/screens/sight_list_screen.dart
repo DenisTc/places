@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/list_screen/add_sight_button.dart';
 import 'package:places/ui/widgets/list_screen/sliver_app_bar_list.dart';
 import 'package:places/ui/widgets/list_screen/sliver_sights.dart';
+import 'package:places/ui/screens/res/colors.dart';
 
 class SightListScreen extends StatefulWidget {
   const SightListScreen({Key? key}) : super(key: key);
@@ -30,7 +34,7 @@ class SightListScreenState extends State<SightListScreen> {
         future: sightList,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasData && !snapshot.hasError) {
@@ -40,18 +44,41 @@ class SightListScreenState extends State<SightListScreen> {
                 SafeArea(
                   child: CustomScrollView(
                     slivers: [
-                      SliverAppBarList(),
+                      const SliverAppBarList(),
                       SliverSights(places: snapshot.data!.places),
                     ],
                   ),
                 ),
-                AddSightButton(),
+                const AddSightButton(),
               ],
             );
           } else {
             return Center(
-              child: Container(
-                child: Text('Error'),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(
+                    iconErrorRound,
+                    height: 64,
+                    width: 64,
+                    color: myLightSecondaryTwo.withOpacity(0.56),
+                  ),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Ошибка',
+                    style: TextStyle(
+                      color: myLightSecondaryTwo,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Что то пошло не так\nПопробуйте позже.',
+                    style: TextStyle(
+                      color: myLightSecondaryTwo,
+                    ),
+                  ),
+                ],
               ),
             );
           }
