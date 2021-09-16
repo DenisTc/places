@@ -23,7 +23,7 @@ class SearchResult extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SightDetails(
-                id: mocks.indexOf(place),
+                place: place,
               ),
             ),
           );

@@ -10,11 +10,11 @@ import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
-  final int id;
+  final Place place;
 
   const SightDetails({
     Key? key,
-    required this.id,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -50,15 +50,15 @@ class _SightDetailsState extends State<SightDetails> {
                           });
                         },
                         controller: _pageController,
-                        itemCount: mocks[widget.id].urls.length,
+                        itemCount: widget.place.urls.length,
                         itemBuilder: (context, index) {
                           return _PlaceImage(
-                            imgUrl: mocks[widget.id].urls[index],
+                            imgUrl: widget.place.urls[index],
                           );
                         },
                       ),
                       const _ArrowBackButton(),
-                      if (mocks[widget.id].urls.length > 1)
+                      if (widget.place.urls.length > 1)
                         PageIndicator(
                           widget: widget,
                           currentPage: currentPage,
@@ -73,7 +73,7 @@ class _SightDetailsState extends State<SightDetails> {
                 [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _Description(place: mocks[widget.id]),
+                    child: _Description(place: widget.place),
                   ),
                 ],
               ),
@@ -121,19 +121,19 @@ class PageIndicator extends StatelessWidget {
       bottom: 0,
       child: Row(
         children: [
-          for (int i = 0; i < mocks[widget.id].urls.length; i++)
+          for (int i = 0; i < widget.place.urls.length; i++)
             Container(
               height: 10,
               decoration: BoxDecoration(
                 borderRadius: (currentPage == 0)
                     ? startIndicator
-                    : (currentPage == mocks[widget.id].urls.length - 1)
+                    : (currentPage == widget.place.urls.length - 1)
                         ? endIndicator
                         : middleIndicator,
                 color: i == currentPage ? myLightMain : Colors.transparent,
               ),
               width: MediaQuery.of(context).size.width /
-                  mocks[widget.id].urls.length,
+                  widget.place.urls.length,
             ),
         ],
       ),

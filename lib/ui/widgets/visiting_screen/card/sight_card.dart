@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
@@ -102,7 +103,9 @@ class __SightCardState extends State<SightCard> {
                 color: Colors.transparent,
                 child: InkWell(
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  onTap: _showSight,
+                  onTap: () {
+                    _showSight(widget.place.id);
+                  },
                 ),
               ),
               Positioned(
@@ -172,11 +175,13 @@ class __SightCardState extends State<SightCard> {
     );
   }
 
-  void _showSight() async {
+  void _showSight(int id) async {
+    final placeRepository = PlaceRepository();
+    final place = await placeRepository.getPlace(id: id);
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
-        return SightDetails(id: mocks.indexOf(widget.place));
+        return SightDetails(place: place);
       },
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
