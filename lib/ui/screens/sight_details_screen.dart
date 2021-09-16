@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
@@ -73,7 +73,7 @@ class _SightDetailsState extends State<SightDetails> {
                 [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _Description(sight: mocks[widget.id]),
+                    child: _Description(place: mocks[widget.id]),
                   ),
                 ],
               ),
@@ -144,10 +144,10 @@ class PageIndicator extends StatelessWidget {
 class _Description extends StatelessWidget {
   const _Description({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
-  final Sight sight;
+  final Place place;
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +157,7 @@ class _Description extends StatelessWidget {
         Row(
           children: [
             Text(
-              sight.name,
+              place.name,
               style:
                   Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
             ),
@@ -167,7 +167,7 @@ class _Description extends StatelessWidget {
         Row(
           children: [
             Text(
-              sight.type,
+              place.placeType,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             Padding(
@@ -186,7 +186,7 @@ class _Description extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         Text(
-          sight.details,
+          place.description,
           style: Theme.of(context).textTheme.bodyText1,
         ),
         const SizedBox(height: 24),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
@@ -141,7 +141,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
   void setCategory(int id) {
     setState(
       () {
-        _controllerCat.text = mocks[id].type;
+        _controllerCat.text = mocks[id].placeType;
       },
     );
   }
@@ -219,7 +219,7 @@ class __CategoryFieldState extends State<_CategoryField> {
               ),
             );
             setState(() {
-              widget.controllerCat.text = mocks[categoryid!].type;
+              widget.controllerCat.text = mocks[categoryid!].placeType;
             });
           },
           icon: const Icon(Icons.navigate_next_rounded),
@@ -577,14 +577,15 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
       onPressed: () {
         if (widget.formKey.currentState!.validate() && widget.enable) {
           mocks.add(
-            Sight(
-              widget.controllerName.text,
-              double.parse(widget.controllerLat.text),
-              double.parse(widget.controllerLng.text),
-              [''],
-              widget.controllerDesc.text,
-              widget.controllerCat.text,
-              'iconParticularPlace',
+            Place(
+              id: 99999,
+              name: widget.controllerName.text,
+              lat: double.parse(widget.controllerLat.text),
+              lon: double.parse(widget.controllerLng.text),
+              urls: [''],
+              description: widget.controllerDesc.text,
+              placeType: widget.controllerCat.text,
+              //'iconParticularPlace',
             ),
           );
         }

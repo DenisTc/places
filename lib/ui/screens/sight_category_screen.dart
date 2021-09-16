@@ -36,8 +36,8 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                mocks[index].type[0].toUpperCase() +
-                                    mocks[index].type.substring(1),
+                                mocks[index].placeType[0].toUpperCase() +
+                                    mocks[index].placeType.substring(1),
                                 style: const TextStyle(
                                   color: myLightMain,
                                   fontSize: 16,

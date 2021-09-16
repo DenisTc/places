@@ -8,7 +8,7 @@ class Place {
   final double? lat;
   final double? lon;
   final String name;
-  final List<dynamic> urls;
+  final List<String> urls;
   final String placeType;
   final String description;
 
@@ -27,7 +27,9 @@ class Place {
         lat = (json['lat'] as num?)?.toDouble(),
         lon = (json['lon'] as num?)?.toDouble(),
         name = json['name'] as String,
-        urls = json['urls'] as List<dynamic>,
+        urls = List<String>.from(
+          json['urls'] as List<dynamic>,
+        ), //json['urls'] as List<String>,
         placeType = json['placeType'] as String,
         description = json['description'] as String;
 

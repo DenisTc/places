@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 
 /// A card of an interesting place to be displayed on the main screen of the application.
 class SightCard extends StatefulWidget {
-  final Sight sight;
-  const SightCard({required this.sight, Key? key}) : super(key: key);
+  final Place place;
+  const SightCard({required this.place, Key? key}) : super(key: key);
 
   @override
   _SightCardState createState() => _SightCardState();
@@ -24,8 +24,8 @@ class _SightCardState extends State<SightCard> {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _SightCardTop(sight: widget.sight),
-              _SightCardBottom(sight: widget.sight),
+              _SightCardTop(place: widget.place),
+              _SightCardBottom(place: widget.place),
             ],
           ),
           Material(
@@ -41,10 +41,10 @@ class _SightCardState extends State<SightCard> {
   }
 
   void _showSight() async {
-    await showModalBottomSheet<Sight>(
+    await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
-        return SightDetails(id: mocks.indexOf(widget.sight));
+        return SightDetails(id: mocks.indexOf(widget.place));
       },
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -58,10 +58,10 @@ class _SightCardState extends State<SightCard> {
 }
 
 class _SightCardBottom extends StatelessWidget {
-  final Sight sight;
+  final Place place;
   const _SightCardBottom({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -82,7 +82,7 @@ class _SightCardBottom extends StatelessWidget {
         children: [
           const SizedBox(height: 16),
           Text(
-            sight.name,
+            place.name,
             maxLines: 2,
             style: Theme.of(context).textTheme.headline1?.copyWith(
                   fontSize: 16,
@@ -93,7 +93,7 @@ class _SightCardBottom extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           Text(
-            sight.details,
+            place.description,
             maxLines: 2,
             style: Theme.of(context).textTheme.bodyText2,
             overflow: TextOverflow.ellipsis,
@@ -106,10 +106,10 @@ class _SightCardBottom extends StatelessWidget {
 }
 
 class _SightCardTop extends StatelessWidget {
-  final Sight sight;
+  final Place place;
   const _SightCardTop({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -124,7 +124,7 @@ class _SightCardTop extends StatelessWidget {
               topRight: Radius.circular(16),
             ),
             child: Image.network(
-              sight.urls.first,
+              place.urls.first,
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,
@@ -151,7 +151,7 @@ class _SightCardTop extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  sight.type,
+                  place.placeType,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,

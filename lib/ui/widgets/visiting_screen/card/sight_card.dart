@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
@@ -14,12 +14,12 @@ import 'package:places/ui/widgets/visiting_screen/card/favorite_card_top.dart';
 class SightCard extends StatefulWidget {
   final GlobalKey globalKey;
   final bool visited;
-  final Sight sight;
-  final Function(Sight sight, bool visited) removeSight;
+  final Place place;
+  final Function(Place place, bool visited) removeSight;
   const SightCard({
     Key? key,
     required this.visited,
-    required this.sight,
+    required this.place,
     required this.globalKey,
     required this.removeSight,
   }) : super(key: key);
@@ -41,10 +41,10 @@ class __SightCardState extends State<SightCard> {
           borderRadius: const BorderRadius.all(Radius.circular(16)),
         ),
         child: Dismissible(
-          key: ValueKey(widget.sight),
+          key: ValueKey(widget.place),
           direction: DismissDirection.endToStart,
           onDismissed: (direction) {
-            widget.removeSight(widget.sight, widget.visited);
+            widget.removeSight(widget.place, widget.visited);
           },
           background: Container(
             width: MediaQuery.of(context).size.width,
@@ -89,11 +89,11 @@ class __SightCardState extends State<SightCard> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   FavoriteCardTop(
-                    sight: widget.sight,
+                    place: widget.place,
                     visited: widget.visited,
                   ),
                   FavoriteCardBottom(
-                    sight: widget.sight,
+                    place: widget.place,
                     visited: widget.visited,
                   ),
                 ],
@@ -156,7 +156,7 @@ class __SightCardState extends State<SightCard> {
                       onTap: () {
                         setState(() {
                           widget.removeSight(
-                            widget.sight,
+                            widget.place,
                             widget.visited,
                           );
                         });
@@ -173,10 +173,10 @@ class __SightCardState extends State<SightCard> {
   }
 
   void _showSight() async {
-    await showModalBottomSheet<Sight>(
+    await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
-        return SightDetails(id: mocks.indexOf(widget.sight));
+        return SightDetails(id: mocks.indexOf(widget.place));
       },
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(

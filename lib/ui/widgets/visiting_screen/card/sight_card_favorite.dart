@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/ui/widgets/visiting_screen/card/sight_card.dart';
 
 /// A card of an interesting place to display on the favourites' screen
 class FavoriteSightCard extends StatefulWidget {
   final bool visited;
-  final Sight sight;
-  final Function(Sight data, Sight sight, bool visited) moveItemInList;
-  final Function(Sight sight, bool visited) removeSight;
+  final Place place;
+  final Function(Place data, Place place, bool visited) moveItemInList;
+  final Function(Place place, bool visited) removeSight;
 
   const FavoriteSightCard({
     required this.visited,
-    required this.sight,
+    required this.place,
     Key? key,
     required this.moveItemInList,
     required this.removeSight,
@@ -28,10 +28,10 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
   Widget build(BuildContext context) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
-    return DragTarget<Sight>(
+    return DragTarget<Place>(
       builder: (context, candidateItems, rejectedItems) {
-        return LongPressDraggable<Sight>(
-          data: widget.sight,
+        return LongPressDraggable<Place>(
+          data: widget.place,
           onDragStarted: () {
             setState(() {
               isDrag = true;
@@ -59,11 +59,11 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
               ),
               child: SightCard(
                 globalKey: globalKey,
-                sight: widget.sight,
+                place: widget.place,
                 visited: widget.visited,
-                removeSight: (sight, visited) {
+                removeSight: (place, visited) {
                   widget.removeSight(
-                    widget.sight,
+                    widget.place,
                     widget.visited,
                   );
                 },
@@ -74,11 +74,11 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
               ? const SizedBox.shrink()
               : SightCard(
                   globalKey: globalKey,
-                  sight: widget.sight,
+                  place: widget.place,
                   visited: widget.visited,
-                  removeSight: (sight, visited) {
+                  removeSight: (place, visited) {
                     widget.removeSight(
-                      widget.sight,
+                      widget.place,
                       widget.visited,
                     );
                   },
@@ -93,7 +93,7 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
           () {
             widget.moveItemInList(
               data,
-              widget.sight,
+              widget.place,
               widget.visited,
             );
           },

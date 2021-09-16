@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
@@ -17,7 +17,7 @@ List<String> historyList = [
 ];
 
 class SightSearchScreen extends StatefulWidget {
-  final List<Sight> filteredList;
+  final List<Place> filteredList;
   const SightSearchScreen({Key? key, required this.filteredList})
       : super(key: key);
 
@@ -27,43 +27,12 @@ class SightSearchScreen extends StatefulWidget {
 
 class _SightSearchScreenState extends State<SightSearchScreen> {
   final _controllerSearch = TextEditingController();
-  late List<Sight> sights = mocks;
-  List<Sight> _filteredSights = [];
-
-  void refresh() {
-    setState(
-      () {
-        _searchSights();
-      },
-    );
-  }
-
-  void updateHistory(List<String> newHistoryList) {
-    setState(() {
-      historyList = newHistoryList;
-    });
-  }
-
-  void _searchSights() {
-    final query = _controllerSearch.text;
-
-    if (query.isNotEmpty) {
-      _filteredSights = sights.where((Sight sight) {
-        return sight.name.toLowerCase().startsWith(query.toLowerCase());
-      }).toList();
-
-      if (_filteredSights.isNotEmpty) {
-        _filteredSights.forEach((element) => historyList.add(element.name));
-        historyList = historyList.toSet().toList();
-      }
-    } else {
-      _filteredSights = [];
-    }
-  }
+  late List<Place> places = mocks;
+  List<Place> _filteredSights = [];
 
   @override
   Widget build(BuildContext context) {
-    sights = widget.filteredList;
+    places = widget.filteredList;
     return Scaffold(
       appBar: const SightAppBar(),
       body: Column(
@@ -120,6 +89,35 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
         ],
       ),
     );
+  }
+
+  void refresh() {
+    setState(
+      _searchSights,
+    );
+  }
+
+  void updateHistory(List<String> newHistoryList) {
+    setState(() {
+      historyList = newHistoryList;
+    });
+  }
+
+  void _searchSights() {
+    final query = _controllerSearch.text;
+
+    if (query.isNotEmpty) {
+      _filteredSights = places.where((place) {
+        return place.name.toLowerCase().startsWith(query.toLowerCase());
+      }).toList();
+
+      if (_filteredSights.isNotEmpty) {
+        _filteredSights.forEach((element) => historyList.add(element.name));
+        historyList = historyList.toSet().toList();
+      }
+    } else {
+      _filteredSights = [];
+    }
   }
 }
 
