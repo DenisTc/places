@@ -28,13 +28,13 @@ class PlaceRepository {
 
   Future<Places> getListPlacesByPost() async {
     Map data = <String, dynamic>{
-      // 'id': 0,
-      // 'lat': 0,
-      // 'lng': 0,
-      // 'name': 'string',
-      // 'urls': ['string'],
-      // 'placeType': 'temple',
-      // 'description': 'string',
+      'id': 0,
+      'lat': 0,
+      'lng': 0,
+      'name': 'string',
+      'urls': ['string'],
+      'placeType': 'temple',
+      'description': 'string',
       //"error": "string"
     };
 
