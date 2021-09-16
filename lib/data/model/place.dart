@@ -2,6 +2,17 @@
 
 // part 'place.g.dart';
 
+Map categories = <String, String>{
+  'other': 'достопримечательность',
+  'museum': 'музей',
+  'monument': 'памятник',
+  'theatre': 'театр',
+  'park': 'парк',
+  'hotel': 'отель',
+  'cafe': 'кафе',
+  'restaurant': 'ресторан',
+};
+
 // @JsonSerializable()
 class Place {
   final int id;
@@ -30,7 +41,7 @@ class Place {
         urls = List<String>.from(
           json['urls'] as List<dynamic>,
         ), //json['urls'] as List<String>,
-        placeType = json['placeType'] as String,
+        placeType = (categories[json['placeType']] ?? json['placeType']) as String,
         description = json['description'] as String;
 
   // factory Place.fromJson(Map<String, dynamic> json) => _$PlaceFromJson(json);
