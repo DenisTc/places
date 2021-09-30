@@ -23,7 +23,7 @@ class SightListScreenState extends State<SightListScreen> {
   @override
   void initState() {
     super.initState();
-    sightList = placeRepository.getListPlaces();
+    sightList = placeRepository.getPlaces();
   }
 
   @override

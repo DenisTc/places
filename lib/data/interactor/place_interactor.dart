@@ -1,0 +1,62 @@
+import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/place_repository.dart';
+
+class PlaceInteractor {
+  final PlaceRepository _placeRepository = PlaceRepository();
+
+  Future<Places> getPlaces(int radius, String category) async {
+    return _placeRepository.getPlaces();
+  }
+
+  Future<Place> getPlaceDetails(int id) async {
+    return _placeRepository.getPlaceDetails(id: id);
+  }
+
+  Future<List<Place>> getFavoritesPlaces() async {
+    return _placeRepository.getFavoritesPlaces();
+  }
+
+  Future<bool> addToFavorites(Place place) async {
+    try {
+      //await _placeRepository.addToFavorites(place);
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> removeFromFavorites(Place place) async {
+    try {
+      //await _placeRepository.removeFromFavorites(place);
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
+
+  Future<List<Place>> getVisitPlaces() async {
+    return _placeRepository.getVisitPlaces();
+  }
+
+  Future<List<Place>> getFavoritePlaces() async {
+    return _placeRepository.getFavoritesPlaces();
+  }
+
+  Future<bool> addToVisitingPlaces(Place place) async {
+    try {
+      //await _placeRepository.addToVisitingPlaces(place);
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> addNewPlace(Place place) async {
+    try {
+      await _placeRepository.addNewPlace(place);
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
+}

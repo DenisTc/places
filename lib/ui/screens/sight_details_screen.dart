@@ -132,8 +132,8 @@ class PageIndicator extends StatelessWidget {
                         : middleIndicator,
                 color: i == currentPage ? myLightMain : Colors.transparent,
               ),
-              width: MediaQuery.of(context).size.width /
-                  widget.place.urls.length,
+              width:
+                  MediaQuery.of(context).size.width / widget.place.urls.length,
             ),
         ],
       ),
@@ -197,7 +197,7 @@ class _Description extends StatelessWidget {
           color: myLightSecondaryTwo,
         ),
         const SizedBox(height: 19),
-        const _FunctionButtons(),
+        _FunctionButtons(place: place),
         const SizedBox(height: 11),
       ],
     );
@@ -205,8 +205,9 @@ class _Description extends StatelessWidget {
 }
 
 class _FunctionButtons extends StatelessWidget {
+  final Place place;
   const _FunctionButtons({
-    Key? key,
+    Key? key, required this.place,
   }) : super(key: key);
 
   @override
@@ -250,19 +251,27 @@ class _FunctionButtons extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(width: 14),
-                Container(
-                  child: SvgPicture.asset(
+                TextButton.icon(
+                  onPressed: (){
+                    mocks.add(place);
+                  },
+                  icon: SvgPicture.asset(
                     iconFavorite,
                     color: Theme.of(context).iconTheme.color,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 9),
-                  child: Text(
+                  label: Text(
                     'В избранное',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
+
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 9),
+                // child: Text(
+                //   'В избранное',
+                //   style: Theme.of(context).textTheme.bodyText1,
+                // ),
+                // ),
               ],
             ),
           ),

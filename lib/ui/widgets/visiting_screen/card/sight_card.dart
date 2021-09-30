@@ -177,7 +177,7 @@ class __SightCardState extends State<SightCard> {
 
   void _showSight(int id) async {
     final placeRepository = PlaceRepository();
-    final place = await placeRepository.getPlace(id: id);
+    final place = await placeRepository.getPlaceDetails(id: id);
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {

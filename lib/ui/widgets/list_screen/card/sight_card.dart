@@ -45,7 +45,7 @@ class _SightCardState extends State<SightCard> {
 
   void _showSight(int id) async {
     final placeRepository = PlaceRepository();
-    final place = await placeRepository.getPlace(id: id);
+    final place = await placeRepository.getPlaceDetails(id: id);
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
@@ -162,7 +162,12 @@ class _SightCardTop extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                SvgPicture.asset(iconFavorite, color: Colors.white),
+                IconButton(
+                  onPressed: (){
+                    mocks.add(place);
+                  },
+                  icon: SvgPicture.asset(iconFavorite, color: Colors.white),
+                )
               ],
             ),
           ),

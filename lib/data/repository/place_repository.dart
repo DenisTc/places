@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/mocks.dart';
 
 final dio = Dio(baseOptions);
 
@@ -13,8 +14,13 @@ BaseOptions baseOptions = BaseOptions(
   responseType: ResponseType.json,
 );
 
+
+
 class PlaceRepository {
-  Future<Places> getListPlaces() async {
+  List<Place> favoritePlaces = [];
+  List<Place> visitPlaces = [];
+  
+  Future<Places> getPlaces() async {
     final response = await dio.get<List<dynamic>>('/place');
 
     if (response.statusCode == 200) {
@@ -26,22 +32,13 @@ class PlaceRepository {
     );
   }
 
-  Future<Places> getListPlacesByPost() async {
-    Map data = <String, dynamic>{
-      'id': 0,
-      'lat': 0,
-      'lng': 0,
-      'name': 'string',
-      'urls': ['string'],
-      'placeType': 'temple',
-      'description': 'string',
-      //"error": "string"
-    };
+  Future<Place> addNewPlace(Place place) async {
+    final data = place;
 
-    final response = await dio.post<List<dynamic>>('/place', data: data);
+    final response = await dio.post<Map<String, dynamic>>('/place', data: data);
 
     if (response.statusCode == 200) {
-      return Places.fromJson(response.data!);
+      return Place.fromJson(response.data!);
     }
 
     throw Exception(
@@ -49,7 +46,7 @@ class PlaceRepository {
     );
   }
 
-  Future<Place> getPlace({required int id}) async {
+  Future<Place> getPlaceDetails({required int id}) async {
     final response = await dio.get<Map<String, dynamic>>('/place/$id');
 
     if (response.statusCode == 200) {
@@ -83,5 +80,25 @@ class PlaceRepository {
     throw Exception(
       'HTTP request error. Error code ${response.statusCode}',
     );
+  }
+
+  Future<List<Place>> getFavoritesPlaces() async {
+    final response = favoritePlaces;
+
+    return response;
+
+    // if (response.statusCode == 200) {
+    //   return Places.fromJson(response.data!);
+    // }
+
+    // throw Exception(
+    //   'HTTP request error. Error code ${response.statusCode}',
+    // );
+  }
+
+  Future<List<Place>> getVisitPlaces() async {
+    final response = visitPlaces;
+
+    return response;
   }
 }

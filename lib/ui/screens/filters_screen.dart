@@ -27,9 +27,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   Map<String, bool> filters = {};
 
-  bool calculateDistance(
-    Place place,
-  ) {
+  bool calculateDistance(Place place) {
     double ky = 40000 / 360;
     double kx = cos(pi * userPosition.lat / 180.0) * ky;
     double dx = (userPosition.lon - place.lon!).abs() * kx;
@@ -312,8 +310,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
   @override
   Widget build(BuildContext context) {
     final displayHeight = MediaQuery.of(context).size.height;
-    return 
-    Column(
+    return Column(
       children: [
         if (displayHeight > 580)
           GridView.builder(
@@ -328,7 +325,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
               return _CategoryCircle(
                 title: category.placeType,
                 icon: SvgPicture.asset(
-                  iconParticularPlace,//category.icon != null ? category.icon! : iconParticularPlace,
+                  iconParticularPlace, //category.icon != null ? category.icon! : iconParticularPlace,
                   height: 40,
                   width: 40,
                   color: Theme.of(context).buttonColor,
@@ -351,7 +348,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                 return _CategoryCircle(
                   title: category.placeType,
                   icon: SvgPicture.asset(
-                    iconParticularPlace,//category.icon != null ? category.icon! : iconParticularPlace,
+                    iconParticularPlace, //category.icon != null ? category.icon! : iconParticularPlace,
                     height: 40,
                     width: 40,
                     color: Theme.of(context).buttonColor,
