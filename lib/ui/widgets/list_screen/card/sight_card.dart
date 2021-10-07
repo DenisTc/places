@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
+
+PlaceInteractor placeInteractor = PlaceInteractor();
 
 /// A card of an interesting place to be displayed on the main screen of the application.
 class SightCard extends StatefulWidget {
@@ -151,7 +154,9 @@ class _SightCardTop extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 8,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -163,11 +168,18 @@ class _SightCardTop extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: (){
-                    mocks.add(place);
+                  onPressed: () {
+                    PlaceRepository.favoritePlaces.contains(place)
+                        ? placeInteractor.removeFromFavorites(place)
+                        : placeInteractor.addToFavorites(place);
                   },
-                  icon: SvgPicture.asset(iconFavorite, color: Colors.white),
-                )
+                  icon: SvgPicture.asset(
+                    (PlaceRepository.favoritePlaces.contains(place))
+                        ? iconFavoriteSelected
+                        : iconFavorite,
+                    color: Colors.white,
+                  ),
+                ),
               ],
             ),
           ),

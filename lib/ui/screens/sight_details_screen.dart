@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/repository/place_repository.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
+
+PlaceInteractor placeInteractor = PlaceInteractor();
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
@@ -221,18 +225,16 @@ class _FunctionButtons extends StatelessWidget {
               await showModalBottomSheet<void>(
                 context: context,
                 builder: (builder) {
-                  return SightCupertinoDatePicker();
+                  return const SightCupertinoDatePicker();
                 },
               );
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  child: SvgPicture.asset(
-                    iconCalendar,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
+                SvgPicture.asset(
+                  iconCalendar,
+                  color: Theme.of(context).iconTheme.color,
                 ),
                 const SizedBox(width: 9),
                 Text(
@@ -245,15 +247,13 @@ class _FunctionButtons extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 1,
           child: InkWell(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(width: 14),
                 TextButton.icon(
                   onPressed: (){
-                    mocks.add(place);
+                    placeInteractor.addToFavorites(place);
                   },
                   icon: SvgPicture.asset(
                     iconFavorite,
@@ -264,14 +264,6 @@ class _FunctionButtons extends StatelessWidget {
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
-
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 9),
-                // child: Text(
-                //   'В избранное',
-                //   style: Theme.of(context).textTheme.bodyText1,
-                // ),
-                // ),
               ],
             ),
           ),

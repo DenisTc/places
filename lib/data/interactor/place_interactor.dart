@@ -4,7 +4,7 @@ import 'package:places/data/repository/place_repository.dart';
 class PlaceInteractor {
   final PlaceRepository _placeRepository = PlaceRepository();
 
-  Future<Places> getPlaces(int radius, String category) async {
+  Future<List<Place>> getPlaces(int radius, String category) async {
     return _placeRepository.getPlaces();
   }
 
@@ -18,7 +18,7 @@ class PlaceInteractor {
 
   Future<bool> addToFavorites(Place place) async {
     try {
-      //await _placeRepository.addToFavorites(place);
+      await PlaceRepository.addToFavorites(place);
       return true;
     } on Exception catch (_) {
       return false;
@@ -27,7 +27,18 @@ class PlaceInteractor {
 
   Future<bool> removeFromFavorites(Place place) async {
     try {
-      //await _placeRepository.removeFromFavorites(place);
+      
+      await _placeRepository.removeFromFavorites(place);
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> removeFromVisit(Place place) async {
+    try {
+      
+      await _placeRepository.removeFromVisit(place);
       return true;
     } on Exception catch (_) {
       return false;

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/mocks.dart';
 
 final dio = Dio(baseOptions);
 
@@ -14,17 +14,26 @@ BaseOptions baseOptions = BaseOptions(
   responseType: ResponseType.json,
 );
 
-
-
 class PlaceRepository {
-  List<Place> favoritePlaces = [];
-  List<Place> visitPlaces = [];
-  
-  Future<Places> getPlaces() async {
+  static List<Place> favoritePlaces = [];
+  static List<Place> visitPlaces = [];
+
+  static Future<Place?> addToFavorites(Place place) async {
+    favoritePlaces.add(place);
+  }
+
+  Future<List<Place>> getVisitPlaces() async {
+    final response = getPlaces();
+    return response;
+  }
+
+  Future<List<Place>> getPlaces() async {
     final response = await dio.get<List<dynamic>>('/place');
 
     if (response.statusCode == 200) {
-      return Places.fromJson(response.data!);
+      return response.data!
+          .map((dynamic place) => Place.fromJson(place as Map<String, dynamic>))
+          .toList();
     }
 
     throw Exception(
@@ -86,19 +95,13 @@ class PlaceRepository {
     final response = favoritePlaces;
 
     return response;
-
-    // if (response.statusCode == 200) {
-    //   return Places.fromJson(response.data!);
-    // }
-
-    // throw Exception(
-    //   'HTTP request error. Error code ${response.statusCode}',
-    // );
   }
 
-  Future<List<Place>> getVisitPlaces() async {
-    final response = visitPlaces;
+  Future<void> removeFromFavorites(Place place) async {
+    favoritePlaces.remove(place);
+  }
 
-    return response;
+  Future<void> removeFromVisit(Place place) async {
+    favoritePlaces.remove(place);
   }
 }
