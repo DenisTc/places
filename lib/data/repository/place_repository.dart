@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:places/data/model/place.dart';
 
@@ -14,11 +15,25 @@ BaseOptions baseOptions = BaseOptions(
 );
 
 class PlaceRepository {
-  Future<Places> getListPlaces() async {
+  static List<Place> favoritePlaces = [];
+  static List<Place> visitPlaces = [];
+
+  static Future<Place?> addToFavorites(Place place) async {
+    favoritePlaces.add(place);
+  }
+
+  Future<List<Place>> getVisitPlaces() async {
+    final response = getPlaces();
+    return response;
+  }
+
+  Future<List<Place>> getPlaces() async {
     final response = await dio.get<List<dynamic>>('/place');
 
     if (response.statusCode == 200) {
-      return Places.fromJson(response.data!);
+      return response.data!
+          .map((dynamic place) => Place.fromJson(place as Map<String, dynamic>))
+          .toList();
     }
 
     throw Exception(
@@ -26,22 +41,13 @@ class PlaceRepository {
     );
   }
 
-  Future<Places> getListPlacesByPost() async {
-    Map data = <String, dynamic>{
-      'id': 0,
-      'lat': 0,
-      'lng': 0,
-      'name': 'string',
-      'urls': ['string'],
-      'placeType': 'temple',
-      'description': 'string',
-      //"error": "string"
-    };
+  Future<Place> addNewPlace(Place place) async {
+    final data = place;
 
-    final response = await dio.post<List<dynamic>>('/place', data: data);
+    final response = await dio.post<Map<String, dynamic>>('/place', data: data);
 
     if (response.statusCode == 200) {
-      return Places.fromJson(response.data!);
+      return Place.fromJson(response.data!);
     }
 
     throw Exception(
@@ -49,7 +55,7 @@ class PlaceRepository {
     );
   }
 
-  Future<Place> getPlace({required int id}) async {
+  Future<Place> getPlaceDetails({required int id}) async {
     final response = await dio.get<Map<String, dynamic>>('/place/$id');
 
     if (response.statusCode == 200) {
@@ -83,5 +89,19 @@ class PlaceRepository {
     throw Exception(
       'HTTP request error. Error code ${response.statusCode}',
     );
+  }
+
+  Future<List<Place>> getFavoritesPlaces() async {
+    final response = favoritePlaces;
+
+    return response;
+  }
+
+  Future<void> removeFromFavorites(Place place) async {
+    favoritePlaces.remove(place);
+  }
+
+  Future<void> removeFromVisit(Place place) async {
+    favoritePlaces.remove(place);
   }
 }

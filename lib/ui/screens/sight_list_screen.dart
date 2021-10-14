@@ -18,19 +18,19 @@ class SightListScreen extends StatefulWidget {
 
 class SightListScreenState extends State<SightListScreen> {
   PlaceRepository placeRepository = PlaceRepository();
-  late Future<Places> sightList;
+  late Future<List<Place>> sightList;
 
   @override
   void initState() {
     super.initState();
-    sightList = placeRepository.getListPlaces();
+    sightList = placeRepository.getPlaces();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
-      body: FutureBuilder<Places>(
+      body: FutureBuilder<List<Place>>(
         future: sightList,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -45,7 +45,7 @@ class SightListScreenState extends State<SightListScreen> {
                   child: CustomScrollView(
                     slivers: [
                       const SliverAppBarList(),
-                      SliverSights(places: snapshot.data!.places),
+                      SliverSights(places: snapshot.data!),
                     ],
                   ),
                 ),
