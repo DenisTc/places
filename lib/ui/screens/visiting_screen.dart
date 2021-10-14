@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/domains/sight.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';

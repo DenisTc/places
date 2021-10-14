@@ -1,4 +1,4 @@
-import 'package:places/domains/sight.dart';
+import 'package:places/data/model/sight.dart';
 import 'package:places/ui/screens/res/icons.dart';
 
 final List<Sight> mocks = [

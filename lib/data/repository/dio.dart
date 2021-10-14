@@ -12,7 +12,7 @@ BaseOptions baseOptions = BaseOptions(
   responseType: ResponseType.json,
 );
 
-Future<dynamic> getDioPosts() async {
+Future<dynamic> getUsers() async {
   initInterceptors();
 
   final postResponse = await dio.get<dynamic>('/users');
