@@ -11,10 +11,10 @@ class SightLandscapeWidget extends StatelessWidget {
     return SliverGrid(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          final sight = mocks[index];
+          final place = mocks[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16),
-            child: SightCard(sight: sight),
+            child: SightCard(place: place),
           );
         },
         childCount: mocks.length,

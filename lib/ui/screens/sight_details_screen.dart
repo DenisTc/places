@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
@@ -10,11 +10,11 @@ import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
-  final int id;
+  final Place place;
 
   const SightDetails({
     Key? key,
-    required this.id,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -50,15 +50,15 @@ class _SightDetailsState extends State<SightDetails> {
                           });
                         },
                         controller: _pageController,
-                        itemCount: mocks[widget.id].urls.length,
+                        itemCount: widget.place.urls.length,
                         itemBuilder: (context, index) {
                           return _PlaceImage(
-                            imgUrl: mocks[widget.id].urls[index],
+                            imgUrl: widget.place.urls[index],
                           );
                         },
                       ),
                       const _ArrowBackButton(),
-                      if (mocks[widget.id].urls.length > 1)
+                      if (widget.place.urls.length > 1)
                         PageIndicator(
                           widget: widget,
                           currentPage: currentPage,
@@ -73,7 +73,7 @@ class _SightDetailsState extends State<SightDetails> {
                 [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _Description(sight: mocks[widget.id]),
+                    child: _Description(place: widget.place),
                   ),
                 ],
               ),
@@ -121,19 +121,19 @@ class PageIndicator extends StatelessWidget {
       bottom: 0,
       child: Row(
         children: [
-          for (int i = 0; i < mocks[widget.id].urls.length; i++)
+          for (int i = 0; i < widget.place.urls.length; i++)
             Container(
               height: 10,
               decoration: BoxDecoration(
                 borderRadius: (currentPage == 0)
                     ? startIndicator
-                    : (currentPage == mocks[widget.id].urls.length - 1)
+                    : (currentPage == widget.place.urls.length - 1)
                         ? endIndicator
                         : middleIndicator,
                 color: i == currentPage ? myLightMain : Colors.transparent,
               ),
               width: MediaQuery.of(context).size.width /
-                  mocks[widget.id].urls.length,
+                  widget.place.urls.length,
             ),
         ],
       ),
@@ -144,10 +144,10 @@ class PageIndicator extends StatelessWidget {
 class _Description extends StatelessWidget {
   const _Description({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
-  final Sight sight;
+  final Place place;
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +157,7 @@ class _Description extends StatelessWidget {
         Row(
           children: [
             Text(
-              sight.name,
+              place.name,
               style:
                   Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
             ),
@@ -167,7 +167,7 @@ class _Description extends StatelessWidget {
         Row(
           children: [
             Text(
-              sight.type,
+              place.placeType,
               style: Theme.of(context).textTheme.subtitle1,
             ),
             Padding(
@@ -186,7 +186,7 @@ class _Description extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         Text(
-          sight.details,
+          place.description,
           style: Theme.of(context).textTheme.bodyText1,
         ),
         const SizedBox(height: 24),

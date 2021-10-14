@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
@@ -22,7 +22,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  List<Sight> filteredList = mocks;
+  List<Place> filteredList = mocks;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,7 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   void _navigateGetDataFromFilters(BuildContext context) async {
-    final List<Sight>? result = await Navigator.push(
+    final List<Place>? result = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => FiltersScreen(filters: filters),

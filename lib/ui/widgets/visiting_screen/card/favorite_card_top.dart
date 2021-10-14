@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 
 class FavoriteCardTop extends StatefulWidget {
   const FavoriteCardTop({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.visited,
   }) : super(key: key);
 
-  final Sight sight;
+  final Place place;
   final bool visited;
 
   @override
@@ -28,7 +28,7 @@ class _FavoriteCardTopState extends State<FavoriteCardTop> {
               topRight: Radius.circular(16),
             ),
             child: Image.network(
-              widget.sight.urls.first,
+              widget.place.urls.first,
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,
@@ -51,7 +51,7 @@ class _FavoriteCardTopState extends State<FavoriteCardTop> {
               children: [
                 Expanded(
                   child: Text(
-                    widget.sight.type,
+                    widget.place.placeType,
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,

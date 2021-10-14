@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/data/model/filters.dart';
 import 'package:places/data/model/location.dart';
@@ -22,18 +22,18 @@ class _FiltersScreenState extends State<FiltersScreen> {
       const Location(57.814183984654186, 28.347436646133506);
 
   RangeValues currentRangeValues = const RangeValues(100, 10000);
-  List<Sight> filteredPlaces = [];
+  List<Place> filteredPlaces = [];
   int countPlaces = 0;
 
   Map<String, bool> filters = {};
 
   bool calculateDistance(
-    Sight place,
+    Place place,
   ) {
     double ky = 40000 / 360;
     double kx = cos(pi * userPosition.lat / 180.0) * ky;
-    double dx = (userPosition.lon - place.lon).abs() * kx;
-    double dy = (userPosition.lat - place.lat).abs() * ky;
+    double dx = (userPosition.lon - place.lon!).abs() * kx;
+    double dy = (userPosition.lat - place.lat!).abs() * ky;
     double distance = sqrt(dx * dx + dy * dy) * 1000;
 
     return (currentRangeValues.start <= distance) &&
@@ -45,9 +45,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
     bool inAria = false;
     bool inCategory = false;
 
-    for (Sight place in mocks) {
+    for (Place place in mocks) {
       inAria = calculateDistance(place);
-      inCategory = filters[place.type.toLowerCase()]!;
+      inCategory = filters[place.placeType.toLowerCase()]!;
 
       if (inAria && inCategory) {
         filteredPlaces.add(place);
@@ -245,7 +245,7 @@ class __DistanceState extends State<_Distance> {
 
 class _ShowButton extends StatefulWidget {
   final int countPlaces;
-  final List<Sight> filteredPlaces;
+  final List<Place> filteredPlaces;
   const _ShowButton({
     Key? key,
     required this.countPlaces,
@@ -326,9 +326,9 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
             itemBuilder: (context, index) {
               final category = mocks[index];
               return _CategoryCircle(
-                title: category.type,
+                title: category.placeType,
                 icon: SvgPicture.asset(
-                  category.icon != null ? category.icon! : iconParticularPlace,
+                  iconParticularPlace,//category.icon != null ? category.icon! : iconParticularPlace,
                   height: 40,
                   width: 40,
                   color: Theme.of(context).buttonColor,
@@ -349,9 +349,9 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
               itemBuilder: (context, index) {
                 final category = mocks[index];
                 return _CategoryCircle(
-                  title: category.type,
+                  title: category.placeType,
                   icon: SvgPicture.asset(
-                    category.icon != null ? category.icon! : iconParticularPlace,
+                    iconParticularPlace,//category.icon != null ? category.icon! : iconParticularPlace,
                     height: 40,
                     width: 40,
                     color: Theme.of(context).buttonColor,

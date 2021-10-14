@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 
 class SearchResult extends StatelessWidget {
-  final Sight sight;
+  final Place place;
   final String searchString;
   const SearchResult({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.searchString,
   }) : super(key: key);
 
@@ -23,17 +23,17 @@ class SearchResult extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SightDetails(
-                id: mocks.indexOf(sight),
+                place: place,
               ),
             ),
           );
         },
         child: Row(
           children: [
-            _SightImage(sight: sight),
+            _SightImage(place: place),
             const SizedBox(width: 16),
             _SightDesc(
-              sight: sight,
+              place: place,
               searchString: searchString,
             ),
           ],
@@ -44,11 +44,11 @@ class SearchResult extends StatelessWidget {
 }
 
 class _SightDesc extends StatelessWidget {
-  final Sight sight;
+  final Place place;
   final String searchString;
   const _SightDesc({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.searchString,
   }) : super(key: key);
 
@@ -60,7 +60,7 @@ class _SightDesc extends StatelessWidget {
         Row(
           children: [
             RichName(
-              name: sight.name,
+              name: place.name,
               searchString: searchString,
             ),
           ],
@@ -69,7 +69,7 @@ class _SightDesc extends StatelessWidget {
         Row(
           children: [
             Text(
-              sight.type,
+              place.placeType,
               style: const TextStyle(color: myLightSecondaryTwo),
             ),
           ],
@@ -129,11 +129,11 @@ class _RichNameState extends State<RichName> {
 }
 
 class _SightImage extends StatelessWidget {
-  final Sight sight;
+  final Place place;
 
   const _SightImage({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -144,7 +144,7 @@ class _SightImage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(12.0)),
         child: Image.network(
-          sight.urls.first,
+          place.urls.first,
           fit: BoxFit.cover,
         ),
       ),

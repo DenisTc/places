@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/sight.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
@@ -34,8 +34,8 @@ class _FavoriteTabBarView extends StatefulWidget {
 }
 
 class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
-  List<Sight> isVisited = [...mocks];
-  List<Sight> notVisited = [...mocks];
+  List<Place> isVisited = [...mocks];
+  List<Place> notVisited = [...mocks];
 
   @override
   Widget build(BuildContext context) {
@@ -49,23 +49,23 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
             if (notVisited.isNotEmpty)
               isPortrait
                   ? SightVisitingPortrainWidget(
-                      sights: notVisited,
+                      places: notVisited,
                       visited: false,
-                      moveItemInList: (data, sight, visited) {
-                        moveItemInList(data, sight, visited);
+                      moveItemInList: (data, place, visited) {
+                        moveItemInList(data, place, visited);
                       },
-                      removeSight: (sight, visited) {
-                        removeSight(sight, visited);
+                      removeSight: (place, visited) {
+                        removePlace(place, visited);
                       }, 
                     )
                   : SightVisitingLandscapeWidget(
-                      sights: notVisited,
+                      places: notVisited,
                       visited: false,
-                      moveItemInList: (data, sight, visited) {
-                        moveItemInList(data, sight, visited);
+                      moveItemInList: (data, place, visited) {
+                        moveItemInList(data, place, visited);
                       },
-                      removeSight: (sight, visited) {
-                        removeSight(sight, visited);
+                      removeSight: (place, visited) {
+                        removePlace(place, visited);
                       },
                     )
             else
@@ -77,23 +77,23 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
             if (isVisited.isNotEmpty)
               isPortrait
                   ? SightVisitingPortrainWidget(
-                      sights: isVisited,
+                      places: isVisited,
                       visited: true,
-                      moveItemInList: (data, sight, visited) {
-                        moveItemInList(data, sight, visited);
+                      moveItemInList: (data, place, visited) {
+                        moveItemInList(data, place, visited);
                       },
-                      removeSight: (sight, visited) {
-                        removeSight(sight, visited);
+                      removeSight: (place, visited) {
+                        removePlace(place, visited);
                       },
                     )
                   : SightVisitingLandscapeWidget(
-                      sights: isVisited,
+                      places: isVisited,
                       visited: true,
-                      moveItemInList: (data, sight, visited) {
-                        moveItemInList(data, sight, visited);
+                      moveItemInList: (data, place, visited) {
+                        moveItemInList(data, place, visited);
                       },
-                      removeSight: (sight, visited) {
-                        removeSight(sight, visited);
+                      removeSight: (place, visited) {
+                        removePlace(place, visited);
                       },
                     )
             else
@@ -112,26 +112,26 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
     setState(() {});
   }
 
-  void moveItemInList(Sight data, Sight sight, bool visited) {
+  void moveItemInList(Place data, Place place, bool visited) {
     setState(
       () {
-        if (visited && isVisited.indexOf(data) != isVisited.indexOf(sight)) {
+        if (visited && isVisited.indexOf(data) != isVisited.indexOf(place)) {
           isVisited.remove(data);
-          isVisited.insert(isVisited.indexOf(sight), data);
-        } else if (notVisited.indexOf(data) != notVisited.indexOf(sight)) {
+          isVisited.insert(isVisited.indexOf(place), data);
+        } else if (notVisited.indexOf(data) != notVisited.indexOf(place)) {
           notVisited.remove(data);
-          notVisited.insert(notVisited.indexOf(sight), data);
+          notVisited.insert(notVisited.indexOf(place), data);
         }
       },
     );
   }
 
-  void removeSight(Sight sight, bool visited) {
+  void removePlace(Place place, bool visited) {
     setState(() {
       if (visited) {
-        isVisited.remove(sight);
+        isVisited.remove(place);
       } else {
-        notVisited.remove(sight);
+        notVisited.remove(place);
       }
     });
   }
