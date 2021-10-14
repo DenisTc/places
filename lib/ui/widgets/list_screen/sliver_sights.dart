@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:places/mocks.dart';
+import 'package:places/ui/widgets/list_screen/card/sight_card.dart';
 import 'package:places/ui/widgets/list_screen/card/sight_landscape_widget.dart';
 import 'package:places/ui/widgets/list_screen/card/sight_portrait_widget.dart';
 
