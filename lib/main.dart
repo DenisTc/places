@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/interactor/settings.dart';
+import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/screens/splash_screen.dart';
 
-final settings = Settings();
+final settings = SettingsInteractor();
 
 void main() {
   runApp(const MyApp());

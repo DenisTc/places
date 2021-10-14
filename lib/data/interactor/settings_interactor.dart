@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/themes.dart';
 
 
-class Settings extends ChangeNotifier{
+class SettingsInteractor extends ChangeNotifier{
   bool _isDarkMode = false;
 
   bool get getThemeValue => _isDarkMode;
