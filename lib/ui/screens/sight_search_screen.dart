@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/model/place_dto.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
@@ -9,17 +11,16 @@ import 'package:places/ui/widgets/search_screen/search_bar.dart';
 import 'package:places/ui/widgets/list_screen/sight_app_bar.dart';
 import 'package:places/ui/widgets/search_screen/search_result_list.dart';
 
-List<String> historyList = [
-  'Кофейня у Рустама',
-  'Рускеала',
-  'Музей истории Российской Федерации',
-  'Зелёные рощи',
-];
+List<String> historyList = [];
+
+final searchInteractor = SearchInteractor();
 
 class SightSearchScreen extends StatefulWidget {
-  final List<Place> filteredList;
-  const SightSearchScreen({Key? key, required this.filteredList})
-      : super(key: key);
+  final Future<List<PlaceDto>>? filteredList;
+  const SightSearchScreen({
+    Key? key,
+    required this.filteredList,
+  }) : super(key: key);
 
   @override
   _SightSearchScreenState createState() => _SightSearchScreenState();
@@ -27,73 +28,83 @@ class SightSearchScreen extends StatefulWidget {
 
 class _SightSearchScreenState extends State<SightSearchScreen> {
   final _controllerSearch = TextEditingController();
-  late List<Place> places = mocks;
-  List<Place> _filteredSights = [];
+  late Future<List<PlaceDto>>? _filteredSights;
 
   @override
   Widget build(BuildContext context) {
-    places = widget.filteredList;
+    _filteredSights = widget.filteredList ??
+        searchInteractor.searchPlaces(name: _controllerSearch.text);
     return Scaffold(
       appBar: const SightAppBar(),
-      body: Column(
+      body: ListView(
         children: [
           SearchBar(
             controllerSearch: _controllerSearch,
             notifyParent: () {
-              refresh();
+              setState(() {});
             },
           ),
           const SizedBox(height: 38),
-          if (_controllerSearch.text.isNotEmpty && _filteredSights.isEmpty)
-            const EmptySearchResult()
-          else
-            SearchResultList(
-              filteredSights: _filteredSights,
-              searchString: _controllerSearch.text,
-            ),
-          if (historyList.isNotEmpty && _controllerSearch.text == '')
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Text(
-                    'ВЫ ИСКАЛИ',
-                    style: TextStyle(
-                      color: myLightSecondaryTwo.withOpacity(0.56),
-                      fontSize: 12,
-                    ),
+          FutureBuilder<List<PlaceDto>>(
+            future: _filteredSights,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (historyList.isNotEmpty && _controllerSearch.text == '') {
+                return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Text(
+                          'ВЫ ИСКАЛИ',
+                          style: TextStyle(
+                            color: myLightSecondaryTwo.withOpacity(0.56),
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      _HistoryList(
+                        historyList: historyList.toList(),
+                        updateHistory: (history) {
+                          updateHistory(history);
+                        },
+                        controllerSearch: _controllerSearch,
+                      ),
+                      _ClearHistoryButton(
+                        historyList: historyList.toList(),
+                        updateHistory: (history) {
+                          updateHistory(history);
+                        },
+                      ),
+                    ],
                   ),
-                ),
-                _HistoryList(
-                  historyList: historyList.toList(),
-                  notifyParent: () {
-                    refresh();
-                  },
-                  updateHistory: (history) {
-                    updateHistory(history);
-                  },
-                  controllerSearch: _controllerSearch,
-                ),
-                _ClearHistoryButton(
-                  historyList: historyList.toList(),
-                  notifyParent: () {
-                    refresh();
-                  },
-                  updateHistory: (history) {
-                    updateHistory(history);
-                  },
-                ),
-              ],
-            ),
+                );
+              } else if (historyList.isEmpty &&
+                  _controllerSearch.text.isEmpty) {
+                return const SizedBox.shrink();
+              }
+
+              if (snapshot.hasData &&
+                  !snapshot.hasError &&
+                  snapshot.data!.isNotEmpty) {
+                _updateHistoryList(snapshot.data!);
+                final searchRes =
+                    filteredByName(_controllerSearch.text, snapshot.data!);
+                return SearchResultList(
+                  filteredSights: searchRes,
+                  searchString: _controllerSearch.text,
+                );
+              } else {
+                return const EmptySearchResult();
+              }
+            },
+          ),
         ],
       ),
-    );
-  }
-
-  void refresh() {
-    setState(
-      _searchSights,
     );
   }
 
@@ -103,34 +114,37 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
     });
   }
 
-  void _searchSights() {
-    final query = _controllerSearch.text;
-
-    if (query.isNotEmpty) {
-      _filteredSights = places.where((place) {
-        return place.name.toLowerCase().startsWith(query.toLowerCase());
-      }).toList();
-
-      if (_filteredSights.isNotEmpty) {
-        _filteredSights.forEach((element) => historyList.add(element.name));
-        historyList = historyList.toSet().toList();
+  List<PlaceDto> filteredByName(String name, List<PlaceDto> places) {
+    final _filredPlaces = <PlaceDto>[];
+    for (final place in places) {
+      final _indexName = place.name.toLowerCase().indexOf(name.toLowerCase());
+      if (_indexName == 0) {
+        _filredPlaces.add(place);
       }
-    } else {
-      _filteredSights = [];
+    }
+
+    return _filredPlaces;
+  }
+
+  void _updateHistoryList(List<PlaceDto> places) {
+    final query = _controllerSearch.text;
+    if (query.isNotEmpty) {
+      for (var place in places) {
+        historyList.add(place.name);
+      }
+      historyList = historyList.toSet().toList();
     }
   }
 }
 
 class _HistoryList extends StatefulWidget {
   final List<String> historyList;
-  final Function() notifyParent;
   final TextEditingController controllerSearch;
   final Function(List<String>) updateHistory;
 
   const _HistoryList({
     Key? key,
     required this.historyList,
-    required this.notifyParent,
     required this.updateHistory,
     required this.controllerSearch,
   }) : super(key: key);
@@ -172,7 +186,6 @@ class _HistoryListState extends State<_HistoryList> {
                             );
                           },
                         );
-                        widget.notifyParent();
                       },
                       child: Text(
                         widget.historyList[index],
@@ -196,7 +209,6 @@ class _HistoryListState extends State<_HistoryList> {
                             widget.updateHistory(widget.historyList);
                           },
                         );
-                        widget.notifyParent();
                       },
                       icon: SvgPicture.asset(
                         iconClose,
@@ -220,13 +232,11 @@ class _HistoryListState extends State<_HistoryList> {
 
 class _ClearHistoryButton extends StatefulWidget {
   final List<String> historyList;
-  final Function() notifyParent;
   final Function(List<String>) updateHistory;
 
   const _ClearHistoryButton({
     Key? key,
     required this.historyList,
-    required this.notifyParent,
     required this.updateHistory,
   }) : super(key: key);
 

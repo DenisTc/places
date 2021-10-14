@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/mocks.dart';
+import 'package:places/data/model/place_dto.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/filters_screen.dart';
@@ -22,7 +22,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  List<Place> filteredList = mocks;
+  Future<List<PlaceDto>>? filteredList;
 
   @override
   Widget build(BuildContext context) {
@@ -115,15 +115,11 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   void _navigateGetDataFromFilters(BuildContext context) async {
-    final List<Place>? result = await Navigator.push(
+    filteredList = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => FiltersScreen(filters: filters),
       ),
     );
-
-    if (result != null) {
-      filteredList = result;
-    }
   }
 }

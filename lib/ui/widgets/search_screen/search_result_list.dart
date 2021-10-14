@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/data/model/place_dto.dart';
 import 'package:places/ui/widgets/search_screen/search_result.dart';
 
 class SearchResultList extends StatelessWidget {
-  final List<Place> _filteredSights;
+  final List<PlaceDto> _filteredSights;
   final String searchString;
 
   const SearchResultList({
     Key? key,
-    required List<Place> filteredSights,
+    required List<PlaceDto> filteredSights,
     required this.searchString,
   })  : _filteredSights = filteredSights,
         super(key: key);

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/mocks.dart';
+import 'package:places/data/model/place_dto.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 
 class SearchResult extends StatelessWidget {
-  final Place place;
+  final PlaceDto place;
   final String searchString;
   const SearchResult({
     Key? key,
@@ -54,29 +54,24 @@ class _SightDesc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            RichName(
-              name: place.name,
-              searchString: searchString,
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Text(
-              place.placeType,
-              style: const TextStyle(color: myLightSecondaryTwo),
-            ),
-          ],
-        ),
-        //if(index != widget.historyList.length-1)
-        const Divider(height: 2),
-      ],
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichName(
+            name: place.name,
+            searchString: searchString,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            place.placeType,
+            style: const TextStyle(color: myLightSecondaryTwo),
+          ),
+          // const SizedBox(height: 8),
+          //if(index != widget.historyList.length-1)
+          // const Divider(height: 2),
+        ],
+      ),
     );
   }
 }
@@ -98,16 +93,18 @@ class RichName extends StatefulWidget {
 class _RichNameState extends State<RichName> {
   @override
   Widget build(BuildContext context) {
-    final int index =
-        widget.name.toLowerCase().indexOf(widget.searchString.toLowerCase()) +
-            widget.searchString.length;
-    final String richText = widget.name.substring(0, index);
-    final String text = widget.name.substring(index);
+    final startIndex =
+        widget.name.toLowerCase().indexOf(widget.searchString.toLowerCase());
+    final endIndex = startIndex + widget.searchString.length;
+    final richText = widget.name.substring(0, endIndex);
+    final text = widget.name.substring(endIndex);
 
     return RichText(
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
       text: TextSpan(
         style: DefaultTextStyle.of(context).style,
-        children: <TextSpan>[
+        children: [
           TextSpan(
             text: richText,
             style: const TextStyle(
