@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/repository/dio.dart';
 import 'package:places/data/interactor/settings.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/screens/splash_screen.dart';

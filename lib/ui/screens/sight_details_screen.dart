@@ -31,58 +31,60 @@ class _SightDetailsState extends State<SightDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).accentColor,
-      child: ConstrainedBox(
-        constraints:
-            BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              expandedHeight: 360,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  height: 360,
-                  color: Colors.brown,
-                  child: Stack(
-                    children: [
-                      PageView.builder(
-                        onPageChanged: (int page) {
-                          setState(() {
-                            setCurrentPage(page.toDouble());
-                          });
-                        },
-                        controller: _pageController,
-                        itemCount: widget.place.urls.length,
-                        itemBuilder: (context, index) {
-                          return _PlaceImage(
-                            imgUrl: widget.place.urls[index],
-                          );
-                        },
-                      ),
-                      const _ArrowBackButton(),
-                      if (widget.place.urls.length > 1)
-                        PageIndicator(
-                          widget: widget,
-                          currentPage: currentPage,
+    return Material(
+      child: Container(
+        color: Theme.of(context).accentColor,
+        child: ConstrainedBox(
+          constraints:
+              BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
+          child: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                expandedHeight: 360,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Container(
+                    height: 360,
+                    color: Colors.brown,
+                    child: Stack(
+                      children: [
+                        PageView.builder(
+                          onPageChanged: (int page) {
+                            setState(() {
+                              setCurrentPage(page.toDouble());
+                            });
+                          },
+                          controller: _pageController,
+                          itemCount: widget.place.urls.length,
+                          itemBuilder: (context, index) {
+                            return _PlaceImage(
+                              imgUrl: widget.place.urls[index],
+                            );
+                          },
                         ),
-                    ],
+                        const _ArrowBackButton(),
+                        if (widget.place.urls.length > 1)
+                          PageIndicator(
+                            widget: widget,
+                            currentPage: currentPage,
+                          ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _Description(place: widget.place),
-                  ),
-                ],
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _Description(place: widget.place),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -220,6 +222,7 @@ class _FunctionButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
+          flex: 1,
           child: InkWell(
             onTap: () async {
               await showModalBottomSheet<void>(
@@ -247,6 +250,7 @@ class _FunctionButtons extends StatelessWidget {
           ),
         ),
         Expanded(
+          flex: 1,
           child: InkWell(
             child: Row(
               children: [

@@ -15,6 +15,7 @@ class SightAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: false,
       toolbarHeight: 56,
+      iconTheme: Theme.of(context).iconTheme,
       title: Text(
         'Список интересных мест',
         style: Theme.of(context).textTheme.headline1,

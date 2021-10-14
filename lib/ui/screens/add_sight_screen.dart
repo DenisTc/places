@@ -584,7 +584,7 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
               id: 99999,
               name: widget.controllerName.text,
               lat: double.parse(widget.controllerLat.text),
-              lon: double.parse(widget.controllerLng.text),
+              lng: double.parse(widget.controllerLng.text),
               urls: [''],
               description: widget.controllerDesc.text,
               placeType: widget.controllerCat.text,
