@@ -90,9 +90,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
               ),
               const SizedBox(height: 20),
               _Distance(
-                notifyParent: () {
-                  setState(() {});
-                },
                 distanceRangeValues: distanceRangeValues,
                 updateRangeVal: (distanceRangeValues) {
                   updateRangeVal(distanceRangeValues);
@@ -129,13 +126,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
 }
 
 class _Distance extends StatefulWidget {
-  final Function() notifyParent;
   final Function(RangeValues rangeValues) updateRangeVal;
   final RangeValues distanceRangeValues;
 
   const _Distance({
     Key? key,
-    required this.notifyParent,
     required this.updateRangeVal,
     required this.distanceRangeValues,
   }) : super(key: key);
@@ -196,12 +191,7 @@ class __DistanceState extends State<_Distance> {
             max: 10000,
             divisions: 100,
             onChanged: (values) {
-              setState(
-                () {
-                  widget.updateRangeVal(values);
-                  widget.notifyParent();
-                },
-              );
+              widget.updateRangeVal(values);
             },
           ),
         ),
@@ -228,7 +218,10 @@ class __ShowButtonState extends State<_ShowButton> {
   Widget build(BuildContext context) {
     var countPlaces = 0;
     final listPlaces = getPlaces(
-        selectFilters, distanceRangeValues.start, distanceRangeValues.end);
+      selectFilters,
+      distanceRangeValues.start,
+      distanceRangeValues.end,
+    );
     return FutureBuilder<List<PlaceDto>>(
       future: listPlaces,
       builder: (context, snapshot) {
@@ -243,7 +236,7 @@ class __ShowButtonState extends State<_ShowButton> {
             style: ElevatedButton.styleFrom(
               primary: countPlaces != 0
                   ? Theme.of(context).buttonColor
-                  : myLightBackground,
+                  : Theme.of(context).primaryColor,
               fixedSize: const Size(double.infinity, 48),
               elevation: 0.0,
               shadowColor: Colors.transparent,
@@ -279,10 +272,11 @@ class __ShowButtonState extends State<_ShowButton> {
     double distanceEnd,
   ) async {
     final placesList = await searchInteractor.searchPlaces(
-        lat: userPosition.lat,
-        lng: userPosition.lng,
-        radius: 10000,
-        typeFilter: selectFilters);
+      lat: userPosition.lat,
+      lng: userPosition.lng,
+      radius: 10000,
+      typeFilter: selectFilters,
+    );
 
     final _filredPlaces = <PlaceDto>[];
 
@@ -338,7 +332,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                     return _CategoryCircle(
                       title: snapshot.data![index],
                       icon: SvgPicture.asset(
-                        iconParticularPlace, //category.icon != null ? category.icon! : iconParticularPlace,
+                        iconParticularPlace,
                         height: 40,
                         width: 40,
                         color: Theme.of(context).buttonColor,
@@ -360,7 +354,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                       return _CategoryCircle(
                         title: snapshot.data![index],
                         icon: SvgPicture.asset(
-                          iconParticularPlace, //category.icon != null ? category.icon! : iconParticularPlace,
+                          iconParticularPlace,
                           height: 40,
                           width: 40,
                           color: Theme.of(context).buttonColor,
@@ -376,7 +370,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
               return const Center(child: CircularProgressIndicator());
             }
           },
-        )
+        ),
       ],
     );
   }
@@ -406,6 +400,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
     final displayHeight = MediaQuery.of(context).size.height;
     final double iconSize = displayHeight > 600 ? 90 : 60;
     final double checkSize = displayHeight > 600 ? 22 : 17;
+    
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(40)),
       onTap: () {
@@ -443,13 +438,13 @@ class __CategoryCircleState extends State<_CategoryCircle> {
                       padding: const EdgeInsets.all(3),
                       height: checkSize,
                       width: checkSize,
-                      decoration: const BoxDecoration(
-                        color: myLightMain,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).secondaryHeaderColor,
                         shape: BoxShape.circle,
                       ),
                       child: SvgPicture.asset(
                         iconCheck,
-                        color: Colors.white,
+                        color: Theme.of(context).accentColor,
                       ),
                     ),
                   ),

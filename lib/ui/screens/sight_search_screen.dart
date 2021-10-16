@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
-import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/search_screen/empty_search_result.dart';
@@ -36,6 +35,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
         searchInteractor.searchPlaces(name: _controllerSearch.text);
     return Scaffold(
       appBar: const SightAppBar(),
+      backgroundColor: Theme.of(context).accentColor,
       body: ListView(
         children: [
           SearchBar(

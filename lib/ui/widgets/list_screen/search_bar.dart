@@ -11,11 +11,11 @@ import 'package:places/data/model/filters.dart';
 final filters = Filters();
 
 class SearchBar extends StatefulWidget {
+  final textFieldFocusNode = FocusNode();
+  
   SearchBar({
     Key? key,
   }) : super(key: key);
-
-  final textFieldFocusNode = FocusNode();
 
   @override
   _SearchBarState createState() => _SearchBarState();
@@ -47,8 +47,8 @@ class _SearchBarState extends State<SearchBar> {
       style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
       decoration: InputDecoration(
         filled: true,
-        contentPadding: EdgeInsets.all(0),
-        fillColor: myLightBackground,
+        contentPadding: EdgeInsets.zero,
+        fillColor: Theme.of(context).primaryColor,
         hintText: 'Поиск',
         hintStyle: const TextStyle(
           color: myLightSecondaryTwo,
@@ -86,28 +86,28 @@ class _SearchBarState extends State<SearchBar> {
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: myLightBackground,
+            color: Colors.transparent,
           ),
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: myLightBackground,
+            color: Colors.transparent,
           ),
         ),
         disabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: myLightBackground,
+            color: Colors.transparent,
           ),
         ),
         enabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: myLightBackground,
+            color: Colors.transparent,
           ),
         ),
       ),

@@ -22,9 +22,11 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-        color: myLightBackground,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(
+          Radius.circular(12.0),
+        ),
+        color: Theme.of(context).primaryColor,
       ),
       child: TextFormField(
         onChanged: (value) {
@@ -67,7 +69,7 @@ class _SearchBarState extends State<SearchBar> {
               iconClearField,
               height: 20,
               color: widget.controllerSearch.text.isNotEmpty
-                  ? myLightMain
+                  ? Theme.of(context).iconTheme.color
                   : Colors.transparent,
             ),
           ),
