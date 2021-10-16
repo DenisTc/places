@@ -180,7 +180,7 @@ class __SightCardState extends State<SightCard> {
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
-        return SightDetails(place: place);
+        return SightDetails(id: place.id);
       },
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(

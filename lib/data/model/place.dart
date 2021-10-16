@@ -22,10 +22,7 @@ class Place {
         lat = (json['lat'] as num?)?.toDouble(),
         lng = (json['lng'] as num?)?.toDouble(),
         name = json['name'] as String,
-        urls = List<String>.from(
-          json['urls'] as List<dynamic>,
-        ),
+        urls = List<String>.from(json['urls'] as List<dynamic>),
         placeType = json['placeType'] as String,
-        // placeType = (categories[json['placeType']] ?? json['placeType']) as String,
         description = json['description'] as String;
 }

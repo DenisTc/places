@@ -1,6 +1,6 @@
 import 'package:places/data/model/place.dart';
 
-class PlaceDto extends Place {
+class PlaceDto{
   final int id;
   final double? lat;
   final double? lng;
@@ -20,15 +20,7 @@ class PlaceDto extends Place {
     required this.urls,
     required this.placeType,
     required this.description,
-  }) : super(
-          id: id,
-          lat: lat,
-          lng: lng,
-          name: name,
-          urls: urls,
-          placeType: placeType,
-          description: description,
-        );
+  });
 
   factory PlaceDto.fromJson(Map<String, dynamic> json) {
     return PlaceDto(

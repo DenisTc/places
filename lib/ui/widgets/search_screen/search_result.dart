@@ -23,17 +23,18 @@ class SearchResult extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SightDetails(
-                place: place,
+                id: place.id,
               ),
             ),
           );
         },
         child: Row(
           children: [
-            _SightImage(place: place),
+            _SightImage(imgUrl: place.urls.first),
             const SizedBox(width: 16),
             _SightDesc(
-              place: place,
+              name: place.name,
+              placeType: place.placeType,
               searchString: searchString,
             ),
           ],
@@ -44,12 +45,14 @@ class SearchResult extends StatelessWidget {
 }
 
 class _SightDesc extends StatelessWidget {
-  final Place place;
+  final String name;
+  final String placeType;
   final String searchString;
   const _SightDesc({
     Key? key,
-    required this.place,
-    required this.searchString,
+    required this.name,
+    required this.placeType,
+    required this.searchString, 
   }) : super(key: key);
 
   @override
@@ -59,12 +62,12 @@ class _SightDesc extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           RichName(
-            name: place.name,
+            name: name,
             searchString: searchString,
           ),
           const SizedBox(height: 8),
           Text(
-            place.placeType,
+            placeType,
             style: const TextStyle(color: myLightSecondaryTwo),
           ),
           // const SizedBox(height: 8),
@@ -126,11 +129,11 @@ class _RichNameState extends State<RichName> {
 }
 
 class _SightImage extends StatelessWidget {
-  final Place place;
+  final String imgUrl;
 
   const _SightImage({
     Key? key,
-    required this.place,
+    required this.imgUrl,
   }) : super(key: key);
 
   @override
@@ -141,7 +144,7 @@ class _SightImage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(12.0)),
         child: Image.network(
-          place.urls.first,
+          imgUrl,
           fit: BoxFit.cover,
         ),
       ),

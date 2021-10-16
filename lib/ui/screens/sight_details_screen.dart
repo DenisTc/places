@@ -14,11 +14,11 @@ PlaceInteractor placeInteractor = PlaceInteractor();
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
-  final Place place;
+  final int id;
 
   const SightDetails({
     Key? key,
-    required this.place,
+    required this.id,
   }) : super(key: key);
 
   @override
@@ -34,57 +34,72 @@ class _SightDetailsState extends State<SightDetails> {
     return Material(
       child: Container(
         color: Theme.of(context).accentColor,
-        child: ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                automaticallyImplyLeading: false,
-                expandedHeight: 360,
-                flexibleSpace: FlexibleSpaceBar(
-                  background: Container(
-                    height: 360,
-                    color: Colors.brown,
-                    child: Stack(
-                      children: [
-                        PageView.builder(
-                          onPageChanged: (int page) {
-                            setState(() {
-                              setCurrentPage(page.toDouble());
-                            });
-                          },
-                          controller: _pageController,
-                          itemCount: widget.place.urls.length,
-                          itemBuilder: (context, index) {
-                            return _PlaceImage(
-                              imgUrl: widget.place.urls[index],
-                            );
-                          },
-                        ),
-                        const _ArrowBackButton(),
-                        if (widget.place.urls.length > 1)
-                          PageIndicator(
-                            widget: widget,
-                            currentPage: currentPage,
-                          ),
-                      ],
-                    ),
-                  ),
+        child: FutureBuilder<Place>(
+          future: placeInteractor.getPlaceDetails(widget.id),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasData && !snapshot.hasError) {
+              final place = snapshot.data!;
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.9,
                 ),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: _Description(place: widget.place),
+                child: CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      automaticallyImplyLeading: false,
+                      expandedHeight: 360,
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Container(
+                          height: 360,
+                          color: Colors.brown,
+                          child: Stack(
+                            children: [
+                              PageView.builder(
+                                onPageChanged: (int page) {
+                                  setState(() {
+                                    setCurrentPage(page.toDouble());
+                                  });
+                                },
+                                controller: _pageController,
+                                itemCount: place.urls.length,
+                                itemBuilder: (context, index) {
+                                  return _PlaceImage(
+                                    imgUrl: place.urls[index],
+                                  );
+                                },
+                              ),
+                              const _ArrowBackButton(),
+                              if (place.urls.length > 1)
+                                PageIndicator(
+                                  countImages: place.urls.length,
+                                  currentPage: currentPage,
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: _Description(place: place),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ),
     );
@@ -98,14 +113,16 @@ class _SightDetailsState extends State<SightDetails> {
 }
 
 class PageIndicator extends StatelessWidget {
+  final int countImages;
+  final double currentPage;
+
   const PageIndicator({
     Key? key,
-    required this.widget,
+    required this.countImages,
     required this.currentPage,
   }) : super(key: key);
 
-  final SightDetails widget;
-  final double currentPage;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -127,19 +144,19 @@ class PageIndicator extends StatelessWidget {
       bottom: 0,
       child: Row(
         children: [
-          for (int i = 0; i < widget.place.urls.length; i++)
+          for (int i = 0; i < countImages; i++)
             Container(
               height: 10,
               decoration: BoxDecoration(
                 borderRadius: (currentPage == 0)
                     ? startIndicator
-                    : (currentPage == widget.place.urls.length - 1)
+                    : (currentPage == countImages - 1)
                         ? endIndicator
                         : middleIndicator,
                 color: i == currentPage ? myLightMain : Colors.transparent,
               ),
               width:
-                  MediaQuery.of(context).size.width / widget.place.urls.length,
+                  MediaQuery.of(context).size.width / countImages,
             ),
         ],
       ),
@@ -213,7 +230,8 @@ class _Description extends StatelessWidget {
 class _FunctionButtons extends StatelessWidget {
   final Place place;
   const _FunctionButtons({
-    Key? key, required this.place,
+    Key? key,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -256,7 +274,7 @@ class _FunctionButtons extends StatelessWidget {
               children: [
                 const SizedBox(width: 14),
                 TextButton.icon(
-                  onPressed: (){
+                  onPressed: () {
                     placeInteractor.addToFavorites(place);
                   },
                   icon: SvgPicture.asset(
