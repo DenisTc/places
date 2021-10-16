@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/main.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/ui/screens/res/icons.dart';
@@ -6,8 +7,6 @@ import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
 import 'package:places/ui/widgets/visiting_screen/card/sight_visiting_landscape_widget.dart';
 import 'package:places/ui/widgets/visiting_screen/card/sight_visiting_portrain_widget.dart';
 import 'package:places/ui/widgets/visiting_screen/visiting_app_bar.dart';
-
-PlaceInteractor placeInteractor = PlaceInteractor();
 
 /// Screen for displaying planned and visited places
 class VisitingScreen extends StatelessWidget {

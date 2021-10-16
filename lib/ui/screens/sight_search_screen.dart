@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/search_screen/empty_search_result.dart';
@@ -11,8 +12,6 @@ import 'package:places/ui/widgets/list_screen/sight_app_bar.dart';
 import 'package:places/ui/widgets/search_screen/search_result_list.dart';
 
 List<String> historyList = [];
-
-final searchInteractor = SearchInteractor();
 
 class SightSearchScreen extends StatefulWidget {
   final Future<List<PlaceDto>>? filteredList;

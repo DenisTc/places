@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:places/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/interactor/search_interactor.dart';
@@ -12,13 +12,15 @@ import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 
 List<String> selectFilters = [];
-SearchInteractor searchInteractor = SearchInteractor();
 RangeValues distanceRangeValues = Constants.defaultDistanceRange;
 const Location userPosition = Constants.userLocation;
 
 class FiltersScreen extends StatefulWidget {
   final Filters filters;
-  const FiltersScreen({Key? key, required this.filters}) : super(key: key);
+  const FiltersScreen({
+    Key? key,
+    required this.filters,
+  }) : super(key: key);
 
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
@@ -400,7 +402,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
     final displayHeight = MediaQuery.of(context).size.height;
     final double iconSize = displayHeight > 600 ? 90 : 60;
     final double checkSize = displayHeight > 600 ? 22 : 17;
-    
+
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(40)),
       onTap: () {

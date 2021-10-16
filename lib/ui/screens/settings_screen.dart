@@ -15,7 +15,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,//settings.getThemeValue ? myDarkMain : Colors.white,
+      backgroundColor: Theme.of(context).accentColor,
       appBar: const _AppBarSettings(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),

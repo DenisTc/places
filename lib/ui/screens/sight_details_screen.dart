@@ -3,14 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
-import 'package:places/mocks.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
-
-PlaceInteractor placeInteractor = PlaceInteractor();
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
