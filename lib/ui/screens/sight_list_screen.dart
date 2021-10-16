@@ -8,6 +8,7 @@ import 'package:places/ui/widgets/list_screen/add_sight_button.dart';
 import 'package:places/ui/widgets/list_screen/sliver_app_bar_list.dart';
 import 'package:places/ui/widgets/list_screen/sliver_sights.dart';
 import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 class SightListScreen extends StatefulWidget {
   const SightListScreen({Key? key}) : super(key: key);
@@ -65,7 +66,7 @@ class SightListScreenState extends State<SightListScreen> {
                   ),
                   const SizedBox(height: 24),
                   const Text(
-                    'Ошибка',
+                    Constants.textError,
                     style: TextStyle(
                       color: myLightSecondaryTwo,
                       fontWeight: FontWeight.w500,
@@ -73,7 +74,7 @@ class SightListScreenState extends State<SightListScreen> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Что то пошло не так\nПопробуйте позже.',
+                    Constants.textTryLater,
                     style: TextStyle(
                       color: myLightSecondaryTwo,
                     ),

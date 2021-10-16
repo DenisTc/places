@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 class VisitingAppbar extends StatelessWidget with PreferredSizeWidget {
   @override
@@ -56,7 +57,7 @@ class VisitingAppbar extends StatelessWidget with PreferredSizeWidget {
       title: Padding(
         padding: const EdgeInsets.all(16),
         child: Text(
-          'Избранное',
+          Constants.textFavorite,
           style: Theme.of(context).textTheme.headline1?.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 18,

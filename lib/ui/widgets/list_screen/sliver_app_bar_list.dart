@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/widgets/list_screen/search_bar.dart';
 
 class SliverAppBarList extends StatefulWidget {
@@ -58,7 +59,7 @@ class MiniTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Список интересных мест',
+      Constants.textListPlaces,
       textAlign: TextAlign.center,
       style: Theme.of(context).textTheme.headline1,
     );
@@ -73,7 +74,7 @@ class BigTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Список\nинтересных мест',
+      Constants.textBigListPlaces,
       style: Theme.of(context)
           .textTheme
           .headline1!

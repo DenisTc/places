@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/main_screen.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double currentPage;
@@ -29,7 +30,7 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
               );
             },
             child: Text(
-              'Пропустить',
+              Constants.textBtnSkip,
               style: TextStyle(
                 color: Theme.of(context).buttonColor,
                 fontWeight: FontWeight.w500,

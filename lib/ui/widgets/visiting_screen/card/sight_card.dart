@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
@@ -73,7 +74,7 @@ class __SightCardState extends State<SightCard> {
                     ),
                     const SizedBox(height: 10),
                     const Text(
-                      'Удалить',
+                      Constants.textBtnDelete,
                       style: TextStyle(
                         color: Colors.white,
                       ),

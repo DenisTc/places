@@ -54,7 +54,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               });
             },
             child: Text(
-              'Очистить',
+              Constants.textBtnClear,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -76,7 +76,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               Row(
                 children: [
                   Text(
-                    'КАТЕГОРИИ',
+                    Constants.textCategories,
                     style: TextStyle(
                       color: myLightSecondaryTwo.withOpacity(0.56),
                     ),
@@ -150,7 +150,7 @@ class __DistanceState extends State<_Distance> {
           children: [
             const Expanded(
               child: Text(
-                'Расстояние',
+                Constants.textDistance,
                 style: TextStyle(fontSize: 16),
               ),
             ),
@@ -250,7 +250,7 @@ class __ShowButtonState extends State<_ShowButton> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'ПОКАЗАТЬ ($countPlaces)',
+                  Constants.textBtnShow + countPlaces.toString(),
                   style: TextStyle(
                     color: countPlaces != 0
                         ? Colors.white

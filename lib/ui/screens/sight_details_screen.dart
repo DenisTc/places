@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/screens/res/styles.dart';
+import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
 
 /// A screen with a detailed description of the place
@@ -120,8 +119,6 @@ class PageIndicator extends StatelessWidget {
     required this.currentPage,
   }) : super(key: key);
 
-  
-
   @override
   Widget build(BuildContext context) {
     const startIndicator = BorderRadius.only(
@@ -153,8 +150,7 @@ class PageIndicator extends StatelessWidget {
                         : middleIndicator,
                 color: i == currentPage ? myLightMain : Colors.transparent,
               ),
-              width:
-                  MediaQuery.of(context).size.width / countImages,
+              width: MediaQuery.of(context).size.width / countImages,
             ),
         ],
       ),
@@ -163,16 +159,17 @@ class PageIndicator extends StatelessWidget {
 }
 
 class _Description extends StatelessWidget {
+  final Place place;
+
   const _Description({
     Key? key,
     required this.place,
   }) : super(key: key);
 
-  final Place place;
-
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 24),
         Row(
@@ -185,25 +182,9 @@ class _Description extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 2),
-        Row(
-          children: [
-            Text(
-              place.placeType,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 16,
-              ),
-              child: Opacity(
-                opacity: 0.56,
-                child: Text(
-                  'закроется в 20:00',
-                  style: Theme.of(context).textTheme.bodyText2,
-                ),
-              ),
-            ),
-          ],
+        Text(
+          place.placeType,
+          style: Theme.of(context).textTheme.subtitle1,
         ),
         const SizedBox(height: 24),
         Text(
@@ -227,6 +208,7 @@ class _Description extends StatelessWidget {
 
 class _FunctionButtons extends StatelessWidget {
   final Place place;
+
   const _FunctionButtons({
     Key? key,
     required this.place,
@@ -257,7 +239,7 @@ class _FunctionButtons extends StatelessWidget {
                 ),
                 const SizedBox(width: 9),
                 Text(
-                  'Запланировать',
+                  Constants.textBtnSchedule,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 const SizedBox(width: 14),
@@ -280,7 +262,7 @@ class _FunctionButtons extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                   ),
                   label: Text(
-                    'В избранное',
+                    Constants.textInFavorite,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
@@ -328,7 +310,7 @@ class _CreateRouteButton extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Text(
-            'ПОСТРОИТЬ МАРШРУТ',
+            Constants.textBtnRoute,
             style: activeBtnTextStyle,
           ),
         ],

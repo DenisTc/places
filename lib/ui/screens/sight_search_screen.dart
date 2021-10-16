@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/search_interactor.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
+import 'package:places/ui/widgets/list_screen/sight_app_bar.dart';
 import 'package:places/ui/widgets/search_screen/empty_search_result.dart';
 import 'package:places/ui/widgets/search_screen/search_bar.dart';
-import 'package:places/ui/widgets/list_screen/sight_app_bar.dart';
 import 'package:places/ui/widgets/search_screen/search_result_list.dart';
 
 List<String> historyList = [];
@@ -59,7 +58,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          'ВЫ ИСКАЛИ',
+                          Constants.textHistory,
                           style: TextStyle(
                             color: myLightSecondaryTwo.withOpacity(0.56),
                             fontSize: 12,
@@ -257,7 +256,7 @@ class __ClearHistoryButtonState extends State<_ClearHistoryButton> {
           );
         },
         child: Text(
-          'Очистить историю',
+          Constants.textBtnClearHistory,
           style: TextStyle(
             color: Theme.of(context).buttonColor,
             fontSize: 16,
