@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/model/place_dto.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
@@ -13,7 +13,7 @@ import 'package:places/ui/widgets/search_screen/search_result_list.dart';
 List<String> historyList = [];
 
 class SightSearchScreen extends StatefulWidget {
-  final Future<List<PlaceDto>>? filteredList;
+  final Future<List<Place>>? filteredList;
   const SightSearchScreen({
     Key? key,
     required this.filteredList,
@@ -25,12 +25,12 @@ class SightSearchScreen extends StatefulWidget {
 
 class _SightSearchScreenState extends State<SightSearchScreen> {
   final _controllerSearch = TextEditingController();
-  late Future<List<PlaceDto>>? _filteredSights;
+  late Future<List<Place>>? _filteredSights;
 
   @override
   Widget build(BuildContext context) {
     _filteredSights = widget.filteredList ??
-        searchInteractor.searchPlaces(name: _controllerSearch.text);
+        searchInteractor.searchPlacesByName(name: _controllerSearch.text);
     return Scaffold(
       appBar: const SightAppBar(),
       backgroundColor: Theme.of(context).accentColor,
@@ -43,7 +43,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
             },
           ),
           const SizedBox(height: 38),
-          FutureBuilder<List<PlaceDto>>(
+          FutureBuilder<List<Place>>(
             future: _filteredSights,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -112,8 +112,8 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
     });
   }
 
-  List<PlaceDto> filteredByName(String name, List<PlaceDto> places) {
-    final _filredPlaces = <PlaceDto>[];
+  List<Place> filteredByName(String name, List<Place> places) {
+    final _filredPlaces = <Place>[];
     for (final place in places) {
       final _indexName = place.name.toLowerCase().indexOf(name.toLowerCase());
       if (_indexName == 0) {
@@ -124,7 +124,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
     return _filredPlaces;
   }
 
-  void _updateHistoryList(List<PlaceDto> places) {
+  void _updateHistoryList(List<Place> places) {
     final query = _controllerSearch.text;
     if (query.isNotEmpty) {
       for (var place in places) {

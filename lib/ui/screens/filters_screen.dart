@@ -1,12 +1,11 @@
 import 'dart:math';
-import 'package:places/main.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/search_interactor.dart';
-import 'package:places/data/model/place.dart';
-import 'package:places/data/model/place_dto.dart';
 import 'package:places/data/model/filters.dart';
 import 'package:places/data/model/location.dart';
+import 'package:places/data/model/place.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
@@ -190,7 +189,7 @@ class __DistanceState extends State<_Distance> {
           width: MediaQuery.of(context).size.width - 32,
           child: RangeSlider(
             values: widget.distanceRangeValues,
-            max: 10000,
+            max: Constants.defaultDistanceRange.end,
             divisions: 100,
             onChanged: (values) {
               widget.updateRangeVal(values);
@@ -219,12 +218,14 @@ class __ShowButtonState extends State<_ShowButton> {
   @override
   Widget build(BuildContext context) {
     var countPlaces = 0;
-    final listPlaces = getPlaces(
-      selectFilters,
-      distanceRangeValues.start,
-      distanceRangeValues.end,
+    final listPlaces = searchInteractor.searchPlaces(
+      lat: userPosition.lat,
+      lng: userPosition.lng,
+      distance: distanceRangeValues,
+      typeFilter: selectFilters,
     );
-    return FutureBuilder<List<PlaceDto>>(
+    
+    return FutureBuilder<List<Place>>(
       future: listPlaces,
       builder: (context, snapshot) {
         if (snapshot.hasData && !snapshot.hasError) {
@@ -250,7 +251,7 @@ class __ShowButtonState extends State<_ShowButton> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  Constants.textBtnShow + countPlaces.toString(),
+                  '${Constants.textBtnShow} ${countPlaces.toString()}',
                   style: TextStyle(
                     color: countPlaces != 0
                         ? Colors.white
@@ -266,29 +267,6 @@ class __ShowButtonState extends State<_ShowButton> {
         }
       },
     );
-  }
-
-  Future<List<PlaceDto>> getPlaces(
-    List<String> selectFilters,
-    double distanceStart,
-    double distanceEnd,
-  ) async {
-    final placesList = await searchInteractor.searchPlaces(
-      lat: userPosition.lat,
-      lng: userPosition.lng,
-      radius: 10000,
-      typeFilter: selectFilters,
-    );
-
-    final _filredPlaces = <PlaceDto>[];
-
-    for (final place in placesList) {
-      if (place.distance! >= distanceStart) {
-        _filredPlaces.add(place);
-      }
-    }
-
-    return _filredPlaces;
   }
 }
 

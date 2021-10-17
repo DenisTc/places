@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/place_dto.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 
 class SearchResult extends StatelessWidget {
-  final PlaceDto place;
+  final Place place;
   final String searchString;
   const SearchResult({
     Key? key,

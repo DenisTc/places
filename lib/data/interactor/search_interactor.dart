@@ -1,22 +1,49 @@
-import 'package:places/data/model/place_dto.dart';
+import 'package:flutter/material.dart';
+import 'package:places/data/model/place.dart';
 import 'package:places/data/repository/search_repository.dart';
 
 SearchRepository _searchRepository = SearchRepository();
 
 class SearchInteractor {
-  Future<List<PlaceDto>> searchPlaces({
-    String name = '',
-    double? lat,
-    double? lng,
-    double? radius,
+  Future<List<Place>> searchPlaces({
+    required double lat,
+    required double lng,
+    required RangeValues distance,
     List<String>? typeFilter,
   }) async {
-    return _searchRepository.searchPlaces(
+    final placesList = await _searchRepository.searchPlaces(
       lat: lat,
       lng: lng,
-      radius: radius,
+      radius: distance.end,
       typeFilter: typeFilter,
-      nameFilter: name,
+    );
+
+    final _filredPlaces = <Place>[];
+
+    for (final place in placesList) {
+      if (place.distance! >= distance.start) {
+        _filredPlaces.add(
+          Place(
+            description: place.description,
+            id: place.id,
+            lat: place.lat,
+            lng: place.lng,
+            name: place.name,
+            placeType: place.placeType,
+            urls: place.urls,
+          ),
+        );
+      }
+    }
+
+    return _filredPlaces;
+  }
+
+  Future<List<Place>> searchPlacesByName({
+    String name = '',
+  }) async {
+    return _searchRepository.searchPlacesByName(
+      name: name,
     );
   }
 

@@ -1,5 +1,4 @@
 import 'package:places/data/model/place.dart';
-import 'package:places/ui/screens/res/icons.dart';
 
 final List<Place> mocks = [
   Place(
