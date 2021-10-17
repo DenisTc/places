@@ -1,16 +1,6 @@
-import 'package:dio/dio.dart';
+import 'package:places/data/api/api_client.dart';
 import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/model/place.dart';
-
-final dio = Dio(baseOptions);
-
-BaseOptions baseOptions = BaseOptions(
-  baseUrl: ApiConstants.baseUrl,
-  connectTimeout: 5000,
-  receiveTimeout: 5000,
-  sendTimeout: 5000,
-  responseType: ResponseType.json,
-);
 
 class PlaceRepository {
   static List<Place> favoritePlaces = [];
@@ -26,7 +16,7 @@ class PlaceRepository {
   }
 
   Future<List<Place>> getPlaces() async {
-    final response = await dio.get<List<dynamic>>(ApiConstants.placeUrl);
+    final response = await ApiClient().client.get<List<dynamic>>(ApiConstants.placeUrl);
 
     if (response.statusCode == 200) {
       return response.data!
@@ -42,7 +32,7 @@ class PlaceRepository {
   Future<Place> addNewPlace(Place place) async {
     final data = place;
 
-    final response = await dio.post<Map<String, dynamic>>(ApiConstants.placeUrl, data: data);
+    final response = await ApiClient().client.post<Map<String, dynamic>>(ApiConstants.placeUrl, data: data);
 
     if (response.statusCode == 200) {
       return Place.fromJson(response.data!);
@@ -54,7 +44,7 @@ class PlaceRepository {
   }
 
   Future<Place> getPlaceDetails({required int id}) async {
-    final response = await dio.get<Map<String, dynamic>>('${ApiConstants.placeUrl}/$id');
+    final response = await ApiClient().client.get<Map<String, dynamic>>('${ApiConstants.placeUrl}/$id');
 
     if (response.statusCode == 200) {
       return Place.fromJson(response.data!);
@@ -66,7 +56,7 @@ class PlaceRepository {
   }
 
   Future<Place?> deletePlace(int id) async {
-    final response = await dio.delete<Place>('${ApiConstants.placeUrl}/$id');
+    final response = await ApiClient().client.delete<Place>('${ApiConstants.placeUrl}/$id');
 
     if (response.statusCode == 200) {
       return response.data;
@@ -78,7 +68,7 @@ class PlaceRepository {
   }
 
   Future<Place?> putPlace(int id) async {
-    final response = await dio.put<Place>('${ApiConstants.placeUrl}/$id');
+    final response = await ApiClient().client.put<Place>('${ApiConstants.placeUrl}/$id');
 
     if (response.statusCode == 200) {
       return response.data;

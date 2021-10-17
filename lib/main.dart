@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/ui/screens/splash_screen.dart';
 
 final settings = SettingsInteractor();
