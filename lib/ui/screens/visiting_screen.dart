@@ -176,6 +176,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
   }
 
   void moveItemInList(Place data, Place place, bool visited) {
+    //TODO(Denis): Configure the logic of interaction with the card.
     // setState(
     //   () {
     //     if (visited && isVisited.indexOf(data) != isVisited.indexOf(place)) {
