@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
@@ -70,6 +69,7 @@ class _SightDesc extends StatelessWidget {
             placeType,
             style: const TextStyle(color: myLightSecondaryTwo),
           ),
+          // TODO(Denis): Align design with figma design from figma.
           // const SizedBox(height: 8),
           //if(index != widget.historyList.length-1)
           // const Divider(height: 2),
