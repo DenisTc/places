@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/data/repository/search_repository.dart';
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/location.dart';
 
 class Filters {
   List<String> category = [];

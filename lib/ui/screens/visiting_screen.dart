@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:places/main.dart';
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/model/place.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
-import 'package:places/ui/widgets/visiting_screen/card/sight_visiting_landscape_widget.dart';
 import 'package:places/ui/widgets/visiting_screen/card/sight_visiting_portrain_widget.dart';
+import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
 import 'package:places/ui/widgets/visiting_screen/visiting_app_bar.dart';
 
 /// Screen for displaying planned and visited places
@@ -77,6 +75,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                 }
               },
             ),
+            // TODO(Denis): Customize the display of items in portrait and landscape orientation for the Favorites screen.
             // if (notVisited.isNotEmpty)
             //   isPortrait
             //       ? SightVisitingPortrainWidget(
@@ -137,6 +136,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
               },
             ),
 
+            // TODO(Denis): Customize the display of items in portrait and landscape orientation for the visited places screen.
             // if (isVisited.isNotEmpty)
             //   isPortrait
             //       ? SightVisitingPortrainWidget(
