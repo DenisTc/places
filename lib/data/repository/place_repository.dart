@@ -1,6 +1,7 @@
 import 'package:places/data/api/api_client.dart';
 import 'package:places/data/api/api_constants.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/data/model/place_dto.dart';
+import 'package:places/domain/place.dart';
 
 class PlaceRepository {
   static List<Place> favoritePlaces = [];
@@ -20,7 +21,7 @@ class PlaceRepository {
 
     if (response.statusCode == 200) {
       return response.data!
-          .map((dynamic place) => Place.fromJson(place as Map<String, dynamic>))
+          .map((dynamic place) => PlaceDto.fromJson(place as Map<String, dynamic>).toModel())
           .toList();
     }
 
@@ -35,7 +36,7 @@ class PlaceRepository {
     final response = await ApiClient().client.post<Map<String, dynamic>>(ApiConstants.placeUrl, data: data);
 
     if (response.statusCode == 200) {
-      return Place.fromJson(response.data!);
+      return PlaceDto.fromJson(response.data!).toModel();
     }
 
     throw Exception(
@@ -47,7 +48,7 @@ class PlaceRepository {
     final response = await ApiClient().client.get<Map<String, dynamic>>('${ApiConstants.placeUrl}/$id');
 
     if (response.statusCode == 200) {
-      return Place.fromJson(response.data!);
+      return PlaceDto.fromJson(response.data!).toModel();
     }
 
     throw Exception(

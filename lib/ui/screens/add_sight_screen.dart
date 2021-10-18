@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/place.dart';
 import 'package:places/main.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -143,7 +143,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
   void setCategory(int id) {
     setState(
       () {
-        _controllerCat.text = mocks[id].placeType;
+        // _controllerCat.text = mocks[id].placeType;
       },
     );
   }
@@ -221,7 +221,7 @@ class __CategoryFieldState extends State<_CategoryField> {
               ),
             );
             setState(() {
-              widget.controllerCat.text = mocks[categoryid!].placeType;
+              // widget.controllerCat.text = mocks[categoryid!].placeType;
             });
           },
           icon: const Icon(Icons.navigate_next_rounded),

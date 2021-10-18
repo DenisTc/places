@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/place.dart';
 import 'package:places/ui/widgets/search_screen/search_result.dart';
 
 class SearchResultList extends StatelessWidget {

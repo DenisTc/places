@@ -1,6 +1,6 @@
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/place.dart';
 
-class PlaceDto{
+class PlaceDto {
   final int id;
   final double? lat;
   final double? lng;
@@ -32,6 +32,20 @@ class PlaceDto{
       name: json['name'] as String,
       placeType: json['placeType'] as String,
       urls: List<String>.from(json['urls'] as List<dynamic>),
+    );
+  }
+}
+
+extension PlaceMapper on PlaceDto {
+  Place toModel() {
+    return Place(
+      id: id,
+      lat: lat,
+      lng: lng,
+      name: name,
+      placeType: placeType,
+      description: description,
+      urls: urls,
     );
   }
 }

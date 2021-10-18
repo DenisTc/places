@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:places/data/api/api_client.dart';
 import 'package:places/data/api/api_constants.dart';
-import 'package:places/data/model/place.dart';
 import 'package:places/data/model/place_dto.dart';
+import 'package:places/domain/place.dart';
 
 class SearchRepository {
   Future<List<PlaceDto>> searchPlaces({
@@ -48,7 +48,7 @@ class SearchRepository {
     if (response.statusCode == 200) {
       final placesList = (jsonDecode(response.toString()) as List<dynamic>)
           .map((dynamic place) =>
-              Place.fromJson(place as Map<String, dynamic>))
+              PlaceDto.fromJson(place as Map<String, dynamic>).toModel())
           .toList();
       return placesList;
     }

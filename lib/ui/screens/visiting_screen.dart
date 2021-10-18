@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/place.dart';
+import 'package:places/domain/place.dart';
 import 'package:places/main.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/visiting_screen/card/sight_visiting_portrain_widget.dart';
