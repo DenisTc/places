@@ -3,8 +3,8 @@ import 'package:places/data/model/place.dart';
 import 'package:places/ui/widgets/search_screen/search_result.dart';
 
 class SearchResultList extends StatelessWidget {
-  final List<Place> _filteredSights;
   final String searchString;
+  final List<Place> _filteredSights;
 
   const SearchResultList({
     Key? key,

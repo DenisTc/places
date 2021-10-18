@@ -34,7 +34,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
     return Scaffold(
       appBar: const SightAppBar(),
       backgroundColor: Theme.of(context).accentColor,
-      body: ListView(
+      body: Column(
         children: [
           SearchBar(
             controllerSearch: _controllerSearch,
@@ -43,16 +43,16 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
             },
           ),
           const SizedBox(height: 38),
-          FutureBuilder<List<Place>>(
-            future: _filteredSights,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              }
+          Expanded(
+            child: FutureBuilder<List<Place>>(
+              future: _filteredSights,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
 
-              if (historyList.isNotEmpty && _controllerSearch.text == '') {
-                return SingleChildScrollView(
-                  child: Column(
+                if (historyList.isNotEmpty && _controllerSearch.text == '') {
+                  return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
@@ -65,41 +65,47 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                           ),
                         ),
                       ),
-                      _HistoryList(
-                        historyList: historyList.toList(),
-                        updateHistory: (history) {
-                          updateHistory(history);
-                        },
-                        controllerSearch: _controllerSearch,
-                      ),
-                      _ClearHistoryButton(
-                        historyList: historyList.toList(),
-                        updateHistory: (history) {
-                          updateHistory(history);
-                        },
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            _HistoryList(
+                              historyList: historyList.toList(),
+                              updateHistory: (history) {
+                                updateHistory(history);
+                              },
+                              controllerSearch: _controllerSearch,
+                            ),
+                            _ClearHistoryButton(
+                              historyList: historyList.toList(),
+                              updateHistory: (history) {
+                                updateHistory(history);
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ],
-                  ),
-                );
-              } else if (historyList.isEmpty &&
-                  _controllerSearch.text.isEmpty) {
-                return const SizedBox.shrink();
-              }
+                  );
+                } else if (historyList.isEmpty &&
+                    _controllerSearch.text.isEmpty) {
+                  return const SizedBox.shrink();
+                }
 
-              if (snapshot.hasData &&
-                  !snapshot.hasError &&
-                  snapshot.data!.isNotEmpty) {
-                _updateHistoryList(snapshot.data!);
-                final searchRes =
-                    filteredByName(_controllerSearch.text, snapshot.data!);
-                return SearchResultList(
-                  filteredSights: searchRes,
-                  searchString: _controllerSearch.text,
-                );
-              } else {
-                return const EmptySearchResult();
-              }
-            },
+                if (snapshot.hasData &&
+                    !snapshot.hasError &&
+                    snapshot.data!.isNotEmpty) {
+                  _updateHistoryList(snapshot.data!);
+                  final searchRes =
+                      filteredByName(_controllerSearch.text, snapshot.data!);
+                  return SearchResultList(
+                    filteredSights: searchRes,
+                    searchString: _controllerSearch.text,
+                  );
+                } else {
+                  return const EmptySearchResult();
+                }
+              },
+            ),
           ),
         ],
       ),
@@ -155,6 +161,7 @@ class _HistoryListState extends State<_HistoryList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      physics: ScrollPhysics(),
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       itemCount: widget.historyList.length,
@@ -255,6 +262,7 @@ class __ClearHistoryButtonState extends State<_ClearHistoryButton> {
             },
           );
         },
+        style: const ButtonStyle(alignment: Alignment.centerLeft),
         child: Text(
           Constants.textBtnClearHistory,
           style: TextStyle(

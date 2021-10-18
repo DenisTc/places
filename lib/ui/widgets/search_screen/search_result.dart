@@ -28,6 +28,7 @@ class SearchResult extends StatelessWidget {
           );
         },
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _SightImage(imgUrl: place.urls.first),
             const SizedBox(width: 16),
@@ -69,10 +70,8 @@ class _SightDesc extends StatelessWidget {
             placeType,
             style: const TextStyle(color: myLightSecondaryTwo),
           ),
-          // TODO(Denis): Align design with figma design from figma.
-          // const SizedBox(height: 8),
-          //if(index != widget.historyList.length-1)
-          // const Divider(height: 2),
+          const SizedBox(height: 8),
+          const Divider(height: 2),
         ],
       ),
     );
