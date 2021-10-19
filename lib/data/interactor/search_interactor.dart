@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/model/place_dto.dart';
+import 'package:places/data/repository/mapper/place_mapper.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:places/domain/place.dart';
 
@@ -25,7 +25,7 @@ class SearchInteractor {
 
     for (final place in placesList) {
       if (place.distance! >= distance.start) {
-        _filredPlaces.add(place.toModel());
+        _filredPlaces.add(PlaceMapper.toModel(place));
       }
     }
 

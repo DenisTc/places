@@ -1,5 +1,3 @@
-import 'package:places/domain/place.dart';
-
 class PlaceDto {
   final int id;
   final double? lat;
@@ -32,20 +30,6 @@ class PlaceDto {
       name: json['name'] as String,
       placeType: json['placeType'] as String,
       urls: List<String>.from(json['urls'] as List<dynamic>),
-    );
-  }
-}
-
-extension PlaceMapper on PlaceDto {
-  Place toModel() {
-    return Place(
-      id: id,
-      lat: lat,
-      lng: lng,
-      name: name,
-      placeType: placeType,
-      description: description,
-      urls: urls,
     );
   }
 }

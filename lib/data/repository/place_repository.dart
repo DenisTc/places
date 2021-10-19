@@ -1,6 +1,7 @@
 import 'package:places/data/api/api_client.dart';
 import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/model/place_dto.dart';
+import 'package:places/data/repository/mapper/place_mapper.dart';
 import 'package:places/domain/place.dart';
 
 class PlaceRepository {
@@ -21,7 +22,7 @@ class PlaceRepository {
 
     if (response.statusCode == 200) {
       return response.data!
-          .map((dynamic place) => PlaceDto.fromJson(place as Map<String, dynamic>).toModel())
+          .map((dynamic place) => PlaceMapper.toModel(PlaceDto.fromJson(place as Map<String, dynamic>)))
           .toList();
     }
 
@@ -36,7 +37,7 @@ class PlaceRepository {
     final response = await ApiClient().client.post<Map<String, dynamic>>(ApiConstants.placeUrl, data: data);
 
     if (response.statusCode == 200) {
-      return PlaceDto.fromJson(response.data!).toModel();
+      return PlaceMapper.toModel(PlaceDto.fromJson(response.data!));
     }
 
     throw Exception(
@@ -48,7 +49,7 @@ class PlaceRepository {
     final response = await ApiClient().client.get<Map<String, dynamic>>('${ApiConstants.placeUrl}/$id');
 
     if (response.statusCode == 200) {
-      return PlaceDto.fromJson(response.data!).toModel();
+      return PlaceMapper.toModel(PlaceDto.fromJson(response.data!));
     }
 
     throw Exception(
