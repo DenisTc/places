@@ -32,7 +32,7 @@ class _SightDetailsState extends State<SightDetails> {
       child: Container(
         color: Theme.of(context).accentColor,
         child: FutureBuilder<Place>(
-          future: placeInteractor.getPlaceDetails(widget.id),
+          future: placeInteractor.getPlaceDetails(id: widget.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/place.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
@@ -18,13 +19,12 @@ class SightListScreen extends StatefulWidget {
 }
 
 class SightListScreenState extends State<SightListScreen> {
-  PlaceRepository placeRepository = PlaceRepository();
   late Future<List<Place>> sightList;
 
   @override
   void initState() {
     super.initState();
-    sightList = placeRepository.getPlaces();
+    sightList = placeInteractor.getPlaces();
   }
 
   @override

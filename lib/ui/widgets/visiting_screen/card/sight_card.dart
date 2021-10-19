@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/data/repository/place_repository.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
@@ -176,8 +176,7 @@ class __SightCardState extends State<SightCard> {
   }
 
   void _showSight(int id) async {
-    final placeRepository = PlaceRepository();
-    final place = await placeRepository.getPlaceDetails(id: id);
+    final place = await placeInteractor.getPlaceDetails(id: id);
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {

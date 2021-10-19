@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:places/main.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/data/repository/place_repository.dart';
-import 'package:places/mocks.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 
@@ -46,8 +43,7 @@ class _SightCardState extends State<SightCard> {
   }
 
   void _showSight(int id) async {
-    final placeRepository = PlaceRepository();
-    final place = await placeRepository.getPlaceDetails(id: id);
+    final place = await placeInteractor.getPlaceDetails(id: id);
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
@@ -121,7 +117,7 @@ class _SightCardTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 96,
       child: Stack(
         children: [
@@ -166,18 +162,31 @@ class _SightCardTop extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    PlaceRepository.favoritePlaces.contains(place)
-                        ? placeInteractor.removeFromFavorites(place)
-                        : placeInteractor.addToFavorites(place);
+                FutureBuilder<List<Place>>(
+                  future: placeInteractor.getFavoritesPlaces(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (snapshot.hasData && !snapshot.hasError) {
+                      return IconButton(
+                        onPressed: () {
+                          snapshot.data!.contains(place)
+                              ? placeInteractor.removeFromFavorites(place)
+                              : placeInteractor.addToFavorites(place);
+                        },
+                        icon: SvgPicture.asset(
+                          (snapshot.data!.contains(place))
+                              ? iconFavoriteSelected
+                              : iconFavorite,
+                          color: Colors.white,
+                        ),
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
                   },
-                  icon: SvgPicture.asset(
-                    (PlaceRepository.favoritePlaces.contains(place))
-                        ? iconFavoriteSelected
-                        : iconFavorite,
-                    color: Colors.white,
-                  ),
                 ),
               ],
             ),

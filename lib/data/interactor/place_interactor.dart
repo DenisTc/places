@@ -1,14 +1,14 @@
-import 'package:places/domain/place.dart';
 import 'package:places/data/repository/place_repository.dart';
+import 'package:places/domain/place.dart';
 
 class PlaceInteractor {
   final PlaceRepository _placeRepository = PlaceRepository();
 
-  Future<List<Place>> getPlaces(int radius, String category) async {
+  Future<List<Place>> getPlaces([int? radius, String? category]) async {
     return _placeRepository.getPlaces();
   }
 
-  Future<Place> getPlaceDetails(int id) async {
+  Future<Place> getPlaceDetails({required int id}) async {
     return _placeRepository.getPlaceDetails(id: id);
   }
 
