@@ -27,8 +27,11 @@ class PlaceRepository {
 
     if (response.statusCode == 200) {
       return response.data!
-          .map((dynamic place) => PlaceMapper.toModel(
-              PlaceDto.fromJson(place as Map<String, dynamic>)))
+          .map(
+            (dynamic place) => PlaceMapper.toModel(
+              PlaceDto.fromJson(place as Map<String, dynamic>),
+            ),
+          )
           .toList();
     }
 

@@ -10,7 +10,7 @@ import 'package:places/ui/screens/splash_screen.dart';
 final settings = SettingsInteractor();
 final api = ApiClient().client;
 
-final _searchRepository = SearchRepository();
+final _searchRepository = SearchRepository(api);
 final _placeRepository = PlaceRepository(api);
 final placeInteractor = PlaceInteractor(_placeRepository);
 final searchInteractor = SearchInteractor(_searchRepository);
