@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:places/data/api/api_client.dart';
 import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/model/place_dto.dart';
@@ -7,6 +8,9 @@ import 'package:places/domain/place.dart';
 class PlaceRepository {
   static List<Place> favoritePlaces = [];
   static List<Place> visitPlaces = [];
+  final Dio api;
+
+  PlaceRepository(this.api);
 
   static Future<Place?> addToFavorites(Place place) async {
     favoritePlaces.add(place);
@@ -18,11 +22,13 @@ class PlaceRepository {
   }
 
   Future<List<Place>> getPlaces() async {
-    final response = await ApiClient().client.get<List<dynamic>>(ApiConstants.placeUrl);
+    final response =
+        await ApiClient().client.get<List<dynamic>>(ApiConstants.placeUrl);
 
     if (response.statusCode == 200) {
       return response.data!
-          .map((dynamic place) => PlaceMapper.toModel(PlaceDto.fromJson(place as Map<String, dynamic>)))
+          .map((dynamic place) => PlaceMapper.toModel(
+              PlaceDto.fromJson(place as Map<String, dynamic>)))
           .toList();
     }
 
@@ -34,7 +40,8 @@ class PlaceRepository {
   Future<Place> addNewPlace(Place place) async {
     final data = place;
 
-    final response = await ApiClient().client.post<Map<String, dynamic>>(ApiConstants.placeUrl, data: data);
+    final response =
+        await api.post<Map<String, dynamic>>(ApiConstants.placeUrl, data: data);
 
     if (response.statusCode == 200) {
       return PlaceMapper.toModel(PlaceDto.fromJson(response.data!));
@@ -46,7 +53,8 @@ class PlaceRepository {
   }
 
   Future<Place> getPlaceDetails({required int id}) async {
-    final response = await ApiClient().client.get<Map<String, dynamic>>('${ApiConstants.placeUrl}/$id');
+    final response =
+        await api.get<Map<String, dynamic>>('${ApiConstants.placeUrl}/$id');
 
     if (response.statusCode == 200) {
       return PlaceMapper.toModel(PlaceDto.fromJson(response.data!));
@@ -58,7 +66,7 @@ class PlaceRepository {
   }
 
   Future<Place?> deletePlace(int id) async {
-    final response = await ApiClient().client.delete<Place>('${ApiConstants.placeUrl}/$id');
+    final response = await api.delete<Place>('${ApiConstants.placeUrl}/$id');
 
     if (response.statusCode == 200) {
       return response.data;
@@ -70,7 +78,7 @@ class PlaceRepository {
   }
 
   Future<Place?> putPlace(int id) async {
-    final response = await ApiClient().client.put<Place>('${ApiConstants.placeUrl}/$id');
+    final response = await api.put<Place>('${ApiConstants.placeUrl}/$id');
 
     if (response.statusCode == 200) {
       return response.data;
