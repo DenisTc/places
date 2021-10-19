@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
+import 'package:places/data/repository/place_repository.dart';
+import 'package:places/data/repository/search_repository.dart';
 import 'package:places/ui/screens/splash_screen.dart';
 
+final SearchRepository _searchRepository = SearchRepository();
+final PlaceRepository _placeRepository = PlaceRepository(); 
+
 final settings = SettingsInteractor();
-final placeInteractor = PlaceInteractor();
-final searchInteractor = SearchInteractor();
+final placeInteractor = PlaceInteractor(_placeRepository);
+final searchInteractor = SearchInteractor(_searchRepository);
 
 void main() {
   runApp(const MyApp());

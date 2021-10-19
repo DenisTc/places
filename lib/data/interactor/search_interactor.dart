@@ -3,9 +3,11 @@ import 'package:places/data/model/place_dto.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:places/domain/place.dart';
 
-SearchRepository _searchRepository = SearchRepository();
-
 class SearchInteractor {
+  final SearchRepository _searchRepository;
+
+  SearchInteractor(this._searchRepository);
+
   Future<List<Place>> searchPlaces({
     required double lat,
     required double lng,

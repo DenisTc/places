@@ -1,9 +1,10 @@
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/place.dart';
 
-final PlaceRepository _placeRepository = PlaceRepository(); 
-
 class PlaceInteractor {
+  final PlaceRepository _placeRepository;
+
+  PlaceInteractor(this._placeRepository);
 
   Future<List<Place>> getPlaces([int? radius, String? category]) async {
     return _placeRepository.getPlaces();
@@ -28,7 +29,6 @@ class PlaceInteractor {
 
   Future<bool> removeFromFavorites(Place place) async {
     try {
-      
       await _placeRepository.removeFromFavorites(place);
       return true;
     } on Exception catch (_) {
@@ -38,7 +38,6 @@ class PlaceInteractor {
 
   Future<bool> removeFromVisit(Place place) async {
     try {
-      
       await _placeRepository.removeFromVisit(place);
       return true;
     } on Exception catch (_) {
