@@ -24,7 +24,6 @@ class SightDetails extends StatefulWidget {
 
 class _SightDetailsState extends State<SightDetails> {
   final PageController _pageController = PageController();
-  double currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -46,50 +45,11 @@ class _SightDetailsState extends State<SightDetails> {
                 ),
                 child: CustomScrollView(
                   slivers: [
-                    SliverAppBar(
-                      automaticallyImplyLeading: false,
-                      expandedHeight: 360,
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: Container(
-                          height: 360,
-                          color: Colors.brown,
-                          child: Stack(
-                            children: [
-                              PageView.builder(
-                                onPageChanged: (int page) {
-                                  setState(() {
-                                    setCurrentPage(page.toDouble());
-                                  });
-                                },
-                                controller: _pageController,
-                                itemCount: place.urls.length,
-                                itemBuilder: (context, index) {
-                                  return _PlaceImage(
-                                    imgUrl: place.urls[index],
-                                  );
-                                },
-                              ),
-                              const _ArrowBackButton(),
-                              if (place.urls.length > 1)
-                                PageIndicator(
-                                  countImages: place.urls.length,
-                                  currentPage: currentPage,
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
+                    _GalleryPlace(
+                      pageController: _pageController,
+                      place: place,
                     ),
-                    SliverList(
-                      delegate: SliverChildListDelegate(
-                        [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            child: _Description(place: place),
-                          ),
-                        ],
-                      ),
-                    ),
+                    _DescriptionPlace(place: place),
                   ],
                 ),
               );
@@ -101,11 +61,84 @@ class _SightDetailsState extends State<SightDetails> {
       ),
     );
   }
+}
 
-  void setCurrentPage(double page) {
-    setState(() {
-      currentPage = page;
-    });
+class _DescriptionPlace extends StatelessWidget {
+  final Place place;
+  
+  const _DescriptionPlace({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: _Description(place: place),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GalleryPlace extends StatefulWidget {
+  final Place place;
+  final PageController _pageController;
+
+  const _GalleryPlace({
+    Key? key,
+    required PageController pageController,
+    required this.place,
+  })  : _pageController = pageController,
+        super(key: key);
+
+  @override
+  State<_GalleryPlace> createState() => _GalleryPlaceState();
+}
+
+class _GalleryPlaceState extends State<_GalleryPlace> {
+  double currentPage = 0;
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      automaticallyImplyLeading: false,
+      expandedHeight: 360,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          height: 360,
+          color: Colors.brown,
+          child: Stack(
+            children: [
+              PageView.builder(
+                onPageChanged: (int page) {
+                  setState(() {
+                    currentPage = page.toDouble();
+                  });
+                },
+                controller: widget._pageController,
+                itemCount: widget.place.urls.length,
+                itemBuilder: (context, index) {
+                  return _PlaceImage(
+                    imgUrl: widget.place.urls[index],
+                  );
+                },
+              ),
+              const _ArrowBackButton(),
+              if (widget.place.urls.length > 1)
+                PageIndicator(
+                  countImages: widget.place.urls.length,
+                  currentPage: currentPage,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -148,7 +181,11 @@ class PageIndicator extends StatelessWidget {
                     : (currentPage == countImages - 1)
                         ? endIndicator
                         : middleIndicator,
-                color: i == currentPage ? myLightMain : Colors.transparent,
+                color: i == currentPage
+                    ? Theme.of(context)
+                        .bottomNavigationBarTheme
+                        .selectedItemColor
+                    : Colors.transparent,
               ),
               width: MediaQuery.of(context).size.width / countImages,
             ),

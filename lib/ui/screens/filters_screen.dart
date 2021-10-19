@@ -431,7 +431,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
               ],
             ),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 10),
           Center(
             child: Text(
               widget.title,
