@@ -1,8 +1,9 @@
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/place.dart';
 
+final PlaceRepository _placeRepository = PlaceRepository(); 
+
 class PlaceInteractor {
-  final PlaceRepository _placeRepository = PlaceRepository();
 
   Future<List<Place>> getPlaces([int? radius, String? category]) async {
     return _placeRepository.getPlaces();
