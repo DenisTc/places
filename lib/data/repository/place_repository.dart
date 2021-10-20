@@ -6,20 +6,11 @@ import 'package:places/data/repository/mapper/place_mapper.dart';
 import 'package:places/domain/place.dart';
 
 class PlaceRepository {
-  static List<Place> favoritePlaces = [];
-  static List<Place> visitPlaces = [];
+  final List<Place> favoritePlaces = [];
+  final List<Place> visitPlaces = [];
   final Dio api;
 
   PlaceRepository(this.api);
-
-  static Future<Place?> addToFavorites(Place place) async {
-    favoritePlaces.add(place);
-  }
-
-  Future<List<Place>> getVisitPlaces() async {
-    final response = getPlaces();
-    return response;
-  }
 
   Future<List<Place>> getPlaces() async {
     final response =
@@ -93,13 +84,24 @@ class PlaceRepository {
   }
 
   Future<List<Place>> getFavoritesPlaces() async {
-    final response = favoritePlaces;
+    return favoritePlaces;
+  }
 
-    return response;
+  Future<void> addToFavorites(Place place) async {
+    favoritePlaces.add(place);
   }
 
   Future<void> removeFromFavorites(Place place) async {
-    favoritePlaces.remove(place);
+    favoritePlaces.removeWhere((item) => item.id == place.id);
+  }
+
+  Future<bool> isFavoritePlace(Place place) async {
+    return favoritePlaces.where((element) => element.id == place.id).isNotEmpty;
+  }
+
+  Future<List<Place>> getVisitPlaces() async {
+    final response = getPlaces();
+    return response;
   }
 
   Future<void> removeFromVisit(Place place) async {

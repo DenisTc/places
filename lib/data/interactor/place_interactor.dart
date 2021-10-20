@@ -14,27 +14,34 @@ class PlaceInteractor {
     return _placeRepository.getPlaceDetails(id: id);
   }
 
+  Future<bool> addNewPlace(Place place) async {
+    try {
+      await _placeRepository.addNewPlace(place);
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
+
+  //Favorite places methods
+
   Future<List<Place>> getFavoritesPlaces() async {
     return _placeRepository.getFavoritesPlaces();
   }
 
-  Future<bool> addToFavorites(Place place) async {
-    try {
-      await PlaceRepository.addToFavorites(place);
-      return true;
-    } on Exception catch (_) {
-      return false;
-    }
+  Future<void> addToFavorites(Place place) async {
+    await _placeRepository.addToFavorites(place);
   }
 
-  Future<bool> removeFromFavorites(Place place) async {
-    try {
-      await _placeRepository.removeFromFavorites(place);
-      return true;
-    } on Exception catch (_) {
-      return false;
-    }
+  Future<void> removeFromFavorites(Place place) async {
+    await _placeRepository.removeFromFavorites(place);
   }
+
+  Future<bool> isFavoritePlace(Place place) async {
+    return _placeRepository.isFavoritePlace(place);
+  }
+
+  //Visited places methods
 
   Future<bool> removeFromVisit(Place place) async {
     try {
@@ -49,22 +56,10 @@ class PlaceInteractor {
     return _placeRepository.getVisitPlaces();
   }
 
-  Future<List<Place>> getFavoritePlaces() async {
-    return _placeRepository.getFavoritesPlaces();
-  }
-
   Future<bool> addToVisitingPlaces(Place place) async {
     try {
+      //TODO: It is necessary to implement a method for adding a place to the list of visited places.
       //await _placeRepository.addToVisitingPlaces(place);
-      return true;
-    } on Exception catch (_) {
-      return false;
-    }
-  }
-
-  Future<bool> addNewPlace(Place place) async {
-    try {
-      await _placeRepository.addNewPlace(place);
       return true;
     } on Exception catch (_) {
       return false;

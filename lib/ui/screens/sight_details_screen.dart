@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/place.dart';
@@ -65,7 +67,7 @@ class _SightDetailsState extends State<SightDetails> {
 
 class _DescriptionPlace extends StatelessWidget {
   final Place place;
-  
+
   const _DescriptionPlace({
     Key? key,
     required this.place,
@@ -243,7 +245,7 @@ class _Description extends StatelessWidget {
   }
 }
 
-class _FunctionButtons extends StatelessWidget {
+class _FunctionButtons extends StatefulWidget {
   final Place place;
 
   const _FunctionButtons({
@@ -252,12 +254,31 @@ class _FunctionButtons extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_FunctionButtons> createState() => _FunctionButtonsState();
+}
+
+class _FunctionButtonsState extends State<_FunctionButtons> {
+  final StreamController<bool> _favoriteIconController =
+      StreamController<bool>.broadcast();
+
+  @override
+  void initState() {
+    _refreshFavoriteIcon(widget.place);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _favoriteIconController.close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
-          flex: 1,
           child: InkWell(
             onTap: () async {
               await showModalBottomSheet<void>(
@@ -285,23 +306,39 @@ class _FunctionButtons extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 1,
           child: InkWell(
             child: Row(
               children: [
                 const SizedBox(width: 14),
-                TextButton.icon(
-                  onPressed: () {
-                    placeInteractor.addToFavorites(place);
+                StreamBuilder<bool>(
+                  stream: _favoriteIconController.stream,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const SizedBox.shrink();
+                    }
+
+                    if (snapshot.hasData && !snapshot.hasError) {
+                      return TextButton.icon(
+                        onPressed: () {
+                          snapshot.data!
+                              ? placeInteractor
+                                  .removeFromFavorites(widget.place)
+                              : placeInteractor.addToFavorites(widget.place);
+                          _refreshFavoriteIcon(widget.place);
+                        },
+                        icon: SvgPicture.asset(
+                          snapshot.data! ? iconFavoriteSelected : iconFavorite,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                        label: Text(
+                          Constants.textInFavorite,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
                   },
-                  icon: SvgPicture.asset(
-                    iconFavorite,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
-                  label: Text(
-                    Constants.textInFavorite,
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
                 ),
               ],
             ),
@@ -310,6 +347,13 @@ class _FunctionButtons extends StatelessWidget {
       ],
     );
   }
+
+  void _refreshFavoriteIcon(Place place) =>
+      _favoriteIconController.sink.addStream(
+        Stream.fromFuture(
+          placeInteractor.isFavoritePlace(place),
+        ),
+      );
 }
 
 class _CreateRouteButton extends StatelessWidget {
