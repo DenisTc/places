@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:places/domains/sight.dart';
-import 'package:places/mocks.dart';
+import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 
 class SearchResult extends StatelessWidget {
-  final Sight sight;
+  final Place place;
   final String searchString;
   const SearchResult({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.searchString,
   }) : super(key: key);
 
@@ -23,17 +22,19 @@ class SearchResult extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SightDetails(
-                id: mocks.indexOf(sight),
+                id: place.id,
               ),
             ),
           );
         },
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SightImage(sight: sight),
+            _SightImage(imgUrl: place.urls.first),
             const SizedBox(width: 16),
             _SightDesc(
-              sight: sight,
+              name: place.name,
+              placeType: place.placeType,
               searchString: searchString,
             ),
           ],
@@ -44,39 +45,35 @@ class SearchResult extends StatelessWidget {
 }
 
 class _SightDesc extends StatelessWidget {
-  final Sight sight;
+  final String name;
+  final String placeType;
   final String searchString;
   const _SightDesc({
     Key? key,
-    required this.sight,
-    required this.searchString,
+    required this.name,
+    required this.placeType,
+    required this.searchString, 
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            RichName(
-              name: sight.name,
-              searchString: searchString,
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        Row(
-          children: [
-            Text(
-              sight.type,
-              style: const TextStyle(color: myLightSecondaryTwo),
-            ),
-          ],
-        ),
-        //if(index != widget.historyList.length-1)
-        const Divider(height: 2),
-      ],
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          RichName(
+            name: name,
+            searchString: searchString,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            placeType,
+            style: const TextStyle(color: myLightSecondaryTwo),
+          ),
+          const SizedBox(height: 8),
+          const Divider(height: 2),
+        ],
+      ),
     );
   }
 }
@@ -98,16 +95,18 @@ class RichName extends StatefulWidget {
 class _RichNameState extends State<RichName> {
   @override
   Widget build(BuildContext context) {
-    final int index =
-        widget.name.toLowerCase().indexOf(widget.searchString.toLowerCase()) +
-            widget.searchString.length;
-    final String richText = widget.name.substring(0, index);
-    final String text = widget.name.substring(index);
+    final startIndex =
+        widget.name.toLowerCase().indexOf(widget.searchString.toLowerCase());
+    final endIndex = startIndex + widget.searchString.length;
+    final richText = widget.name.substring(0, endIndex);
+    final text = widget.name.substring(endIndex);
 
     return RichText(
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
       text: TextSpan(
         style: DefaultTextStyle.of(context).style,
-        children: <TextSpan>[
+        children: [
           TextSpan(
             text: richText,
             style: const TextStyle(
@@ -129,11 +128,11 @@ class _RichNameState extends State<RichName> {
 }
 
 class _SightImage extends StatelessWidget {
-  final Sight sight;
+  final String imgUrl;
 
   const _SightImage({
     Key? key,
-    required this.sight,
+    required this.imgUrl,
   }) : super(key: key);
 
   @override
@@ -144,7 +143,7 @@ class _SightImage extends StatelessWidget {
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(12.0)),
         child: Image.network(
-          sight.urls.first,
+          imgUrl,
           fit: BoxFit.cover,
         ),
       ),

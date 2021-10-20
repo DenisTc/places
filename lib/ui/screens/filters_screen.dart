@@ -2,93 +2,58 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/domains/sight.dart';
-import 'package:places/mocks.dart';
-import 'package:places/models/filters.dart';
-import 'package:places/models/location.dart';
+import 'package:places/domain/filters.dart';
+import 'package:places/domain/location.dart';
+import 'package:places/domain/place.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
+
+List<String> selectFilters = [];
+RangeValues distanceRangeValues = Constants.defaultDistanceRange;
+const Location userPosition = Constants.userLocation;
 
 class FiltersScreen extends StatefulWidget {
   final Filters filters;
-  const FiltersScreen({Key? key, required this.filters}) : super(key: key);
+  const FiltersScreen({
+    Key? key,
+    required this.filters,
+  }) : super(key: key);
 
   @override
   _FiltersScreenState createState() => _FiltersScreenState();
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  final Location userPosition =
-      const Location(57.814183984654186, 28.347436646133506);
-
-  RangeValues currentRangeValues = const RangeValues(100, 10000);
-  List<Sight> filteredPlaces = [];
+  List<Place> filteredPlaces = [];
   int countPlaces = 0;
 
   Map<String, bool> filters = {};
 
-  bool calculateDistance(
-    Sight place,
-  ) {
-    double ky = 40000 / 360;
-    double kx = cos(pi * userPosition.lat / 180.0) * ky;
-    double dx = (userPosition.lon - place.lon).abs() * kx;
-    double dy = (userPosition.lat - place.lat).abs() * ky;
-    double distance = sqrt(dx * dx + dy * dy) * 1000;
-
-    return (currentRangeValues.start <= distance) &&
-        (distance <= currentRangeValues.end);
-  }
-
-  int countPlacesNear() {
-    filteredPlaces = [];
-    bool inAria = false;
-    bool inCategory = false;
-
-    for (Sight place in mocks) {
-      inAria = calculateDistance(place);
-      inCategory = filters[place.type.toLowerCase()]!;
-
-      if (inAria && inCategory) {
-        filteredPlaces.add(place);
-      } else if (filteredPlaces.contains(place) && !inCategory) {
-        filteredPlaces.remove(place);
-      }
-    }
-    return filteredPlaces.length;
-  }
-
   @override
   Widget build(BuildContext context) {
     filters = widget.filters.categories;
-    currentRangeValues = widget.filters.currentRangeValues;
-    refresh();
+    distanceRangeValues = widget.filters.distanceRangeValues;
+    setState(() {});
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          onPressed: () {
-            filters.updateAll((key, value) => value = false);
-            widget.filters.currentRangeValues = const RangeValues(100, 10000);
-            countPlaces = countPlacesNear();
-            Navigator.pop(context, mocks);
-          },
-        ),
+        iconTheme: Theme.of(context).iconTheme,
         actions: [
           TextButton(
             onPressed: () {
               setState(() {
                 filters.updateAll((key, value) => value = false);
-                widget.filters.currentRangeValues =
-                    const RangeValues(100, 10000);
-                countPlaces = countPlacesNear();
+                widget.filters.distanceRangeValues =
+                    Constants.defaultDistanceRange;
+                selectFilters.clear();
               });
             },
             child: Text(
-              'Очистить',
+              Constants.textBtnClear,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -110,7 +75,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               Row(
                 children: [
                   Text(
-                    'КАТЕГОРИИ',
+                    Constants.textCategories,
                     style: TextStyle(
                       color: myLightSecondaryTwo.withOpacity(0.56),
                     ),
@@ -120,18 +85,15 @@ class _FiltersScreenState extends State<FiltersScreen> {
               const SizedBox(height: 20),
               _FiltersCategory(
                 notifyParent: () {
-                  refresh();
+                  setState(() {});
                 },
                 filters: filters,
               ),
               const SizedBox(height: 20),
               _Distance(
-                notifyParent: () {
-                  refresh();
-                },
-                currentRangeValues: currentRangeValues,
-                updateRangeVal: (currentRangeValues) {
-                  updateRangeVal(currentRangeValues);
+                distanceRangeValues: distanceRangeValues,
+                updateRangeVal: (distanceRangeValues) {
+                  updateRangeVal(distanceRangeValues);
                 },
               ),
               const SizedBox(height: 50),
@@ -146,29 +108,32 @@ class _FiltersScreenState extends State<FiltersScreen> {
     );
   }
 
-  void refresh() {
-    setState(() {
-      countPlaces = countPlacesNear();
-    });
+  bool calculateDistance(Place place) {
+    double ky = 40000 / 360;
+    double kx = cos(pi * userPosition.lat / 180.0) * ky;
+    double dx = (userPosition.lng - place.lng!).abs() * kx;
+    double dy = (userPosition.lat - place.lat!).abs() * ky;
+    double distance = sqrt(dx * dx + dy * dy) * 1000;
+
+    return (distanceRangeValues.start <= distance) &&
+        (distance <= distanceRangeValues.end);
   }
 
   void updateRangeVal(RangeValues newRangeValues) {
     setState(() {
-      widget.filters.currentRangeValues = newRangeValues;
+      widget.filters.distanceRangeValues = newRangeValues;
     });
   }
 }
 
 class _Distance extends StatefulWidget {
-  final Function() notifyParent;
   final Function(RangeValues rangeValues) updateRangeVal;
-  final RangeValues currentRangeValues;
+  final RangeValues distanceRangeValues;
 
   const _Distance({
     Key? key,
-    required this.notifyParent,
     required this.updateRangeVal,
-    required this.currentRangeValues,
+    required this.distanceRangeValues,
   }) : super(key: key);
 
   @override
@@ -181,11 +146,10 @@ class __DistanceState extends State<_Distance> {
     return Column(
       children: [
         Row(
-          mainAxisSize: MainAxisSize.max,
           children: [
             const Expanded(
               child: Text(
-                'Расстояние',
+                Constants.textDistance,
                 style: TextStyle(fontSize: 16),
               ),
             ),
@@ -199,7 +163,7 @@ class __DistanceState extends State<_Distance> {
                       style: TextStyle(color: myLightSecondaryTwo),
                     ),
                     TextSpan(
-                      text: widget.currentRangeValues.start.round().toString(),
+                      text: widget.distanceRangeValues.start.round().toString(),
                       style: const TextStyle(color: myLightSecondaryTwo),
                     ),
                     const TextSpan(
@@ -207,7 +171,7 @@ class __DistanceState extends State<_Distance> {
                       style: TextStyle(color: myLightSecondaryTwo),
                     ),
                     TextSpan(
-                      text: widget.currentRangeValues.end.round().toString(),
+                      text: widget.distanceRangeValues.end.round().toString(),
                       style: const TextStyle(color: myLightSecondaryTwo),
                     ),
                     const TextSpan(
@@ -221,20 +185,14 @@ class __DistanceState extends State<_Distance> {
           ],
         ),
         const SizedBox(height: 10),
-        Container(
+        SizedBox(
           width: MediaQuery.of(context).size.width - 32,
           child: RangeSlider(
-            values: widget.currentRangeValues,
-            min: 100,
-            max: 10000,
+            values: widget.distanceRangeValues,
+            max: Constants.defaultDistanceRange.end,
             divisions: 100,
             onChanged: (values) {
-              setState(
-                () {
-                  widget.updateRangeVal(values);
-                  widget.notifyParent();
-                },
-              );
+              widget.updateRangeVal(values);
             },
           ),
         ),
@@ -245,7 +203,7 @@ class __DistanceState extends State<_Distance> {
 
 class _ShowButton extends StatefulWidget {
   final int countPlaces;
-  final List<Sight> filteredPlaces;
+  final List<Place> filteredPlaces;
   const _ShowButton({
     Key? key,
     required this.countPlaces,
@@ -259,37 +217,55 @@ class _ShowButton extends StatefulWidget {
 class __ShowButtonState extends State<_ShowButton> {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        if (widget.countPlaces != 0) {
-          Navigator.pop(context, widget.filteredPlaces);
+    var countPlaces = 0;
+    final listPlaces = searchInteractor.searchPlaces(
+      lat: userPosition.lat,
+      lng: userPosition.lng,
+      distance: distanceRangeValues,
+      typeFilter: selectFilters,
+    );
+    
+    return FutureBuilder<List<Place>>(
+      future: listPlaces,
+      builder: (context, snapshot) {
+        if (snapshot.hasData && !snapshot.hasError) {
+          countPlaces = snapshot.data!.length;
+          return ElevatedButton(
+            onPressed: () {
+              if (countPlaces != 0) {
+                Navigator.pop(context, listPlaces);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              primary: countPlaces != 0
+                  ? Theme.of(context).buttonColor
+                  : Theme.of(context).primaryColor,
+              fixedSize: const Size(double.infinity, 48),
+              elevation: 0.0,
+              shadowColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${Constants.textBtnShow} ${countPlaces.toString()}',
+                  style: TextStyle(
+                    color: countPlaces != 0
+                        ? Colors.white
+                        : myLightSecondaryTwo.withOpacity(0.56),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
         }
       },
-      style: ElevatedButton.styleFrom(
-        primary: widget.countPlaces != 0
-            ? Theme.of(context).buttonColor
-            : myLightBackground,
-        fixedSize: const Size(double.infinity, 48),
-        elevation: 0.0,
-        shadowColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'ПОКАЗАТЬ (${widget.countPlaces})',
-            style: TextStyle(
-              color: widget.countPlaces != 0
-                  ? Colors.white
-                  : myLightSecondaryTwo.withOpacity(0.56),
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -309,59 +285,72 @@ class _FiltersCategory extends StatefulWidget {
 }
 
 class _FiltersCategoryState extends State<_FiltersCategory> {
+  final Future<List<String>> categoriesList = searchInteractor.getCategories();
+
   @override
   Widget build(BuildContext context) {
     final displayHeight = MediaQuery.of(context).size.height;
-    return 
-    Column(
+    return Column(
       children: [
-        if (displayHeight > 580)
-          GridView.builder(
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: MediaQuery.of(context).size.width / 3,
-              mainAxisSpacing: 30,
-            ),
-            itemCount: mocks.length,
-            itemBuilder: (context, index) {
-              final category = mocks[index];
-              return _CategoryCircle(
-                title: category.type,
-                icon: SvgPicture.asset(
-                  category.icon != null ? category.icon! : iconParticularPlace,
-                  height: 40,
-                  width: 40,
-                  color: Theme.of(context).buttonColor,
-                ),
-                notifyParent: widget.notifyParent,
-                filters: widget.filters,
-              );
-            },
-          )
-        else
-          SizedBox(
-            height: 100,
-            width: MediaQuery.of(context).size.width,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: mocks.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                final category = mocks[index];
-                return _CategoryCircle(
-                  title: category.type,
-                  icon: SvgPicture.asset(
-                    category.icon != null ? category.icon! : iconParticularPlace,
-                    height: 40,
-                    width: 40,
-                    color: Theme.of(context).buttonColor,
+        FutureBuilder<List<String>>(
+          future: categoriesList,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasData && !snapshot.hasError) {
+              if (displayHeight > 580) {
+                return GridView.builder(
+                  shrinkWrap: true,
+                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: MediaQuery.of(context).size.width / 3,
+                    mainAxisSpacing: 30,
                   ),
-                  notifyParent: widget.notifyParent,
-                  filters: widget.filters,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return _CategoryCircle(
+                      title: snapshot.data![index],
+                      icon: SvgPicture.asset(
+                        iconParticularPlace,
+                        height: 40,
+                        width: 40,
+                        color: Theme.of(context).buttonColor,
+                      ),
+                      notifyParent: widget.notifyParent,
+                      filters: widget.filters,
+                    );
+                  },
                 );
-              },
-            ),
-          ),
+              } else {
+                return SizedBox(
+                  height: 100,
+                  width: MediaQuery.of(context).size.width,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: snapshot.data!.length,
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return _CategoryCircle(
+                        title: snapshot.data![index],
+                        icon: SvgPicture.asset(
+                          iconParticularPlace,
+                          height: 40,
+                          width: 40,
+                          color: Theme.of(context).buttonColor,
+                        ),
+                        notifyParent: widget.notifyParent,
+                        filters: widget.filters,
+                      );
+                    },
+                  ),
+                );
+              }
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ],
     );
   }
@@ -391,12 +380,16 @@ class __CategoryCircleState extends State<_CategoryCircle> {
     final displayHeight = MediaQuery.of(context).size.height;
     final double iconSize = displayHeight > 600 ? 90 : 60;
     final double checkSize = displayHeight > 600 ? 22 : 17;
+
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(40)),
       onTap: () {
         setState(() {
-          widget.filters[widget.title.toLowerCase()] =
-              !widget.filters[widget.title.toLowerCase()]!;
+          if (selectFilters.contains(widget.title.toLowerCase())) {
+            selectFilters.remove(widget.title.toLowerCase());
+          } else {
+            selectFilters.add(widget.title.toLowerCase());
+          }
           widget.notifyParent();
         });
       },
@@ -417,7 +410,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
                     child: widget.icon,
                   ),
                 ),
-                if (widget.filters[widget.title.toLowerCase()]!)
+                if (selectFilters.contains(widget.title.toLowerCase()))
                   Positioned(
                     right: 0,
                     bottom: 0,
@@ -425,23 +418,27 @@ class __CategoryCircleState extends State<_CategoryCircle> {
                       padding: const EdgeInsets.all(3),
                       height: checkSize,
                       width: checkSize,
-                      decoration: const BoxDecoration(
-                        color: myLightMain,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).secondaryHeaderColor,
                         shape: BoxShape.circle,
                       ),
                       child: SvgPicture.asset(
                         iconCheck,
-                        color: Colors.white,
+                        color: Theme.of(context).accentColor,
                       ),
                     ),
                   ),
               ],
             ),
           ),
-          const SizedBox(height: 12),
-          Text(
-            widget.title,
-            style: const TextStyle(fontSize: 12),
+          const SizedBox(height: 10),
+          Center(
+            child: Text(
+              widget.title,
+              softWrap: false,
+              overflow: TextOverflow.fade,
+              style: const TextStyle(fontSize: 12),
+            ),
           ),
         ],
       ),

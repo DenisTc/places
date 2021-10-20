@@ -1,27 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/place.dart';
+import 'package:places/mocks.dart';
+import 'package:places/ui/widgets/list_screen/card/sight_card.dart';
 import 'package:places/ui/widgets/list_screen/card/sight_landscape_widget.dart';
 import 'package:places/ui/widgets/list_screen/card/sight_portrait_widget.dart';
 
 class SliverSights extends StatelessWidget {
+  final List<Place> places;
+
   const SliverSights({
     Key? key,
+    required this.places,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
     return SliverPadding(
       sliver: isPortrait
-          ? const SightPortraitWidget()
-          : const SightLandscapeWidget(),
+          ? SightPortraitWidget(places: places)
+          : SightLandscapeWidget(places: places),
       padding: const EdgeInsets.symmetric(horizontal: 16),
     );
   }
 }
 
 class SightPortraitWidget extends StatelessWidget {
+  final List<Place> places;
   const SightPortraitWidget({
     Key? key,
+    required this.places,
   }) : super(key: key);
 
   @override
@@ -29,30 +38,32 @@ class SightPortraitWidget extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          final sight = mocks[index];
+          final place = places[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16),
-            child: SightCard(sight: sight),
+            child: SightCard(place: place),
           );
         },
-        childCount: mocks.length,
+        childCount: places.length,
       ),
     );
   }
 }
 
 class SightLandscapeWidget extends StatelessWidget {
-  const SightLandscapeWidget({Key? key}) : super(key: key);
+  final List<Place> places;
+  const SightLandscapeWidget({Key? key, required this.places})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SliverGrid(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          final sight = mocks[index];
+          final place = mocks[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16),
-            child: SightCard(sight: sight),
+            child: SightCard(place: place),
           );
         },
         childCount: mocks.length,

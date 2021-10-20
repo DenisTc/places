@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:places/domains/sight.dart';
+import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
 
 class FavoriteCardBottom extends StatelessWidget {
-  final Sight sight;
+  final Place place;
   final bool visited;
 
   const FavoriteCardBottom({
     Key? key,
-    required this.sight,
+    required this.place,
     required this.visited,
   }) : super(key: key);
 
@@ -33,7 +33,7 @@ class FavoriteCardBottom extends StatelessWidget {
         children: [
           const SizedBox(height: 16),
           Text(
-            sight.name,
+            place.name,
             maxLines: 2,
             style: Theme.of(context)
                 .textTheme

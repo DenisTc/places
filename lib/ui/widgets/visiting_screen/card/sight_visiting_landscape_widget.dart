@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:places/domains/sight.dart';
+import 'package:places/domain/place.dart';
 import 'package:places/ui/widgets/visiting_screen/card/sight_card_favorite.dart';
 
 // Widget for displaying a list of places in horizontal orientation
 class SightVisitingLandscapeWidget extends StatelessWidget {
-  final List<Sight> sights;
+  final List<Place> places;
   final bool visited;
-  final Function(Sight data, Sight sight, bool visited) moveItemInList;
-  final Function(Sight sight, bool visited) removeSight;
+  final Function(Place data, Place place, bool visited) moveItemInList;
+  final Function(Place place, bool visited) removeSight;
   const SightVisitingLandscapeWidget({
     Key? key,
-    required this.sights,
+    required this.places,
     required this.moveItemInList,
     required this.removeSight,
     required this.visited,
@@ -25,22 +25,22 @@ class SightVisitingLandscapeWidget extends StatelessWidget {
           SliverGrid(
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                final sight = sights[index];
+                final place = places[index];
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16),
                   child: FavoriteSightCard(
-                    sight: sight,
+                    place: place,
                     visited: visited,
-                    moveItemInList: (data, sight, visited) {
-                      moveItemInList(data, sight, visited);
+                    moveItemInList: (data, place, visited) {
+                      moveItemInList(data, place, visited);
                     },
-                    removeSight: (sight, visited) {
-                      removeSight(sight, visited);
+                    removeSight: (place, visited) {
+                      removeSight(place, visited);
                     },
                   ),
                 );
               },
-              childCount: sights.length,
+              childCount: places.length,
             ),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 class SightAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -15,8 +16,9 @@ class SightAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       centerTitle: false,
       toolbarHeight: 56,
+      iconTheme: Theme.of(context).iconTheme,
       title: Text(
-        'Список интересных мест',
+        Constants.textListPlaces,
         style: Theme.of(context).textTheme.headline1,
       ),
     );

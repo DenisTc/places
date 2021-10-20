@@ -1,28 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/domains/sight.dart';
-import 'package:places/mocks.dart';
+import 'package:places/domain/filters.dart';
+import 'package:places/domain/place.dart';
+import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/sight_search_screen.dart';
-import 'package:places/models/filters.dart';
 
 final filters = Filters();
 
 class SearchBar extends StatefulWidget {
+  final textFieldFocusNode = FocusNode();
+  
   SearchBar({
     Key? key,
   }) : super(key: key);
-
-  final textFieldFocusNode = FocusNode();
 
   @override
   _SearchBarState createState() => _SearchBarState();
 }
 
 class _SearchBarState extends State<SearchBar> {
-  List<Sight> filteredList = mocks;
+  Future<List<Place>>? filteredList;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +46,8 @@ class _SearchBarState extends State<SearchBar> {
       style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
       decoration: InputDecoration(
         filled: true,
-        contentPadding: EdgeInsets.all(0),
-        fillColor: myLightBackground,
+        contentPadding: EdgeInsets.zero,
+        fillColor: Theme.of(context).primaryColor,
         hintText: 'Поиск',
         hintStyle: const TextStyle(
           color: myLightSecondaryTwo,
@@ -86,28 +85,28 @@ class _SearchBarState extends State<SearchBar> {
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: myLightBackground,
+            color: Colors.transparent,
           ),
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: myLightBackground,
+            color: Colors.transparent,
           ),
         ),
         disabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: myLightBackground,
+            color: Colors.transparent,
           ),
         ),
         enabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
             width: 1,
-            color: myLightBackground,
+            color: Colors.transparent,
           ),
         ),
       ),
@@ -115,15 +114,11 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   void _navigateGetDataFromFilters(BuildContext context) async {
-    final List<Sight>? result = await Navigator.push(
+    filteredList = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => FiltersScreen(filters: filters),
       ),
     );
-
-    if (result != null) {
-      filteredList = result;
-    }
   }
 }

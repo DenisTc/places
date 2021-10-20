@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 class SelectImageDialog extends StatelessWidget {
   const SelectImageDialog({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class SelectImageDialog extends StatelessWidget {
                     ),
                     const SizedBox(width: 15),
                     const Text(
-                      'Камера',
+                      Constants.textBtnCamera,
                       style: TextStyle(
                         fontSize: 16,
                         color: myLightSecondaryTwo,
@@ -49,7 +50,7 @@ class SelectImageDialog extends StatelessWidget {
                     ),
                     const SizedBox(width: 14),
                     const Text(
-                      'Фотография',
+                      Constants.textBtnPhoto,
                       style: TextStyle(
                         fontSize: 16,
                         color: myLightSecondaryTwo,
@@ -67,7 +68,7 @@ class SelectImageDialog extends StatelessWidget {
                     ),
                     const SizedBox(width: 16),
                     const Text(
-                      'Файл',
+                      Constants.textBtnFile,
                       style: TextStyle(
                         fontSize: 16,
                         color: myLightSecondaryTwo,
@@ -95,7 +96,7 @@ class SelectImageDialog extends StatelessWidget {
               ),
               width: MediaQuery.of(context).size.width,
               child: Text(
-                'ОТМЕНА',
+                Constants.textCancel.toUpperCase(),
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   color: Theme.of(context).buttonColor,

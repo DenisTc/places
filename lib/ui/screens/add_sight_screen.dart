@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/domains/sight.dart';
+import 'package:places/domain/place.dart';
+import 'package:places/main.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_category_screen.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/sight_gallery.dart';
@@ -44,15 +46,15 @@ class _AddSightScreenState extends State<AddSightScreen> {
                 children: [
                   const SizedBox(height: 24),
                   const Text(
-                    'ГАЛЕРЕЯ',
+                    Constants.textGallery,
                     style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 24),
                   SightGallery(),
                   const SizedBox(height: 24),
-                  const Text(
-                    'КАТЕГОРИЯ',
-                    style: TextStyle(color: myLightSecondaryTwo),
+                  Text(
+                    Constants.textCategory.toUpperCase(),
+                    style: const TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 5),
                   _CategoryField(
@@ -66,7 +68,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   ),
                   const SizedBox(height: 24),
                   const Text(
-                    'НАЗВАНИЕ',
+                    Constants.textTitle,
                     style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 12),
@@ -92,7 +94,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   const _SelectOnMapButton(),
                   const SizedBox(height: 30),
                   const Text(
-                    'ОПИСАНИЕ',
+                    Constants.textDescription,
                     style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 12),
@@ -141,7 +143,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
   void setCategory(int id) {
     setState(
       () {
-        _controllerCat.text = mocks[id].type;
+        // _controllerCat.text = mocks[id].placeType;
       },
     );
   }
@@ -157,7 +159,7 @@ class _SelectOnMapButton extends StatelessWidget {
     return TextButton(
       onPressed: () {},
       child: Text(
-        'Указать на карте',
+        Constants.textBtnShowOnMap,
         style: TextStyle(
           color: Theme.of(context).buttonColor,
           fontSize: 16,
@@ -219,7 +221,7 @@ class __CategoryFieldState extends State<_CategoryField> {
               ),
             );
             setState(() {
-              widget.controllerCat.text = mocks[categoryid!].type;
+              // widget.controllerCat.text = mocks[categoryid!].placeType;
             });
           },
           icon: const Icon(Icons.navigate_next_rounded),
@@ -347,7 +349,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'ШИРОТА',
+                Constants.textLatitude,
                 style: TextStyle(color: myLightSecondaryTwo),
               ),
               const SizedBox(height: 12),
@@ -357,7 +359,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Введите значение широты';
+                    return Constants.textEnterLatitude;
                   }
                 },
                 onChanged: (value) {
@@ -414,7 +416,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'ДОЛГОТА',
+                Constants.textLongitude,
                 style: TextStyle(color: myLightSecondaryTwo),
               ),
               const SizedBox(height: 12),
@@ -425,7 +427,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Введите значение долготы';
+                    return Constants.textEnterLongitude;
                   }
                 },
                 onChanged: (value) {
@@ -576,21 +578,21 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
     return ElevatedButton(
       onPressed: () {
         if (widget.formKey.currentState!.validate() && widget.enable) {
-          mocks.add(
-            Sight(
-              widget.controllerName.text,
-              double.parse(widget.controllerLat.text),
-              double.parse(widget.controllerLng.text),
-              [''],
-              widget.controllerDesc.text,
-              widget.controllerCat.text,
-              'iconParticularPlace',
+          placeInteractor.addNewPlace(
+            Place(
+              id: 99999,
+              name: widget.controllerName.text,
+              lat: double.parse(widget.controllerLat.text),
+              lng: double.parse(widget.controllerLng.text),
+              urls: [''],
+              description: widget.controllerDesc.text,
+              placeType: widget.controllerCat.text,
             ),
           );
         }
       },
       child: Text(
-        'СОЗДАТЬ',
+        Constants.textBtnCreate,
         style: TextStyle(
           color: widget.enable
               ? Colors.white

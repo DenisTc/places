@@ -3,6 +3,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:places/main.dart';
 import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,//settings.getThemeValue ? myDarkMain : Colors.white,
+      backgroundColor: Theme.of(context).accentColor,
       appBar: const _AppBarSettings(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -26,7 +27,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    'Тёмная тема',
+                    Constants.textDarkTheme,
                     style: Theme.of(context).textTheme.headline1?.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -56,7 +57,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    'Смотреть туториал',
+                    Constants.textBtnTutorial,
                     style: Theme.of(context).textTheme.headline1?.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -106,7 +107,7 @@ class _AppBarSettings extends StatelessWidget implements PreferredSizeWidget {
       title: Padding(
         padding: const EdgeInsets.all(16),
         child: Text(
-          'Настройки',
+          Constants.textSettings,
           style: Theme.of(context).textTheme.headline1?.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 18,

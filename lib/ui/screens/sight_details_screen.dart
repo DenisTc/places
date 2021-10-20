@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/domains/sight.dart';
-import 'package:places/mocks.dart';
+import 'package:places/domain/place.dart';
+import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/screens/res/styles.dart';
+import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
 
 /// A screen with a detailed description of the place
@@ -23,83 +24,133 @@ class SightDetails extends StatefulWidget {
 
 class _SightDetailsState extends State<SightDetails> {
   final PageController _pageController = PageController();
-  double currentPage = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).accentColor,
-      child: ConstrainedBox(
-        constraints:
-            BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              automaticallyImplyLeading: false,
-              expandedHeight: 360,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Container(
-                  height: 360,
-                  color: Colors.brown,
-                  child: Stack(
-                    children: [
-                      PageView.builder(
-                        onPageChanged: (int page) {
-                          setState(() {
-                            setCurrentPage(page.toDouble());
-                          });
-                        },
-                        controller: _pageController,
-                        itemCount: mocks[widget.id].urls.length,
-                        itemBuilder: (context, index) {
-                          return _PlaceImage(
-                            imgUrl: mocks[widget.id].urls[index],
-                          );
-                        },
-                      ),
-                      const _ArrowBackButton(),
-                      if (mocks[widget.id].urls.length > 1)
-                        PageIndicator(
-                          widget: widget,
-                          currentPage: currentPage,
-                        ),
-                    ],
-                  ),
+    return Material(
+      child: Container(
+        color: Theme.of(context).accentColor,
+        child: FutureBuilder<Place>(
+          future: placeInteractor.getPlaceDetails(id: widget.id),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasData && !snapshot.hasError) {
+              final place = snapshot.data!;
+              return ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.9,
                 ),
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: _Description(sight: mocks[widget.id]),
-                  ),
-                ],
-              ),
-            ),
-          ],
+                child: CustomScrollView(
+                  slivers: [
+                    _GalleryPlace(
+                      pageController: _pageController,
+                      place: place,
+                    ),
+                    _DescriptionPlace(place: place),
+                  ],
+                ),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
         ),
       ),
     );
   }
+}
 
-  void setCurrentPage(double page) {
-    setState(() {
-      currentPage = page;
-    });
+class _DescriptionPlace extends StatelessWidget {
+  final Place place;
+  
+  const _DescriptionPlace({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildListDelegate(
+        [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: _Description(place: place),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GalleryPlace extends StatefulWidget {
+  final Place place;
+  final PageController _pageController;
+
+  const _GalleryPlace({
+    Key? key,
+    required PageController pageController,
+    required this.place,
+  })  : _pageController = pageController,
+        super(key: key);
+
+  @override
+  State<_GalleryPlace> createState() => _GalleryPlaceState();
+}
+
+class _GalleryPlaceState extends State<_GalleryPlace> {
+  double currentPage = 0;
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      automaticallyImplyLeading: false,
+      expandedHeight: 360,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          height: 360,
+          color: Colors.brown,
+          child: Stack(
+            children: [
+              PageView.builder(
+                onPageChanged: (int page) {
+                  setState(() {
+                    currentPage = page.toDouble();
+                  });
+                },
+                controller: widget._pageController,
+                itemCount: widget.place.urls.length,
+                itemBuilder: (context, index) {
+                  return _PlaceImage(
+                    imgUrl: widget.place.urls[index],
+                  );
+                },
+              ),
+              const _ArrowBackButton(),
+              if (widget.place.urls.length > 1)
+                PageIndicator(
+                  countImages: widget.place.urls.length,
+                  currentPage: currentPage,
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
 class PageIndicator extends StatelessWidget {
+  final int countImages;
+  final double currentPage;
+
   const PageIndicator({
     Key? key,
-    required this.widget,
+    required this.countImages,
     required this.currentPage,
   }) : super(key: key);
-
-  final SightDetails widget;
-  final double currentPage;
 
   @override
   Widget build(BuildContext context) {
@@ -121,19 +172,22 @@ class PageIndicator extends StatelessWidget {
       bottom: 0,
       child: Row(
         children: [
-          for (int i = 0; i < mocks[widget.id].urls.length; i++)
+          for (int i = 0; i < countImages; i++)
             Container(
               height: 10,
               decoration: BoxDecoration(
                 borderRadius: (currentPage == 0)
                     ? startIndicator
-                    : (currentPage == mocks[widget.id].urls.length - 1)
+                    : (currentPage == countImages - 1)
                         ? endIndicator
                         : middleIndicator,
-                color: i == currentPage ? myLightMain : Colors.transparent,
+                color: i == currentPage
+                    ? Theme.of(context)
+                        .bottomNavigationBarTheme
+                        .selectedItemColor
+                    : Colors.transparent,
               ),
-              width: MediaQuery.of(context).size.width /
-                  mocks[widget.id].urls.length,
+              width: MediaQuery.of(context).size.width / countImages,
             ),
         ],
       ),
@@ -142,51 +196,36 @@ class PageIndicator extends StatelessWidget {
 }
 
 class _Description extends StatelessWidget {
+  final Place place;
+
   const _Description({
     Key? key,
-    required this.sight,
+    required this.place,
   }) : super(key: key);
-
-  final Sight sight;
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 24),
         Row(
           children: [
             Text(
-              sight.name,
+              place.name,
               style:
                   Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
             ),
           ],
         ),
         const SizedBox(height: 2),
-        Row(
-          children: [
-            Text(
-              sight.type,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 16,
-              ),
-              child: Opacity(
-                opacity: 0.56,
-                child: Text(
-                  'закроется в 20:00',
-                  style: Theme.of(context).textTheme.bodyText2,
-                ),
-              ),
-            ),
-          ],
+        Text(
+          place.placeType,
+          style: Theme.of(context).textTheme.subtitle1,
         ),
         const SizedBox(height: 24),
         Text(
-          sight.details,
+          place.description,
           style: Theme.of(context).textTheme.bodyText1,
         ),
         const SizedBox(height: 24),
@@ -197,7 +236,7 @@ class _Description extends StatelessWidget {
           color: myLightSecondaryTwo,
         ),
         const SizedBox(height: 19),
-        const _FunctionButtons(),
+        _FunctionButtons(place: place),
         const SizedBox(height: 11),
       ],
     );
@@ -205,8 +244,11 @@ class _Description extends StatelessWidget {
 }
 
 class _FunctionButtons extends StatelessWidget {
+  final Place place;
+
   const _FunctionButtons({
     Key? key,
+    required this.place,
   }) : super(key: key);
 
   @override
@@ -215,27 +257,26 @@ class _FunctionButtons extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
+          flex: 1,
           child: InkWell(
             onTap: () async {
               await showModalBottomSheet<void>(
                 context: context,
                 builder: (builder) {
-                  return SightCupertinoDatePicker();
+                  return const SightCupertinoDatePicker();
                 },
               );
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  child: SvgPicture.asset(
-                    iconCalendar,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
+                SvgPicture.asset(
+                  iconCalendar,
+                  color: Theme.of(context).iconTheme.color,
                 ),
                 const SizedBox(width: 9),
                 Text(
-                  'Запланировать',
+                  Constants.textBtnSchedule,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 const SizedBox(width: 14),
@@ -247,19 +288,18 @@ class _FunctionButtons extends StatelessWidget {
           flex: 1,
           child: InkWell(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(width: 14),
-                Container(
-                  child: SvgPicture.asset(
+                TextButton.icon(
+                  onPressed: () {
+                    placeInteractor.addToFavorites(place);
+                  },
+                  icon: SvgPicture.asset(
                     iconFavorite,
                     color: Theme.of(context).iconTheme.color,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 9),
-                  child: Text(
-                    'В избранное',
+                  label: Text(
+                    Constants.textInFavorite,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
@@ -307,7 +347,7 @@ class _CreateRouteButton extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Text(
-            'ПОСТРОИТЬ МАРШРУТ',
+            Constants.textBtnRoute,
             style: activeBtnTextStyle,
           ),
         ],

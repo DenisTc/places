@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 int? indexCategory;
 
@@ -36,8 +37,8 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                mocks[index].type[0].toUpperCase() +
-                                    mocks[index].type.substring(1),
+                                mocks[index].placeType[0].toUpperCase() +
+                                    mocks[index].placeType.substring(1),
                                 style: const TextStyle(
                                   color: myLightMain,
                                   fontSize: 16,
@@ -95,10 +96,10 @@ class __SaveButtonState extends State<_SaveButton> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pop(context, indexCategory);//mocks[indexCategory!].type[0]);
+          Navigator.pop(context, indexCategory);
         },
         child: Text(
-          'Сохранить'.toUpperCase(),
+          Constants.textBtnSave,
           style: TextStyle(
             color: (indexCategory == null)
                 ? myLightSecondaryTwo.withOpacity(0.56)
@@ -140,7 +141,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      title: const Text('Категория'),
+      title: const Text(Constants.textCategory),
       leading: IconButton(
         icon: const Icon(Icons.navigate_before_rounded),
         onPressed: () => Navigator.of(context).pop(),

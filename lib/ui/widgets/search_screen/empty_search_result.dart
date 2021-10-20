@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 
 class EmptySearchResult extends StatelessWidget {
@@ -23,7 +24,7 @@ class EmptySearchResult extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           Text(
-            'Ничего не найдено.',
+            Constants.textNotFound,
             style: TextStyle(
               fontSize: 18,
               color: myLightSecondaryTwo.withOpacity(0.56),
@@ -32,7 +33,7 @@ class EmptySearchResult extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Попробуйте изменить параметры\nпоиска',
+            Constants.textTryChangeOptions,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,

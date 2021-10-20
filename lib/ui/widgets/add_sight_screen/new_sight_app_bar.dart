@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 class NewSightAppBar extends StatelessWidget implements PreferredSizeWidget {
   const NewSightAppBar({
@@ -15,14 +16,14 @@ class NewSightAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      title: const Text('Новое место'),
+      title: const Text(Constants.textNewPlace),
       leadingWidth: 100,
       leading: TextButton(
         onPressed: () {
           Navigator.pop(context);
         },
         child: const Text(
-          'Отмена',
+          Constants.textCancel,
           style: TextStyle(
             color: myLightSecondaryTwo,
             fontWeight: FontWeight.w500,
