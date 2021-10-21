@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:places/data/repository/mapper/place_mapper.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:places/domain/place.dart';
+import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 class SearchInteractor {
   final SearchRepository _searchRepository;
+  RangeValues distanceRangeValue = Constants.defaultDistanceRange;
 
   SearchInteractor(this._searchRepository);
 

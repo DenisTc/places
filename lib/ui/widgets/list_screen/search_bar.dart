@@ -117,7 +117,7 @@ class _SearchBarState extends State<SearchBar> {
     filteredList = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => FiltersScreen(filters: filters),
+        builder: (context) => const FiltersScreen(),
       ),
     );
   }
