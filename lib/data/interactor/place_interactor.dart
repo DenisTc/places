@@ -6,7 +6,12 @@ class PlaceInteractor {
 
   PlaceInteractor(this._placeRepository);
 
-  Future<List<Place>> getPlaces([int? radius, String? category]) async {
+  // Methods for working with a remote repository
+
+  Future<List<Place>> getPlaces([
+    int? radius,
+    String? category,
+  ]) async {
     return _placeRepository.getPlaces();
   }
 
@@ -23,10 +28,14 @@ class PlaceInteractor {
     }
   }
 
-  //Favorite places methods
+  // Methods for working with favorites places
 
   Future<List<Place>> getFavoritesPlaces() async {
     return _placeRepository.getFavoritesPlaces();
+  }
+
+  Stream<bool> isFavoritePlace(Place place) async* {
+    yield _placeRepository.isFavoritePlace(place);
   }
 
   Future<void> addToFavorites(Place place) async {
@@ -37,20 +46,7 @@ class PlaceInteractor {
     await _placeRepository.removeFromFavorites(place);
   }
 
-  Future<bool> isFavoritePlace(Place place) async {
-    return _placeRepository.isFavoritePlace(place);
-  }
-
-  //Visited places methods
-
-  Future<bool> removeFromVisit(Place place) async {
-    try {
-      await _placeRepository.removeFromVisit(place);
-      return true;
-    } on Exception catch (_) {
-      return false;
-    }
-  }
+  // Methods for working with visited places
 
   Future<List<Place>> getVisitPlaces() async {
     return _placeRepository.getVisitPlaces();
@@ -60,6 +56,15 @@ class PlaceInteractor {
     try {
       //TODO: It is necessary to implement a method for adding a place to the list of visited places.
       //await _placeRepository.addToVisitingPlaces(place);
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> removeFromVisit(Place place) async {
+    try {
+      await _placeRepository.removeFromVisit(place);
       return true;
     } on Exception catch (_) {
       return false;

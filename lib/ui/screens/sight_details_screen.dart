@@ -259,7 +259,7 @@ class _FunctionButtons extends StatefulWidget {
 
 class _FunctionButtonsState extends State<_FunctionButtons> {
   final StreamController<bool> _favoriteIconController =
-      StreamController<bool>.broadcast();
+      StreamController<bool>();
 
   @override
   void initState() {
@@ -331,7 +331,9 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
                           color: Theme.of(context).iconTheme.color,
                         ),
                         label: Text(
-                          Constants.textInFavorite,
+                          snapshot.data!
+                              ? Constants.textInFavorite
+                              : Constants.textToFavorite,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                       );
@@ -348,12 +350,8 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
     );
   }
 
-  void _refreshFavoriteIcon(Place place) =>
-      _favoriteIconController.sink.addStream(
-        Stream.fromFuture(
-          placeInteractor.isFavoritePlace(place),
-        ),
-      );
+  void _refreshFavoriteIcon(Place place) => _favoriteIconController.sink
+      .addStream(placeInteractor.isFavoritePlace(place));
 }
 
 class _CreateRouteButton extends StatelessWidget {

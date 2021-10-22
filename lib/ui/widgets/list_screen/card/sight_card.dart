@@ -100,12 +100,8 @@ class _SightCardState extends State<SightCard> {
     );
   }
 
-  void _refreshFavoriteIcon(Place place) =>
-      _favoriteIconController.sink.addStream(
-        Stream.fromFuture(
-          placeInteractor.isFavoritePlace(place),
-        ),
-      );
+  void _refreshFavoriteIcon(Place place) => _favoriteIconController.sink
+      .addStream(placeInteractor.isFavoritePlace(place));
 
   void _showSight(int id) async {
     final place = await placeInteractor.getPlaceDetails(id: id);

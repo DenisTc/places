@@ -87,21 +87,20 @@ class PlaceRepository {
     return favoritePlaces;
   }
 
+  Future<List<Place>> getVisitPlaces() async {
+    return visitPlaces;
+  }
+
+  bool isFavoritePlace(Place place) {
+    return favoritePlaces.contains(place);
+  }
+
   Future<void> addToFavorites(Place place) async {
     favoritePlaces.add(place);
   }
 
   Future<void> removeFromFavorites(Place place) async {
-    favoritePlaces.removeWhere((item) => item.id == place.id);
-  }
-
-  Future<bool> isFavoritePlace(Place place) async {
-    return favoritePlaces.where((element) => element.id == place.id).isNotEmpty;
-  }
-
-  Future<List<Place>> getVisitPlaces() async {
-    final response = getPlaces();
-    return response;
+    favoritePlaces.remove(place);
   }
 
   Future<void> removeFromVisit(Place place) async {

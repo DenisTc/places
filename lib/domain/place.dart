@@ -1,4 +1,6 @@
-class Place {
+import 'package:equatable/equatable.dart';
+
+class Place extends Equatable {
   final int id;
   final double? lat;
   final double? lng;
@@ -7,7 +9,10 @@ class Place {
   final String placeType;
   final String description;
 
-  Place({
+  @override
+  List<Object?> get props => [id, lat, lng, name, urls, placeType, description];
+
+  const Place({
     required this.id,
     required this.lat,
     required this.lng,
