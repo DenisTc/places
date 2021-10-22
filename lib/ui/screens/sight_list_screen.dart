@@ -96,9 +96,8 @@ class SightListScreenState extends State<SightListScreen> {
     );
   }
 
-  void _uploadListPlaces() => _listPlacesController.sink.addStream(
-        Stream.fromFuture(
-          placeInteractor.getPlaces(),
-        ),
-      );
+void _uploadListPlaces() async {
+  final _places = await placeInteractor.getPlaces();
+  _listPlacesController.sink.add(_places);
+}
 }

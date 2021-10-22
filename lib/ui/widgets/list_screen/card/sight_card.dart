@@ -18,7 +18,7 @@ class SightCard extends StatefulWidget {
 
 class _SightCardState extends State<SightCard> {
   final StreamController<bool> _favoriteIconController =
-      StreamController<bool>.broadcast();
+      StreamController<bool>();
 
   @override
   void initState() {
