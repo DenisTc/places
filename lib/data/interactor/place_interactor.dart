@@ -1,10 +1,23 @@
+import 'dart:async';
+
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/place.dart';
 
 class PlaceInteractor {
   final PlaceRepository _placeRepository;
+  final StreamController<List<Place>> _listPlacesController =
+      StreamController<List<Place>>.broadcast();
+
+  Stream<List<Place>> get getStreamPlaces {
+    _placeRepository.getPlaces().then(_listPlacesController.add);
+    return _listPlacesController.stream;
+  }
 
   PlaceInteractor(this._placeRepository);
+
+  void dispose() {
+    _listPlacesController.close();
+  }
 
   // Methods for working with a remote repository
 

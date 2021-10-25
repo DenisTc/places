@@ -20,19 +20,17 @@ class SightListScreen extends StatefulWidget {
 }
 
 class SightListScreenState extends State<SightListScreen> {
-  final StreamController<List<Place>> _listPlacesController =
-      StreamController<List<Place>>();
+  late Stream<List<Place>> places;
 
   @override
   void initState() {
     super.initState();
-    _uploadListPlaces();
+    placeInteractor.getStreamPlaces;
   }
 
   @override
   void dispose() {
     super.dispose();
-    _listPlacesController.close();
   }
 
   @override
@@ -40,7 +38,7 @@ class SightListScreenState extends State<SightListScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
       body: StreamBuilder<List<Place>>(
-        stream: _listPlacesController.stream,
+        stream: placeInteractor.getStreamPlaces,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -95,9 +93,4 @@ class SightListScreenState extends State<SightListScreen> {
       ),
     );
   }
-
-void _uploadListPlaces() async {
-  final _places = await placeInteractor.getPlaces();
-  _listPlacesController.sink.add(_places);
-}
 }

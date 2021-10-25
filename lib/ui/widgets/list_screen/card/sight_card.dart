@@ -18,7 +18,7 @@ class SightCard extends StatefulWidget {
 
 class _SightCardState extends State<SightCard> {
   final StreamController<bool> _favoriteIconController =
-      StreamController<bool>();
+      StreamController<bool>.broadcast();
 
   @override
   void initState() {
@@ -28,8 +28,8 @@ class _SightCardState extends State<SightCard> {
 
   @override
   void dispose() {
-    super.dispose();
     _favoriteIconController.close();
+    super.dispose();
   }
 
   @override
@@ -118,6 +118,7 @@ class _SightCardState extends State<SightCard> {
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
     );
+    _refreshFavoriteIcon(widget.place);
   }
 }
 
