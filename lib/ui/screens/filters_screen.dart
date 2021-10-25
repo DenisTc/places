@@ -1,9 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/domain/filters.dart';
-import 'package:places/domain/location.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -11,14 +7,13 @@ import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 
 List<String> selectFilters = [];
+
 RangeValues distanceRangeValues = Constants.defaultDistanceRange;
-const Location userPosition = Constants.userLocation;
+RangeValues currentDistanceReange = Constants.defaultDistanceRange;
 
 class FiltersScreen extends StatefulWidget {
-  final Filters filters;
   const FiltersScreen({
     Key? key,
-    required this.filters,
   }) : super(key: key);
 
   @override
@@ -28,14 +23,11 @@ class FiltersScreen extends StatefulWidget {
 class _FiltersScreenState extends State<FiltersScreen> {
   List<Place> filteredPlaces = [];
   int countPlaces = 0;
-
   Map<String, bool> filters = {};
 
   @override
   Widget build(BuildContext context) {
-    filters = widget.filters.categories;
-    distanceRangeValues = widget.filters.distanceRangeValues;
-    setState(() {});
+    distanceRangeValues = searchInteractor.distanceRangeValue;
 
     return Scaffold(
       appBar: AppBar(
@@ -47,7 +39,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             onPressed: () {
               setState(() {
                 filters.updateAll((key, value) => value = false);
-                widget.filters.distanceRangeValues =
+                searchInteractor.distanceRangeValue =
                     Constants.defaultDistanceRange;
                 selectFilters.clear();
               });
@@ -108,20 +100,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
     );
   }
 
-  bool calculateDistance(Place place) {
-    double ky = 40000 / 360;
-    double kx = cos(pi * userPosition.lat / 180.0) * ky;
-    double dx = (userPosition.lng - place.lng!).abs() * kx;
-    double dy = (userPosition.lat - place.lat!).abs() * ky;
-    double distance = sqrt(dx * dx + dy * dy) * 1000;
-
-    return (distanceRangeValues.start <= distance) &&
-        (distance <= distanceRangeValues.end);
-  }
-
   void updateRangeVal(RangeValues newRangeValues) {
     setState(() {
-      widget.filters.distanceRangeValues = newRangeValues;
+      searchInteractor.distanceRangeValue = newRangeValues;
     });
   }
 }
@@ -219,8 +200,8 @@ class __ShowButtonState extends State<_ShowButton> {
   Widget build(BuildContext context) {
     var countPlaces = 0;
     final listPlaces = searchInteractor.searchPlaces(
-      lat: userPosition.lat,
-      lng: userPosition.lng,
+      lat: Constants.userLocation.lat,
+      lng: Constants.userLocation.lng,
       distance: distanceRangeValues,
       typeFilter: selectFilters,
     );

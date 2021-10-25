@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -19,20 +20,25 @@ class SightListScreen extends StatefulWidget {
 }
 
 class SightListScreenState extends State<SightListScreen> {
-  late Future<List<Place>> sightList;
+  late Stream<List<Place>> places;
 
   @override
   void initState() {
     super.initState();
-    sightList = placeInteractor.getPlaces();
+    placeInteractor.getStreamPlaces;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
-      body: FutureBuilder<List<Place>>(
-        future: sightList,
+      body: StreamBuilder<List<Place>>(
+        stream: placeInteractor.getStreamPlaces,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
