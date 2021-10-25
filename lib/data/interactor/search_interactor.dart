@@ -23,14 +23,6 @@ class SearchInteractor {
       typeFilter: typeFilter,
     );
 
-    // final _filredPlaces = <Place>[];
-
-    // for (final place in placesList) {
-    //   if (place.distance! >= distance.start) {
-    //     _filredPlaces.add(PlaceMapper.toModel(place));
-    //   }
-    // }
-
     return placesList;
   }
 
