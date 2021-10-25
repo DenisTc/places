@@ -19,19 +19,19 @@ class SearchInteractor {
     final placesList = await _searchRepository.searchPlaces(
       lat: lat,
       lng: lng,
-      radius: distance.end,
+      distance: distance,
       typeFilter: typeFilter,
     );
 
-    final _filredPlaces = <Place>[];
+    // final _filredPlaces = <Place>[];
 
-    for (final place in placesList) {
-      if (place.distance! >= distance.start) {
-        _filredPlaces.add(PlaceMapper.toModel(place));
-      }
-    }
+    // for (final place in placesList) {
+    //   if (place.distance! >= distance.start) {
+    //     _filredPlaces.add(PlaceMapper.toModel(place));
+    //   }
+    // }
 
-    return _filredPlaces;
+    return placesList;
   }
 
   Future<List<Place>> searchPlacesByName({
