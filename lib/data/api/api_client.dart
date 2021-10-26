@@ -9,6 +9,6 @@ class ApiClient {
     sendTimeout: 5000,
     responseType: ResponseType.json,
   );
-
+  
   Dio get client => Dio(_baseOptions);
 }

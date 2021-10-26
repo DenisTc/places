@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:places/data/api/api_client.dart';
 import 'package:places/data/api/api_constants.dart';
+import 'package:places/data/exceptions/network_exception.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/data/repository/mapper/place_mapper.dart';
 import 'package:places/domain/place.dart';
@@ -13,21 +15,24 @@ class PlaceRepository {
   PlaceRepository(this.api);
 
   Future<List<Place>> getPlaces() async {
-    final response =
-        await ApiClient().client.get<List<dynamic>>(ApiConstants.placeUrl);
+    try {
+      final response = await api.get<List<dynamic>>(ApiConstants.placeUrl);
 
-    if (response.statusCode == 200) {
-      return response.data!
-          .map(
-            (dynamic place) => PlaceMapper.toModel(
-              PlaceDto.fromJson(place as Map<String, dynamic>),
-            ),
-          )
-          .toList();
+      if (response.statusCode == 200) {
+        return response.data!
+            .map(
+              (dynamic place) => PlaceMapper.toModel(
+                PlaceDto.fromJson(place as Map<String, dynamic>),
+              ),
+            )
+            .toList();
+      }
+    } on DioError catch (e) {
+      throw NetworkException.fromDioError(e);
     }
 
     throw Exception(
-      'HTTP request error. Error code ${response.statusCode}',
+      'HTTP request error. Error code ',
     );
   }
 
