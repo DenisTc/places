@@ -11,6 +11,7 @@ class NetworkException implements Exception {
       case DioErrorType.connectTimeout:
         message = 'Connection timeout with API server';
         break;
+
       case DioErrorType.other:
         message = 'Connection to API server failed due to internet connection';
         break;
@@ -19,7 +20,7 @@ class NetworkException implements Exception {
         break;
       case DioErrorType.response:
         message =
-            'В запросе ${dioError.response!.requestOptions.uri} возникла ошибка: ${dioError.response!.statusCode} ${dioError.response!.statusMessage}';
+            "В запросе '${dioError.response!.requestOptions.uri}' возникла ошибка: ${dioError.response!.statusCode} ${dioError.response!.statusMessage}";
         break;
       case DioErrorType.sendTimeout:
         message = 'Send timeout in connection with API server';

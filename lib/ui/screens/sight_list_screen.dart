@@ -23,17 +23,6 @@ class SightListScreenState extends State<SightListScreen> {
   late Stream<List<Place>> places;
 
   @override
-  void initState() {
-    super.initState();
-    placeInteractor.getStreamPlaces;
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
