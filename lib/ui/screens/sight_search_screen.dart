@@ -6,6 +6,7 @@ import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/list_screen/sight_app_bar.dart';
+import 'package:places/ui/widgets/network_exception.dart';
 import 'package:places/ui/widgets/search_screen/empty_search_result.dart';
 import 'package:places/ui/widgets/search_screen/search_bar.dart';
 import 'package:places/ui/widgets/search_screen/search_result_list.dart';
@@ -30,7 +31,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
   @override
   Widget build(BuildContext context) {
     if (widget.filterList != null) {
-      _filteredSights = searchInteractor.getFiltredStream(
+      _filteredSights = searchInteractor.getFiltredPlacesStream(
         lat: (widget.filterList!['lat'] as num).toDouble(),
         lng: (widget.filterList!['lng'] as num).toDouble(),
         distance: widget.filterList!['distance'] as RangeValues,
@@ -38,7 +39,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
         nameFilter: _controllerSearch.text,
       );
     }else{
-      _filteredSights = searchInteractor.getFiltredStream(nameFilter: _controllerSearch.text);
+      _filteredSights = searchInteractor.getFiltredPlacesStream(nameFilter: _controllerSearch.text);
     }
 
     return Scaffold(
@@ -120,33 +121,8 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                 }
 
                 /// snapshot.hasError
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        iconErrorRound,
-                        height: 64,
-                        width: 64,
-                        color: myLightSecondaryTwo.withOpacity(0.56),
-                      ),
-                      const SizedBox(height: 24),
-                      const Text(
-                        Constants.textError,
-                        style: TextStyle(
-                          color: myLightSecondaryTwo,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        Constants.textTryLater,
-                        style: TextStyle(
-                          color: myLightSecondaryTwo,
-                        ),
-                      ),
-                    ],
-                  ),
+                return const Center(
+                  child: NetworkException(),
                 );
               },
             ),
