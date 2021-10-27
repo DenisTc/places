@@ -18,12 +18,14 @@ class SearchRepository {
     double? lng,
     RangeValues? distance,
     List<String>? typeFilter,
+    String? nameFilter,
   }) async {
     final data = {
       'lat': lat,
       'lng': lng,
       'radius': distance?.end,
       'typeFilter': typeFilter,
+      'nameFilter': nameFilter,
     };
 
     final response = await ApiClient().client.post<String>(
@@ -31,50 +33,22 @@ class SearchRepository {
           data: data,
         );
 
-    if (response.statusCode == 200) {
-      var placeDtoList =
-          (jsonDecode(response.toString()) as List<dynamic>)
-              .map((dynamic place) =>
-                  PlaceDto.fromJson(place as Map<String, dynamic>))
-              .toList();
+    var placeDtoList = (jsonDecode(response.toString()) as List<dynamic>)
+        .map(
+          (dynamic place) => PlaceDto.fromJson(place as Map<String, dynamic>),
+        )
+        .toList();
 
-      if (distance != null) {
-        placeDtoList = placeDtoList
-            .where((place) => place.distance! >= distance.start)
-            .toList();
-      }
-
-      final placesList = placeDtoList
-          .map((dynamic place) => PlaceMapper.toModel(place as PlaceDto))
+    if (distance != null) {
+      placeDtoList = placeDtoList
+          .where((place) => place.distance! >= distance.start)
           .toList();
-
-      return placesList;
     }
 
-    throw Exception(
-      'HTTP request error. Error code ${response.statusCode}',
-    );
-  }
+    final placesList = placeDtoList
+        .map((dynamic place) => PlaceMapper.toModel(place as PlaceDto))
+        .toList();
 
-  Future<List<Place>> searchPlacesByName({String? name}) async {
-    final data = {'nameFilter': name};
-
-    final response = await ApiClient()
-        .client
-        .post<String>(ApiConstants.filteredPlacesUrl, data: data);
-    if (response.statusCode == 200) {
-      final placesList = (jsonDecode(response.toString()) as List<dynamic>)
-          .map(
-            (dynamic place) => PlaceMapper.toModel(
-              PlaceDto.fromJson(place as Map<String, dynamic>),
-            ),
-          )
-          .toList();
-      return placesList;
-    }
-
-    throw Exception(
-      'HTTP request error. Error code ${response.statusCode}',
-    );
+    return placesList;
   }
 }

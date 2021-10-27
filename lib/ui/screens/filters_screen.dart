@@ -199,22 +199,30 @@ class __ShowButtonState extends State<_ShowButton> {
   @override
   Widget build(BuildContext context) {
     var countPlaces = 0;
-    final listPlaces = searchInteractor.searchPlaces(
+    final listPlaces = searchInteractor.getFiltredStream(
       lat: Constants.userLocation.lat,
       lng: Constants.userLocation.lng,
       distance: distanceRangeValues,
       typeFilter: selectFilters,
     );
-    
-    return FutureBuilder<List<Place>>(
-      future: listPlaces,
+
+    return StreamBuilder<List<Place>>(
+      stream: listPlaces,
       builder: (context, snapshot) {
         if (snapshot.hasData && !snapshot.hasError) {
           countPlaces = snapshot.data!.length;
           return ElevatedButton(
             onPressed: () {
               if (countPlaces != 0) {
-                Navigator.pop(context, listPlaces);
+                Navigator.pop(
+                  context,
+                  {
+                    'lat': Constants.userLocation.lat,
+                    'lng': Constants.userLocation.lng,
+                    'distance': distanceRangeValues,
+                    'typeFilter': selectFilters,
+                  },
+                );
               }
             },
             style: ElevatedButton.styleFrom(

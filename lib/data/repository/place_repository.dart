@@ -25,54 +25,29 @@ class PlaceRepository {
 
   Future<Place> addNewPlace(Place place) async {
     final data = place;
-
-    final response =
-        await api.post<Map<String, dynamic>>(ApiConstants.placeUrl, data: data);
-
-    if (response.statusCode == 200) {
-      return PlaceMapper.toModel(PlaceDto.fromJson(response.data!));
-    }
-
-    throw Exception(
-      'HTTP request error. Error code ${response.statusCode}',
+    final response = await api.post<Map<String, dynamic>>(
+      ApiConstants.placeUrl,
+      data: data,
     );
+
+    return PlaceMapper.toModel(PlaceDto.fromJson(response.data!));
   }
 
   Future<Place> getPlaceDetails({required int id}) async {
     final response =
         await api.get<Map<String, dynamic>>('${ApiConstants.placeUrl}/$id');
 
-    if (response.statusCode == 200) {
-      return PlaceMapper.toModel(PlaceDto.fromJson(response.data!));
-    }
-
-    throw Exception(
-      'HTTP request error. Error code ${response.statusCode}',
-    );
+    return PlaceMapper.toModel(PlaceDto.fromJson(response.data!));
   }
 
   Future<Place?> deletePlace(int id) async {
     final response = await api.delete<Place>('${ApiConstants.placeUrl}/$id');
-
-    if (response.statusCode == 200) {
-      return response.data;
-    }
-
-    throw Exception(
-      'HTTP request error. Error code ${response.statusCode}',
-    );
+    return response.data;
   }
 
   Future<Place?> putPlace(int id) async {
     final response = await api.put<Place>('${ApiConstants.placeUrl}/$id');
-
-    if (response.statusCode == 200) {
-      return response.data;
-    }
-
-    throw Exception(
-      'HTTP request error. Error code ${response.statusCode}',
-    );
+    return response.data;
   }
 
   Future<List<Place>> getFavoritesPlaces() async {

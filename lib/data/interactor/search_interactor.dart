@@ -1,37 +1,61 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:places/data/repository/mapper/place_mapper.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 class SearchInteractor {
   final SearchRepository _searchRepository;
+  final StreamController<List<Place>> _listFiltredController =
+      StreamController<List<Place>>.broadcast();
   RangeValues distanceRangeValue = Constants.defaultDistanceRange;
 
   SearchInteractor(this._searchRepository);
 
-  Future<List<Place>> searchPlaces({
-    required double lat,
-    required double lng,
-    required RangeValues distance,
+  Stream<List<Place>> getFiltredStream({
+    double? lat,
+    double? lng,
+    RangeValues? distance,
     List<String>? typeFilter,
+    String? nameFilter,
+  }) {
+    _searchRepository
+        .searchPlaces(
+          lat: lat,
+          lng: lng,
+          distance: distance,
+          typeFilter: typeFilter,
+          nameFilter: nameFilter,
+        )
+        .then(_listFiltredController.add);
+    return _listFiltredController.stream;
+  }
+
+  void addErrorToFiltredController(Object error) {
+    _listFiltredController.addError(error);
+  }
+
+  void dispose() {
+    _listFiltredController.close();
+  }
+
+  Future<List<Place>> searchPlaces({
+    double? lat,
+    double? lng,
+    RangeValues? distance,
+    List<String>? typeFilter,
+    String? nameFilter,
   }) async {
     final placesList = await _searchRepository.searchPlaces(
       lat: lat,
       lng: lng,
       distance: distance,
       typeFilter: typeFilter,
+      nameFilter: nameFilter,
     );
 
     return placesList;
-  }
-
-  Future<List<Place>> searchPlacesByName({
-    String name = '',
-  }) async {
-    return _searchRepository.searchPlacesByName(
-      name: name,
-    );
   }
 
   Future<List<String>> getCategories() async {

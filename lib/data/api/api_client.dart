@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/exceptions/network_exception.dart';
+import 'package:places/main.dart';
+
 
 class ApiClient {
   final _baseOptions = BaseOptions(
@@ -30,6 +32,12 @@ class ApiClient {
           },
           onError: (error, errorInterceptorHandler) {
             debugPrint(NetworkException.fromDioError(error).toString());
+            if(error.requestOptions.path == ApiConstants.placeUrl){
+              placeInteractor.addErrorToPlacesController(error);
+            }else{
+              searchInteractor.addErrorToFiltredController(error);
+            }
+            
           },
         ),
       );

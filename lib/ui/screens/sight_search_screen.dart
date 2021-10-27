@@ -13,10 +13,10 @@ import 'package:places/ui/widgets/search_screen/search_result_list.dart';
 List<String> historyList = [];
 
 class SightSearchScreen extends StatefulWidget {
-  final Future<List<Place>>? filteredList;
+  final Map<String, dynamic>? filterList;
   const SightSearchScreen({
     Key? key,
-    required this.filteredList,
+    required this.filterList,
   }) : super(key: key);
 
   @override
@@ -25,12 +25,22 @@ class SightSearchScreen extends StatefulWidget {
 
 class _SightSearchScreenState extends State<SightSearchScreen> {
   final _controllerSearch = TextEditingController();
-  late Future<List<Place>>? _filteredSights;
+  late Stream<List<Place>>? _filteredSights;
 
   @override
   Widget build(BuildContext context) {
-    _filteredSights = widget.filteredList ??
-        searchInteractor.searchPlacesByName(name: _controllerSearch.text);
+    if (widget.filterList != null) {
+      _filteredSights = searchInteractor.getFiltredStream(
+        lat: (widget.filterList!['lat'] as num).toDouble(),
+        lng: (widget.filterList!['lng'] as num).toDouble(),
+        distance: widget.filterList!['distance'] as RangeValues,
+        typeFilter: widget.filterList!['typeFilter'] as List<String>,
+        nameFilter: _controllerSearch.text,
+      );
+    }else{
+      _filteredSights = searchInteractor.getFiltredStream(nameFilter: _controllerSearch.text);
+    }
+
     return Scaffold(
       appBar: const SightAppBar(),
       backgroundColor: Theme.of(context).accentColor,
@@ -44,13 +54,15 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
           ),
           const SizedBox(height: 38),
           Expanded(
-            child: FutureBuilder<List<Place>>(
-              future: _filteredSights,
+            child: StreamBuilder<List<Place>>(
+              stream: _filteredSights,
               builder: (context, snapshot) {
+                /// Wating request
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
+                /// Display history search
                 if (historyList.isNotEmpty && _controllerSearch.text == '') {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,19 +103,51 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                   return const SizedBox.shrink();
                 }
 
+                /// Display search result
                 if (snapshot.hasData &&
                     !snapshot.hasError &&
                     snapshot.data!.isNotEmpty) {
                   _updateHistoryList(snapshot.data!);
                   final searchRes =
                       filteredByName(_controllerSearch.text, snapshot.data!);
+
+                  if (searchRes.isEmpty) return const EmptySearchResult();
+
                   return SearchResultList(
                     filteredSights: searchRes,
                     searchString: _controllerSearch.text,
                   );
-                } else {
-                  return const EmptySearchResult();
                 }
+
+                /// snapshot.hasError
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        iconErrorRound,
+                        height: 64,
+                        width: 64,
+                        color: myLightSecondaryTwo.withOpacity(0.56),
+                      ),
+                      const SizedBox(height: 24),
+                      const Text(
+                        Constants.textError,
+                        style: TextStyle(
+                          color: myLightSecondaryTwo,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        Constants.textTryLater,
+                        style: TextStyle(
+                          color: myLightSecondaryTwo,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               },
             ),
           ),

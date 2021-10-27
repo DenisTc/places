@@ -21,7 +21,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  Future<List<Place>>? filteredList;
+  Map<String, dynamic>? filterList;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class _SearchBarState extends State<SearchBar> {
             context,
             MaterialPageRoute(
               builder: (context) => SightSearchScreen(
-                filteredList: filteredList,
+                filterList: filterList,
               ),
             ),
           );
@@ -114,7 +114,7 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   void _navigateGetDataFromFilters(BuildContext context) async {
-    filteredList = await Navigator.push(
+    filterList = await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const FiltersScreen(),
