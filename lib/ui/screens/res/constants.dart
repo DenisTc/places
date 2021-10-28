@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/location.dart';
 
 const Location userLocation = Location(56.8490809, 53.247786);
-const RangeValues defaultDistanceRange = RangeValues(0, 10000);
+const RangeValues defaultDistanceRange = RangeValues(0, 10000.0);
 const String textToFavorite = 'В избранное';
 const String textInFavorite = 'В избранном';
 const String textFavorite = 'Избранное';

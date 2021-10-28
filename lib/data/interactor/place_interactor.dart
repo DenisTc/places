@@ -15,6 +15,10 @@ class PlaceInteractor {
 
   PlaceInteractor(this._placeRepository);
 
+  void addErrorToPlacesController(Object error) {
+    _listPlacesController.addError(error);
+  }
+
   void dispose() {
     _listPlacesController.close();
   }

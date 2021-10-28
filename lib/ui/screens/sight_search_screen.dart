@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/place.dart';
+import 'package:places/domain/settings_filter.dart';
 import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/list_screen/sight_app_bar.dart';
+import 'package:places/ui/widgets/network_exception.dart';
 import 'package:places/ui/widgets/search_screen/empty_search_result.dart';
 import 'package:places/ui/widgets/search_screen/search_bar.dart';
 import 'package:places/ui/widgets/search_screen/search_result_list.dart';
@@ -13,10 +15,10 @@ import 'package:places/ui/widgets/search_screen/search_result_list.dart';
 List<String> historyList = [];
 
 class SightSearchScreen extends StatefulWidget {
-  final Future<List<Place>>? filteredList;
+  final SettingsFilter? settingsFilter;
   const SightSearchScreen({
     Key? key,
-    required this.filteredList,
+    required this.settingsFilter,
   }) : super(key: key);
 
   @override
@@ -25,12 +27,10 @@ class SightSearchScreen extends StatefulWidget {
 
 class _SightSearchScreenState extends State<SightSearchScreen> {
   final _controllerSearch = TextEditingController();
-  late Future<List<Place>>? _filteredSights;
+  late Stream<List<Place>>? _filteredPlaces;
 
   @override
   Widget build(BuildContext context) {
-    _filteredSights = widget.filteredList ??
-        searchInteractor.searchPlacesByName(name: _controllerSearch.text);
     return Scaffold(
       appBar: const SightAppBar(),
       backgroundColor: Theme.of(context).accentColor,
@@ -44,13 +44,8 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
           ),
           const SizedBox(height: 38),
           Expanded(
-            child: FutureBuilder<List<Place>>(
-              future: _filteredSights,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-
+            child: Builder(
+              builder: (context) {
                 if (historyList.isNotEmpty && _controllerSearch.text == '') {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,19 +86,39 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                   return const SizedBox.shrink();
                 }
 
-                if (snapshot.hasData &&
-                    !snapshot.hasError &&
-                    snapshot.data!.isNotEmpty) {
-                  _updateHistoryList(snapshot.data!);
-                  final searchRes =
-                      filteredByName(_controllerSearch.text, snapshot.data!);
-                  return SearchResultList(
-                    filteredSights: searchRes,
-                    searchString: _controllerSearch.text,
-                  );
-                } else {
-                  return const EmptySearchResult();
-                }
+                _filteredPlaces =
+                    searchInteractor.getFiltredPlacesStream(widget.settingsFilter ?? SettingsFilter());
+
+                return StreamBuilder<List<Place>>(
+                  stream: _filteredPlaces,
+                  builder: (context, snapshot) {
+                    /// Wating request
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    /// Display search result
+                    if (snapshot.hasData &&
+                        !snapshot.hasError &&
+                        snapshot.data!.isNotEmpty) {
+                      _updateHistoryList(snapshot.data!);
+                      final searchRes = filteredByName(
+                          _controllerSearch.text, snapshot.data!);
+
+                      if (searchRes.isEmpty) return const EmptySearchResult();
+
+                      return SearchResultList(
+                        filteredSights: searchRes,
+                        searchString: _controllerSearch.text,
+                      );
+                    }
+
+                    /// snapshot.hasError
+                    return const Center(
+                      child: NetworkException(),
+                    );
+                  },
+                );
               },
             ),
           ),

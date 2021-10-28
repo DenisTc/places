@@ -18,12 +18,12 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    super.initState();
     _tabController = TabController(
       length: 4,
       vsync: this,
       initialIndex: selectedTab,
     );
+    super.initState();
   }
 
   @override
