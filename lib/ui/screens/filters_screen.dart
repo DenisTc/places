@@ -29,6 +29,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
   @override
   Widget build(BuildContext context) {
     distanceRangeValues = searchInteractor.distanceRangeValue;
+    final categoriesList = searchInteractor.getCategoriesStream();
 
     return Scaffold(
       appBar: AppBar(
@@ -62,39 +63,53 @@ class _FiltersScreenState extends State<FiltersScreen> {
             left: 16,
             right: 16,
           ),
-          child: Column(
-            children: [
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  Text(
-                    Constants.textCategories,
-                    style: TextStyle(
-                      color: myLightSecondaryTwo.withOpacity(0.56),
+          child: StreamBuilder<List<String>>(
+            stream: categoriesList,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasData && !snapshot.hasError) {
+                return Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Text(
+                          Constants.textCategories,
+                          style: TextStyle(
+                            color: myLightSecondaryTwo.withOpacity(0.56),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              _FiltersCategory(
-                notifyParent: () {
-                  setState(() {});
-                },
-                filters: filters,
-              ),
-              const SizedBox(height: 20),
-              _Distance(
-                distanceRangeValues: distanceRangeValues,
-                updateRangeVal: (distanceRangeValues) {
-                  updateRangeVal(distanceRangeValues);
-                },
-              ),
-              const SizedBox(height: 50),
-              _ShowButton(
-                countPlaces: countPlaces,
-                filteredPlaces: filteredPlaces,
-              ),
-            ],
+                    const SizedBox(height: 20),
+                    _FiltersCategory(
+                      notifyParent: () {
+                        setState(() {});
+                      },
+                      filters: filters,
+                      categories: snapshot.data,
+                    ),
+                    const SizedBox(height: 20),
+                    _Distance(
+                      distanceRangeValues: distanceRangeValues,
+                      updateRangeVal: (distanceRangeValues) {
+                        updateRangeVal(distanceRangeValues);
+                      },
+                    ),
+                    const SizedBox(height: 50),
+                    _ShowButton(
+                      countPlaces: countPlaces,
+                      filteredPlaces: filteredPlaces,
+                    ),
+                  ],
+                );
+              }
+
+              return const NetworkException();
+            },
           ),
         ),
       ),
@@ -286,11 +301,13 @@ class __ShowButtonState extends State<_ShowButton> {
 class _FiltersCategory extends StatefulWidget {
   final Function() notifyParent;
   final Map<String, bool> filters;
+  final List<String>? categories;
 
   const _FiltersCategory({
     Key? key,
     required this.notifyParent,
     required this.filters,
+    required this.categories,
   }) : super(key: key);
 
   @override
@@ -303,68 +320,53 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
   @override
   Widget build(BuildContext context) {
     final displayHeight = MediaQuery.of(context).size.height;
-    return Column(
-      children: [
-        StreamBuilder<List<String>>(
-          stream: searchInteractor.getCategoriesStream(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
 
-            if (snapshot.hasData && !snapshot.hasError) {
-              if (displayHeight > 580) {
-                return GridView.builder(
-                  shrinkWrap: true,
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: MediaQuery.of(context).size.width / 3,
-                    mainAxisSpacing: 30,
-                  ),
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    return _CategoryCircle(
-                      title: snapshot.data![index],
-                      icon: SvgPicture.asset(
-                        iconParticularPlace,
-                        height: 40,
-                        width: 40,
-                        color: Theme.of(context).buttonColor,
-                      ),
-                      notifyParent: widget.notifyParent,
-                      filters: widget.filters,
-                    );
-                  },
-                );
-              } else {
-                return SizedBox(
-                  height: 100,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: snapshot.data!.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return _CategoryCircle(
-                        title: snapshot.data![index],
-                        icon: SvgPicture.asset(
-                          iconParticularPlace,
-                          height: 40,
-                          width: 40,
-                          color: Theme.of(context).buttonColor,
-                        ),
-                        notifyParent: widget.notifyParent,
-                        filters: widget.filters,
-                      );
-                    },
-                  ),
-                );
-              }
-            }
-
-            return const NetworkException();
+    if (displayHeight > 580) {
+      if (widget.categories != null)
+        return GridView.builder(
+          shrinkWrap: true,
+          gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: MediaQuery.of(context).size.width / 3,
+            mainAxisSpacing: 30,
+          ),
+          itemCount: widget.categories!.length,
+          itemBuilder: (context, index) {
+            return _CategoryCircle(
+              title: widget.categories![index],
+              icon: SvgPicture.asset(
+                iconParticularPlace,
+                height: 40,
+                width: 40,
+                color: Theme.of(context).buttonColor,
+              ),
+              notifyParent: widget.notifyParent,
+              filters: widget.filters,
+            );
           },
-        ),
-      ],
+        );
+    }
+    
+    return SizedBox(
+      height: 100,
+      width: MediaQuery.of(context).size.width,
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: widget.categories!.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return _CategoryCircle(
+            title: widget.categories![index],
+            icon: SvgPicture.asset(
+              iconParticularPlace,
+              height: 40,
+              width: 40,
+              color: Theme.of(context).buttonColor,
+            ),
+            notifyParent: widget.notifyParent,
+            filters: widget.filters,
+          );
+        },
+      ),
     );
   }
 }
