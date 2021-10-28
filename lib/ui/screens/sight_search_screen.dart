@@ -86,8 +86,9 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                   return const SizedBox.shrink();
                 }
 
-                _filteredPlaces =
-                    searchInteractor.getFiltredPlacesStream(widget.settingsFilter ?? SettingsFilter());
+                _filteredPlaces = searchInteractor.getFiltredPlacesStream(
+                  widget.settingsFilter ?? SettingsFilter(),
+                );
 
                 return StreamBuilder<List<Place>>(
                   stream: _filteredPlaces,
@@ -103,7 +104,9 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                         snapshot.data!.isNotEmpty) {
                       _updateHistoryList(snapshot.data!);
                       final searchRes = filteredByName(
-                          _controllerSearch.text, snapshot.data!);
+                        _controllerSearch.text,
+                        snapshot.data!,
+                      );
 
                       if (searchRes.isEmpty) return const EmptySearchResult();
 
@@ -176,7 +179,7 @@ class _HistoryListState extends State<_HistoryList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: ScrollPhysics(),
+      physics: const ScrollPhysics(),
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       itemCount: widget.historyList.length,

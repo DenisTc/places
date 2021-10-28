@@ -23,6 +23,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       vsync: this,
       initialIndex: selectedTab,
     );
+
+    _tabController.addListener(() {
+      onSelectTab(_tabController.index);
+    });
     super.initState();
   }
 
@@ -42,6 +46,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
+
     return Scaffold(
       body: TabBarView(
         controller: _tabController,
@@ -64,7 +69,6 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   }
 
   void onSelectTab(int index) {
-    if (selectedTab == index) return;
     setState(() {
       selectedTab = index;
     });

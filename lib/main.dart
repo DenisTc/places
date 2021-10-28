@@ -29,11 +29,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
-    settings.addListener(
-      () => setState(() {}),
-    );
-
+    settings.addListener(() => setState(() {}));
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    settings.dispose();
+    super.dispose();
   }
 
   @override

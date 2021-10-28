@@ -11,38 +11,36 @@ class EmptySearchResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          SvgPicture.asset(
-            iconSearch,
-            height: 70,
-            color: myLightSecondaryTwo,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        SvgPicture.asset(
+          iconSearch,
+          height: 70,
+          color: myLightSecondaryTwo,
+        ),
+        const SizedBox(height: 32),
+        Text(
+          Constants.textNotFound,
+          style: TextStyle(
+            fontSize: 18,
+            color: myLightSecondaryTwo.withOpacity(0.56),
+            fontWeight: FontWeight.w500,
           ),
-          const SizedBox(height: 32),
-          Text(
-            Constants.textNotFound,
-            style: TextStyle(
-              fontSize: 18,
-              color: myLightSecondaryTwo.withOpacity(0.56),
-              fontWeight: FontWeight.w500,
-            ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          Constants.textTryChangeOptions,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 14,
+            color: myLightSecondaryTwo.withOpacity(0.56),
+            fontWeight: FontWeight.w500,
           ),
-          const SizedBox(height: 8),
-          Text(
-            Constants.textTryChangeOptions,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              color: myLightSecondaryTwo.withOpacity(0.56),
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
