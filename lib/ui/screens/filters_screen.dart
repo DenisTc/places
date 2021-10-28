@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/place.dart';
+import 'package:places/domain/settings_filter.dart';
 import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
@@ -215,59 +216,54 @@ class __ShowButtonState extends State<_ShowButton> {
   @override
   Widget build(BuildContext context) {
     var countPlaces = 0;
-    final listPlaces = searchInteractor.getFiltredPlacesStream(
+    final settingsFilter = SettingsFilter(
       lat: Constants.userLocation.lat,
       lng: Constants.userLocation.lng,
       distance: distanceRangeValues,
       typeFilter: selectFilters,
     );
 
-    return StreamBuilder<List<Place>>(
-      stream: listPlaces,
-      builder: (context, snapshot) {
-        if (snapshot.hasData && !snapshot.hasError) {
-          countPlaces = snapshot.data!.length;
-          return ElevatedButton(
-            onPressed: () {
-              if (countPlaces != 0) {
-                Navigator.pop(
-                  context,
-                  {
-                    'lat': Constants.userLocation.lat,
-                    'lng': Constants.userLocation.lng,
-                    'distance': distanceRangeValues,
-                    'typeFilter': selectFilters,
-                  },
-                );
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              primary: countPlaces != 0
-                  ? Theme.of(context).buttonColor
-                  : Theme.of(context).primaryColor,
-              fixedSize: const Size(double.infinity, 48),
-              elevation: 0.0,
-              shadowColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '${Constants.textBtnShow} ${countPlaces.toString()}',
-                  style: TextStyle(
-                    color: countPlaces != 0
-                        ? Colors.white
-                        : myLightSecondaryTwo.withOpacity(0.56),
-                    fontWeight: FontWeight.w700,
-                  ),
+    if (settingsFilter.typeFilter!.isNotEmpty) {
+      final listPlaces =
+          searchInteractor.getFiltredPlacesStream(settingsFilter);
+      return StreamBuilder<List<Place>>(
+        stream: listPlaces,
+        builder: (context, snapshot) {
+          if (snapshot.hasData && !snapshot.hasError) {
+            countPlaces = snapshot.data!.length;
+            return ElevatedButton(
+              onPressed: () {
+                if (countPlaces != 0) {
+                  Navigator.pop(context, settingsFilter);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                primary: countPlaces != 0
+                    ? Theme.of(context).buttonColor
+                    : Theme.of(context).primaryColor,
+                fixedSize: const Size(double.infinity, 48),
+                elevation: 0.0,
+                shadowColor: Colors.transparent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-              ],
-            ),
-          );
-        } else {
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '${Constants.textBtnShow} ${countPlaces.toString()}',
+                    style: TextStyle(
+                      color: countPlaces != 0
+                          ? Colors.white
+                          : myLightSecondaryTwo.withOpacity(0.56),
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
           return ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
@@ -292,8 +288,32 @@ class __ShowButtonState extends State<_ShowButton> {
               ],
             ),
           );
-        }
-      },
+        },
+      );
+    }
+    return ElevatedButton(
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(
+        primary: Theme.of(context).primaryColor,
+        fixedSize: const Size(double.infinity, 48),
+        elevation: 0.0,
+        shadowColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            Constants.textBtnShow,
+            style: TextStyle(
+              color: myLightSecondaryTwo.withOpacity(0.56),
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -345,7 +365,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
           },
         );
     }
-    
+
     return SizedBox(
       height: 100,
       width: MediaQuery.of(context).size.width,

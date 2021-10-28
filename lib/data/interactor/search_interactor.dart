@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:places/domain/place.dart';
+import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 class SearchInteractor {
@@ -15,21 +16,11 @@ class SearchInteractor {
 
   SearchInteractor(this._searchRepository);
 
-  Stream<List<Place>> getFiltredPlacesStream({
-    double? lat,
-    double? lng,
-    RangeValues? distance,
-    List<String>? typeFilter,
-    String? nameFilter,
-  }) {
+  Stream<List<Place>> getFiltredPlacesStream(
+    SettingsFilter? settingsFilter,
+  ) {
     _searchRepository
-        .searchPlaces(
-          lat: lat,
-          lng: lng,
-          distance: distance,
-          typeFilter: typeFilter,
-          nameFilter: nameFilter,
-        )
+        .getFiltredPlaces(settingsFilter)
         .then(_listFiltredController.add);
     return _listFiltredController.stream;
   }
@@ -50,7 +41,7 @@ class SearchInteractor {
   }
 
   Future<List<String>> getCategories() async {
-    final _placesList = await _searchRepository.searchPlaces();
+    final _placesList = await _searchRepository.getCategories();
     final _categoryList = <String>[];
 
     for (final place in _placesList) {
