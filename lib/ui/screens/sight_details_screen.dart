@@ -35,7 +35,6 @@ class _SightDetailsState extends State<SightDetails> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Material(
       child: Container(
         color: Theme.of(context).accentColor,
@@ -268,12 +267,12 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
   late PlaceInteractor _favoriteIconController;
   @override
   void initState() {
-    _favoriteIconController = context.read<PlaceInteractor>();
     super.initState();
+    _favoriteIconController = context.read<PlaceInteractor>();
   }
+
   @override
   Widget build(BuildContext context) {
-    debugPrint(_favoriteIconController.isFavoritePlace(widget.place).toString());
     debugPrint('refresh ui');
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -310,38 +309,33 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
             child: Row(
               children: [
                 const SizedBox(width: 14),
-                StreamBuilder<bool>(
-                  stream: _favoriteIconController.isFavoritePlace(widget.place),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SizedBox.shrink();
-                    }
-
-                    if (snapshot.hasData && !snapshot.hasError) {
+                StreamProvider<bool>.value(
+                  value: _favoriteIconController.isFavoritePlace(widget.place),
+                  initialData: false,
+                  child: Consumer<bool>(
+                    builder: (context, isFavorite, _) {
                       return TextButton.icon(
                         onPressed: () {
-                          snapshot.data!
+                          isFavorite
                               ? _favoriteIconController
                                   .removeFromFavorites(widget.place)
                               : _favoriteIconController
                                   .addToFavorites(widget.place);
-                          setState(() {});
+                          // setState(() {});
                         },
                         icon: SvgPicture.asset(
-                          snapshot.data! ? iconFavoriteSelected : iconFavorite,
+                          isFavorite ? iconFavoriteSelected : iconFavorite,
                           color: Theme.of(context).iconTheme.color,
                         ),
                         label: Text(
-                          snapshot.data!
+                          isFavorite
                               ? Constants.textInFavorite
                               : Constants.textToFavorite,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                       );
-                    } else {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                  },
+                    },
+                  ),
                 ),
               ],
             ),

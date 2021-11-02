@@ -9,10 +9,14 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<PlaceInteractor>.value(value: PlaceInteractor()),
-        Provider<SearchInteractor>.value(value: SearchInteractor()),
-        ChangeNotifierProvider<SettingsInteractor>.value(
-          value: SettingsInteractor(),
+        ChangeNotifierProvider<PlaceInteractor>(
+          create: (_) => PlaceInteractor(),
+        ),
+        Provider<SearchInteractor>(
+          create: (_) => SearchInteractor(),
+        ),
+        ChangeNotifierProvider<SettingsInteractor>(
+          create: (_) => SettingsInteractor(),
         ),
       ],
       child: const MyApp(),
