@@ -54,6 +54,7 @@ class PlaceInteractor extends ChangeNotifier {
 
   Stream<bool> isFavoritePlace(Place place) async* {
     yield _placeRepository.isFavoritePlace(place);
+    notifyListeners();
   }
 
   Future<void> addToFavorites(Place place) async {

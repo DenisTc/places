@@ -19,10 +19,16 @@ class SightListScreen extends StatefulWidget {
 
 class SightListScreenState extends State<SightListScreen> {
   late Stream<List<Place>> places;
+  late PlaceInteractor _placeInteractor;
+
+  @override
+  void initState() {
+    _placeInteractor = context.read<PlaceInteractor>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final placeInteractor = context.read<PlaceInteractor>();
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
       body: Stack(
@@ -32,23 +38,26 @@ class SightListScreenState extends State<SightListScreen> {
             child: CustomScrollView(
               slivers: [
                 const SliverAppBarList(),
-                StreamBuilder<List<Place>>(
-                  stream: placeInteractor.getStreamPlaces,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                StreamProvider<List<Place>>.value(
+                  initialData: const [],
+                  value: _placeInteractor.getStreamPlaces,
+                  child: Consumer<List<Place>>(
+                    builder: (context, place, _) {
+                      if (place.isEmpty) {
+                        return const SliverFillRemaining(
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+
+                      if (place.isNotEmpty) {
+                        return SliverSights(places: place);
+                      }
+
                       return const SliverFillRemaining(
-                        child: Center(child: CircularProgressIndicator()),
+                        child: NetworkException(),
                       );
-                    }
-
-                    if (snapshot.hasData && !snapshot.hasError) {
-                      return SliverSights(places: snapshot.data!);
-                    }
-
-                    return const SliverFillRemaining(
-                      child: NetworkException(),
-                    );
-                  },
+                    },
+                  ),
                 ),
               ],
             ),
