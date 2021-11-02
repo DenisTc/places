@@ -7,14 +7,14 @@ import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 
 class SearchInteractor {
-  final SearchRepository _searchRepository;
+  final _searchRepository = SearchRepository();
   final StreamController<List<Place>> _listFiltredController =
       StreamController<List<Place>>.broadcast();
   final StreamController<List<String>> _listCategoriesController =
       StreamController<List<String>>.broadcast();
   RangeValues distanceRangeValue = Constants.defaultDistanceRange;
 
-  SearchInteractor(this._searchRepository);
+  SearchInteractor();
 
   Stream<List<Place>> getFiltredPlacesStream(
     SettingsFilter? settingsFilter,

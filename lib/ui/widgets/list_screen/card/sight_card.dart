@@ -1,11 +1,10 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/main.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
+import 'package:provider/provider.dart';
 
 /// A card of an interesting place to be displayed on the main screen of the application.
 class SightCard extends StatefulWidget {
@@ -17,23 +16,9 @@ class SightCard extends StatefulWidget {
 }
 
 class _SightCardState extends State<SightCard> {
-  final StreamController<bool> _favoriteIconController =
-      StreamController<bool>.broadcast();
-
-  @override
-  void initState() {
-    _refreshFavoriteIcon(widget.place);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _favoriteIconController.close();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final placeInteractor = context.read<PlaceInteractor>();
     return SizedBox(
       height: 188,
       child: Stack(
@@ -67,7 +52,7 @@ class _SightCardState extends State<SightCard> {
                   ),
                 ),
                 StreamBuilder<bool>(
-                  stream: _favoriteIconController.stream,
+                  stream: placeInteractor.isFavoritePlace(widget.place),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const SizedBox.shrink();
@@ -80,7 +65,7 @@ class _SightCardState extends State<SightCard> {
                               ? placeInteractor
                                   .removeFromFavorites(widget.place)
                               : placeInteractor.addToFavorites(widget.place);
-                          _refreshFavoriteIcon(widget.place);
+                          setState(() {});
                         },
                         icon: SvgPicture.asset(
                           snapshot.data! ? iconFavoriteSelected : iconFavorite,
@@ -100,15 +85,11 @@ class _SightCardState extends State<SightCard> {
     );
   }
 
-  void _refreshFavoriteIcon(Place place) => _favoriteIconController.sink
-      .addStream(placeInteractor.isFavoritePlace(place));
-
   void _showSight(int id) async {
-    final place = await placeInteractor.getPlaceDetails(id: id);
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
-        return SightDetails(id: place.id);
+        return SightDetails(id: id);
       },
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -118,7 +99,6 @@ class _SightCardState extends State<SightCard> {
       ),
       clipBehavior: Clip.antiAliasWithSaveLayer,
     );
-    _refreshFavoriteIcon(widget.place);
   }
 }
 

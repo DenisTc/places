@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/settings_screen.dart';
-import 'package:places/ui/widgets/sight_bottom_nav_bar.dart';
 import 'package:places/ui/screens/sight_list_screen.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/screens/visiting_screen.dart';
+import 'package:places/ui/widgets/sight_bottom_nav_bar.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -13,8 +13,9 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-  late TabController _tabController;
   int selectedTab = 0;
+  late TabController _tabController;
+  
 
   @override
   void initState() {

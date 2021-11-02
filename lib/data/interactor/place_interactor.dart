@@ -1,10 +1,11 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/place.dart';
 
-class PlaceInteractor {
-  final PlaceRepository _placeRepository;
+class PlaceInteractor extends ChangeNotifier {
+  final PlaceRepository _placeRepository = PlaceRepository();
   final StreamController<List<Place>> _listPlacesController =
       StreamController<List<Place>>.broadcast();
 
@@ -13,7 +14,7 @@ class PlaceInteractor {
     return _listPlacesController.stream;
   }
 
-  PlaceInteractor(this._placeRepository);
+  PlaceInteractor();
 
   void addErrorToPlacesController(Object error) {
     _listPlacesController.addError(error);
@@ -57,10 +58,14 @@ class PlaceInteractor {
 
   Future<void> addToFavorites(Place place) async {
     await _placeRepository.addToFavorites(place);
+    notifyListeners();
+    debugPrint('add');
   }
 
   Future<void> removeFromFavorites(Place place) async {
     await _placeRepository.removeFromFavorites(place);
+    notifyListeners();
+    debugPrint('remove');
   }
 
   // Methods for working with visited places

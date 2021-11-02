@@ -1,15 +1,14 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
+import 'package:provider/provider.dart';
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
@@ -26,14 +25,22 @@ class SightDetails extends StatefulWidget {
 
 class _SightDetailsState extends State<SightDetails> {
   final PageController _pageController = PageController();
+  late PlaceInteractor _placeInteractor;
+
+  @override
+  void initState() {
+    _placeInteractor = context.read<PlaceInteractor>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    
     return Material(
       child: Container(
         color: Theme.of(context).accentColor,
         child: FutureBuilder<Place>(
-          future: placeInteractor.getPlaceDetails(id: widget.id),
+          future: _placeInteractor.getPlaceDetails(id: widget.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -258,23 +265,16 @@ class _FunctionButtons extends StatefulWidget {
 }
 
 class _FunctionButtonsState extends State<_FunctionButtons> {
-  final StreamController<bool> _favoriteIconController =
-      StreamController<bool>();
-
+  late PlaceInteractor _favoriteIconController;
   @override
   void initState() {
-    _refreshFavoriteIcon(widget.place);
+    _favoriteIconController = context.read<PlaceInteractor>();
     super.initState();
   }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _favoriteIconController.close();
-  }
-
   @override
   Widget build(BuildContext context) {
+    debugPrint(_favoriteIconController.isFavoritePlace(widget.place).toString());
+    debugPrint('refresh ui');
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -311,7 +311,7 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
               children: [
                 const SizedBox(width: 14),
                 StreamBuilder<bool>(
-                  stream: _favoriteIconController.stream,
+                  stream: _favoriteIconController.isFavoritePlace(widget.place),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const SizedBox.shrink();
@@ -321,10 +321,11 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
                       return TextButton.icon(
                         onPressed: () {
                           snapshot.data!
-                              ? placeInteractor
+                              ? _favoriteIconController
                                   .removeFromFavorites(widget.place)
-                              : placeInteractor.addToFavorites(widget.place);
-                          _refreshFavoriteIcon(widget.place);
+                              : _favoriteIconController
+                                  .addToFavorites(widget.place);
+                          setState(() {});
                         },
                         icon: SvgPicture.asset(
                           snapshot.data! ? iconFavoriteSelected : iconFavorite,
@@ -349,9 +350,6 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
       ],
     );
   }
-
-  void _refreshFavoriteIcon(Place place) => _favoriteIconController.sink
-      .addStream(placeInteractor.isFavoritePlace(place));
 }
 
 class _CreateRouteButton extends StatelessWidget {

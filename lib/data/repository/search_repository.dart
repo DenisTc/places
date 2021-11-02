@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:places/data/api/api_client.dart';
 import 'package:places/data/api/api_constants.dart';
@@ -10,9 +9,9 @@ import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
 
 class SearchRepository {
-  final Dio api;
+  final api = ApiClient().client;
 
-  SearchRepository(this.api);
+  SearchRepository();
 
   Future<List<Place>> getFiltredPlaces(SettingsFilter? settingsFilter) async {
     final data = settingsFilter!.toMap();

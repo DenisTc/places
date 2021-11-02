@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
-import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/network_exception.dart';
+import 'package:provider/provider.dart';
 
 List<String> selectFilters = [];
 
@@ -23,9 +24,16 @@ class FiltersScreen extends StatefulWidget {
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
+  late SearchInteractor searchInteractor;
   List<Place> filteredPlaces = [];
-  int countPlaces = 0;
   Map<String, bool> filters = {};
+  int countPlaces = 0;
+
+  @override
+  void initState() {
+    searchInteractor = Provider.of<SearchInteractor>(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -213,6 +221,13 @@ class _ShowButton extends StatefulWidget {
 }
 
 class __ShowButtonState extends State<_ShowButton> {
+  late SearchInteractor _searchInteractor;
+  @override
+  void initState() {
+    _searchInteractor = Provider.of<SearchInteractor>(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var countPlaces = 0;
@@ -225,7 +240,7 @@ class __ShowButtonState extends State<_ShowButton> {
 
     if (settingsFilter.typeFilter!.isNotEmpty) {
       final listPlaces =
-          searchInteractor.getFiltredPlacesStream(settingsFilter);
+          _searchInteractor.getFiltredPlacesStream(settingsFilter);
       return StreamBuilder<List<Place>>(
         stream: listPlaces,
         builder: (context, snapshot) {
@@ -335,8 +350,6 @@ class _FiltersCategory extends StatefulWidget {
 }
 
 class _FiltersCategoryState extends State<_FiltersCategory> {
-  final Future<List<String>> categoriesList = searchInteractor.getCategories();
-
   @override
   Widget build(BuildContext context) {
     final displayHeight = MediaQuery.of(context).size.height;

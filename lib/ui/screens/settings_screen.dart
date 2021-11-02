@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:places/main.dart';
+import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    final _settingsInteractor = Provider.of<SettingsInteractor>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
       appBar: const _AppBarSettings(),
@@ -42,10 +44,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   borderRadius: 16.0,
                   inactiveColor: myInactiveBlack.withOpacity(0.56),
                   activeColor: myDarkGreen,
-                  value: settings.getThemeValue,
+                  value: _settingsInteractor.getThemeValue,
                   onToggle: (value) {
                     setState(() {
-                      settings.changeTheme(value);
+                      _settingsInteractor.changeTheme(value);
                     });
                   },
                 ),
