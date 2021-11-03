@@ -239,10 +239,8 @@ class __ShowButtonState extends State<_ShowButton> {
     );
 
     if (settingsFilter.typeFilter!.isNotEmpty) {
-      final listPlaces =
-          _searchInteractor.getFiltredPlacesStream(settingsFilter);
       return StreamBuilder<List<Place>>(
-        stream: listPlaces,
+        stream: _searchInteractor.getFiltredPlacesStream(settingsFilter),
         builder: (context, snapshot) {
           if (snapshot.hasData && !snapshot.hasError) {
             countPlaces = snapshot.data!.length;
@@ -355,7 +353,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
     final displayHeight = MediaQuery.of(context).size.height;
 
     if (displayHeight > 580) {
-      if (widget.categories != null)
+      if (widget.categories != null){
         return GridView.builder(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -377,6 +375,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
             );
           },
         );
+      }
     }
 
     return SizedBox(

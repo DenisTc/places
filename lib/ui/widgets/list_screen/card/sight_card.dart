@@ -7,18 +7,13 @@ import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:provider/provider.dart';
 
 /// A card of an interesting place to be displayed on the main screen of the application.
-class SightCard extends StatefulWidget {
+class SightCard extends StatelessWidget {
   final Place place;
   const SightCard({required this.place, Key? key}) : super(key: key);
 
   @override
-  _SightCardState createState() => _SightCardState();
-}
-
-class _SightCardState extends State<SightCard> {
-  @override
   Widget build(BuildContext context) {
-    final placeInteractor = context.read<PlaceInteractor>();
+    final _favoriteIconController = context.watch<PlaceInteractor>();
     return SizedBox(
       height: 188,
       child: Stack(
@@ -26,8 +21,8 @@ class _SightCardState extends State<SightCard> {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _SightCardTop(place: widget.place),
-              _SightCardBottom(place: widget.place),
+              _SightCardTop(place: place),
+              _SightCardBottom(place: place),
             ],
           ),
           Material(
@@ -35,7 +30,7 @@ class _SightCardState extends State<SightCard> {
             child: InkWell(
               borderRadius: const BorderRadius.all(Radius.circular(16)),
               onTap: () {
-                _showSight(widget.place.id);
+                _showSight(context, place.id);
               },
             ),
           ),
@@ -45,37 +40,32 @@ class _SightCardState extends State<SightCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  widget.place.placeType,
+                  place.placeType,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                StreamBuilder<bool>(
-                  stream: placeInteractor.isFavoritePlace(widget.place),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SizedBox.shrink();
-                    }
-
-                    if (snapshot.hasData && !snapshot.hasError) {
+                StreamProvider<bool>.value(
+                  value: _favoriteIconController.isFavoritePlace(place),
+                  initialData: false,
+                  child: Consumer<bool>(
+                    builder: (context, isFavorite, child) {
                       return IconButton(
                         onPressed: () {
-                          snapshot.data!
-                              ? placeInteractor
-                                  .removeFromFavorites(widget.place)
-                              : placeInteractor.addToFavorites(widget.place);
-                          setState(() {});
+                          isFavorite
+                              ? _favoriteIconController
+                                  .removeFromFavorites(place)
+                              : _favoriteIconController
+                                  .addToFavorites(place);
                         },
                         icon: SvgPicture.asset(
-                          snapshot.data! ? iconFavoriteSelected : iconFavorite,
+                          isFavorite ? iconFavoriteSelected : iconFavorite,
                           color: Colors.white,
                         ),
                       );
-                    } else {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                  },
+                    },
+                  ),
                 ),
               ],
             ),
@@ -85,7 +75,7 @@ class _SightCardState extends State<SightCard> {
     );
   }
 
-  void _showSight(int id) async {
+  void _showSight(BuildContext context,int id) async {
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {

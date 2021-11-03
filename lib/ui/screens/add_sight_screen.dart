@@ -575,9 +575,16 @@ class _CreateSightButton extends StatefulWidget {
 }
 
 class _CreateSightButtonState extends State<_CreateSightButton> {
+  late PlaceInteractor _placeInteractor;
+
+  @override
+  void initState() {
+    super.initState();
+    _placeInteractor = context.read<PlaceInteractor>();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _placeInteractor = context.read<PlaceInteractor>();
     return ElevatedButton(
       onPressed: () {
         if (widget.formKey.currentState!.validate() && widget.enable) {

@@ -8,13 +8,24 @@ import 'package:places/ui/widgets/list_screen/sliver_sights.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 import 'package:provider/provider.dart';
 
-class SightListScreen extends StatelessWidget {
+class SightListScreen extends StatefulWidget {
   const SightListScreen({Key? key}) : super(key: key);
 
-  
+  @override
+  SightListScreenState createState() => SightListScreenState();
+}
+
+class SightListScreenState extends State<SightListScreen> {
+  late PlaceInteractor placeInteractor;
+
+  @override
+  void initState() {
+    super.initState();
+    placeInteractor = context.read<PlaceInteractor>();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final _placeInteractor = context.watch<PlaceInteractor>();
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
       body: Stack(
@@ -24,26 +35,23 @@ class SightListScreen extends StatelessWidget {
             child: CustomScrollView(
               slivers: [
                 const SliverAppBarList(),
-                StreamProvider<List<Place>>.value(
-                  initialData: const [],
-                  value: _placeInteractor.getStreamPlaces,
-                  child: Consumer<List<Place>>(
-                    builder: (context, place, _) {
-                      if (place.isEmpty) {
-                        return const SliverFillRemaining(
-                          child: Center(child: CircularProgressIndicator()),
-                        );
-                      }
-
-                      if (place.isNotEmpty) {
-                        return SliverSights(places: place);
-                      }
-
+                StreamBuilder<List<Place>>(
+                  stream: placeInteractor.getStreamPlaces,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
                       return const SliverFillRemaining(
-                        child: NetworkException(),
+                        child: Center(child: CircularProgressIndicator()),
                       );
-                    },
-                  ),
+                    }
+
+                    if (snapshot.hasData && !snapshot.hasError) {
+                      return SliverSights(places: snapshot.data!);
+                    }
+
+                    return const SliverFillRemaining(
+                      child: NetworkException(),
+                    );
+                  },
                 ),
               ],
             ),

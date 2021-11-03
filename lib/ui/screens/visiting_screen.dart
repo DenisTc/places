@@ -204,11 +204,9 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
   void removePlace(Place place, bool visited) {
     setState(() {
       if (visited) {
-        //isVisited.remove(place);
-        // placeInteractor.removeFromVisit(place);
+        _placeInteractor.removeFromVisit(place);
       } else {
-        //notVisited.remove(place);
-        // placeInteractor.removeFromFavorites(place);
+        _placeInteractor.removeFromFavorites(place);
       }
     });
   }
