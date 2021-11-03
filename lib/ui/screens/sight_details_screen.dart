@@ -251,7 +251,7 @@ class _Description extends StatelessWidget {
   }
 }
 
-class _FunctionButtons extends StatefulWidget {
+class _FunctionButtons extends StatelessWidget {
   final Place place;
 
   const _FunctionButtons({
@@ -260,20 +260,8 @@ class _FunctionButtons extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<_FunctionButtons> createState() => _FunctionButtonsState();
-}
-
-class _FunctionButtonsState extends State<_FunctionButtons> {
-  late PlaceInteractor _favoriteIconController;
-  @override
-  void initState() {
-    super.initState();
-    _favoriteIconController = context.read<PlaceInteractor>();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    debugPrint('refresh ui');
+    final _favoriteIconController = context.watch<PlaceInteractor>();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -310,18 +298,17 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
               children: [
                 const SizedBox(width: 14),
                 StreamProvider<bool>.value(
-                  value: _favoriteIconController.isFavoritePlace(widget.place),
+                  value: _favoriteIconController.isFavoritePlace(place),
                   initialData: false,
                   child: Consumer<bool>(
-                    builder: (context, isFavorite, _) {
+                    builder: (context, isFavorite, child) {
                       return TextButton.icon(
                         onPressed: () {
                           isFavorite
                               ? _favoriteIconController
-                                  .removeFromFavorites(widget.place)
+                                  .removeFromFavorites(place)
                               : _favoriteIconController
-                                  .addToFavorites(widget.place);
-                          // setState(() {});
+                                  .addToFavorites(place);
                         },
                         icon: SvgPicture.asset(
                           isFavorite ? iconFavoriteSelected : iconFavorite,

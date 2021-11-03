@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -10,25 +8,13 @@ import 'package:places/ui/widgets/list_screen/sliver_sights.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 import 'package:provider/provider.dart';
 
-class SightListScreen extends StatefulWidget {
+class SightListScreen extends StatelessWidget {
   const SightListScreen({Key? key}) : super(key: key);
 
-  @override
-  SightListScreenState createState() => SightListScreenState();
-}
-
-class SightListScreenState extends State<SightListScreen> {
-  late Stream<List<Place>> places;
-  late PlaceInteractor _placeInteractor;
-
-  @override
-  void initState() {
-    _placeInteractor = context.read<PlaceInteractor>();
-    super.initState();
-  }
-
+  
   @override
   Widget build(BuildContext context) {
+    final _placeInteractor = context.watch<PlaceInteractor>();
     return Scaffold(
       backgroundColor: Theme.of(context).accentColor,
       body: Stack(

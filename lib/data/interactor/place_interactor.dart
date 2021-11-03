@@ -54,19 +54,16 @@ class PlaceInteractor extends ChangeNotifier {
 
   Stream<bool> isFavoritePlace(Place place) async* {
     yield _placeRepository.isFavoritePlace(place);
-    notifyListeners();
   }
 
   Future<void> addToFavorites(Place place) async {
     await _placeRepository.addToFavorites(place);
     notifyListeners();
-    debugPrint('add');
   }
 
   Future<void> removeFromFavorites(Place place) async {
     await _placeRepository.removeFromFavorites(place);
     notifyListeners();
-    debugPrint('remove');
   }
 
   // Methods for working with visited places
