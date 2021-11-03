@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/main.dart';
 import 'package:places/mocks.dart';
@@ -9,6 +10,7 @@ import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_category_screen.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/sight_gallery.dart';
 import 'package:places/ui/widgets/add_sight_screen/new_sight_app_bar.dart';
+import 'package:provider/provider.dart';
 
 class AddSightScreen extends StatefulWidget {
   const AddSightScreen({Key? key}) : super(key: key);
@@ -573,12 +575,20 @@ class _CreateSightButton extends StatefulWidget {
 }
 
 class _CreateSightButtonState extends State<_CreateSightButton> {
+  late PlaceInteractor _placeInteractor;
+
+  @override
+  void initState() {
+    super.initState();
+    _placeInteractor = context.read<PlaceInteractor>();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
         if (widget.formKey.currentState!.validate() && widget.enable) {
-          placeInteractor.addNewPlace(
+          _placeInteractor.addNewPlace(
             Place(
               id: 99999,
               name: widget.controllerName.text,

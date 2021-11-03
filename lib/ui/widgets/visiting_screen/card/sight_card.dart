@@ -3,14 +3,15 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/main.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
 import 'package:places/ui/widgets/visiting_screen/card/favorite_card_bottom.dart';
 import 'package:places/ui/widgets/visiting_screen/card/favorite_card_top.dart';
+import 'package:provider/src/provider.dart';
 
 class SightCard extends StatefulWidget {
   final GlobalKey globalKey;
@@ -32,6 +33,7 @@ class SightCard extends StatefulWidget {
 class __SightCardState extends State<SightCard> {
   @override
   Widget build(BuildContext context) {
+    final _placeInteractor = context.watch<PlaceInteractor>();
     return Material(
       borderRadius: const BorderRadius.all(Radius.circular(16)),
       child: Container(
@@ -157,12 +159,7 @@ class __SightCardState extends State<SightCard> {
                         color: Colors.white,
                       ),
                       onTap: () {
-                        setState(() {
-                          widget.removeSight(
-                            widget.place,
-                            widget.visited,
-                          );
-                        });
+                        _placeInteractor.removeFromFavorites(widget.place);
                       },
                     ),
                   ],
@@ -176,11 +173,10 @@ class __SightCardState extends State<SightCard> {
   }
 
   void _showSight(int id) async {
-    final place = await placeInteractor.getPlaceDetails(id: id);
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
-        return SightDetails(id: place.id);
+        return SightDetails(id: id);
       },
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
 import 'package:places/main.dart';
@@ -11,6 +12,7 @@ import 'package:places/ui/widgets/network_exception.dart';
 import 'package:places/ui/widgets/search_screen/empty_search_result.dart';
 import 'package:places/ui/widgets/search_screen/search_bar.dart';
 import 'package:places/ui/widgets/search_screen/search_result_list.dart';
+import 'package:provider/provider.dart';
 
 List<String> historyList = [];
 
@@ -28,6 +30,13 @@ class SightSearchScreen extends StatefulWidget {
 class _SightSearchScreenState extends State<SightSearchScreen> {
   final _controllerSearch = TextEditingController();
   late Stream<List<Place>>? _filteredPlaces;
+  late SearchInteractor _searchInteractor;
+
+  @override
+  void initState() {
+    _searchInteractor = Provider.of<SearchInteractor>(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +95,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                   return const SizedBox.shrink();
                 }
 
-                _filteredPlaces = searchInteractor.getFiltredPlacesStream(
+                _filteredPlaces = _searchInteractor.getFiltredPlacesStream(
                   widget.settingsFilter ?? SettingsFilter(),
                 );
 

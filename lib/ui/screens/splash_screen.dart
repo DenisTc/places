@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -13,22 +13,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   late Future<void> isInitialized;
-
-  Future<void> _navigateToNext() async {
-    return Future.delayed(
-      const Duration(seconds: 2),
-      () => {
-        Navigator.pushReplacement<void, void>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const OnboardingScreen(),
-          ),
-        ),
-      },
-    ).then(
-      (_) => debugPrint('Переход на следующий экран'),
-    );
-  }
 
   @override
   void initState() {
@@ -59,6 +43,22 @@ class _SplashScreenState extends State<SplashScreen> {
           child: SvgPicture.asset(iconSplash, color: Colors.white),
         ),
       ),
+    );
+  }
+
+  Future<void> _navigateToNext() async {
+    return Future.delayed(
+      const Duration(seconds: 2),
+      () => {
+        Navigator.pushReplacement<void, void>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const OnboardingScreen(),
+          ),
+        ),
+      },
+    ).then(
+      (_) => debugPrint('Переход на следующий экран'),
     );
   }
 }

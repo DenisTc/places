@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/api/api_client.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
-import 'package:places/data/repository/place_repository.dart';
-import 'package:places/data/repository/search_repository.dart';
 import 'package:places/ui/screens/splash_screen.dart';
-
-final settings = SettingsInteractor();
-final api = ApiClient().client;
-
-final _searchRepository = SearchRepository(api);
-final _placeRepository = PlaceRepository(api);
-final placeInteractor = PlaceInteractor(_placeRepository);
-final searchInteractor = SearchInteractor(_searchRepository);
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<PlaceInteractor>(
+          create: (_) => PlaceInteractor(),
+        ),
+        Provider<SearchInteractor>(
+          create: (_) => SearchInteractor(),
+        ),
+        ChangeNotifierProvider<SettingsInteractor>(
+          create: (_) => SettingsInteractor(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -28,22 +33,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    settings.addListener(() => setState(() {}));
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    settings.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _theme = Provider.of<SettingsInteractor>(context).getTheme;
     return MaterialApp(
       title: 'Sights',
-      theme: settings.getTheme,
+      theme: _theme,
       home: const SplashScreen(),
     );
   }

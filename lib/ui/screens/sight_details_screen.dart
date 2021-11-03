@@ -1,15 +1,14 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
+import 'package:provider/provider.dart';
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
@@ -26,6 +25,13 @@ class SightDetails extends StatefulWidget {
 
 class _SightDetailsState extends State<SightDetails> {
   final PageController _pageController = PageController();
+  late PlaceInteractor _placeInteractor;
+
+  @override
+  void initState() {
+    _placeInteractor = context.read<PlaceInteractor>();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +39,7 @@ class _SightDetailsState extends State<SightDetails> {
       child: Container(
         color: Theme.of(context).accentColor,
         child: FutureBuilder<Place>(
-          future: placeInteractor.getPlaceDetails(id: widget.id),
+          future: _placeInteractor.getPlaceDetails(id: widget.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -245,7 +251,7 @@ class _Description extends StatelessWidget {
   }
 }
 
-class _FunctionButtons extends StatefulWidget {
+class _FunctionButtons extends StatelessWidget {
   final Place place;
 
   const _FunctionButtons({
@@ -254,27 +260,8 @@ class _FunctionButtons extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<_FunctionButtons> createState() => _FunctionButtonsState();
-}
-
-class _FunctionButtonsState extends State<_FunctionButtons> {
-  final StreamController<bool> _favoriteIconController =
-      StreamController<bool>();
-
-  @override
-  void initState() {
-    _refreshFavoriteIcon(widget.place);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _favoriteIconController.close();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _favoriteIconController = context.watch<PlaceInteractor>();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -310,37 +297,32 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
             child: Row(
               children: [
                 const SizedBox(width: 14),
-                StreamBuilder<bool>(
-                  stream: _favoriteIconController.stream,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SizedBox.shrink();
-                    }
-
-                    if (snapshot.hasData && !snapshot.hasError) {
+                StreamProvider<bool>.value(
+                  value: _favoriteIconController.isFavoritePlace(place),
+                  initialData: false,
+                  child: Consumer<bool>(
+                    builder: (context, isFavorite, child) {
                       return TextButton.icon(
                         onPressed: () {
-                          snapshot.data!
-                              ? placeInteractor
-                                  .removeFromFavorites(widget.place)
-                              : placeInteractor.addToFavorites(widget.place);
-                          _refreshFavoriteIcon(widget.place);
+                          isFavorite
+                              ? _favoriteIconController
+                                  .removeFromFavorites(place)
+                              : _favoriteIconController
+                                  .addToFavorites(place);
                         },
                         icon: SvgPicture.asset(
-                          snapshot.data! ? iconFavoriteSelected : iconFavorite,
+                          isFavorite ? iconFavoriteSelected : iconFavorite,
                           color: Theme.of(context).iconTheme.color,
                         ),
                         label: Text(
-                          snapshot.data!
+                          isFavorite
                               ? Constants.textInFavorite
                               : Constants.textToFavorite,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                       );
-                    } else {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                  },
+                    },
+                  ),
                 ),
               ],
             ),
@@ -349,9 +331,6 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
       ],
     );
   }
-
-  void _refreshFavoriteIcon(Place place) => _favoriteIconController.sink
-      .addStream(placeInteractor.isFavoritePlace(place));
 }
 
 class _CreateRouteButton extends StatelessWidget {
