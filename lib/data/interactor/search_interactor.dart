@@ -15,6 +15,10 @@ class SearchInteractor extends ChangeNotifier {
   RangeValues _distanceRangeValue = Constants.defaultDistanceRange;
   List<String> selectedFilters = [];
 
+  RangeValues get getRangeValue => _distanceRangeValue;
+
+  SearchInteractor();
+
   void setRangeValue(RangeValues rangeValues) {
     _distanceRangeValue = rangeValues;
     notifyListeners();
@@ -28,10 +32,6 @@ class SearchInteractor extends ChangeNotifier {
     }
     notifyListeners();
   }
-
-  RangeValues get getRangeValue => _distanceRangeValue;
-
-  SearchInteractor();
 
   Stream<List<Place>> getFiltredPlacesStream(SettingsFilter? settingsFilter) {
     _searchRepository
