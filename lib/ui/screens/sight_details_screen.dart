@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
@@ -228,7 +229,7 @@ class _Description extends StatelessWidget {
         ),
         const SizedBox(height: 2),
         Text(
-          place.placeType,
+          Category.getCategory(place.placeType).name,
           style: Theme.of(context).textTheme.subtitle1,
         ),
         const SizedBox(height: 24),
