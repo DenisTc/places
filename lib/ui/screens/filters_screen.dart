@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/interactor/search_interactor.dart';
+import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -326,13 +327,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
           itemCount: widget.categories!.length,
           itemBuilder: (context, index) {
             return _CategoryCircle(
-              title: widget.categories![index],
-              icon: SvgPicture.asset(
-                iconParticularPlace,
-                height: 40,
-                width: 40,
-                color: Theme.of(context).buttonColor,
-              ),
+              category: Category.getCategory(widget.categories![index]),
               filters: widget.filters,
             );
           },
@@ -349,13 +344,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return _CategoryCircle(
-            title: widget.categories![index],
-            icon: SvgPicture.asset(
-              iconParticularPlace,
-              height: 40,
-              width: 40,
-              color: Theme.of(context).buttonColor,
-            ),
+            category: Category.getCategory(widget.categories![index]),
             filters: widget.filters,
           );
         },
@@ -365,14 +354,12 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
 }
 
 class _CategoryCircle extends StatelessWidget {
-  final String title;
-  final SvgPicture icon;
+  final Category category;
   final Map<String, bool> filters;
 
   const _CategoryCircle({
     Key? key,
-    required this.title,
-    required this.icon,
+    required this.category,
     required this.filters,
   }) : super(key: key);
 
@@ -386,7 +373,7 @@ class _CategoryCircle extends StatelessWidget {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(40)),
       onTap: () {
-        _searchInteractor.selectCategory(title.toLowerCase());
+        _searchInteractor.selectCategory(category.type.toLowerCase());
       },
       child: Column(
         children: [
@@ -402,11 +389,16 @@ class _CategoryCircle extends StatelessWidget {
               children: [
                 Positioned.fill(
                   child: Align(
-                    child: icon,
+                    child: SvgPicture.asset(
+                      category.icon,
+                      height: 40,
+                      width: 40,
+                      color: Theme.of(context).buttonColor,
+                    ),
                   ),
                 ),
                 if (_searchInteractor.selectedFilters
-                    .contains(title.toLowerCase()))
+                    .contains(category.type.toLowerCase()))
                   Positioned(
                     right: 0,
                     bottom: 0,
@@ -430,7 +422,7 @@ class _CategoryCircle extends StatelessWidget {
           const SizedBox(height: 10),
           Center(
             child: Text(
-              title,
+              capitalize(category.name),
               softWrap: false,
               overflow: TextOverflow.fade,
               style: const TextStyle(fontSize: 12),
@@ -440,4 +432,6 @@ class _CategoryCircle extends StatelessWidget {
       ),
     );
   }
+
+  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 }

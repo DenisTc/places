@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
@@ -67,7 +68,7 @@ class _SightDesc extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            placeType,
+            Category.getCategory(placeType).name,
             style: const TextStyle(color: myLightSecondaryTwo),
           ),
           const SizedBox(height: 8),
