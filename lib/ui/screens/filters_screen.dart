@@ -24,21 +24,21 @@ class FiltersScreen extends StatefulWidget {
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  late SearchInteractor searchInteractor;
+  late SearchInteractor _searchInteractor;
   List<Place> filteredPlaces = [];
   Map<String, bool> filters = {};
   int countPlaces = 0;
 
   @override
   void initState() {
-    searchInteractor = Provider.of<SearchInteractor>(context);
+    _searchInteractor = Provider.of<SearchInteractor>(context, listen: false);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    distanceRangeValues = searchInteractor.distanceRangeValue;
-    final categoriesList = searchInteractor.getCategoriesStream();
+    distanceRangeValues = _searchInteractor.distanceRangeValue;
+    final categoriesList = _searchInteractor.getCategoriesStream();
 
     return Scaffold(
       appBar: AppBar(
@@ -50,7 +50,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             onPressed: () {
               setState(() {
                 filters.updateAll((key, value) => value = false);
-                searchInteractor.distanceRangeValue =
+                _searchInteractor.distanceRangeValue =
                     Constants.defaultDistanceRange;
                 selectFilters.clear();
               });
@@ -127,7 +127,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   void updateRangeVal(RangeValues newRangeValues) {
     setState(() {
-      searchInteractor.distanceRangeValue = newRangeValues;
+      _searchInteractor.distanceRangeValue = newRangeValues;
     });
   }
 }
@@ -224,7 +224,7 @@ class __ShowButtonState extends State<_ShowButton> {
   late SearchInteractor _searchInteractor;
   @override
   void initState() {
-    _searchInteractor = Provider.of<SearchInteractor>(context);
+    _searchInteractor = Provider.of<SearchInteractor>(context, listen: false);
     super.initState();
   }
 
