@@ -9,8 +9,6 @@ import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 import 'package:provider/provider.dart';
 
-List<String> selectFilters = [];
-
 RangeValues distanceRangeValues = Constants.defaultDistanceRange;
 RangeValues currentDistanceReange = Constants.defaultDistanceRange;
 
@@ -37,9 +35,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    distanceRangeValues = _searchInteractor.distanceRangeValue;
-    final categoriesList = _searchInteractor.getCategoriesStream();
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -48,12 +43,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              setState(() {
-                filters.updateAll((key, value) => value = false);
-                _searchInteractor.distanceRangeValue =
-                    Constants.defaultDistanceRange;
-                selectFilters.clear();
-              });
+              filters.updateAll((key, value) => value = false);
+              _searchInteractor.setRangeValue(Constants.defaultDistanceRange);
+              _searchInteractor.selectedFilters.clear();
             },
             child: Text(
               Constants.textBtnClear,
@@ -73,7 +65,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             right: 16,
           ),
           child: StreamBuilder<List<String>>(
-            stream: categoriesList,
+            stream: _searchInteractor.getCategoriesStream(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(child: CircularProgressIndicator());
@@ -95,18 +87,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     ),
                     const SizedBox(height: 20),
                     _FiltersCategory(
-                      notifyParent: () {
-                        setState(() {});
-                      },
                       filters: filters,
                       categories: snapshot.data,
                     ),
                     const SizedBox(height: 20),
                     _Distance(
                       distanceRangeValues: distanceRangeValues,
-                      updateRangeVal: (distanceRangeValues) {
-                        updateRangeVal(distanceRangeValues);
-                      },
                     ),
                     const SizedBox(height: 50),
                     _ShowButton(
@@ -124,31 +110,19 @@ class _FiltersScreenState extends State<FiltersScreen> {
       ),
     );
   }
-
-  void updateRangeVal(RangeValues newRangeValues) {
-    setState(() {
-      _searchInteractor.distanceRangeValue = newRangeValues;
-    });
-  }
 }
 
-class _Distance extends StatefulWidget {
-  final Function(RangeValues rangeValues) updateRangeVal;
+class _Distance extends StatelessWidget {
   final RangeValues distanceRangeValues;
 
   const _Distance({
     Key? key,
-    required this.updateRangeVal,
     required this.distanceRangeValues,
   }) : super(key: key);
 
   @override
-  __DistanceState createState() => __DistanceState();
-}
-
-class __DistanceState extends State<_Distance> {
-  @override
   Widget build(BuildContext context) {
+    final _searchInteractor = context.watch<SearchInteractor>();
     return Column(
       children: [
         Row(
@@ -169,7 +143,9 @@ class __DistanceState extends State<_Distance> {
                       style: TextStyle(color: myLightSecondaryTwo),
                     ),
                     TextSpan(
-                      text: widget.distanceRangeValues.start.round().toString(),
+                      text: _searchInteractor.getRangeValue.start
+                          .round()
+                          .toString(),
                       style: const TextStyle(color: myLightSecondaryTwo),
                     ),
                     const TextSpan(
@@ -177,7 +153,9 @@ class __DistanceState extends State<_Distance> {
                       style: TextStyle(color: myLightSecondaryTwo),
                     ),
                     TextSpan(
-                      text: widget.distanceRangeValues.end.round().toString(),
+                      text: _searchInteractor.getRangeValue.end
+                          .round()
+                          .toString(),
                       style: const TextStyle(color: myLightSecondaryTwo),
                     ),
                     const TextSpan(
@@ -194,12 +172,10 @@ class __DistanceState extends State<_Distance> {
         SizedBox(
           width: MediaQuery.of(context).size.width - 32,
           child: RangeSlider(
-            values: widget.distanceRangeValues,
+            values: _searchInteractor.getRangeValue,
             max: Constants.defaultDistanceRange.end,
             divisions: 100,
-            onChanged: (values) {
-              widget.updateRangeVal(values);
-            },
+            onChanged: _searchInteractor.setRangeValue,
           ),
         ),
       ],
@@ -207,7 +183,7 @@ class __DistanceState extends State<_Distance> {
   }
 }
 
-class _ShowButton extends StatefulWidget {
+class _ShowButton extends StatelessWidget {
   final int countPlaces;
   final List<Place> filteredPlaces;
   const _ShowButton({
@@ -217,25 +193,14 @@ class _ShowButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  __ShowButtonState createState() => __ShowButtonState();
-}
-
-class __ShowButtonState extends State<_ShowButton> {
-  late SearchInteractor _searchInteractor;
-  @override
-  void initState() {
-    _searchInteractor = Provider.of<SearchInteractor>(context, listen: false);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _searchInteractor = context.watch<SearchInteractor>();
     var countPlaces = 0;
     final settingsFilter = SettingsFilter(
       lat: Constants.userLocation.lat,
       lng: Constants.userLocation.lng,
-      distance: distanceRangeValues,
-      typeFilter: selectFilters,
+      distance: _searchInteractor.getRangeValue,
+      typeFilter: _searchInteractor.selectedFilters,
     );
 
     if (settingsFilter.typeFilter!.isNotEmpty) {
@@ -332,13 +297,11 @@ class __ShowButtonState extends State<_ShowButton> {
 }
 
 class _FiltersCategory extends StatefulWidget {
-  final Function() notifyParent;
   final Map<String, bool> filters;
   final List<String>? categories;
 
   const _FiltersCategory({
     Key? key,
-    required this.notifyParent,
     required this.filters,
     required this.categories,
   }) : super(key: key);
@@ -353,7 +316,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
     final displayHeight = MediaQuery.of(context).size.height;
 
     if (displayHeight > 580) {
-      if (widget.categories != null){
+      if (widget.categories != null) {
         return GridView.builder(
           shrinkWrap: true,
           gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
@@ -370,7 +333,6 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
                 width: 40,
                 color: Theme.of(context).buttonColor,
               ),
-              notifyParent: widget.notifyParent,
               filters: widget.filters,
             );
           },
@@ -394,7 +356,6 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
               width: 40,
               color: Theme.of(context).buttonColor,
             ),
-            notifyParent: widget.notifyParent,
             filters: widget.filters,
           );
         },
@@ -403,27 +364,21 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
   }
 }
 
-class _CategoryCircle extends StatefulWidget {
+class _CategoryCircle extends StatelessWidget {
   final String title;
   final SvgPicture icon;
-  final Function() notifyParent;
   final Map<String, bool> filters;
 
   const _CategoryCircle({
     Key? key,
     required this.title,
     required this.icon,
-    required this.notifyParent,
     required this.filters,
   }) : super(key: key);
 
   @override
-  __CategoryCircleState createState() => __CategoryCircleState();
-}
-
-class __CategoryCircleState extends State<_CategoryCircle> {
-  @override
   Widget build(BuildContext context) {
+    final _searchInteractor = context.watch<SearchInteractor>();
     final displayHeight = MediaQuery.of(context).size.height;
     final double iconSize = displayHeight > 600 ? 90 : 60;
     final double checkSize = displayHeight > 600 ? 22 : 17;
@@ -431,14 +386,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(40)),
       onTap: () {
-        setState(() {
-          if (selectFilters.contains(widget.title.toLowerCase())) {
-            selectFilters.remove(widget.title.toLowerCase());
-          } else {
-            selectFilters.add(widget.title.toLowerCase());
-          }
-          widget.notifyParent();
-        });
+        _searchInteractor.selectCategory(title.toLowerCase());
       },
       child: Column(
         children: [
@@ -454,10 +402,11 @@ class __CategoryCircleState extends State<_CategoryCircle> {
               children: [
                 Positioned.fill(
                   child: Align(
-                    child: widget.icon,
+                    child: icon,
                   ),
                 ),
-                if (selectFilters.contains(widget.title.toLowerCase()))
+                if (_searchInteractor.selectedFilters
+                    .contains(title.toLowerCase()))
                   Positioned(
                     right: 0,
                     bottom: 0,
@@ -481,7 +430,7 @@ class __CategoryCircleState extends State<_CategoryCircle> {
           const SizedBox(height: 10),
           Center(
             child: Text(
-              widget.title,
+              title,
               softWrap: false,
               overflow: TextOverflow.fade,
               style: const TextStyle(fontSize: 12),
