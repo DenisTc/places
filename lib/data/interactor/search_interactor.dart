@@ -6,19 +6,34 @@ import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 
-class SearchInteractor {
+class SearchInteractor extends ChangeNotifier {
   final _searchRepository = SearchRepository();
   final StreamController<List<Place>> _listFiltredController =
       StreamController<List<Place>>.broadcast();
   final StreamController<List<String>> _listCategoriesController =
       StreamController<List<String>>.broadcast();
-  RangeValues distanceRangeValue = Constants.defaultDistanceRange;
+  RangeValues _distanceRangeValue = Constants.defaultDistanceRange;
+  List<String> selectedFilters = [];
+
+  RangeValues get getRangeValue => _distanceRangeValue;
 
   SearchInteractor();
 
-  Stream<List<Place>> getFiltredPlacesStream(
-    SettingsFilter? settingsFilter,
-  ) {
+  void setRangeValue(RangeValues rangeValues) {
+    _distanceRangeValue = rangeValues;
+    notifyListeners();
+  }
+
+  void selectCategory(String category) {
+    if (selectedFilters.contains(category.toLowerCase())) {
+      selectedFilters.remove(category.toLowerCase());
+    } else {
+      selectedFilters.add(category.toLowerCase());
+    }
+    notifyListeners();
+  }
+
+  Stream<List<Place>> getFiltredPlacesStream(SettingsFilter? settingsFilter) {
     _searchRepository
         .getFiltredPlaces(settingsFilter)
         .then(_listFiltredController.add);

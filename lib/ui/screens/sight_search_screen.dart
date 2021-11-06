@@ -34,7 +34,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
 
   @override
   void initState() {
-    _searchInteractor = Provider.of<SearchInteractor>(context);
+    _searchInteractor = Provider.of<SearchInteractor>(context, listen: false);
     super.initState();
   }
 

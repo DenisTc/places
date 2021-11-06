@@ -12,7 +12,7 @@ void main() {
         ChangeNotifierProvider<PlaceInteractor>(
           create: (_) => PlaceInteractor(),
         ),
-        Provider<SearchInteractor>(
+        ChangeNotifierProvider<SearchInteractor>(
           create: (_) => SearchInteractor(),
         ),
         ChangeNotifierProvider<SettingsInteractor>(
