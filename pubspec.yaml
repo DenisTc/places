@@ -12,12 +12,14 @@ dependencies:
   flutter:
     sdk: flutter
   provider: ^6.0.1
-  cupertino_icons: ^1.0.2
   flutter_svg: ^0.22.0
   flutter_switch: ^0.3.2
   surf_lint_rules: ^1.4.0
   dio: ^4.0.0
   equatable: ^2.0.3
+  image_picker: ^0.8.4+4
+  file_picker: ^4.2.1
+  open_file: ^3.2.1
 
 dev_dependencies:
   flutter_test:
