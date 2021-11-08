@@ -26,7 +26,6 @@ class SightListScreenState extends State<SightListScreen> {
   @override
   void initState() {
     super.initState();
-    // placeInteractor = context.read<PlaceInteractor>();
     _store = PlaceListStore(context.read<PlaceInteractor>());
     _store.loadList();
   }

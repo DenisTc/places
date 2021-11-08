@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/place.dart';
@@ -18,13 +17,6 @@ abstract class PlaceListStoreBase with Store {
   @action
   Future<void> loadList({bool isHidden = false}) async {
     final future = _placeInteractor.getPlaces();
-
-    try{
-placeList = ObservableFuture(future);
-
-    } catch(e){
-      debugPrint(e.toString());
-    }
-    
+    placeList = ObservableFuture(future);
   }
 }
