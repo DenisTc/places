@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:mobx/mobx.dart';
 import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/store/place_list/place_list_store.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/widgets/list_screen/add_sight_button.dart';
@@ -20,7 +19,6 @@ class SightListScreen extends StatefulWidget {
 }
 
 class SightListScreenState extends State<SightListScreen> {
-  late PlaceInteractor placeInteractor;
   late PlaceListStore _store;
 
   @override
@@ -44,7 +42,6 @@ class SightListScreenState extends State<SightListScreen> {
                 Observer(
                   builder: (_) {
                     final future = _store.placeList;
-                    debugPrint(future.status.toString());
 
                     switch (future.status) {
                       case FutureStatus.pending:

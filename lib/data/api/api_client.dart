@@ -40,6 +40,7 @@ class ApiClient {
             } else {
               searchInteractor.addErrorToFiltredController(error);
             }
+            return errorInterceptorHandler.next(error);
           },
         ),
       );
