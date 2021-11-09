@@ -52,17 +52,22 @@ class SightCard extends StatelessWidget {
                   initialData: false,
                   child: Consumer<bool>(
                     builder: (context, isFavorite, child) {
-                      return IconButton(
-                        onPressed: () {
-                          isFavorite
-                              ? _favoriteIconController
-                                  .removeFromFavorites(place)
-                              : _favoriteIconController
-                                  .addToFavorites(place);
-                        },
-                        icon: SvgPicture.asset(
-                          isFavorite ? iconFavoriteSelected : iconFavorite,
-                          color: Colors.white,
+                      return Material(
+                        color: Colors.transparent,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(50)),
+                        clipBehavior: Clip.antiAlias,
+                        child: IconButton(
+                          onPressed: () {
+                            isFavorite
+                                ? _favoriteIconController
+                                    .removeFromFavorites(place)
+                                : _favoriteIconController.addToFavorites(place);
+                          },
+                          icon: SvgPicture.asset(
+                            isFavorite ? iconFavoriteSelected : iconFavorite,
+                            color: Colors.white,
+                          ),
                         ),
                       );
                     },
@@ -76,7 +81,7 @@ class SightCard extends StatelessWidget {
     );
   }
 
-  void _showSight(BuildContext context,int id) async {
+  void _showSight(BuildContext context, int id) async {
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
