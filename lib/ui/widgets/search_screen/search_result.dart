@@ -7,10 +7,12 @@ import 'package:places/ui/screens/sight_details_screen.dart';
 class SearchResult extends StatelessWidget {
   final Place place;
   final String searchString;
+  final Function(String name) addPlaceToSearchHistory;
   const SearchResult({
     Key? key,
     required this.place,
     required this.searchString,
+    required this.addPlaceToSearchHistory,
   }) : super(key: key);
 
   @override
@@ -27,6 +29,7 @@ class SearchResult extends StatelessWidget {
               ),
             ),
           );
+          addPlaceToSearchHistory(place.name);
         },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,7 +56,7 @@ class _SightDesc extends StatelessWidget {
     Key? key,
     required this.name,
     required this.placeType,
-    required this.searchString, 
+    required this.searchString,
   }) : super(key: key);
 
   @override
