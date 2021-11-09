@@ -124,7 +124,7 @@ class _GalleryPlaceState extends State<_GalleryPlace> {
           child: Stack(
             children: [
               PageView.builder(
-                onPageChanged: (int page) {
+                onPageChanged: (page) {
                   setState(() {
                     currentPage = page.toDouble();
                   });
@@ -219,11 +219,16 @@ class _Description extends StatelessWidget {
       children: [
         const SizedBox(height: 24),
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              place.name,
-              style:
-                  Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
+            Expanded(
+              child: Text(
+                place.name,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1
+                    ?.copyWith(fontSize: 24),
+              ),
             ),
           ],
         ),
@@ -308,8 +313,7 @@ class _FunctionButtons extends StatelessWidget {
                           isFavorite
                               ? _favoriteIconController
                                   .removeFromFavorites(place)
-                              : _favoriteIconController
-                                  .addToFavorites(place);
+                              : _favoriteIconController.addToFavorites(place);
                         },
                         icon: SvgPicture.asset(
                           isFavorite ? iconFavoriteSelected : iconFavorite,
@@ -418,23 +422,25 @@ class _ArrowBackButton extends StatelessWidget {
     return Positioned(
       top: 16.0,
       right: 16.0,
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).pop();
-        },
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-          ),
-          child: Align(
-            child: SvgPicture.asset(
-              iconClose,
-              height: 20,
-              width: 20,
-              color: myLightMain,
+      child: SafeArea(
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: Align(
+              child: SvgPicture.asset(
+                iconClose,
+                height: 20,
+                width: 20,
+                color: myLightMain,
+              ),
             ),
           ),
         ),
