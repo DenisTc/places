@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
-import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
@@ -78,6 +77,9 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                                 updateHistory(history);
                               },
                               controllerSearch: _controllerSearch,
+                              notifyParent: () {
+                                setState(() {});
+                              },
                             ),
                             _ClearHistoryButton(
                               historyList: historyList.toList(),
@@ -172,12 +174,14 @@ class _HistoryList extends StatefulWidget {
   final List<String> historyList;
   final TextEditingController controllerSearch;
   final Function(List<String>) updateHistory;
+  final Function() notifyParent;
 
   const _HistoryList({
     Key? key,
     required this.historyList,
     required this.updateHistory,
     required this.controllerSearch,
+    required this.notifyParent,
   }) : super(key: key);
 
   @override
@@ -218,6 +222,7 @@ class _HistoryListState extends State<_HistoryList> {
                             );
                           },
                         );
+                        widget.notifyParent();
                       },
                       child: Text(
                         widget.historyList[index],
