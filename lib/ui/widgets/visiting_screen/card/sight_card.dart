@@ -111,56 +111,65 @@ class __SightCardState extends State<SightCard> {
                 ),
               ),
               Positioned(
-                right: 16,
-                top: 10,
+                right: 4,
                 child: Row(
                   children: [
-                    InkWell(
-                      onTap: () async {
-                        if (widget.visited) {
-                        } else {
-                          if (Platform.isAndroid) {
-                            await showDatePicker(
-                              context: context,
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2101),
-                              builder: (context, child) {
-                                return Theme(
-                                  data: ThemeData.light().copyWith(
-                                    colorScheme: ColorScheme.light(
-                                      primary: Theme.of(context).buttonColor,
-                                    ),
-                                  ),
-                                  child: child!,
-                                );
-                              },
-                            );
+                    Material(
+                      color: Colors.transparent,
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      clipBehavior: Clip.antiAlias,
+                      child: IconButton(
+                        onPressed: () async {
+                          if (widget.visited) {
                           } else {
-                            await showModalBottomSheet<void>(
-                              context: context,
-                              builder: (builder) {
-                                return SightCupertinoDatePicker();
-                              },
-                            );
+                            if (Platform.isAndroid) {
+                              await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2101),
+                                builder: (context, child) {
+                                  return Theme(
+                                    data: ThemeData.light().copyWith(
+                                      colorScheme: ColorScheme.light(
+                                        primary: Theme.of(context).buttonColor,
+                                      ),
+                                    ),
+                                    child: child!,
+                                  );
+                                },
+                              );
+                            } else {
+                              await showModalBottomSheet<void>(
+                                context: context,
+                                builder: (builder) {
+                                  return const SightCupertinoDatePicker();
+                                },
+                              );
+                            }
                           }
-                        }
-                      },
-                      child: SvgPicture.asset(
-                        widget.visited ? iconShare : iconCalendar,
-                        width: 25,
-                        color: Colors.white,
+                        },
+                        icon: SvgPicture.asset(
+                          widget.visited ? iconShare : iconCalendar,
+                          width: 25,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 16),
-                    InkWell(
-                      child: const Icon(
-                        Icons.clear_outlined,
-                        color: Colors.white,
+                    const SizedBox(width: 2),
+                    Material(
+                      color: Colors.transparent,
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      clipBehavior: Clip.antiAlias,
+                      child: IconButton(
+                        onPressed: () {
+                          _placeInteractor.removeFromFavorites(widget.place);
+                        },
+                        icon: const Icon(
+                          Icons.clear_outlined,
+                          color: Colors.white,
+                        ),
                       ),
-                      onTap: () {
-                        _placeInteractor.removeFromFavorites(widget.place);
-                      },
                     ),
                   ],
                 ),

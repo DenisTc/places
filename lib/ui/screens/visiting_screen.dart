@@ -69,8 +69,8 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                   return SightVisitingPortrainWidget(
                     places: snapshot.data!,
                     visited: false,
-                    moveItemInList: (data, place, visited) {
-                      moveItemInList(data, place, visited);
+                    moveItemInList: (data, place, places, visited) {
+                      moveItemInList(data, place,snapshot.data!, visited);
                     },
                     removeSight: (place, visited) {
                       removePlace(place, visited);
@@ -129,8 +129,8 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                   return SightVisitingPortrainWidget(
                     places: snapshot.data!,
                     visited: true,
-                    moveItemInList: (data, place, visited) {
-                      moveItemInList(data, place, visited);
+                    moveItemInList: (data, place, places , visited) {
+                      moveItemInList(data, place, snapshot.data!, visited);
                     },
                     removeSight: (place, visited) {
                       removePlace(place, visited);
@@ -186,19 +186,15 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
     setState(() {});
   }
 
-  void moveItemInList(Place data, Place place, bool visited) {
-    //TODO(Denis): Configure the logic of interaction with the card.
-    // setState(
-    //   () {
-    //     if (visited && isVisited.indexOf(data) != isVisited.indexOf(place)) {
-    //       isVisited.remove(data);
-    //       isVisited.insert(isVisited.indexOf(place), data);
-    //     } else if (notVisited.indexOf(data) != notVisited.indexOf(place)) {
-    //       notVisited.remove(data);
-    //       notVisited.insert(notVisited.indexOf(place), data);
-    //     }
-    //   },
-    // );
+  void moveItemInList(Place data, Place place, List<Place> placeList,bool visited) {
+    setState(
+      () {
+        if (placeList.indexOf(data) != placeList.indexOf(place)) {
+          placeList.remove(data);
+          placeList.insert(placeList.indexOf(place), data);
+        }
+      },
+    );
   }
 
   void removePlace(Place place, bool visited) {

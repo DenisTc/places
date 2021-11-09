@@ -6,7 +6,7 @@ import 'package:places/ui/widgets/visiting_screen/card/sight_card_favorite.dart'
 class SightVisitingPortrainWidget extends StatelessWidget {
   final List<Place> places;
   final bool visited;
-  final Function(Place data, Place place, bool visited) moveItemInList;
+  final Function(Place data, Place place, List<Place> places, bool visited) moveItemInList;
   final Function(Place place, bool visited) removeSight;
   const SightVisitingPortrainWidget({
     Key? key,
@@ -30,7 +30,7 @@ class SightVisitingPortrainWidget extends StatelessWidget {
             place: place,
             visited: visited,
             moveItemInList: (data, place, visited) {
-              moveItemInList(data, place, visited);
+              moveItemInList(data, place, places, visited);
             },
             removeSight: (place, visited) {
               removeSight(place, visited);
