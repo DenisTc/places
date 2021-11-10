@@ -34,7 +34,21 @@ class SearchResult extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SightImage(imgUrl: place.urls.first),
+            if (place.urls.isNotEmpty)
+              _SightImage(imgUrl: place.urls.first)
+            else
+              Container(
+                height: 56,
+                width: 56,
+                color: Colors.white,
+                child: const Center(
+                  child: Icon(
+                    Icons.image_not_supported_outlined,
+                    color: Colors.grey,
+                    size: 30.0,
+                  ),
+                ),
+              ),
             const SizedBox(width: 16),
             _SightDesc(
               name: place.name,
@@ -141,19 +155,43 @@ class _SightImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 56,
       width: 56,
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         child: Image.network(
           imgUrl,
           fit: BoxFit.cover,
+          loadingBuilder: (
+            context,
+            child,
+            loadingProgress,
+          ) {
+            if (loadingProgress == null) return child;
+
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes!
+                    : null,
+              ),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: Colors.white,
+              child: const Center(
+                child: Icon(
+                  Icons.image_not_supported_outlined,
+                  color: Colors.grey,
+                  size: 30.0,
+                ),
+              ),
+            );
+          },
         ),
-      ),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-        color: Colors.red,
       ),
     );
   }

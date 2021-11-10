@@ -15,7 +15,16 @@ class SightCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _favoriteIconController = context.watch<PlaceInteractor>();
-    return SizedBox(
+    return Container(
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade400,
+            blurRadius: 15.0,
+            spreadRadius: 0.5,
+          ),
+        ],
+      ),
       height: 188,
       child: Stack(
         children: [
@@ -124,7 +133,7 @@ class _SightCardBottom extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             place.name,
-            maxLines: 2,
+            maxLines: 1,
             style: Theme.of(context).textTheme.headline1?.copyWith(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -155,7 +164,14 @@ class _SightCardTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
       height: 96,
       child: Stack(
         children: [
@@ -164,29 +180,48 @@ class _SightCardTop extends StatelessWidget {
               topLeft: Radius.circular(16),
               topRight: Radius.circular(16),
             ),
-            child: Image.network(
-              place.urls.first,
-              fit: BoxFit.cover,
-              height: double.infinity,
-              width: double.infinity,
-              loadingBuilder: (
-                context,
-                child,
-                loadingProgress,
-              ) {
-                if (loadingProgress == null) return child;
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
-                  ),
-                );
-              },
-            ),
+            child: place.urls.isNotEmpty
+                ? Image.network(
+                    place.urls.first,
+                    fit: BoxFit.cover,
+                    height: double.infinity,
+                    width: double.infinity,
+                    loadingBuilder: (
+                      context,
+                      child,
+                      loadingProgress,
+                    ) {
+                      if (loadingProgress == null) return child;
+
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return imagePlaceholder();
+                    },
+                  )
+                : imagePlaceholder(),
           ),
         ],
+      ),
+    );
+  }
+
+  Container imagePlaceholder() {
+    return Container(
+      color: Colors.white,
+      child: const Center(
+        child: Icon(
+          Icons.image_not_supported_outlined,
+          color: Colors.grey,
+          size: 50.0,
+        ),
       ),
     );
   }

@@ -123,20 +123,32 @@ class _GalleryPlaceState extends State<_GalleryPlace> {
           color: Colors.brown,
           child: Stack(
             children: [
-              PageView.builder(
-                onPageChanged: (page) {
-                  setState(() {
-                    currentPage = page.toDouble();
-                  });
-                },
-                controller: widget._pageController,
-                itemCount: widget.place.urls.length,
-                itemBuilder: (context, index) {
-                  return _PlaceImage(
-                    imgUrl: widget.place.urls[index],
-                  );
-                },
-              ),
+              if (widget.place.urls.isNotEmpty)
+                PageView.builder(
+                  onPageChanged: (page) {
+                    setState(() {
+                      currentPage = page.toDouble();
+                    });
+                  },
+                  controller: widget._pageController,
+                  itemCount: widget.place.urls.length,
+                  itemBuilder: (context, index) {
+                    return _PlaceImage(
+                      imgUrl: widget.place.urls[index],
+                    );
+                  },
+                )
+              else
+                Container(
+                  color: Colors.white,
+                  child: const Center(
+                    child: Icon(
+                      Icons.image_not_supported_outlined,
+                      color: Colors.grey,
+                      size: 100.0,
+                    ),
+                  ),
+                ),
               const _ArrowBackButton(),
               if (widget.place.urls.length > 1)
                 PageIndicator(
@@ -392,22 +404,40 @@ class _PlaceImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      imgUrl,
-      fit: BoxFit.cover,
-      height: double.infinity,
-      width: double.infinity,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Center(
-          child: CircularProgressIndicator(
-            value: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
-                : null,
-          ),
-        );
-      },
+    return imgUrl.isNotEmpty
+        ? Image.network(
+            imgUrl,
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              );
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return imagePlaceholder();
+            },
+          )
+        : imagePlaceholder();
+  }
+
+  Container imagePlaceholder() {
+    return Container(
+      color: Colors.white,
+      child: const Center(
+        child: Icon(
+          Icons.image_not_supported_outlined,
+          color: Colors.grey,
+          size: 100.0,
+        ),
+      ),
     );
   }
 }
