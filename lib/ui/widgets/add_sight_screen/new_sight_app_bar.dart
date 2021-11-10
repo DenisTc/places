@@ -16,7 +16,10 @@ class NewSightAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: Colors.transparent,
       elevation: 0,
-      title: const Text(Constants.textNewPlace),
+      title: Text(
+        Constants.textNewPlace,
+        style: TextStyle(color: Theme.of(context).secondaryHeaderColor),
+      ),
       leadingWidth: 100,
       leading: TextButton(
         onPressed: () {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/mocks.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/add_sight_image_button.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/sight_image.dart';
 
@@ -11,14 +11,15 @@ class SightGallery extends StatefulWidget {
 
 class _SightGalleryState extends State<SightGallery> {
   List<String> images = [];
+  List<XFile>? xFileList = [];
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         AddSightImageButton(
-          addImage: () {
-            addImage();
+          addImage: (xFileList) {
+            addImage(xFileList);
           },
         ),
         Expanded(
@@ -29,7 +30,7 @@ class _SightGalleryState extends State<SightGallery> {
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: images.length,
-              itemBuilder: (BuildContext context, int index) {
+              itemBuilder: (context, index) {
                 return Dismissible(
                   key: UniqueKey(),
                   onDismissed: (direction) {
@@ -58,9 +59,9 @@ class _SightGalleryState extends State<SightGallery> {
     });
   }
 
-  void addImage() {
+  void addImage(List<XFile>? xFileList) {
     setState(() {
-      images.add(mocks[0].urls.first);
+      images.addAll(xFileList!.map((image) => image.path));
     });
   }
 }

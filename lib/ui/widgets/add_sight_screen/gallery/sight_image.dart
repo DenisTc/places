@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/screens/res/icons.dart';
@@ -30,8 +32,8 @@ class SightImage extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-                child: Image.network(
-                  image,
+                child: Image.file(
+                  File(image),
                   fit: BoxFit.cover,
                 ),
               ),

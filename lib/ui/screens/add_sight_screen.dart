@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/main.dart';
-import 'package:places/mocks.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/screens/res/icons.dart';
@@ -188,7 +188,7 @@ class _CategoryField extends StatefulWidget {
 }
 
 class __CategoryFieldState extends State<_CategoryField> {
-  int? categoryid;
+  String? selectedCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -216,15 +216,18 @@ class __CategoryFieldState extends State<_CategoryField> {
         ),
         suffixIcon: IconButton(
           onPressed: () async {
-            categoryid = await Navigator.push<int>(
+            selectedCategory = await Navigator.push<String>(
               context,
               MaterialPageRoute(
-                builder: (context) => SightCategoryScreen(),
+                builder: (context) => const SightCategoryScreen(),
               ),
             );
-            setState(() {
-              // widget.controllerCat.text = mocks[categoryid!].placeType;
-            });
+            if (selectedCategory != null) {
+              setState(() {
+                widget.controllerCat.text =
+                    Category.getCategory(selectedCategory!).name;
+              });
+            }
           },
           icon: const Icon(Icons.navigate_next_rounded),
           color: myLightMain,
@@ -356,6 +359,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
               ),
               const SizedBox(height: 12),
               TextFormField(
+                controller: widget.controllerLat,
                 onFieldSubmitted: (value) {
                   FocusScope.of(context).requestFocus(widget.focusNodeLng);
                 },
@@ -373,7 +377,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 textInputAction: TextInputAction.next,
                 keyboardType:
                     const TextInputType.numberWithOptions(signed: true),
-                controller: widget.controllerLat,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 cursorColor: myLightMain,
                 decoration: InputDecoration(
                   contentPadding:
@@ -423,6 +427,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
               ),
               const SizedBox(height: 12),
               TextFormField(
+                controller: widget.controllerLng,
                 focusNode: widget.focusNodeLng,
                 onFieldSubmitted: (value) {
                   FocusScope.of(context).requestFocus(widget.focusNodeDesc);
@@ -440,7 +445,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 textInputAction: TextInputAction.next,
                 keyboardType:
                     const TextInputType.numberWithOptions(signed: true),
-                controller: widget.controllerLng,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 cursorColor: myLightMain,
                 decoration: InputDecoration(
                   contentPadding:
