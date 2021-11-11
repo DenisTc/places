@@ -234,8 +234,8 @@ class __CategoryFieldState extends State<_CategoryField> {
           icon: const Icon(Icons.navigate_next_rounded, size: 32,),
           color: myLightMain,
         ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-        enabledBorder: OutlineInputBorder(
+        border: UnderlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        enabledBorder: UnderlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerCat.text.isNotEmpty
@@ -243,7 +243,7 @@ class __CategoryFieldState extends State<_CategoryField> {
                 : Colors.grey,
           ),
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: UnderlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerCat.text.isNotEmpty
@@ -467,7 +467,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 textInputAction: TextInputAction.next,
                 keyboardType:
                     const TextInputType.numberWithOptions(signed: true),
-                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],//r"[0-9.]" '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$'
+                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
                 cursorColor: myLightMain,
                 decoration: InputDecoration(
                   contentPadding:
