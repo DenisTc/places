@@ -12,7 +12,7 @@ final filters = Filters();
 
 class SearchBar extends StatefulWidget {
   final textFieldFocusNode = FocusNode();
-  
+
   SearchBar({
     Key? key,
   }) : super(key: key);
@@ -32,7 +32,8 @@ class _SearchBarState extends State<SearchBar> {
           Navigator.push<List>(
             context,
             MaterialPageRoute(
-              builder: (context) => SightSearchScreen(settingsFilter: settingsFilter),
+              builder: (context) =>
+                  SightSearchScreen(settingsFilter: settingsFilter),
             ),
           );
         }
@@ -62,22 +63,27 @@ class _SearchBarState extends State<SearchBar> {
             color: myLightSecondaryTwo.withOpacity(0.56),
           ),
         ),
-        suffixIcon: GestureDetector(
-          child: IconButton(
-            icon: SvgPicture.asset(
-              iconOptions,
-              height: 15,
-              width: 15,
-              color: Theme.of(context).buttonColor,
+        suffixIcon: Material(
+          color: Colors.transparent,
+          borderRadius: const BorderRadius.all(Radius.circular(50)),
+          clipBehavior: Clip.antiAlias,
+          child: GestureDetector(
+            child: IconButton(
+              icon: SvgPicture.asset(
+                iconOptions,
+                height: 15,
+                width: 15,
+                color: Theme.of(context).buttonColor,
+              ),
+              onPressed: () {
+                widget.textFieldFocusNode.unfocus();
+                widget.textFieldFocusNode.canRequestFocus = false;
+                _navigateGetDataFromFilters(context);
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  widget.textFieldFocusNode.canRequestFocus = true;
+                });
+              },
             ),
-            onPressed: () {
-              widget.textFieldFocusNode.unfocus();
-              widget.textFieldFocusNode.canRequestFocus = false;
-              _navigateGetDataFromFilters(context);
-              Future.delayed(const Duration(milliseconds: 100), () {
-                widget.textFieldFocusNode.canRequestFocus = true;
-              });
-            },
           ),
         ),
         border: const OutlineInputBorder(
