@@ -29,6 +29,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const _AppBar(),
+      backgroundColor: Theme.of(context).accentColor,
       body: Column(
         children: [
           const SizedBox(height: 24),
@@ -63,8 +64,9 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                                     Text(
                                       categoryName[0].toUpperCase() +
                                           categoryName.substring(1),
-                                      style: const TextStyle(
-                                        color: myLightMain,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .secondaryHeaderColor,
                                         fontSize: 16,
                                       ),
                                     ),
@@ -78,7 +80,10 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                                   ],
                                 ),
                                 const SizedBox(height: 14),
-                                const Divider(height: 1),
+                                Divider(
+                                  height: 1,
+                                  color: myLightSecondaryTwo.withOpacity(0.56),
+                                ),
                               ],
                             ),
                           ),
@@ -141,7 +146,7 @@ class __SaveButtonState extends State<_SaveButton> {
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(
             (widget.selectedType == null)
-                ? myLightBackground
+                ? Theme.of(context).primaryColor
                 : Theme.of(context).buttonColor,
           ),
           minimumSize:

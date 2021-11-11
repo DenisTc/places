@@ -48,11 +48,11 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 16),
                     padding: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(10),
                       ),
-                      color: Colors.white,
+                      color: Theme.of(context).accentColor,
                     ),
                     child: Column(
                       children: [
@@ -67,6 +67,7 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                           },
                           child: Row(
                             children: [
+                              // TODO: Need make the text color as on the layout in figma
                               SvgPicture.asset(
                                 iconCamera,
                                 color: myLightSecondaryTwo,
@@ -82,7 +83,12 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                             ],
                           ),
                         ),
-                        const Divider(),
+                        const SizedBox(height: 10),
+                        Divider(
+                          height: 1,
+                          color: myLightSecondaryTwo.withOpacity(0.56),
+                        ),
+                        const SizedBox(height: 6),
                         InkWell(
                           onTap: () {
                             _imgFromGallery().then(
@@ -112,7 +118,7 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 4),
                   InkWell(
                     onTap: () {
                       Navigator.of(context).pop();
@@ -121,11 +127,11 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                       alignment: Alignment.center,
                       margin: const EdgeInsets.symmetric(horizontal: 16),
                       padding: const EdgeInsets.all(16),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(10),
                         ),
-                        color: Colors.white,
+                        color: Theme.of(context).accentColor,
                       ),
                       width: MediaQuery.of(context).size.width,
                       child: Text(

@@ -36,6 +36,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const NewSightAppBar(),
+      backgroundColor: Theme.of(context).accentColor,
       body: ListView(
         shrinkWrap: true,
         children: [
@@ -206,7 +207,11 @@ class __CategoryFieldState extends State<_CategoryField> {
       controller: widget.controllerCat,
       readOnly: true,
       textInputAction: TextInputAction.next,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: Theme.of(context).secondaryHeaderColor,
+      ),
       decoration: InputDecoration(
         contentPadding:
             const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
@@ -231,8 +236,11 @@ class __CategoryFieldState extends State<_CategoryField> {
               });
             }
           },
-          icon: const Icon(Icons.navigate_next_rounded, size: 32,),
-          color: myLightMain,
+          icon: const Icon(
+            Icons.navigate_next_rounded,
+            size: 32,
+          ),
+          color: Theme.of(context).secondaryHeaderColor,
         ),
         border: UnderlineInputBorder(borderRadius: BorderRadius.circular(8)),
         enabledBorder: UnderlineInputBorder(
@@ -294,10 +302,15 @@ class _NameFieldState extends State<_NameField> {
       controller: widget.controllerName,
       textInputAction: TextInputAction.next,
       keyboardType: TextInputType.text,
-      cursorColor: myLightMain,
-      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+      cursorColor: Theme.of(context).secondaryHeaderColor,
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: Theme.of(context).secondaryHeaderColor,
+      ),
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
@@ -329,7 +342,7 @@ class _NameFieldState extends State<_NameField> {
             height: 20,
             width: 20,
             color: widget.controllerName.text.isNotEmpty
-                ? myLightMain
+                ? Theme.of(context).secondaryHeaderColor
                 : Colors.transparent,
           ),
         ),
@@ -393,14 +406,25 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 },
                 focusNode: widget.focusNodeLat,
                 textInputAction: TextInputAction.next,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Theme.of(context).secondaryHeaderColor,
+                ),
                 keyboardType:
                     const TextInputType.numberWithOptions(signed: true),
-                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
-                cursorColor: myLightMain,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(
+                    RegExp(r'[0-9.]'),
+                  ),
+                ],
+                cursorColor: Theme.of(context).secondaryHeaderColor,
                 decoration: InputDecoration(
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
@@ -429,7 +453,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                       height: 20,
                       width: 20,
                       color: widget.controllerLat.text.isNotEmpty
-                          ? myLightMain
+                          ? Theme.of(context).secondaryHeaderColor
                           : Colors.transparent,
                     ),
                   ),
@@ -464,15 +488,23 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     widget.notifyParent();
                   });
                 },
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Theme.of(context).secondaryHeaderColor,
+                ),
                 textInputAction: TextInputAction.next,
                 keyboardType:
                     const TextInputType.numberWithOptions(signed: true),
-                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
-                cursorColor: myLightMain,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))
+                ],
+                cursorColor: Theme.of(context).secondaryHeaderColor,
                 decoration: InputDecoration(
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8)),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
@@ -501,7 +533,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                       height: 20,
                       width: 20,
                       color: widget.controllerLng.text.isNotEmpty
-                          ? myLightMain
+                          ? Theme.of(context).secondaryHeaderColor
                           : Colors.transparent,
                     ),
                   ),
@@ -551,7 +583,12 @@ class __DescriptionFieldState extends State<_DescriptionField> {
       keyboardType: TextInputType.text,
       minLines: 4,
       maxLines: 4,
-      cursorColor: myLightMain,
+      cursorColor: Theme.of(context).secondaryHeaderColor,
+      style: TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: Theme.of(context).secondaryHeaderColor,
+      ),
       decoration: InputDecoration(
         hintText: 'введите текст',
         hintStyle: const TextStyle(
@@ -569,7 +606,7 @@ class __DescriptionFieldState extends State<_DescriptionField> {
           borderSide: BorderSide(
             color: widget.controllerDesc.text.isNotEmpty
                 ? Theme.of(context).buttonColor.withOpacity(0.4)
-                : Colors.grey,
+                : myLightSecondaryTwo.withOpacity(0.56),
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -577,7 +614,7 @@ class __DescriptionFieldState extends State<_DescriptionField> {
           borderSide: BorderSide(
             color: widget.controllerDesc.text.isNotEmpty
                 ? Theme.of(context).buttonColor.withOpacity(0.4)
-                : Colors.grey,
+                : myLightSecondaryTwo.withOpacity(0.56),
           ),
         ),
       ),
@@ -647,7 +684,9 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
       ),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(
-          widget.enable ? Theme.of(context).buttonColor : myLightBackground,
+          widget.enable
+              ? Theme.of(context).buttonColor
+              : Theme.of(context).primaryColor,
         ),
         minimumSize: MaterialStateProperty.all(const Size(double.infinity, 48)),
         shadowColor: MaterialStateProperty.all(Colors.transparent),

@@ -15,16 +15,7 @@ class SightCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _favoriteIconController = context.watch<PlaceInteractor>();
-    return Container(
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.shade400,
-            blurRadius: 15.0,
-            spreadRadius: 0.5,
-          ),
-        ],
-      ),
+    return SizedBox(
       height: 188,
       child: Stack(
         children: [
@@ -203,19 +194,19 @@ class _SightCardTop extends StatelessWidget {
                       );
                     },
                     errorBuilder: (context, error, stackTrace) {
-                      return imagePlaceholder();
+                      return imagePlaceholder(context);
                     },
                   )
-                : imagePlaceholder(),
+                : imagePlaceholder(context),
           ),
         ],
       ),
     );
   }
 
-  Container imagePlaceholder() {
+  Container imagePlaceholder(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).secondaryHeaderColor,
       child: const Center(
         child: Icon(
           Icons.photo_size_select_actual_outlined,
