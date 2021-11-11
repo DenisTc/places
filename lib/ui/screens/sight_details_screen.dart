@@ -9,6 +9,7 @@ import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
+import 'package:places/ui/widgets/sight_details_screen/photo_view.dart';
 import 'package:provider/provider.dart';
 
 /// A screen with a detailed description of the place
@@ -132,12 +133,26 @@ class _GalleryPlaceState extends State<_GalleryPlace> {
                     });
                   },
                   allowImplicitScrolling: true,
-                  physics: ClampingScrollPhysics(),
+                  physics: const ClampingScrollPhysics(),
                   controller: widget._pageController,
                   itemCount: widget.place.urls.length,
                   itemBuilder: (context, index) {
-                    return _PlaceImage(
-                      imgUrl: widget.place.urls[index],
+                    return GestureDetector(
+                      onTap: () {
+                        if (widget.place.urls.isNotEmpty) {
+                          Navigator.of(context).push<void>(
+                            MaterialPageRoute(
+                              builder: (context) => PhotoView(
+                                imageList: widget.place.urls,
+                                currentImage: 0,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: _PlaceImage(
+                        imgUrl: widget.place.urls[index],
+                      ),
                     );
                   },
                 )
