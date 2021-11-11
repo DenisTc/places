@@ -37,7 +37,6 @@ class _SightDetailsState extends State<SightDetails> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.red,
       child: Container(
         color: Theme.of(context).accentColor,
         child: FutureBuilder<Place>(
