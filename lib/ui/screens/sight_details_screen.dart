@@ -37,6 +37,7 @@ class _SightDetailsState extends State<SightDetails> {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.red,
       child: Container(
         color: Theme.of(context).accentColor,
         child: FutureBuilder<Place>(
@@ -115,12 +116,13 @@ class _GalleryPlaceState extends State<_GalleryPlace> {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
       expandedHeight: 360,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           height: 360,
-          color: Colors.brown,
+          color: Colors.white,
           child: Stack(
             children: [
               if (widget.place.urls.isNotEmpty)
@@ -130,6 +132,8 @@ class _GalleryPlaceState extends State<_GalleryPlace> {
                       currentPage = page.toDouble();
                     });
                   },
+                  allowImplicitScrolling: true,
+                  physics: ClampingScrollPhysics(),
                   controller: widget._pageController,
                   itemCount: widget.place.urls.length,
                   itemBuilder: (context, index) {
