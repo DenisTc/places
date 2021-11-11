@@ -143,7 +143,7 @@ class _GalleryPlaceState extends State<_GalleryPlace> {
                   color: Colors.white,
                   child: const Center(
                     child: Icon(
-                      Icons.image_not_supported_outlined,
+                      Icons.photo_size_select_actual_outlined,
                       color: Colors.grey,
                       size: 100.0,
                     ),
@@ -433,7 +433,7 @@ class _PlaceImage extends StatelessWidget {
       color: Colors.white,
       child: const Center(
         child: Icon(
-          Icons.image_not_supported_outlined,
+          Icons.photo_size_select_actual_outlined,
           color: Colors.grey,
           size: 100.0,
         ),

@@ -11,7 +11,6 @@ class SightGallery extends StatefulWidget {
 
 class _SightGalleryState extends State<SightGallery> {
   List<String> images = [];
-  List<XFile>? xFileList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +33,9 @@ class _SightGalleryState extends State<SightGallery> {
                 return Dismissible(
                   key: UniqueKey(),
                   onDismissed: (direction) {
-                    images.remove(images[index]);
+                    setState(() {
+                      images.remove(images[index]);
+                    });
                   },
                   direction: DismissDirection.up,
                   background: Container(),

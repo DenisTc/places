@@ -208,6 +208,8 @@ class __CategoryFieldState extends State<_CategoryField> {
       textInputAction: TextInputAction.next,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: InputDecoration(
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         hintText: 'Не выбрано',
         hintStyle: const TextStyle(
           color: myLightSecondaryTwo,
@@ -229,13 +231,24 @@ class __CategoryFieldState extends State<_CategoryField> {
               });
             }
           },
-          icon: const Icon(Icons.navigate_next_rounded),
+          icon: const Icon(Icons.navigate_next_rounded, size: 32,),
           color: myLightMain,
         ),
-        focusedBorder: UnderlineInputBorder(
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: Theme.of(context).buttonColor.withOpacity(0.4),
-            width: 2.0,
+            color: widget.controllerCat.text.isNotEmpty
+                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                : Colors.grey,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: widget.controllerCat.text.isNotEmpty
+                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                : Colors.grey,
           ),
         ),
       ),
@@ -284,19 +297,22 @@ class _NameFieldState extends State<_NameField> {
       cursorColor: myLightMain,
       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
       decoration: InputDecoration(
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-        border: const OutlineInputBorder(),
+        contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: Theme.of(context).buttonColor.withOpacity(0.4),
-            width: 1.0,
+            color: widget.controllerName.text.isNotEmpty
+                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                : Colors.grey,
           ),
         ),
         focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: Theme.of(context).buttonColor.withOpacity(0.4),
-            width: 2.0,
+            color: widget.controllerName.text.isNotEmpty
+                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                : Colors.grey,
           ),
         ),
         suffixIcon: IconButton(
@@ -306,6 +322,8 @@ class _NameFieldState extends State<_NameField> {
               widget.notifyParent();
             });
           },
+          iconSize: 10,
+          padding: EdgeInsets.zero,
           icon: SvgPicture.asset(
             iconClearField,
             height: 20,
@@ -377,22 +395,26 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 textInputAction: TextInputAction.next,
                 keyboardType:
                     const TextInputType.numberWithOptions(signed: true),
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],
                 cursorColor: myLightMain,
                 decoration: InputDecoration(
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                  border: const OutlineInputBorder(),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: Theme.of(context).buttonColor.withOpacity(0.4),
-                      width: 1.0,
+                      color: widget.controllerLat.text.isNotEmpty
+                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          : Colors.grey,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: Theme.of(context).buttonColor.withOpacity(0.4),
-                      width: 2.0,
+                      color: widget.controllerLat.text.isNotEmpty
+                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          : Colors.grey,
                     ),
                   ),
                   suffixIcon: IconButton(
@@ -445,22 +467,26 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 textInputAction: TextInputAction.next,
                 keyboardType:
                     const TextInputType.numberWithOptions(signed: true),
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))],//r"[0-9.]" '^\$|^(0|([1-9][0-9]{0,}))(\\.[0-9]{0,})?\$'
                 cursorColor: myLightMain,
                 decoration: InputDecoration(
                   contentPadding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-                  border: OutlineInputBorder(),
+                      const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: Theme.of(context).buttonColor.withOpacity(0.4),
-                      width: 1.0,
+                      color: widget.controllerLng.text.isNotEmpty
+                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          : Colors.grey,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
-                      color: Theme.of(context).buttonColor.withOpacity(0.4),
-                      width: 2.0,
+                      color: widget.controllerLng.text.isNotEmpty
+                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          : Colors.grey,
                     ),
                   ),
                   suffixIcon: IconButton(
@@ -539,15 +565,19 @@ class __DescriptionFieldState extends State<_DescriptionField> {
         ),
         border: const OutlineInputBorder(),
         enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: Theme.of(context).buttonColor.withOpacity(0.4),
-            width: 1.0,
+            color: widget.controllerDesc.text.isNotEmpty
+                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                : Colors.grey,
           ),
         ),
         focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-            color: Theme.of(context).buttonColor.withOpacity(0.4),
-            width: 2.0,
+            color: widget.controllerDesc.text.isNotEmpty
+                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                : Colors.grey,
           ),
         ),
       ),

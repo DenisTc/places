@@ -40,7 +40,7 @@ class SightPortraitWidget extends StatelessWidget {
         (context, index) {
           final place = places[index];
           return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.only(bottom: 16, top: 18),
             child: SightCard(place: place),
           );
         },

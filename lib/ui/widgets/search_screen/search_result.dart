@@ -43,7 +43,7 @@ class SearchResult extends StatelessWidget {
                 color: Colors.white,
                 child: const Center(
                   child: Icon(
-                    Icons.image_not_supported_outlined,
+                    Icons.photo_size_select_actual_outlined,
                     color: Colors.grey,
                     size: 30.0,
                   ),
@@ -184,7 +184,7 @@ class _SightImage extends StatelessWidget {
               color: Colors.white,
               child: const Center(
                 child: Icon(
-                  Icons.image_not_supported_outlined,
+                  Icons.photo_size_select_actual_outlined,
                   color: Colors.grey,
                   size: 30.0,
                 ),
