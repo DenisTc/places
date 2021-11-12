@@ -194,6 +194,20 @@ class __CategoryFieldState extends State<_CategoryField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onTap: () async {
+        selectedCategory = await Navigator.push<String>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SightCategoryScreen(),
+          ),
+        );
+        if (selectedCategory != null) {
+          setState(() {
+            widget.controllerCat.text =
+                Category.getCategory(selectedCategory!).name;
+          });
+        }
+      },
       validator: (value) {
         if (value!.isEmpty) {
           return 'Выберите категорию';
@@ -221,25 +235,9 @@ class __CategoryFieldState extends State<_CategoryField> {
           fontSize: 16,
           fontWeight: FontWeight.w400,
         ),
-        suffixIcon: IconButton(
-          onPressed: () async {
-            selectedCategory = await Navigator.push<String>(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const SightCategoryScreen(),
-              ),
-            );
-            if (selectedCategory != null) {
-              setState(() {
-                widget.controllerCat.text =
-                    Category.getCategory(selectedCategory!).name;
-              });
-            }
-          },
-          icon: const Icon(
-            Icons.navigate_next_rounded,
-            size: 32,
-          ),
+        suffixIcon: Icon(
+          Icons.navigate_next_rounded,
+          size: 32,
           color: Theme.of(context).secondaryHeaderColor,
         ),
         border: UnderlineInputBorder(borderRadius: BorderRadius.circular(8)),
