@@ -144,7 +144,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
 
   void _addPlaceToSearchHistory(String name) {
     setState(() {
-      historyList.add(name);
+      if (!historyList.contains(name)) historyList.add(name);
     });
   }
 
