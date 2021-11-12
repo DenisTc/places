@@ -8,7 +8,7 @@
 // import 'package:image_picker/image_picker.dart';
 // import 'package:open_file/open_file.dart';
 // import 'package:places/ui/screens/res/colors.dart';
-// import 'package:places/ui/screens/res/constants.dart' as Constants;
+// import 'package:places/ui/screens/res/constants.dart' as constants;
 // import 'package:places/ui/screens/res/icons.dart';
 // import 'package:places/ui/widgets/add_sight_screen/gallery/file_list.dart';
 

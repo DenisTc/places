@@ -1,25 +1,21 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
+// import 'dart:io';
+// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:open_file/open_file.dart';
+// import 'package:open_file/open_file.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/widgets/add_sight_screen/gallery/file_list.dart';
-import 'package:places/ui/widgets/add_sight_screen/gallery/select_image_dialog.dart';
+// import 'package:places/ui/widgets/add_sight_screen/gallery/file_list.dart';
+// import 'package:places/ui/widgets/add_sight_screen/gallery/select_image_dialog.dart';
 
 class AddSightImageButton extends StatefulWidget {
   final Function(List<XFile>?) addImage;
+
   const AddSightImageButton({
-    Key? key,
     required this.addImage,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -27,10 +23,9 @@ class AddSightImageButton extends StatefulWidget {
 }
 
 class _AddSightImageButtonState extends State<AddSightImageButton> {
+  final picker = ImagePicker();
   ImagePicker imagePicker = ImagePicker();
   List<XFile>? imageFileList = [];
-
-  final picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +47,7 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                       borderRadius: const BorderRadius.all(
                         Radius.circular(10),
                       ),
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     child: Column(
                       children: [
@@ -74,7 +69,7 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                               ),
                               const SizedBox(width: 15),
                               const Text(
-                                Constants.textBtnCamera,
+                                constants.textBtnCamera,
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: myLightSecondaryTwo,
@@ -106,7 +101,7 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                               ),
                               const SizedBox(width: 14),
                               const Text(
-                                Constants.textBtnPhoto,
+                                constants.textBtnPhoto,
                                 style: TextStyle(
                                   fontSize: 16,
                                   color: myLightSecondaryTwo,
@@ -131,11 +126,11 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                         borderRadius: const BorderRadius.all(
                           Radius.circular(10),
                         ),
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                       width: MediaQuery.of(context).size.width,
                       child: Text(
-                        Constants.textCancel.toUpperCase(),
+                        constants.textCancel.toUpperCase(),
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           color: Theme.of(context).buttonColor,

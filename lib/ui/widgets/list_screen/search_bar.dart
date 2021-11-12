@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/filters.dart';
-import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -89,28 +88,24 @@ class _SearchBarState extends State<SearchBar> {
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
-            width: 1,
             color: Colors.transparent,
           ),
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
-            width: 1,
             color: Colors.transparent,
           ),
         ),
         disabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
-            width: 1,
             color: Colors.transparent,
           ),
         ),
         enabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
-            width: 1,
             color: Colors.transparent,
           ),
         ),
@@ -118,7 +113,7 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 
-  void _navigateGetDataFromFilters(BuildContext context) async {
+  Future<void> _navigateGetDataFromFilters(BuildContext context) async {
     settingsFilter = await Navigator.push(
       context,
       MaterialPageRoute(

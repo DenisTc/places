@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     try {
       _navigateToNext();
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Ошибка при переходе на следующий экран: $e');
     }
   }

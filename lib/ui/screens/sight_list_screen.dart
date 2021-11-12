@@ -31,7 +31,7 @@ class SightListScreenState extends State<SightListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       body: Stack(
         alignment: AlignmentDirectional.topCenter,
         children: [

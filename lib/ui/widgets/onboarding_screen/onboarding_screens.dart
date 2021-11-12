@@ -9,10 +9,10 @@ class OnboardingScreens extends StatefulWidget {
   final double currentPage;
 
   const OnboardingScreens({
-    Key? key,
     required this.pageController,
     required this.setCurrentPage,
     required this.currentPage,
+    Key? key,
   }) : super(key: key);
 
   @override

@@ -7,10 +7,11 @@ import 'package:places/ui/screens/res/icons.dart';
 class PhotoView extends StatefulWidget {
   final List<String> imageList;
   final int currentImage;
+
   const PhotoView({
-    Key? key,
     required this.imageList,
     required this.currentImage,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -31,7 +32,7 @@ class _PhotoViewState extends State<PhotoView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(40.0),
         child: AppBar(
@@ -94,7 +95,7 @@ class _PhotoViewState extends State<PhotoView> {
         scrollPhysics: const BouncingScrollPhysics(),
         backgroundDecoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(20)),
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).colorScheme.secondary,
         ),
         enableRotation: true,
         loadingBuilder: (context, event) => const Center(

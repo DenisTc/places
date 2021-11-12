@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 
-class VisitingAppbar extends StatelessWidget with PreferredSizeWidget {
+
+class VisitingAppbar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(116);
-
+  
   const VisitingAppbar({
     Key? key,
   }) : super(key: key);
@@ -49,7 +50,7 @@ class VisitingAppbar extends StatelessWidget with PreferredSizeWidget {
                 fontSize: 14,
               ),
               unselectedLabelColor: myLightSecondaryTwo.withOpacity(0.56),
-              labelColor: Theme.of(context).accentColor,
+              labelColor: Theme.of(context).colorScheme.secondary,
             ),
           ),
         ),
@@ -57,7 +58,7 @@ class VisitingAppbar extends StatelessWidget with PreferredSizeWidget {
       title: Padding(
         padding: const EdgeInsets.all(16),
         child: Text(
-          Constants.textFavorite,
+          constants.textFavorite,
           style: Theme.of(context).textTheme.headline1?.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 18,

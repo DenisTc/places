@@ -4,7 +4,7 @@ import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
@@ -17,8 +17,8 @@ class SightDetails extends StatefulWidget {
   final int id;
 
   const SightDetails({
-    Key? key,
     required this.id,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -39,7 +39,7 @@ class _SightDetailsState extends State<SightDetails> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).colorScheme.secondary,
         child: FutureBuilder<Place>(
           future: _placeInteractor.getPlaceDetails(id: widget.id),
           builder: (context, snapshot) {
@@ -77,8 +77,8 @@ class _DescriptionPlace extends StatelessWidget {
   final Place place;
 
   const _DescriptionPlace({
-    Key? key,
     required this.place,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -101,9 +101,9 @@ class _GalleryPlace extends StatefulWidget {
   final PageController _pageController;
 
   const _GalleryPlace({
-    Key? key,
     required PageController pageController,
     required this.place,
+    Key? key,
   })  : _pageController = pageController,
         super(key: key);
 
@@ -113,6 +113,7 @@ class _GalleryPlace extends StatefulWidget {
 
 class _GalleryPlaceState extends State<_GalleryPlace> {
   double currentPage = 0;
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -186,9 +187,9 @@ class PageIndicator extends StatelessWidget {
   final double currentPage;
 
   const PageIndicator({
-    Key? key,
     required this.countImages,
     required this.currentPage,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -238,8 +239,8 @@ class _Description extends StatelessWidget {
   final Place place;
 
   const _Description({
-    Key? key,
     required this.place,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -291,8 +292,8 @@ class _FunctionButtons extends StatelessWidget {
   final Place place;
 
   const _FunctionButtons({
-    Key? key,
     required this.place,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -320,7 +321,7 @@ class _FunctionButtons extends StatelessWidget {
                 ),
                 const SizedBox(width: 9),
                 Text(
-                  Constants.textBtnSchedule,
+                  constants.textBtnSchedule,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 const SizedBox(width: 14),
@@ -351,8 +352,8 @@ class _FunctionButtons extends StatelessWidget {
                         ),
                         label: Text(
                           isFavorite
-                              ? Constants.textInFavorite
-                              : Constants.textToFavorite,
+                              ? constants.textInFavorite
+                              : constants.textToFavorite,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                       );
@@ -403,7 +404,7 @@ class _CreateRouteButton extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Text(
-            Constants.textBtnRoute,
+            constants.textBtnRoute,
             style: activeBtnTextStyle,
           ),
         ],
@@ -416,8 +417,8 @@ class _PlaceImage extends StatelessWidget {
   final String imgUrl;
 
   const _PlaceImage({
-    Key? key,
     required this.imgUrl,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -440,13 +441,20 @@ class _PlaceImage extends StatelessWidget {
               );
             },
             errorBuilder: (context, error, stackTrace) {
-              return imagePlaceholder();
+              return const ImagePlaceholder();
             },
           )
-        : imagePlaceholder();
+        : const ImagePlaceholder();
   }
+}
 
-  Container imagePlaceholder() {
+class ImagePlaceholder extends StatelessWidget {
+  const ImagePlaceholder({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       child: const Center(

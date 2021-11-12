@@ -3,7 +3,7 @@ import 'package:flutter_switch/flutter_switch.dart';
 import 'package:places/data/interactor/settings_interactor.dart';
 import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -18,7 +18,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     final _settingsInteractor = Provider.of<SettingsInteractor>(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       appBar: const _AppBarSettings(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -29,7 +29,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    Constants.textDarkTheme,
+                    constants.textDarkTheme,
                     style: Theme.of(context).textTheme.headline1?.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -47,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   value: _settingsInteractor.getThemeValue,
                   onToggle: (value) {
                     setState(() {
-                      _settingsInteractor.changeTheme(value);
+                      _settingsInteractor.changeTheme(toggleValue: value);
                     });
                   },
                 ),
@@ -59,7 +59,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    Constants.textBtnTutorial,
+                    constants.textBtnTutorial,
                     style: Theme.of(context).textTheme.headline1?.copyWith(
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
@@ -94,12 +94,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
 }
 
 class _AppBarSettings extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => const Size.fromHeight(56);
+
   const _AppBarSettings({
     Key? key,
   }) : super(key: key);
-
-  @override
-  Size get preferredSize => const Size.fromHeight(56);
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +109,7 @@ class _AppBarSettings extends StatelessWidget implements PreferredSizeWidget {
       title: Padding(
         padding: const EdgeInsets.all(16),
         child: Text(
-          Constants.textSettings,
+          constants.textSettings,
           style: Theme.of(context).textTheme.headline1?.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 18,

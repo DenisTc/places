@@ -8,9 +8,9 @@ class SightImage extends StatelessWidget {
   final Function(String imgUrl) notifyParent;
   final String image;
   const SightImage({
-    Key? key,
     required this.image,
     required this.notifyParent,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -42,7 +42,7 @@ class SightImage extends StatelessWidget {
               top: 6,
               right: 6,
               child: InkWell(
-                onTap: (){
+                onTap: () {
                   notifyParent(image);
                 },
                 child: SvgPicture.asset(

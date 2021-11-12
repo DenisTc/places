@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/ui/screens/res/colors.dart';
 
 class FavoriteCardBottom extends StatelessWidget {
   final Place place;
   final bool visited;
 
   const FavoriteCardBottom({
-    Key? key,
     required this.place,
     required this.visited,
+    Key? key,
   }) : super(key: key);
 
   @override

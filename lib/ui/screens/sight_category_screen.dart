@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
 import 'package:places/ui/widgets/network_exception.dart';
 import 'package:provider/provider.dart';
 
@@ -16,8 +16,8 @@ class SightCategoryScreen extends StatefulWidget {
 }
 
 class _SightCategoryScreenState extends State<SightCategoryScreen> {
-  late SearchInteractor _searchInteractor;
   String? selectedType;
+  late SearchInteractor _searchInteractor;
 
   @override
   void initState() {
@@ -29,7 +29,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const _AppBar(),
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       body: Column(
         children: [
           const SizedBox(height: 24),
@@ -117,8 +117,8 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
 class _SaveButton extends StatefulWidget {
   final String? selectedType;
   const _SaveButton({
-    Key? key,
     required this.selectedType,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -135,7 +135,7 @@ class __SaveButtonState extends State<_SaveButton> {
           Navigator.pop(context, widget.selectedType);
         },
         child: Text(
-          Constants.textBtnSave,
+          constants.textBtnSave,
           style: TextStyle(
             color: (widget.selectedType == null)
                 ? myLightSecondaryTwo.withOpacity(0.56)
@@ -164,12 +164,12 @@ class __SaveButtonState extends State<_SaveButton> {
 }
 
 class _AppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => const Size.fromHeight(56.0);
+
   const _AppBar({
     Key? key,
   }) : super(key: key);
-
-  @override
-  Size get preferredSize => const Size.fromHeight(56.0);
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +178,7 @@ class _AppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.transparent,
       elevation: 0,
       title: Text(
-        Constants.textCategory,
+        constants.textCategory,
         style: TextStyle(color: Theme.of(context).secondaryHeaderColor),
       ),
       leading: IconButton(

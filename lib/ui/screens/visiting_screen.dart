@@ -16,7 +16,7 @@ class VisitingScreen extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
-        backgroundColor: Theme.of(context).accentColor,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         appBar: const VisitingAppbar(),
         body: const _FavoriteTabBarView(),
       ),
@@ -48,8 +48,8 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
 
   @override
   Widget build(BuildContext context) {
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
+    // final isPortrait =
+    //     MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Container(
       margin: const EdgeInsets.only(top: 28),
@@ -70,7 +70,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                     places: snapshot.data!,
                     visited: false,
                     moveItemInList: (data, place, places, visited) {
-                      moveItemInList(data, place,snapshot.data!, visited);
+                      moveItemInList(data, place, snapshot.data!, visited);
                     },
                     removeSight: (place, visited) {
                       removePlace(place, visited);
@@ -86,7 +86,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                 }
               },
             ),
-            // TODO(Denis): Customize the display of items in portrait and landscape orientation for the Favorites screen.
+            // TODO: Customize the display of items in portrait and landscape orientation for the Favorites screen.
             // if (_notVisited.isNotEmpty)
             //   isPortrait
             //       ? SightVisitingPortrainWidget(
@@ -129,7 +129,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                   return SightVisitingPortrainWidget(
                     places: snapshot.data!,
                     visited: true,
-                    moveItemInList: (data, place, places , visited) {
+                    moveItemInList: (data, place, places, visited) {
                       moveItemInList(data, place, snapshot.data!, visited);
                     },
                     removeSight: (place, visited) {
@@ -147,7 +147,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
               },
             ),
 
-            // TODO(Denis): Customize the display of items in portrait and landscape orientation for the visited places screen.
+            // TODO: Customize the display of items in portrait and landscape orientation for the visited places screen.
             // if (_isVisited.isNotEmpty)
             //   isPortrait
             //       ? SightVisitingPortrainWidget(
@@ -186,7 +186,12 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
     setState(() {});
   }
 
-  void moveItemInList(Place data, Place place, List<Place> placeList,bool visited) {
+  void moveItemInList(
+    Place data,
+    Place place,
+    List<Place> placeList,
+    bool visited,
+  ) {
     setState(
       () {
         if (placeList.indexOf(data) != placeList.indexOf(place)) {

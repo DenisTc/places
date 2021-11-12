@@ -38,6 +38,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Sights',
       theme: _theme,
+      debugShowCheckedModeBanner: false,
       home: const SplashScreen(),
     );
   }

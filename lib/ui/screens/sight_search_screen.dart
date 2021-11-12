@@ -4,7 +4,7 @@ import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/list_screen/sight_app_bar.dart';
 import 'package:places/ui/widgets/network_exception.dart';
@@ -17,9 +17,10 @@ List<String> historyList = [];
 
 class SightSearchScreen extends StatefulWidget {
   final SettingsFilter? settingsFilter;
+
   const SightSearchScreen({
-    Key? key,
     required this.settingsFilter,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -41,7 +42,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const SightAppBar(),
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       body: Column(
         children: [
           SearchBar(
@@ -61,7 +62,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          Constants.textHistory,
+                          constants.textHistory,
                           style: TextStyle(
                             color: myLightSecondaryTwo.withOpacity(0.56),
                             fontSize: 12,
@@ -179,11 +180,11 @@ class _HistoryList extends StatefulWidget {
   final Function() notifyParent;
 
   const _HistoryList({
-    Key? key,
     required this.historyList,
     required this.deletePlaceFromHistory,
     required this.controllerSearch,
     required this.notifyParent,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -269,9 +270,9 @@ class _ClearHistoryButton extends StatefulWidget {
   final Function() clearHistory;
 
   const _ClearHistoryButton({
-    Key? key,
     required this.historyList,
     required this.clearHistory,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -293,7 +294,7 @@ class __ClearHistoryButtonState extends State<_ClearHistoryButton> {
         },
         style: const ButtonStyle(alignment: Alignment.centerLeft),
         child: Text(
-          Constants.textBtnClearHistory,
+          constants.textBtnClearHistory,
           style: TextStyle(
             color: Theme.of(context).buttonColor,
             fontSize: 16,

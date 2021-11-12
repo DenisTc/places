@@ -12,9 +12,10 @@ class FavoriteSightCard extends StatefulWidget {
   const FavoriteSightCard({
     required this.visited,
     required this.place,
-    Key? key,
     required this.moveItemInList,
     required this.removeSight,
+    Key? key,
+    
   }) : super(key: key);
 
   @override

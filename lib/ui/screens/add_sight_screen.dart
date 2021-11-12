@@ -5,7 +5,7 @@ import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_category_screen.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/sight_gallery.dart';
@@ -36,7 +36,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const NewSightAppBar(),
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       body: ListView(
         shrinkWrap: true,
         children: [
@@ -49,14 +49,14 @@ class _AddSightScreenState extends State<AddSightScreen> {
                 children: [
                   const SizedBox(height: 24),
                   const Text(
-                    Constants.textGallery,
+                    constants.textGallery,
                     style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 24),
-                  SightGallery(),
+                  const SightGallery(),
                   const SizedBox(height: 24),
                   Text(
-                    Constants.textCategory.toUpperCase(),
+                    constants.textCategory.toUpperCase(),
                     style: const TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 5),
@@ -71,7 +71,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   ),
                   const SizedBox(height: 24),
                   const Text(
-                    Constants.textTitle,
+                    constants.textTitle,
                     style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 12),
@@ -97,7 +97,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   const _SelectOnMapButton(),
                   const SizedBox(height: 30),
                   const Text(
-                    Constants.textDescription,
+                    constants.textDescription,
                     style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 12),
@@ -162,7 +162,7 @@ class _SelectOnMapButton extends StatelessWidget {
     return TextButton(
       onPressed: () {},
       child: Text(
-        Constants.textBtnShowOnMap,
+        constants.textBtnShowOnMap,
         style: TextStyle(
           color: Theme.of(context).buttonColor,
           fontSize: 16,
@@ -178,10 +178,10 @@ class _CategoryField extends StatefulWidget {
   final Function(int id) setValue;
 
   const _CategoryField({
-    Key? key,
     required this.controllerCat,
     required this.notifyParent,
     required this.setValue,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -271,11 +271,11 @@ class _NameField extends StatefulWidget {
   final Function() notifyParent;
 
   const _NameField({
-    Key? key,
     required this.formKey,
     required this.focusNodeLat,
     required this.controllerName,
     required this.notifyParent,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -286,7 +286,7 @@ class _NameFieldState extends State<_NameField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onFieldSubmitted: (String value) {
+      onFieldSubmitted: (_) {
         FocusScope.of(context).requestFocus(widget.focusNodeLat);
       },
       validator: (value) {
@@ -360,13 +360,13 @@ class _CoordinatesFields extends StatefulWidget {
   final Function() notifyParent;
 
   const _CoordinatesFields({
-    Key? key,
     required this.focusNodeLat,
     required this.focusNodeLng,
     required this.focusNodeDesc,
     required this.controllerLat,
     required this.controllerLng,
     required this.notifyParent,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -381,11 +381,10 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
       children: [
         Expanded(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                Constants.textLatitude,
+                constants.textLatitude,
                 style: TextStyle(color: myLightSecondaryTwo),
               ),
               const SizedBox(height: 12),
@@ -396,7 +395,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return Constants.textEnterLatitude;
+                    return constants.textEnterLatitude;
                   }
                 },
                 onChanged: (value) {
@@ -415,7 +414,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     const TextInputType.numberWithOptions(signed: true),
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(
-                    RegExp(r'[0-9.]'),
+                    RegExp('[0-9.]'),
                   ),
                 ],
                 cursorColor: Theme.of(context).secondaryHeaderColor,
@@ -468,7 +467,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                Constants.textLongitude,
+                constants.textLongitude,
                 style: TextStyle(color: myLightSecondaryTwo),
               ),
               const SizedBox(height: 12),
@@ -480,7 +479,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 },
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return Constants.textEnterLongitude;
+                    return constants.textEnterLongitude;
                   }
                 },
                 onChanged: (value) {
@@ -497,14 +496,17 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                 keyboardType:
                     const TextInputType.numberWithOptions(signed: true),
                 inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))
+                  FilteringTextInputFormatter.allow(
+                    RegExp('[0-9.]'),
+                  ),
                 ],
                 cursorColor: Theme.of(context).secondaryHeaderColor,
                 decoration: InputDecoration(
                   contentPadding:
                       const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
                   border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8)),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
@@ -553,10 +555,10 @@ class _DescriptionField extends StatefulWidget {
   final Function() notifyParent;
 
   const _DescriptionField({
-    Key? key,
     required this.focusNode,
     required this.notifyParent,
     required this.controllerDesc,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -632,7 +634,6 @@ class _CreateSightButton extends StatefulWidget {
   final TextEditingController controllerDesc;
 
   const _CreateSightButton({
-    Key? key,
     required this.enable,
     required this.formKey,
     required this.controllerCat,
@@ -640,6 +641,7 @@ class _CreateSightButton extends StatefulWidget {
     required this.controllerLat,
     required this.controllerLng,
     required this.controllerDesc,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -666,7 +668,7 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
               name: widget.controllerName.text,
               lat: double.parse(widget.controllerLat.text),
               lng: double.parse(widget.controllerLng.text),
-              urls: [''],
+              urls: const [''],
               description: widget.controllerDesc.text,
               placeType: widget.controllerCat.text,
             ),
@@ -674,7 +676,7 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
         }
       },
       child: Text(
-        Constants.textBtnCreate,
+        constants.textBtnCreate,
         style: TextStyle(
           color: widget.enable
               ? Colors.white

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 
 class NewSightAppBar extends StatelessWidget implements PreferredSizeWidget {
+  @override
+  Size get preferredSize => const Size.fromHeight(56);
+
   const NewSightAppBar({
     Key? key,
   }) : super(key: key);
-
-  @override
-  Size get preferredSize => const Size.fromHeight(56);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class NewSightAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.transparent,
       elevation: 0,
       title: Text(
-        Constants.textNewPlace,
+        constants.textNewPlace,
         style: TextStyle(color: Theme.of(context).secondaryHeaderColor),
       ),
       leadingWidth: 100,
@@ -26,7 +26,7 @@ class NewSightAppBar extends StatelessWidget implements PreferredSizeWidget {
           Navigator.pop(context);
         },
         child: const Text(
-          Constants.textCancel,
+          constants.textCancel,
           style: TextStyle(
             color: myLightSecondaryTwo,
             fontWeight: FontWeight.w500,

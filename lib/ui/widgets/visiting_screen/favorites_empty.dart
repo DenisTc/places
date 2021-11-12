@@ -7,10 +7,10 @@ class FavoritesEmpty extends StatelessWidget {
   final String desc;
 
   const FavoritesEmpty({
-    Key? key,
     required this.icon,
     required this.title,
     required this.desc,
+    Key? key,
   }) : super(key: key);
 
   @override

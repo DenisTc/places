@@ -4,14 +4,14 @@ import 'package:places/ui/widgets/search_screen/search_result.dart';
 
 class SearchResultList extends StatelessWidget {
   final String searchString;
-  final List<Place> _filteredSights;
   final Function(String name) addPlaceToSearchHistory;
+  final List<Place> _filteredSights;
 
   const SearchResultList({
-    Key? key,
     required List<Place> filteredSights,
     required this.searchString,
     required this.addPlaceToSearchHistory,
+    Key? key,
   })  : _filteredSights = filteredSights,
         super(key: key);
 

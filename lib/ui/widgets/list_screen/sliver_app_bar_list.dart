@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/widgets/list_screen/search_bar.dart';
 
 class SliverAppBarList extends StatefulWidget {
@@ -23,7 +23,7 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
       pinned: true,
       elevation: 0.0,
       expandedHeight: isPortrait ? 176.0 : 130,
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       flexibleSpace: LayoutBuilder(
         builder: (context, constraints) {
           final top = constraints.biggest.height;
@@ -59,7 +59,7 @@ class MiniTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      Constants.textListPlaces,
+      constants.textListPlaces,
       textAlign: TextAlign.center,
       style: Theme.of(context).textTheme.headline1,
     );
@@ -74,7 +74,7 @@ class BigTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      Constants.textBigListPlaces,
+      constants.textBigListPlaces,
       style: Theme.of(context)
           .textTheme
           .headline1!

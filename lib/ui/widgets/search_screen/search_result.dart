@@ -8,11 +8,12 @@ class SearchResult extends StatelessWidget {
   final Place place;
   final String searchString;
   final Function(String name) addPlaceToSearchHistory;
+
   const SearchResult({
-    Key? key,
     required this.place,
     required this.searchString,
     required this.addPlaceToSearchHistory,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -66,11 +67,12 @@ class _SightDesc extends StatelessWidget {
   final String name;
   final String placeType;
   final String searchString;
+
   const _SightDesc({
-    Key? key,
     required this.name,
     required this.placeType,
     required this.searchString,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -101,9 +103,9 @@ class RichName extends StatefulWidget {
   final String searchString;
 
   const RichName({
-    Key? key,
     required this.name,
     required this.searchString,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -149,8 +151,8 @@ class _SightImage extends StatelessWidget {
   final String imgUrl;
 
   const _SightImage({
-    Key? key,
     required this.imgUrl,
+    Key? key,
   }) : super(key: key);
 
   @override

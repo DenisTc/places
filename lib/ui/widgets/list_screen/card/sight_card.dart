@@ -81,7 +81,7 @@ class SightCard extends StatelessWidget {
     );
   }
 
-  void _showSight(BuildContext context, int id) async {
+  Future<void> _showSight(BuildContext context, int id) async {
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
@@ -101,8 +101,8 @@ class SightCard extends StatelessWidget {
 class _SightCardBottom extends StatelessWidget {
   final Place place;
   const _SightCardBottom({
-    Key? key,
     required this.place,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -149,8 +149,8 @@ class _SightCardBottom extends StatelessWidget {
 class _SightCardTop extends StatelessWidget {
   final Place place;
   const _SightCardTop({
-    Key? key,
     required this.place,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -194,17 +194,24 @@ class _SightCardTop extends StatelessWidget {
                       );
                     },
                     errorBuilder: (context, error, stackTrace) {
-                      return imagePlaceholder(context);
+                      return const ImagePlaceholder();
                     },
                   )
-                : imagePlaceholder(context),
+                : const ImagePlaceholder(),
           ),
         ],
       ),
     );
   }
+}
 
-  Container imagePlaceholder(BuildContext context) {
+class ImagePlaceholder extends StatelessWidget {
+  const ImagePlaceholder({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).secondaryHeaderColor,
       child: const Center(

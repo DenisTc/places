@@ -5,8 +5,8 @@ import 'package:places/ui/widgets/onboarding_screen/home_button.dart';
 class PageIndicator extends StatelessWidget {
   final double currentPage;
   const PageIndicator({
-    Key? key,
     required this.currentPage,
+    Key? key,
   }) : super(key: key);
 
   @override

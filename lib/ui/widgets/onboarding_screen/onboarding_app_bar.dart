@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/main_screen.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 
 class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double currentPage;
 
-  const OnboardingAppBar({
-    Key? key,
-    required this.currentPage,
-  }) : super(key: key);
-
   @override
   Size get preferredSize => const Size.fromHeight(56);
+
+  const OnboardingAppBar({
+    required this.currentPage,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
               );
             },
             child: Text(
-              Constants.textBtnSkip,
+              constants.textBtnSkip,
               style: TextStyle(
                 color: Theme.of(context).buttonColor,
                 fontWeight: FontWeight.w500,

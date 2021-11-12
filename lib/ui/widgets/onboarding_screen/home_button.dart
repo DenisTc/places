@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/main_screen.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 
 class HomeButton extends StatelessWidget {
   const HomeButton({
@@ -28,7 +28,7 @@ class HomeButton extends StatelessWidget {
         ),
       ),
       child: const Text(
-        Constants.textBtnStart,
+        constants.textBtnStart,
         style: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w700,

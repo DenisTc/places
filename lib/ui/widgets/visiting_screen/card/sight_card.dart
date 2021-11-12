@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
 import 'package:places/ui/widgets/visiting_screen/card/favorite_card_bottom.dart';
 import 'package:places/ui/widgets/visiting_screen/card/favorite_card_top.dart';
-import 'package:provider/src/provider.dart';
+import 'package:provider/provider.dart';
 
 class SightCard extends StatefulWidget {
   final GlobalKey globalKey;
@@ -19,11 +19,11 @@ class SightCard extends StatefulWidget {
   final Place place;
   final Function(Place place, bool visited) removeSight;
   const SightCard({
-    Key? key,
     required this.visited,
     required this.place,
     required this.globalKey,
     required this.removeSight,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -40,7 +40,7 @@ class __SightCardState extends State<SightCard> {
         key: widget.globalKey,
         height: 199,
         decoration: BoxDecoration(
-          color: Theme.of(context).accentColor,
+          color: Theme.of(context).colorScheme.secondary,
           borderRadius: const BorderRadius.all(Radius.circular(16)),
         ),
         child: Dismissible(
@@ -57,7 +57,7 @@ class __SightCardState extends State<SightCard> {
                 end: Alignment.centerLeft,
                 colors: [
                   Colors.red,
-                  Theme.of(context).accentColor,
+                  Theme.of(context).colorScheme.secondary,
                 ],
               ),
               borderRadius: const BorderRadius.all(Radius.circular(16)),
@@ -76,7 +76,7 @@ class __SightCardState extends State<SightCard> {
                     ),
                     const SizedBox(height: 10),
                     const Text(
-                      Constants.textBtnDelete,
+                      constants.textBtnDelete,
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -181,7 +181,7 @@ class __SightCardState extends State<SightCard> {
     );
   }
 
-  void _showSight(int id) async {
+  Future<void> _showSight(int id) async {
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
