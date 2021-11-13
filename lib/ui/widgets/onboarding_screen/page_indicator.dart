@@ -4,8 +4,10 @@ import 'package:places/ui/widgets/onboarding_screen/home_button.dart';
 
 class PageIndicator extends StatelessWidget {
   final double currentPage;
+  final bool fromSettings;
   const PageIndicator({
     required this.currentPage,
+    required this.fromSettings,
     Key? key,
   }) : super(key: key);
 
@@ -38,7 +40,7 @@ class PageIndicator extends StatelessWidget {
             ],
           ),
           SizedBox(height: (currentPage == 2) ? 32 : 80),
-          if (currentPage == 2) const HomeButton(),
+          if (currentPage == 2) HomeButton(fromSettings: fromSettings),
         ],
       ),
     );

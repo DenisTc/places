@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement<void, void>(
           context,
           MaterialPageRoute(
-            builder: (context) => const OnboardingScreen(),
+            builder: (context) => const OnboardingScreen(fromSettings: false),
           ),
         ),
       },

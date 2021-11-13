@@ -7,11 +7,13 @@ class OnboardingScreens extends StatefulWidget {
   final PageController pageController;
   final Function(double page) setCurrentPage;
   final double currentPage;
+  final bool fromSettings;
 
   const OnboardingScreens({
     required this.pageController,
     required this.setCurrentPage,
     required this.currentPage,
+    required this.fromSettings,
     Key? key,
   }) : super(key: key);
 
@@ -51,7 +53,10 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
             ),
           ],
         ),
-        PageIndicator(currentPage: widget.currentPage),
+        PageIndicator(
+          currentPage: widget.currentPage,
+          fromSettings: widget.fromSettings,
+        ),
       ],
     );
   }

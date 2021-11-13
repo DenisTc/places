@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/main_screen.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
+import 'package:places/ui/screens/settings_screen.dart';
 
 class HomeButton extends StatelessWidget {
+  final bool fromSettings;
   const HomeButton({
+    required this.fromSettings,
     Key? key,
   }) : super(key: key);
 
@@ -14,7 +17,8 @@ class HomeButton extends StatelessWidget {
         Navigator.pushReplacement<void, void>(
           context,
           MaterialPageRoute(
-            builder: (context) => const MainScreen(),
+            builder: (context) =>
+                fromSettings ? const SettingsScreen() : const MainScreen(),
           ),
         );
       },
