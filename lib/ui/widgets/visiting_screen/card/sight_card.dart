@@ -43,132 +43,143 @@ class __SightCardState extends State<SightCard> {
           color: Theme.of(context).colorScheme.secondary,
           borderRadius: const BorderRadius.all(Radius.circular(16)),
         ),
-        child: Dismissible(
-          key: ValueKey(widget.place),
-          direction: DismissDirection.endToStart,
-          onDismissed: (direction) {
-            widget.removeSight(widget.place, widget.visited);
-          },
-          background: Container(
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.centerRight,
-                end: Alignment.centerLeft,
-                colors: [
-                  Colors.red,
-                  Theme.of(context).colorScheme.secondary,
-                ],
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(16)),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      iconBasket,
-                      width: 25,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      constants.textBtnDelete,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16.0),
           child: Stack(
             children: [
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  FavoriteCardTop(
-                    place: widget.place,
-                    visited: widget.visited,
+              Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.centerRight,
+                    end: Alignment.centerLeft,
+                    colors: [
+                      Colors.red,
+                      Theme.of(context).colorScheme.secondary,
+                    ],
                   ),
-                  FavoriteCardBottom(
-                    place: widget.place,
-                    visited: widget.visited,
-                  ),
-                ],
-              ),
-              Material(
-                color: Colors.transparent,
-                child: InkWell(
                   borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  onTap: () {
-                    _showSight(widget.place.id);
-                  },
                 ),
-              ),
-              Positioned(
-                right: 4,
-                child: Row(
-                  children: [
-                    Material(
-                      color: Colors.transparent,
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      clipBehavior: Clip.antiAlias,
-                      child: IconButton(
-                        onPressed: () async {
-                          if (widget.visited) {
-                          } else {
-                            if (Platform.isAndroid) {
-                              await showDatePicker(
-                                context: context,
-                                initialDate: DateTime.now(),
-                                firstDate: DateTime.now(),
-                                lastDate: DateTime(2101),
-                                builder: (context, child) {
-                                  return Theme(
-                                    data: ThemeData.light().copyWith(
-                                      colorScheme: ColorScheme.light(
-                                        primary: Theme.of(context).buttonColor,
-                                      ),
-                                    ),
-                                    child: child!,
-                                  );
-                                },
-                              );
-                            } else {
-                              await showModalBottomSheet<void>(
-                                context: context,
-                                builder: (builder) {
-                                  return const SightCupertinoDatePicker();
-                                },
-                              );
-                            }
-                          }
-                        },
-                        icon: SvgPicture.asset(
-                          widget.visited ? iconShare : iconCalendar,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: Align(
+                    alignment: AlignmentDirectional.centerEnd,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          iconBasket,
                           width: 25,
                           color: Colors.white,
                         ),
-                      ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          constants.textBtnDelete,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 2),
+                  ),
+                ),
+              ),
+              Dismissible(
+                key: ValueKey(widget.place),
+                direction: DismissDirection.endToStart,
+                onDismissed: (direction) {
+                  widget.removeSight(widget.place, widget.visited);
+                },
+                child: Stack(
+                  children: [
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        FavoriteCardTop(
+                          place: widget.place,
+                          visited: widget.visited,
+                        ),
+                        FavoriteCardBottom(
+                          place: widget.place,
+                          visited: widget.visited,
+                        ),
+                      ],
+                    ),
                     Material(
                       color: Colors.transparent,
-                      borderRadius: const BorderRadius.all(Radius.circular(50)),
-                      clipBehavior: Clip.antiAlias,
-                      child: IconButton(
-                        onPressed: () {
-                          _placeInteractor.removeFromFavorites(widget.place);
+                      child: InkWell(
+                        borderRadius: const BorderRadius.all(Radius.circular(16)),
+                        onTap: () {
+                          _showSight(widget.place.id);
                         },
-                        icon: const Icon(
-                          Icons.clear_outlined,
-                          color: Colors.white,
-                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 4,
+                      child: Row(
+                        children: [
+                          Material(
+                            color: Colors.transparent,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(50)),
+                            clipBehavior: Clip.antiAlias,
+                            child: IconButton(
+                              onPressed: () async {
+                                if (widget.visited) {
+                                } else {
+                                  if (Platform.isAndroid) {
+                                    await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime.now(),
+                                      lastDate: DateTime(2101),
+                                      builder: (context, child) {
+                                        return Theme(
+                                          data: ThemeData.light().copyWith(
+                                            colorScheme: ColorScheme.light(
+                                              primary:
+                                                  Theme.of(context).buttonColor,
+                                            ),
+                                          ),
+                                          child: child!,
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    await showModalBottomSheet<void>(
+                                      context: context,
+                                      builder: (builder) {
+                                        return const SightCupertinoDatePicker();
+                                      },
+                                    );
+                                  }
+                                }
+                              },
+                              icon: SvgPicture.asset(
+                                widget.visited ? iconShare : iconCalendar,
+                                width: 25,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                          Material(
+                            color: Colors.transparent,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(50)),
+                            clipBehavior: Clip.antiAlias,
+                            child: IconButton(
+                              onPressed: () {
+                                _placeInteractor
+                                    .removeFromFavorites(widget.place);
+                              },
+                              icon: const Icon(
+                                Icons.clear_outlined,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
