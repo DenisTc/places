@@ -7,10 +7,13 @@ import 'package:places/ui/screens/sight_details_screen.dart';
 class SearchResult extends StatelessWidget {
   final Place place;
   final String searchString;
+  final Function(String name) addPlaceToSearchHistory;
+
   const SearchResult({
-    Key? key,
     required this.place,
     required this.searchString,
+    required this.addPlaceToSearchHistory,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -27,11 +30,26 @@ class SearchResult extends StatelessWidget {
               ),
             ),
           );
+          addPlaceToSearchHistory(place.name);
         },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _SightImage(imgUrl: place.urls.first),
+            if (place.urls.isNotEmpty)
+              _SightImage(imgUrl: place.urls.first)
+            else
+              Container(
+                height: 56,
+                width: 56,
+                color: Colors.white,
+                child: const Center(
+                  child: Icon(
+                    Icons.photo_size_select_actual_outlined,
+                    color: Colors.grey,
+                    size: 30.0,
+                  ),
+                ),
+              ),
             const SizedBox(width: 16),
             _SightDesc(
               name: place.name,
@@ -49,11 +67,12 @@ class _SightDesc extends StatelessWidget {
   final String name;
   final String placeType;
   final String searchString;
+
   const _SightDesc({
-    Key? key,
     required this.name,
     required this.placeType,
-    required this.searchString, 
+    required this.searchString,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -84,9 +103,9 @@ class RichName extends StatefulWidget {
   final String searchString;
 
   const RichName({
-    Key? key,
     required this.name,
     required this.searchString,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -132,25 +151,49 @@ class _SightImage extends StatelessWidget {
   final String imgUrl;
 
   const _SightImage({
-    Key? key,
     required this.imgUrl,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 56,
       width: 56,
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(12.0)),
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         child: Image.network(
           imgUrl,
           fit: BoxFit.cover,
+          loadingBuilder: (
+            context,
+            child,
+            loadingProgress,
+          ) {
+            if (loadingProgress == null) return child;
+
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                        loadingProgress.expectedTotalBytes!
+                    : null,
+              ),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return Container(
+              color: Colors.white,
+              child: const Center(
+                child: Icon(
+                  Icons.photo_size_select_actual_outlined,
+                  color: Colors.grey,
+                  size: 30.0,
+                ),
+              ),
+            );
+          },
         ),
-      ),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-        color: Colors.red,
       ),
     );
   }

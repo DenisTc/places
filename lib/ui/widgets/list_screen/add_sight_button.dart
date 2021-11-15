@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/screens/add_sight_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 
 class AddSightButton extends StatelessWidget {
@@ -38,7 +38,7 @@ class AddSightButton extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Text(
-                Constants.textNewPlace.toUpperCase(),
+                constants.textNewPlace.toUpperCase(),
                 style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w700,

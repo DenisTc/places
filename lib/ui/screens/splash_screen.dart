@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     try {
       _navigateToNext();
-    } catch (e) {
+    } on Exception catch (e) {
       debugPrint('Ошибка при переходе на следующий экран: $e');
     }
   }
@@ -53,7 +53,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement<void, void>(
           context,
           MaterialPageRoute(
-            builder: (context) => const OnboardingScreen(),
+            builder: (context) => const OnboardingScreen(fromSettings: false),
           ),
         ),
       },

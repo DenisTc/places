@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/domain/filters.dart';
-import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -12,7 +11,7 @@ final filters = Filters();
 
 class SearchBar extends StatefulWidget {
   final textFieldFocusNode = FocusNode();
-  
+
   SearchBar({
     Key? key,
   }) : super(key: key);
@@ -32,7 +31,8 @@ class _SearchBarState extends State<SearchBar> {
           Navigator.push<List>(
             context,
             MaterialPageRoute(
-              builder: (context) => SightSearchScreen(settingsFilter: settingsFilter),
+              builder: (context) =>
+                  SightSearchScreen(settingsFilter: settingsFilter),
             ),
           );
         }
@@ -62,49 +62,50 @@ class _SearchBarState extends State<SearchBar> {
             color: myLightSecondaryTwo.withOpacity(0.56),
           ),
         ),
-        suffixIcon: GestureDetector(
-          child: IconButton(
-            icon: SvgPicture.asset(
-              iconOptions,
-              height: 15,
-              width: 15,
-              color: Theme.of(context).buttonColor,
+        suffixIcon: Material(
+          color: Colors.transparent,
+          borderRadius: const BorderRadius.all(Radius.circular(50)),
+          clipBehavior: Clip.antiAlias,
+          child: GestureDetector(
+            child: IconButton(
+              icon: SvgPicture.asset(
+                iconOptions,
+                height: 15,
+                width: 15,
+                color: Theme.of(context).buttonColor,
+              ),
+              onPressed: () {
+                widget.textFieldFocusNode.unfocus();
+                widget.textFieldFocusNode.canRequestFocus = false;
+                _navigateGetDataFromFilters(context);
+                Future.delayed(const Duration(milliseconds: 100), () {
+                  widget.textFieldFocusNode.canRequestFocus = true;
+                });
+              },
             ),
-            onPressed: () {
-              widget.textFieldFocusNode.unfocus();
-              widget.textFieldFocusNode.canRequestFocus = false;
-              _navigateGetDataFromFilters(context);
-              Future.delayed(const Duration(milliseconds: 100), () {
-                widget.textFieldFocusNode.canRequestFocus = true;
-              });
-            },
           ),
         ),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
-            width: 1,
             color: Colors.transparent,
           ),
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
-            width: 1,
             color: Colors.transparent,
           ),
         ),
         disabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
-            width: 1,
             color: Colors.transparent,
           ),
         ),
         enabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(
-            width: 1,
             color: Colors.transparent,
           ),
         ),
@@ -112,7 +113,7 @@ class _SearchBarState extends State<SearchBar> {
     );
   }
 
-  void _navigateGetDataFromFilters(BuildContext context) async {
+  Future<void> _navigateGetDataFromFilters(BuildContext context) async {
     settingsFilter = await Navigator.push(
       context,
       MaterialPageRoute(

@@ -8,11 +8,11 @@ class SettingsFilter {
   final String? nameFilter;
 
   SettingsFilter({
-    this.lat = null,
-    this.lng = null,
-    this.distance = null,
-    this.typeFilter = null,
-    this.nameFilter = null,
+    this.lat,
+    this.lng,
+    this.distance,
+    this.typeFilter,
+    this.nameFilter,
   });
 
   Map<String, dynamic> toMap() {

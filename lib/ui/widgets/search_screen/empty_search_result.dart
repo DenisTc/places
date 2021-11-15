@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 
 class EmptySearchResult extends StatelessWidget {
@@ -13,8 +13,6 @@ class EmptySearchResult extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
       children: [
         SvgPicture.asset(
           iconSearch,
@@ -23,7 +21,7 @@ class EmptySearchResult extends StatelessWidget {
         ),
         const SizedBox(height: 32),
         Text(
-          Constants.textNotFound,
+          constants.textNotFound,
           style: TextStyle(
             fontSize: 18,
             color: myLightSecondaryTwo.withOpacity(0.56),
@@ -32,7 +30,7 @@ class EmptySearchResult extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          Constants.textTryChangeOptions,
+          constants.textTryChangeOptions,
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 14,

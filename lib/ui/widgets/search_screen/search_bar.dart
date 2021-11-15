@@ -8,9 +8,9 @@ class SearchBar extends StatefulWidget {
   final Function() notifyParent;
 
   const SearchBar({
-    Key? key,
     required this.controllerSearch,
     required this.notifyParent,
+    Key? key,
   }) : super(key: key);
 
   @override

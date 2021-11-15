@@ -52,17 +52,22 @@ class SightCard extends StatelessWidget {
                   initialData: false,
                   child: Consumer<bool>(
                     builder: (context, isFavorite, child) {
-                      return IconButton(
-                        onPressed: () {
-                          isFavorite
-                              ? _favoriteIconController
-                                  .removeFromFavorites(place)
-                              : _favoriteIconController
-                                  .addToFavorites(place);
-                        },
-                        icon: SvgPicture.asset(
-                          isFavorite ? iconFavoriteSelected : iconFavorite,
-                          color: Colors.white,
+                      return Material(
+                        color: Colors.transparent,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(50)),
+                        clipBehavior: Clip.antiAlias,
+                        child: IconButton(
+                          onPressed: () {
+                            isFavorite
+                                ? _favoriteIconController
+                                    .removeFromFavorites(place)
+                                : _favoriteIconController.addToFavorites(place);
+                          },
+                          icon: SvgPicture.asset(
+                            isFavorite ? iconFavoriteSelected : iconFavorite,
+                            color: Colors.white,
+                          ),
                         ),
                       );
                     },
@@ -76,7 +81,7 @@ class SightCard extends StatelessWidget {
     );
   }
 
-  void _showSight(BuildContext context,int id) async {
+  Future<void> _showSight(BuildContext context, int id) async {
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
@@ -96,8 +101,8 @@ class SightCard extends StatelessWidget {
 class _SightCardBottom extends StatelessWidget {
   final Place place;
   const _SightCardBottom({
-    Key? key,
     required this.place,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -119,7 +124,7 @@ class _SightCardBottom extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             place.name,
-            maxLines: 2,
+            maxLines: 1,
             style: Theme.of(context).textTheme.headline1?.copyWith(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
@@ -144,13 +149,20 @@ class _SightCardBottom extends StatelessWidget {
 class _SightCardTop extends StatelessWidget {
   final Place place;
   const _SightCardTop({
-    Key? key,
     required this.place,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
       height: 96,
       child: Stack(
         children: [
@@ -159,29 +171,55 @@ class _SightCardTop extends StatelessWidget {
               topLeft: Radius.circular(16),
               topRight: Radius.circular(16),
             ),
-            child: Image.network(
-              place.urls.first,
-              fit: BoxFit.cover,
-              height: double.infinity,
-              width: double.infinity,
-              loadingBuilder: (
-                context,
-                child,
-                loadingProgress,
-              ) {
-                if (loadingProgress == null) return child;
-                return Center(
-                  child: CircularProgressIndicator(
-                    value: loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
-                  ),
-                );
-              },
-            ),
+            child: place.urls.isNotEmpty
+                ? Image.network(
+                    place.urls.first,
+                    fit: BoxFit.cover,
+                    height: double.infinity,
+                    width: double.infinity,
+                    loadingBuilder: (
+                      context,
+                      child,
+                      loadingProgress,
+                    ) {
+                      if (loadingProgress == null) return child;
+
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return const ImagePlaceholder();
+                    },
+                  )
+                : const ImagePlaceholder(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ImagePlaceholder extends StatelessWidget {
+  const ImagePlaceholder({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Theme.of(context).secondaryHeaderColor,
+      child: const Center(
+        child: Icon(
+          Icons.photo_size_select_actual_outlined,
+          color: Colors.grey,
+          size: 50.0,
+        ),
       ),
     );
   }

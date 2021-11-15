@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/styles.dart';
 
 final lightTheme = ThemeData(
-  accentColor: Colors.white,
+  appBarTheme: AppBarTheme(
+    systemOverlayStyle: SystemUiOverlayStyle.dark,
+  ),
   scaffoldBackgroundColor: Colors.white,
   primaryColor: myLightBackground,
   primaryColorLight: myLightSecondaryTwo.withOpacity(0),
@@ -33,11 +36,11 @@ final lightTheme = ThemeData(
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: Colors.transparent,
   ),
+  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
 );
 
 final darkTheme = ThemeData(
   iconTheme: const IconThemeData(color: Colors.white),
-  accentColor: myDarkMain,
   scaffoldBackgroundColor: nightRider,
   primaryColor: myDark,
   errorColor: myDarkRed,
@@ -65,4 +68,5 @@ final darkTheme = ThemeData(
     inactiveTrackColor: myLightSecondaryTwo.withOpacity(0.56),
     thumbColor: Colors.white,
   ),
+  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: myDarkMain),
 );

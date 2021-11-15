@@ -4,11 +4,12 @@ import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
+import 'package:places/ui/widgets/sight_details_screen/photo_view.dart';
 import 'package:provider/provider.dart';
 
 /// A screen with a detailed description of the place
@@ -16,8 +17,8 @@ class SightDetails extends StatefulWidget {
   final int id;
 
   const SightDetails({
-    Key? key,
     required this.id,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -38,7 +39,7 @@ class _SightDetailsState extends State<SightDetails> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).colorScheme.secondary,
         child: FutureBuilder<Place>(
           future: _placeInteractor.getPlaceDetails(id: widget.id),
           builder: (context, snapshot) {
@@ -76,8 +77,8 @@ class _DescriptionPlace extends StatelessWidget {
   final Place place;
 
   const _DescriptionPlace({
-    Key? key,
     required this.place,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -100,9 +101,9 @@ class _GalleryPlace extends StatefulWidget {
   final PageController _pageController;
 
   const _GalleryPlace({
-    Key? key,
     required PageController pageController,
     required this.place,
+    Key? key,
   })  : _pageController = pageController,
         super(key: key);
 
@@ -112,31 +113,61 @@ class _GalleryPlace extends StatefulWidget {
 
 class _GalleryPlaceState extends State<_GalleryPlace> {
   double currentPage = 0;
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      backgroundColor: Colors.transparent,
       automaticallyImplyLeading: false,
       expandedHeight: 360,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           height: 360,
-          color: Colors.brown,
+          color: Colors.white,
           child: Stack(
             children: [
-              PageView.builder(
-                onPageChanged: (int page) {
-                  setState(() {
-                    currentPage = page.toDouble();
-                  });
-                },
-                controller: widget._pageController,
-                itemCount: widget.place.urls.length,
-                itemBuilder: (context, index) {
-                  return _PlaceImage(
-                    imgUrl: widget.place.urls[index],
-                  );
-                },
-              ),
+              if (widget.place.urls.isNotEmpty)
+                PageView.builder(
+                  onPageChanged: (page) {
+                    setState(() {
+                      currentPage = page.toDouble();
+                    });
+                  },
+                  allowImplicitScrolling: true,
+                  physics: const ClampingScrollPhysics(),
+                  controller: widget._pageController,
+                  itemCount: widget.place.urls.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        if (widget.place.urls.isNotEmpty) {
+                          Navigator.of(context).push<void>(
+                            MaterialPageRoute(
+                              builder: (context) => PhotoView(
+                                imageList: widget.place.urls,
+                                currentImage: 0,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: _PlaceImage(
+                        imgUrl: widget.place.urls[index],
+                      ),
+                    );
+                  },
+                )
+              else
+                Container(
+                  color: Colors.white,
+                  child: const Center(
+                    child: Icon(
+                      Icons.photo_size_select_actual_outlined,
+                      color: Colors.grey,
+                      size: 100.0,
+                    ),
+                  ),
+                ),
               const _ArrowBackButton(),
               if (widget.place.urls.length > 1)
                 PageIndicator(
@@ -156,9 +187,9 @@ class PageIndicator extends StatelessWidget {
   final double currentPage;
 
   const PageIndicator({
-    Key? key,
     required this.countImages,
     required this.currentPage,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -208,8 +239,8 @@ class _Description extends StatelessWidget {
   final Place place;
 
   const _Description({
-    Key? key,
     required this.place,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -219,11 +250,16 @@ class _Description extends StatelessWidget {
       children: [
         const SizedBox(height: 24),
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              place.name,
-              style:
-                  Theme.of(context).textTheme.headline1?.copyWith(fontSize: 24),
+            Expanded(
+              child: Text(
+                place.name,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1
+                    ?.copyWith(fontSize: 24),
+              ),
             ),
           ],
         ),
@@ -256,8 +292,8 @@ class _FunctionButtons extends StatelessWidget {
   final Place place;
 
   const _FunctionButtons({
-    Key? key,
     required this.place,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -285,7 +321,7 @@ class _FunctionButtons extends StatelessWidget {
                 ),
                 const SizedBox(width: 9),
                 Text(
-                  Constants.textBtnSchedule,
+                  constants.textBtnSchedule,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 const SizedBox(width: 14),
@@ -308,8 +344,7 @@ class _FunctionButtons extends StatelessWidget {
                           isFavorite
                               ? _favoriteIconController
                                   .removeFromFavorites(place)
-                              : _favoriteIconController
-                                  .addToFavorites(place);
+                              : _favoriteIconController.addToFavorites(place);
                         },
                         icon: SvgPicture.asset(
                           isFavorite ? iconFavoriteSelected : iconFavorite,
@@ -317,8 +352,8 @@ class _FunctionButtons extends StatelessWidget {
                         ),
                         label: Text(
                           isFavorite
-                              ? Constants.textInFavorite
-                              : Constants.textToFavorite,
+                              ? constants.textInFavorite
+                              : constants.textToFavorite,
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                       );
@@ -369,7 +404,7 @@ class _CreateRouteButton extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           Text(
-            Constants.textBtnRoute,
+            constants.textBtnRoute,
             style: activeBtnTextStyle,
           ),
         ],
@@ -382,28 +417,53 @@ class _PlaceImage extends StatelessWidget {
   final String imgUrl;
 
   const _PlaceImage({
-    Key? key,
     required this.imgUrl,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      imgUrl,
-      fit: BoxFit.cover,
-      height: double.infinity,
-      width: double.infinity,
-      loadingBuilder: (context, child, loadingProgress) {
-        if (loadingProgress == null) return child;
-        return Center(
-          child: CircularProgressIndicator(
-            value: loadingProgress.expectedTotalBytes != null
-                ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
-                : null,
-          ),
-        );
-      },
+    return imgUrl.isNotEmpty
+        ? Image.network(
+            imgUrl,
+            fit: BoxFit.cover,
+            height: double.infinity,
+            width: double.infinity,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return Center(
+                child: CircularProgressIndicator(
+                  value: loadingProgress.expectedTotalBytes != null
+                      ? loadingProgress.cumulativeBytesLoaded /
+                          loadingProgress.expectedTotalBytes!
+                      : null,
+                ),
+              );
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return const ImagePlaceholder();
+            },
+          )
+        : const ImagePlaceholder();
+  }
+}
+
+class ImagePlaceholder extends StatelessWidget {
+  const ImagePlaceholder({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: const Center(
+        child: Icon(
+          Icons.photo_size_select_actual_outlined,
+          color: Colors.grey,
+          size: 100.0,
+        ),
+      ),
     );
   }
 }
@@ -418,23 +478,25 @@ class _ArrowBackButton extends StatelessWidget {
     return Positioned(
       top: 16.0,
       right: 16.0,
-      child: InkWell(
-        onTap: () {
-          Navigator.of(context).pop();
-        },
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-          ),
-          child: Align(
-            child: SvgPicture.asset(
-              iconClose,
-              height: 20,
-              width: 20,
-              color: myLightMain,
+      child: SafeArea(
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).pop();
+          },
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+            ),
+            child: Align(
+              child: SvgPicture.asset(
+                iconClose,
+                height: 20,
+                width: 20,
+                color: myLightMain,
+              ),
             ),
           ),
         ),

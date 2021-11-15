@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
 
 class FavoriteCardTop extends StatefulWidget {
-  const FavoriteCardTop({
-    Key? key,
-    required this.place,
-    required this.visited,
-  }) : super(key: key);
-
   final Place place;
   final bool visited;
+
+  const FavoriteCardTop({
+    required this.place,
+    required this.visited,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _FavoriteCardTopState createState() => _FavoriteCardTopState();
@@ -18,7 +18,7 @@ class FavoriteCardTop extends StatefulWidget {
 class _FavoriteCardTopState extends State<FavoriteCardTop> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 96,
       child: Stack(
         children: [

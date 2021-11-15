@@ -32,3 +32,4 @@ const iconListSelected = 'res/icons/list_selected.svg';
 const iconMapSelected = 'res/icons/map_selected.svg';
 const iconSettingsSelected = 'res/icons/settings_selected.svg';
 const iconErrorRound = 'res/icons/error_round.svg';
+const iconImgPlaceholder = 'res/icons/image_placeholder.svg';

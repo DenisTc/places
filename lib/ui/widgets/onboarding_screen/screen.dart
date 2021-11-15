@@ -8,10 +8,11 @@ class Screen extends StatelessWidget {
   final String description;
 
   const Screen({
-    Key? key,
     required this.icon,
     required this.title,
     required this.description,
+    Key? key,
+    
   }) : super(key: key);
 
   @override

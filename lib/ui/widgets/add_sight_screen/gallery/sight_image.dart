@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/screens/res/icons.dart';
@@ -6,9 +8,9 @@ class SightImage extends StatelessWidget {
   final Function(String imgUrl) notifyParent;
   final String image;
   const SightImage({
-    Key? key,
     required this.image,
     required this.notifyParent,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -30,8 +32,8 @@ class SightImage extends StatelessWidget {
               ),
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(12.0)),
-                child: Image.network(
-                  image,
+                child: Image.file(
+                  File(image),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -40,7 +42,7 @@ class SightImage extends StatelessWidget {
               top: 6,
               right: 6,
               child: InkWell(
-                onTap: (){
+                onTap: () {
                   notifyParent(image);
                 },
                 child: SvgPicture.asset(

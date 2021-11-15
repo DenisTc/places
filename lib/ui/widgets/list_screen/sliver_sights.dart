@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/mocks.dart';
 import 'package:places/ui/widgets/list_screen/card/sight_card.dart';
-import 'package:places/ui/widgets/list_screen/card/sight_landscape_widget.dart';
-import 'package:places/ui/widgets/list_screen/card/sight_portrait_widget.dart';
 
 class SliverSights extends StatelessWidget {
   final List<Place> places;
 
   const SliverSights({
-    Key? key,
     required this.places,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -29,8 +27,8 @@ class SliverSights extends StatelessWidget {
 class SightPortraitWidget extends StatelessWidget {
   final List<Place> places;
   const SightPortraitWidget({
-    Key? key,
     required this.places,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -40,7 +38,7 @@ class SightPortraitWidget extends StatelessWidget {
         (context, index) {
           final place = places[index];
           return Padding(
-            padding: const EdgeInsets.only(bottom: 16),
+            padding: const EdgeInsets.only(bottom: 16, top: 18),
             child: SightCard(place: place),
           );
         },
@@ -52,8 +50,10 @@ class SightPortraitWidget extends StatelessWidget {
 
 class SightLandscapeWidget extends StatelessWidget {
   final List<Place> places;
-  const SightLandscapeWidget({Key? key, required this.places})
-      : super(key: key);
+  const SightLandscapeWidget({
+    required this.places,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 
 class SearchInteractor extends ChangeNotifier {
   final _searchRepository = SearchRepository();
@@ -12,12 +12,17 @@ class SearchInteractor extends ChangeNotifier {
       StreamController<List<Place>>.broadcast();
   final StreamController<List<String>> _listCategoriesController =
       StreamController<List<String>>.broadcast();
-  RangeValues _distanceRangeValue = Constants.defaultDistanceRange;
   List<String> selectedFilters = [];
-
   RangeValues get getRangeValue => _distanceRangeValue;
+  RangeValues _distanceRangeValue = constants.defaultDistanceRange;
 
   SearchInteractor();
+
+  @override
+  void dispose() {
+    _listFiltredController.close();
+    _listCategoriesController.close();
+  }
 
   void setRangeValue(RangeValues rangeValues) {
     _distanceRangeValue = rangeValues;
@@ -48,11 +53,6 @@ class SearchInteractor extends ChangeNotifier {
   void addErrorToFiltredController(Object error) {
     _listFiltredController.addError(error);
     _listCategoriesController.addError(error);
-  }
-
-  void dispose() {
-    _listFiltredController.close();
-    _listCategoriesController.close();
   }
 
   Future<List<String>> getCategories() async {

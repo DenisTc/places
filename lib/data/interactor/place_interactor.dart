@@ -16,12 +16,13 @@ class PlaceInteractor extends ChangeNotifier {
 
   PlaceInteractor();
 
-  void addErrorToPlacesController(Object error) {
-    _listPlacesController.addError(error);
-  }
-
+  @override
   void dispose() {
     _listPlacesController.close();
+  }
+
+  void addErrorToPlacesController(Object error) {
+    _listPlacesController.addError(error);
   }
 
   // Methods for working with a remote repository

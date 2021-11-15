@@ -1,14 +1,17 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 
 class FileList extends StatefulWidget {
   final List<PlatformFile> files;
   final ValueChanged<PlatformFile> onOpenedFile;
 
-  const FileList({Key? key, required this.files, required this.onOpenedFile})
-      : super(key: key);
+  const FileList({
+    required this.files,
+    required this.onOpenedFile,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _FileListState createState() => _FileListState();
@@ -20,15 +23,17 @@ class _FileListState extends State<FileList> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Selected Files'),
+        title: const Text('Selected Files'),
       ),
       body: ListView.builder(
-          itemCount: widget.files.length,
-          itemBuilder: (context, index) {
-            final file = widget.files[index];
+        itemCount: widget.files.length,
+        itemBuilder: (context, index) {
+          final file = widget.files[index];
 
-            return buildFile(file);
-          }),
+          // ignore: avoid-returning-widgets
+          return buildFile(file);
+        },
+      ),
     );
   }
 
@@ -47,15 +52,15 @@ class _FileListState extends State<FileList> {
                 width: 80,
                 height: 80,
               )
-            : Container(
+            : const SizedBox(
                 width: 80,
                 height: 80,
               ),
-        title: Text('${file.name}'),
-        subtitle: Text('${file.extension}'),
+        title: Text(file.name),
+        subtitle: Text(file.extension.toString()),
         trailing: Text(
-          '$size',
-          style: TextStyle(fontWeight: FontWeight.w700),
+          size,
+          style: const TextStyle(fontWeight: FontWeight.w700),
         ),
       ),
     );

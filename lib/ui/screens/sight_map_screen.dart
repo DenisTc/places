@@ -6,7 +6,7 @@ class SightMapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       body: const Center(
         child: Text(
           'Карта интересных мест',

@@ -9,11 +9,11 @@ class SightVisitingLandscapeWidget extends StatelessWidget {
   final Function(Place data, Place place, bool visited) moveItemInList;
   final Function(Place place, bool visited) removeSight;
   const SightVisitingLandscapeWidget({
-    Key? key,
     required this.places,
     required this.moveItemInList,
     required this.removeSight,
     required this.visited,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -31,12 +31,8 @@ class SightVisitingLandscapeWidget extends StatelessWidget {
                   child: FavoriteSightCard(
                     place: place,
                     visited: visited,
-                    moveItemInList: (data, place, visited) {
-                      moveItemInList(data, place, visited);
-                    },
-                    removeSight: (place, visited) {
-                      removeSight(place, visited);
-                    },
+                    moveItemInList: moveItemInList,
+                    removeSight: removeSight,
                   ),
                 );
               },

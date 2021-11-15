@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/store/place_list/place_list_store.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/widgets/list_screen/add_sight_button.dart';
 import 'package:places/ui/widgets/list_screen/sliver_app_bar_list.dart';
@@ -16,18 +19,19 @@ class SightListScreen extends StatefulWidget {
 }
 
 class SightListScreenState extends State<SightListScreen> {
-  late PlaceInteractor placeInteractor;
+  late PlaceListStore _store;
 
   @override
   void initState() {
     super.initState();
-    placeInteractor = context.read<PlaceInteractor>();
+    _store = PlaceListStore(context.read<PlaceInteractor>());
+    _store.loadList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       body: Stack(
         alignment: AlignmentDirectional.topCenter,
         children: [
@@ -35,22 +39,28 @@ class SightListScreenState extends State<SightListScreen> {
             child: CustomScrollView(
               slivers: [
                 const SliverAppBarList(),
-                StreamBuilder<List<Place>>(
-                  stream: placeInteractor.getStreamPlaces,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const SliverFillRemaining(
-                        child: Center(child: CircularProgressIndicator()),
-                      );
-                    }
+                Observer(
+                  builder: (_) {
+                    final future = _store.placeList;
 
-                    if (snapshot.hasData && !snapshot.hasError) {
-                      return SliverSights(places: snapshot.data!);
-                    }
+                    switch (future.status) {
+                      case FutureStatus.pending:
+                        return const SliverFillRemaining(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
 
-                    return const SliverFillRemaining(
-                      child: NetworkException(),
-                    );
+                      case FutureStatus.rejected:
+                        return const SliverFillRemaining(
+                          child: NetworkException(),
+                        );
+
+                      case FutureStatus.fulfilled:
+                        return SliverSights(
+                          places: future.result as List<Place>,
+                        );
+                    }
                   },
                 ),
               ],

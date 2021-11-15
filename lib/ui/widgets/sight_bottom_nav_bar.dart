@@ -9,9 +9,9 @@ class SightBottomNavBar extends StatefulWidget {
   final Function(int index) onSelectTab;
 
   const SightBottomNavBar({
-    Key? key,
     required this.currentIndex,
     required this.onSelectTab,
+    Key? key,
   }) : super(key: key);
 
   @override

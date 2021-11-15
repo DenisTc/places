@@ -3,9 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
-import 'package:places/main.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/list_screen/sight_app_bar.dart';
 import 'package:places/ui/widgets/network_exception.dart';
@@ -18,9 +17,10 @@ List<String> historyList = [];
 
 class SightSearchScreen extends StatefulWidget {
   final SettingsFilter? settingsFilter;
+
   const SightSearchScreen({
-    Key? key,
     required this.settingsFilter,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -42,7 +42,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const SightAppBar(),
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       body: Column(
         children: [
           SearchBar(
@@ -62,7 +62,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
-                          Constants.textHistory,
+                          constants.textHistory,
                           style: TextStyle(
                             color: myLightSecondaryTwo.withOpacity(0.56),
                             fontSize: 12,
@@ -74,16 +74,17 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                           children: [
                             _HistoryList(
                               historyList: historyList.toList(),
-                              updateHistory: (history) {
-                                updateHistory(history);
+                              deletePlaceFromHistory: (name) {
+                                _deletePlaceFromHistory(name);
                               },
                               controllerSearch: _controllerSearch,
+                              notifyParent: () {
+                                setState(() {});
+                              },
                             ),
                             _ClearHistoryButton(
                               historyList: historyList.toList(),
-                              updateHistory: (history) {
-                                updateHistory(history);
-                              },
+                              clearHistory: _clearHistory,
                             ),
                           ],
                         ),
@@ -111,8 +112,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                     if (snapshot.hasData &&
                         !snapshot.hasError &&
                         snapshot.data!.isNotEmpty) {
-                      _updateHistoryList(snapshot.data!);
-                      final searchRes = filteredByName(
+                      final searchRes = _filterPlacesByName(
                         _controllerSearch.text,
                         snapshot.data!,
                       );
@@ -122,6 +122,9 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                       return SearchResultList(
                         filteredSights: searchRes,
                         searchString: _controllerSearch.text,
+                        addPlaceToSearchHistory: (name) {
+                          _addPlaceToSearchHistory(name);
+                        },
                       );
                     }
 
@@ -139,13 +142,25 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
     );
   }
 
-  void updateHistory(List<String> newHistoryList) {
+  void _addPlaceToSearchHistory(String name) {
     setState(() {
-      historyList = newHistoryList;
+      if (!historyList.contains(name)) historyList.add(name);
     });
   }
 
-  List<Place> filteredByName(String name, List<Place> places) {
+  void _deletePlaceFromHistory(String name) {
+    setState(() {
+      historyList.remove(name);
+    });
+  }
+
+  void _clearHistory() {
+    setState(() {
+      historyList.clear();
+    });
+  }
+
+  List<Place> _filterPlacesByName(String name, List<Place> places) {
     final _filredPlaces = <Place>[];
     for (final place in places) {
       final _indexName = place.name.toLowerCase().indexOf(name.toLowerCase());
@@ -156,28 +171,20 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
 
     return _filredPlaces;
   }
-
-  void _updateHistoryList(List<Place> places) {
-    final query = _controllerSearch.text;
-    if (query.isNotEmpty) {
-      for (var place in places) {
-        historyList.add(place.name);
-      }
-      historyList = historyList.toSet().toList();
-    }
-  }
 }
 
 class _HistoryList extends StatefulWidget {
   final List<String> historyList;
   final TextEditingController controllerSearch;
-  final Function(List<String>) updateHistory;
+  final Function(String) deletePlaceFromHistory;
+  final Function() notifyParent;
 
   const _HistoryList({
-    Key? key,
     required this.historyList,
-    required this.updateHistory,
+    required this.deletePlaceFromHistory,
     required this.controllerSearch,
+    required this.notifyParent,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -218,6 +225,7 @@ class _HistoryListState extends State<_HistoryList> {
                             );
                           },
                         );
+                        widget.notifyParent();
                       },
                       child: Text(
                         widget.historyList[index],
@@ -234,13 +242,8 @@ class _HistoryListState extends State<_HistoryList> {
                     child: IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
-                        setState(
-                          () {
-                            widget.historyList
-                                .remove(widget.historyList[index]);
-                            widget.updateHistory(widget.historyList);
-                          },
-                        );
+                        widget
+                            .deletePlaceFromHistory(widget.historyList[index]);
                       },
                       icon: SvgPicture.asset(
                         iconClose,
@@ -264,12 +267,12 @@ class _HistoryListState extends State<_HistoryList> {
 
 class _ClearHistoryButton extends StatefulWidget {
   final List<String> historyList;
-  final Function(List<String>) updateHistory;
+  final Function() clearHistory;
 
   const _ClearHistoryButton({
-    Key? key,
     required this.historyList,
-    required this.updateHistory,
+    required this.clearHistory,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -285,13 +288,13 @@ class __ClearHistoryButtonState extends State<_ClearHistoryButton> {
         onPressed: () {
           setState(
             () {
-              widget.updateHistory([]);
+              widget.clearHistory();
             },
           );
         },
         style: const ButtonStyle(alignment: Alignment.centerLeft),
         child: Text(
-          Constants.textBtnClearHistory,
+          constants.textBtnClearHistory,
           style: TextStyle(
             color: Theme.of(context).buttonColor,
             fontSize: 16,

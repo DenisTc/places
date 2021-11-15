@@ -1,16 +1,6 @@
 import 'package:places/ui/screens/res/icons.dart';
 
 class Category {
-  final String type;
-  final String name;
-  final String icon;
-
-  Category({
-    required this.type,
-    required this.name,
-    required this.icon,
-  });
-
   static List<Category> catList = [
     Category(type: 'other', name: 'прочее', icon: iconParticularPlace),
     Category(type: 'monument', name: 'памятник', icon: iconParticularPlace),
@@ -22,6 +12,16 @@ class Category {
     Category(type: 'temple', name: 'храм', icon: iconParticularPlace),
     Category(type: 'restaurant', name: 'ресторан', icon: iconRestourant),
   ];
+
+  final String type;
+  final String name;
+  final String icon;
+
+  Category({
+    required this.type,
+    required this.name,
+    required this.icon,
+  });
 
   static Category getCategory(String type) {
     return catList.where((element) => element.type == type).single;

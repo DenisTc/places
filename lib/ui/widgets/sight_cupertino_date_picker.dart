@@ -13,7 +13,7 @@ class _SightCupertinoDatePickerState extends State<SightCupertinoDatePicker> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).accentColor,
+      color: Theme.of(context).colorScheme.secondary,
       height: 250,
       child: CupertinoTheme(
         data: CupertinoThemeData(

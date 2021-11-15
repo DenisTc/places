@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 
 class NetworkException extends StatelessWidget {
@@ -22,7 +22,7 @@ class NetworkException extends StatelessWidget {
         ),
         const SizedBox(height: 24),
         const Text(
-          Constants.textError,
+          constants.textError,
           style: TextStyle(
             color: myLightSecondaryTwo,
             fontWeight: FontWeight.w500,
@@ -30,7 +30,7 @@ class NetworkException extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         const Text(
-          Constants.textTryLater,
+          constants.textTryLater,
           style: TextStyle(
             color: myLightSecondaryTwo,
           ),

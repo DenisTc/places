@@ -5,13 +5,13 @@ import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as Constants;
+import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 import 'package:provider/provider.dart';
 
-RangeValues distanceRangeValues = Constants.defaultDistanceRange;
-RangeValues currentDistanceReange = Constants.defaultDistanceRange;
+RangeValues distanceRangeValues = constants.defaultDistanceRange;
+RangeValues currentDistanceReange = constants.defaultDistanceRange;
 
 class FiltersScreen extends StatefulWidget {
   const FiltersScreen({
@@ -23,10 +23,10 @@ class FiltersScreen extends StatefulWidget {
 }
 
 class _FiltersScreenState extends State<FiltersScreen> {
-  late SearchInteractor _searchInteractor;
   List<Place> filteredPlaces = [];
   Map<String, bool> filters = {};
   int countPlaces = 0;
+  late SearchInteractor _searchInteractor;
 
   @override
   void initState() {
@@ -45,11 +45,11 @@ class _FiltersScreenState extends State<FiltersScreen> {
           TextButton(
             onPressed: () {
               filters.updateAll((key, value) => value = false);
-              _searchInteractor.setRangeValue(Constants.defaultDistanceRange);
+              _searchInteractor.setRangeValue(constants.defaultDistanceRange);
               _searchInteractor.selectedFilters.clear();
             },
             child: Text(
-              Constants.textBtnClear,
+              constants.textBtnClear,
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -79,7 +79,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     Row(
                       children: [
                         Text(
-                          Constants.textCategories,
+                          constants.textCategories,
                           style: TextStyle(
                             color: myLightSecondaryTwo.withOpacity(0.56),
                           ),
@@ -117,8 +117,8 @@ class _Distance extends StatelessWidget {
   final RangeValues distanceRangeValues;
 
   const _Distance({
-    Key? key,
     required this.distanceRangeValues,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -130,7 +130,7 @@ class _Distance extends StatelessWidget {
           children: [
             const Expanded(
               child: Text(
-                Constants.textDistance,
+                constants.textDistance,
                 style: TextStyle(fontSize: 16),
               ),
             ),
@@ -174,7 +174,7 @@ class _Distance extends StatelessWidget {
           width: MediaQuery.of(context).size.width - 32,
           child: RangeSlider(
             values: _searchInteractor.getRangeValue,
-            max: Constants.defaultDistanceRange.end,
+            max: constants.defaultDistanceRange.end,
             divisions: 100,
             onChanged: _searchInteractor.setRangeValue,
           ),
@@ -188,9 +188,9 @@ class _ShowButton extends StatelessWidget {
   final int countPlaces;
   final List<Place> filteredPlaces;
   const _ShowButton({
-    Key? key,
     required this.countPlaces,
     required this.filteredPlaces,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -198,8 +198,8 @@ class _ShowButton extends StatelessWidget {
     final _searchInteractor = context.watch<SearchInteractor>();
     var countPlaces = 0;
     final settingsFilter = SettingsFilter(
-      lat: Constants.userLocation.lat,
-      lng: Constants.userLocation.lng,
+      lat: constants.userLocation.lat,
+      lng: constants.userLocation.lng,
       distance: _searchInteractor.getRangeValue,
       typeFilter: _searchInteractor.selectedFilters,
     );
@@ -231,7 +231,7 @@ class _ShowButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${Constants.textBtnShow} ${countPlaces.toString()}',
+                    '${constants.textBtnShow} ${countPlaces.toString()}',
                     style: TextStyle(
                       color: countPlaces != 0
                           ? Colors.white
@@ -258,7 +258,7 @@ class _ShowButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  Constants.textBtnShow,
+                  constants.textBtnShow,
                   style: TextStyle(
                     color: myLightSecondaryTwo.withOpacity(0.56),
                     fontWeight: FontWeight.w700,
@@ -285,7 +285,7 @@ class _ShowButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            Constants.textBtnShow,
+            constants.textBtnShow,
             style: TextStyle(
               color: myLightSecondaryTwo.withOpacity(0.56),
               fontWeight: FontWeight.w700,
@@ -302,9 +302,9 @@ class _FiltersCategory extends StatefulWidget {
   final List<String>? categories;
 
   const _FiltersCategory({
-    Key? key,
     required this.filters,
     required this.categories,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -358,9 +358,9 @@ class _CategoryCircle extends StatelessWidget {
   final Map<String, bool> filters;
 
   const _CategoryCircle({
-    Key? key,
     required this.category,
     required this.filters,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -412,7 +412,7 @@ class _CategoryCircle extends StatelessWidget {
                       ),
                       child: SvgPicture.asset(
                         iconCheck,
-                        color: Theme.of(context).accentColor,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                   ),

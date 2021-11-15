@@ -3,7 +3,11 @@ import 'package:places/ui/widgets/onboarding_screen/onboarding_app_bar.dart';
 import 'package:places/ui/widgets/onboarding_screen/onboarding_screens.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+  final bool fromSettings;
+  const OnboardingScreen({
+    required this.fromSettings,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _OnboardingScreenState createState() => _OnboardingScreenState();
@@ -22,14 +26,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,
-      appBar: OnboardingAppBar(currentPage: currentPage),
+      backgroundColor: Theme.of(context).colorScheme.secondary,
+      appBar: OnboardingAppBar(
+        currentPage: currentPage,
+        fromSettings: widget.fromSettings,
+      ),
       body: OnboardingScreens(
         pageController: _pageController,
         setCurrentPage: (page) {
           setCurrentPage(page);
         },
         currentPage: currentPage,
+        fromSettings: widget.fromSettings,
       ),
     );
   }
