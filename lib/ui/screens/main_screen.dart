@@ -13,7 +13,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-  int selectedTab = 0;
+  int selectedTab = 3;
   late TabController _tabController;
   
 
