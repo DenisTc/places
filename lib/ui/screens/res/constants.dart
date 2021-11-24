@@ -42,3 +42,5 @@ const String textBtnSkip = 'Пропустить';
 const String textNotFound = 'Ничего не найдено.';
 const String textTryChangeOptions = 'Попробуйте изменить параметры\nпоиска';
 const String textBtnDelete = 'Удалить';
+const String textScrWantToVisit = 'Отмечайте понравившиеся\nместа и они появятся здесь.';
+const String textScrVisited = 'Завершите маршрут,\nчтобы место попало сюда.';

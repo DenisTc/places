@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/blocs/favorite_places/bloc/favorite_places_bloc.dart';
+import 'package:places/data/blocs/place/bloc/place_bloc.dart';
+
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -10,7 +13,7 @@ import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
 import 'package:places/ui/widgets/sight_details_screen/photo_view.dart';
-import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 /// A screen with a detailed description of the place
 class SightDetails extends StatefulWidget {
@@ -27,12 +30,11 @@ class SightDetails extends StatefulWidget {
 
 class _SightDetailsState extends State<SightDetails> {
   final PageController _pageController = PageController();
-  late PlaceInteractor _placeInteractor;
 
   @override
   void initState() {
-    _placeInteractor = context.read<PlaceInteractor>();
     super.initState();
+    BlocProvider.of<PlaceBloc>(context).add(LoadPlace(widget.id));
   }
 
   @override
@@ -40,15 +42,9 @@ class _SightDetailsState extends State<SightDetails> {
     return Material(
       child: Container(
         color: Theme.of(context).colorScheme.secondary,
-        child: FutureBuilder<Place>(
-          future: _placeInteractor.getPlaceDetails(id: widget.id),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (snapshot.hasData && !snapshot.hasError) {
-              final place = snapshot.data!;
+        child: BlocBuilder<PlaceBloc, PlaceState>(
+          builder: (context, state) {
+            if (state is PlaceLoaded) {
               return ConstrainedBox(
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.9,
@@ -57,15 +53,19 @@ class _SightDetailsState extends State<SightDetails> {
                   slivers: [
                     _GalleryPlace(
                       pageController: _pageController,
-                      place: place,
+                      place: state.place,
                     ),
-                    _DescriptionPlace(place: place),
+                    _DescriptionPlace(place: state.place),
                   ],
                 ),
               );
-            } else {
-              return const Center(child: CircularProgressIndicator());
             }
+
+            return const Center(
+                child: Text(
+              'Some error',
+              style: TextStyle(color: Colors.red),
+            ));
           },
         ),
       ),
@@ -291,14 +291,16 @@ class _Description extends StatelessWidget {
 class _FunctionButtons extends StatelessWidget {
   final Place place;
 
-  const _FunctionButtons({
+  _FunctionButtons({
     required this.place,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _favoriteIconController = context.watch<PlaceInteractor>();
+    DateTime? date;
+    BlocProvider.of<FavoritePlaceBloc>(context).add(PlaceIsVisited(place));
+    BlocProvider.of<FavoritePlaceBloc>(context).add(PlaceIsFavorite(place));
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -308,57 +310,99 @@ class _FunctionButtons extends StatelessWidget {
               await showModalBottomSheet<void>(
                 context: context,
                 builder: (builder) {
-                  return const SightCupertinoDatePicker();
+                  return SightCupertinoDatePicker(
+                    onValueChanged: (newItem) {
+                      date = newItem;
+                    },
+                  );
+                },
+              ).whenComplete(
+                () {
+                  BlocProvider.of<FavoritePlaceBloc>(context).add(
+                    PlaceToggleInVisited(
+                      place: place,
+                      date: date ?? DateTime.now(),
+                    ),
+                  );
                 },
               );
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SvgPicture.asset(
-                  iconCalendar,
-                  color: Theme.of(context).iconTheme.color,
-                ),
-                const SizedBox(width: 9),
-                Text(
-                  constants.textBtnSchedule,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                const SizedBox(width: 14),
-              ],
+            child: BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+              buildWhen: (context, state) {
+                return state is PlaceCheckIsVisited;
+              },
+              builder: (context, state) {
+                if (state is PlaceCheckIsVisited) {
+                  bool planned = state.visitedList.containsKey(place);
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        planned ? iconCalendarFilled : iconCalendar,
+                        color: planned
+                            ? Theme.of(context).buttonColor
+                            : Theme.of(context).iconTheme.color,
+                      ),
+                      const SizedBox(width: 9),
+                      planned
+                          ? Text(
+                              DateFormat('d MMM. y', 'en_US')
+                                  .format(state.visitedList[place]!),
+                              style: TextStyle(
+                                color: Theme.of(context).buttonColor,
+                              ),
+                            )
+                          : Text(
+                              constants.textBtnSchedule,
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                    ],
+                  );
+                }
+                return const SizedBox.shrink();
+              },
             ),
           ),
         ),
         Expanded(
           child: InkWell(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(width: 14),
-                StreamProvider<bool>.value(
-                  value: _favoriteIconController.isFavoritePlace(place),
-                  initialData: false,
-                  child: Consumer<bool>(
-                    builder: (context, isFavorite, child) {
-                      return TextButton.icon(
-                        onPressed: () {
-                          isFavorite
-                              ? _favoriteIconController
-                                  .removeFromFavorites(place)
-                              : _favoriteIconController.addToFavorites(place);
-                        },
-                        icon: SvgPicture.asset(
-                          isFavorite ? iconFavoriteSelected : iconFavorite,
-                          color: Theme.of(context).iconTheme.color,
-                        ),
-                        label: Text(
-                          isFavorite
-                              ? constants.textInFavorite
-                              : constants.textToFavorite,
-                          style: Theme.of(context).textTheme.bodyText1,
+                BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+                  buildWhen: (context, state) {
+                    return state is PlaceCheckIsFavorite;
+                  },
+                  builder: (context, state) {
+                    if (state is PlaceCheckIsFavorite) {
+                      return Material(
+                        color: Colors.transparent,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(50)),
+                        clipBehavior: Clip.antiAlias,
+                        child: TextButton.icon(
+                          onPressed: () {
+                            BlocProvider.of<FavoritePlaceBloc>(context)
+                                .add(PlaceToggleInFavorites(place));
+                          },
+                          icon: SvgPicture.asset(
+                            state.favoriteList.contains(place.id)
+                                ? iconFavoriteSelected
+                                : iconFavorite,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
+                          label: Text(
+                            state.favoriteList.contains(place.id)
+                                ? constants.textInFavorite
+                                : constants.textToFavorite,
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
                         ),
                       );
-                    },
-                  ),
+                    }
+
+                    return const SizedBox.shrink();
+                  },
                 ),
               ],
             ),

@@ -12,11 +12,9 @@ class SightVisitingPortrainWidget extends StatelessWidget {
     List<Place> places,
     bool visited,
   ) moveItemInList;
-  final Function(Place place, bool visited) removeSight;
   const SightVisitingPortrainWidget({
     required this.places,
     required this.moveItemInList,
-    required this.removeSight,
     required this.visited,
     Key? key,
   }) : super(key: key);
@@ -37,7 +35,6 @@ class SightVisitingPortrainWidget extends StatelessWidget {
             moveItemInList: (data, place, visited) {
               moveItemInList(data, place, places, visited);
             },
-            removeSight: removeSight,
           ),
         );
       },

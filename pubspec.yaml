@@ -11,14 +11,17 @@ environment:
 dependencies:
   dart_code_metrics: ^4.6.0
   dio: ^4.0.0
+  easy_localization: ^3.0.0
   equatable: ^2.0.3
   file_picker: ^4.2.1
   flutter:
     sdk: flutter
+  flutter_bloc: ^7.3.3
   flutter_mobx: ^2.0.2
   flutter_svg: ^0.22.0
   flutter_switch: ^0.3.2
   image_picker: ^0.8.4+4
+  intl: ^0.17.0
   mobx: ^2.0.5
   open_file: ^3.2.1
   photo_view: ^0.13.0

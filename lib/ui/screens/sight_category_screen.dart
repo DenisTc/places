@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/search_interactor.dart';
+import 'package:places/data/blocs/place_categories/bloc/place_categories_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/network_exception.dart';
-import 'package:provider/provider.dart';
 
 class SightCategoryScreen extends StatefulWidget {
   const SightCategoryScreen({Key? key}) : super(key: key);
@@ -17,12 +17,11 @@ class SightCategoryScreen extends StatefulWidget {
 
 class _SightCategoryScreenState extends State<SightCategoryScreen> {
   String? selectedType;
-  late SearchInteractor _searchInteractor;
 
   @override
   void initState() {
-    _searchInteractor = Provider.of<SearchInteractor>(context, listen: false);
     super.initState();
+    BlocProvider.of<PlaceCategoriesBloc>(context).add(LoadPlaceCategories());
   }
 
   @override
@@ -35,17 +34,16 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
           const SizedBox(height: 24),
           Expanded(
             child: Scrollbar(
-              child: StreamBuilder<List<String>>(
-                stream: _searchInteractor.getCategoriesStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
+              child: BlocBuilder<PlaceCategoriesBloc, PlaceCategoriesState>(
+                builder: (context, state) {
+                  if (state is PlaceCategoriesLoading) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
-                  if (snapshot.hasData && !snapshot.hasError) {
-                    final categories = snapshot.data;
+                  if (state is PlaceCategoriesLoaded) {
+                    final categories = state.categories;
                     return ListView.builder(
-                      itemCount: categories!.length,
+                      itemCount: categories.length,
                       itemBuilder: (context, index) {
                         final categoryName =
                             Category.getCategory(categories[index]).name;
@@ -101,7 +99,11 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                     );
                   }
 
-                  return const NetworkException();
+                  if (state is PlaceCategoriesError) {
+                    return const NetworkException();
+                  }
+
+                  return SizedBox.shrink();
                 },
               ),
             ),

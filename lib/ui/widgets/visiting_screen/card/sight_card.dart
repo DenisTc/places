@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/blocs/favorite_places/bloc/favorite_places_bloc.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
@@ -11,18 +12,15 @@ import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
 import 'package:places/ui/widgets/visiting_screen/card/favorite_card_bottom.dart';
 import 'package:places/ui/widgets/visiting_screen/card/favorite_card_top.dart';
-import 'package:provider/provider.dart';
 
 class SightCard extends StatefulWidget {
   final GlobalKey globalKey;
   final bool visited;
   final Place place;
-  final Function(Place place, bool visited) removeSight;
   const SightCard({
     required this.visited,
     required this.place,
     required this.globalKey,
-    required this.removeSight,
     Key? key,
   }) : super(key: key);
 
@@ -33,7 +31,7 @@ class SightCard extends StatefulWidget {
 class __SightCardState extends State<SightCard> {
   @override
   Widget build(BuildContext context) {
-    final _placeInteractor = context.watch<PlaceInteractor>();
+    // final _placeInteractor = context.watch<PlaceInteractor>();
     return Material(
       borderRadius: const BorderRadius.all(Radius.circular(16)),
       child: Container(
@@ -88,7 +86,8 @@ class __SightCardState extends State<SightCard> {
                 key: ValueKey(widget.place),
                 direction: DismissDirection.endToStart,
                 onDismissed: (direction) {
-                  widget.removeSight(widget.place, widget.visited);
+                  BlocProvider.of<FavoritePlaceBloc>(context)
+                      .add(PlaceToggleInFavorites(widget.place));
                 },
                 child: Stack(
                   children: [
@@ -108,7 +107,8 @@ class __SightCardState extends State<SightCard> {
                     Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        borderRadius: const BorderRadius.all(Radius.circular(16)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16)),
                         onTap: () {
                           _showSight(widget.place.id);
                         },
@@ -149,7 +149,11 @@ class __SightCardState extends State<SightCard> {
                                     await showModalBottomSheet<void>(
                                       context: context,
                                       builder: (builder) {
-                                        return const SightCupertinoDatePicker();
+                                        return SightCupertinoDatePicker(
+                                          onValueChanged: (newItem) {
+                                            // date = newItem;
+                                          },
+                                        );
                                       },
                                     );
                                   }
@@ -170,8 +174,8 @@ class __SightCardState extends State<SightCard> {
                             clipBehavior: Clip.antiAlias,
                             child: IconButton(
                               onPressed: () {
-                                _placeInteractor
-                                    .removeFromFavorites(widget.place);
+                                BlocProvider.of<FavoritePlaceBloc>(context)
+                                    .add(PlaceToggleInFavorites(widget.place));
                               },
                               icon: const Icon(
                                 Icons.clear_outlined,

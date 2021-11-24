@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/themes.dart';
 
-class SettingsInteractor extends ChangeNotifier {
-  bool get getThemeValue => _isDarkMode;
+class ThemeRepository{
+  bool get getThemeStatus => _isDarkMode;
 
   ThemeData get getTheme => _isDarkMode ? darkTheme : lightTheme;
 
   bool _isDarkMode = false;
 
-  void changeTheme({required bool toggleValue}) {
-    _isDarkMode = toggleValue;
-    notifyListeners();
+  void changeTheme() {
+    _isDarkMode = !_isDarkMode;
   }
 }

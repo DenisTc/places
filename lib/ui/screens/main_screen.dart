@@ -15,7 +15,6 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   int selectedTab = 0;
   late TabController _tabController;
-  
 
   @override
   void initState() {
@@ -51,7 +50,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     return Scaffold(
       body: TabBarView(
         controller: _tabController,
-        children: const [
+        children: [
           SightListScreen(),
           SightMapScreen(),
           VisitingScreen(),

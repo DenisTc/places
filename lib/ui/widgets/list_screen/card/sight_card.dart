@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/blocs/favorite_places/bloc/favorite_places_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
-import 'package:provider/provider.dart';
 
 /// A card of an interesting place to be displayed on the main screen of the application.
 class SightCard extends StatelessWidget {
   final Place place;
-  const SightCard({required this.place, Key? key}) : super(key: key);
+  SightCard({required this.place, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _favoriteIconController = context.watch<PlaceInteractor>();
+    BlocProvider.of<FavoritePlaceBloc>(context).add(PlaceIsFavorite(place));
+
     return SizedBox(
       height: 188,
       child: Stack(
@@ -47,11 +48,12 @@ class SightCard extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                StreamProvider<bool>.value(
-                  value: _favoriteIconController.isFavoritePlace(place),
-                  initialData: false,
-                  child: Consumer<bool>(
-                    builder: (context, isFavorite, child) {
+                BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+                  buildWhen: (context, state) {
+                    return state != PlaceCheckIsFavorite;
+                  },
+                  builder: (context, state) {
+                    if (state is PlaceCheckIsFavorite) {
                       return Material(
                         color: Colors.transparent,
                         borderRadius:
@@ -59,19 +61,21 @@ class SightCard extends StatelessWidget {
                         clipBehavior: Clip.antiAlias,
                         child: IconButton(
                           onPressed: () {
-                            isFavorite
-                                ? _favoriteIconController
-                                    .removeFromFavorites(place)
-                                : _favoriteIconController.addToFavorites(place);
+                            BlocProvider.of<FavoritePlaceBloc>(context)
+                                .add(PlaceToggleInFavorites(place));
                           },
                           icon: SvgPicture.asset(
-                            isFavorite ? iconFavoriteSelected : iconFavorite,
+                            state.favoriteList.contains(place.id)
+                                ? iconFavoriteSelected
+                                : iconFavorite,
                             color: Colors.white,
                           ),
                         ),
                       );
-                    },
-                  ),
+                    }
+
+                    return const SizedBox.shrink();
+                  },
                 ),
               ],
             ),

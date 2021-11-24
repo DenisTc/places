@@ -7,13 +7,11 @@ class FavoriteSightCard extends StatefulWidget {
   final bool visited;
   final Place place;
   final Function(Place data, Place place, bool visited) moveItemInList;
-  final Function(Place place, bool visited) removeSight;
 
   const FavoriteSightCard({
     required this.visited,
     required this.place,
     required this.moveItemInList,
-    required this.removeSight,
     Key? key,
     
   }) : super(key: key);
@@ -62,12 +60,6 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
                 globalKey: globalKey,
                 place: widget.place,
                 visited: widget.visited,
-                removeSight: (place, visited) {
-                  widget.removeSight(
-                    widget.place,
-                    widget.visited,
-                  );
-                },
               ),
             ),
           ),
@@ -77,12 +69,6 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
                   globalKey: globalKey,
                   place: widget.place,
                   visited: widget.visited,
-                  removeSight: (place, visited) {
-                    widget.removeSight(
-                      widget.place,
-                      widget.visited,
-                    );
-                  },
                 ),
         );
       },

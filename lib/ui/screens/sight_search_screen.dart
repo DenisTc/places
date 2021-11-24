@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/blocs/filtered_places/filtered_places_bloc.dart';
+import 'package:places/data/blocs/filtered_places/filtered_places_event.dart';
+import 'package:places/data/blocs/filtered_places/filtered_places_state.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
@@ -30,12 +34,11 @@ class SightSearchScreen extends StatefulWidget {
 class _SightSearchScreenState extends State<SightSearchScreen> {
   final _controllerSearch = TextEditingController();
   late Stream<List<Place>>? _filteredPlaces;
-  late SearchInteractor _searchInteractor;
 
   @override
   void initState() {
-    _searchInteractor = Provider.of<SearchInteractor>(context, listen: false);
     super.initState();
+    BlocProvider.of<FilteredPlacesBloc>(context).add(FilteredPlacesLoad());
   }
 
   @override
@@ -96,28 +99,19 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                   return const SizedBox.shrink();
                 }
 
-                _filteredPlaces = _searchInteractor.getFiltredPlacesStream(
-                  widget.settingsFilter ?? SettingsFilter(),
-                );
-
-                return StreamBuilder<List<Place>>(
-                  stream: _filteredPlaces,
-                  builder: (context, snapshot) {
-                    /// Wating request
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                return BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
+                  builder: (context, state) {
+                    if (state is FilteredPlacesLoadInProgress) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    /// Display search result
-                    if (snapshot.hasData &&
-                        !snapshot.hasError &&
-                        snapshot.data!.isNotEmpty) {
+                    if (state is FilteredPlacesLoadSuccess) {
                       final searchRes = _filterPlacesByName(
                         _controllerSearch.text,
-                        snapshot.data!,
+                        state.places,
                       );
 
-                      if (searchRes.isEmpty) return const EmptySearchResult();
+                      if (searchRes.length == 0) return const EmptySearchResult();
 
                       return SearchResultList(
                         filteredSights: searchRes,
@@ -128,12 +122,55 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                       );
                     }
 
-                    /// snapshot.hasError
-                    return const Center(
-                      child: NetworkException(),
-                    );
+                    if (state is FilteredPlacesLoadError) {
+                      return const SliverFillRemaining(
+                        child: NetworkException(),
+                      );
+                    }
+
+                    return const EmptySearchResult();
                   },
                 );
+
+                /// TODO: Убрать!!!
+                // _filteredPlaces = _searchInteractor.getFiltredPlacesStream(
+                //   widget.settingsFilter ?? SettingsFilter(),
+                // );
+
+                // return StreamBuilder<List<Place>>(
+                //   stream: _filteredPlaces,
+                //   builder: (context, snapshot) {
+                //     /// Wating request
+                //     if (snapshot.connectionState == ConnectionState.waiting) {
+                //       return const Center(child: CircularProgressIndicator());
+                //     }
+
+                //     /// Display search result
+                //     if (snapshot.hasData &&
+                //         !snapshot.hasError &&
+                //         snapshot.data!.isNotEmpty) {
+                //       final searchRes = _filterPlacesByName(
+                //         _controllerSearch.text,
+                //         snapshot.data!,
+                //       );
+
+                //       if (searchRes.isEmpty) return const EmptySearchResult();
+
+                //       return SearchResultList(
+                //         filteredSights: searchRes,
+                //         searchString: _controllerSearch.text,
+                //         addPlaceToSearchHistory: (name) {
+                //           _addPlaceToSearchHistory(name);
+                //         },
+                //       );
+                //     }
+
+                //     /// snapshot.hasError
+                //     return const Center(
+                //       child: NetworkException(),
+                //     );
+                //   },
+                // );
               },
             ),
           ),
