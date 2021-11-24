@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/data/blocs/theme/bloc/theme_bloc.dart';
+import 'package:places/data/repository/search_repository.dart';
 import 'package:places/data/repository/theme_repository.dart';
 import 'package:places/ui/screens/splash_screen.dart';
 
@@ -8,6 +10,8 @@ void main() {
   runApp(
     MultiBlocProvider(
       providers: [
+        BlocProvider<FilteredPlacesBloc>(
+            create: (context) => FilteredPlacesBloc(SearchRepository())),
         BlocProvider<ThemeBloc>(
             create: (context) => ThemeBloc(ThemeRepository())),
       ],
