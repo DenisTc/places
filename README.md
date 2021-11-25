@@ -14,7 +14,19 @@ https://user-images.githubusercontent.com/16900043/141295244-cbb48e60-26bf-4df5-
 
 2) Экран фильтров. Позволяет отфильтровать список мест по категории и расстоянию до него.
 
+
+https://user-images.githubusercontent.com/16900043/143462172-f7bdc9f1-6a52-4b00-bf81-5f5e8c2bd382.mp4
+
+
+
+
 3) Экран поиска. Позвоволяет осуществить поиск места по имени.
+
+
+https://user-images.githubusercontent.com/16900043/143462574-f1e2deb2-2e40-4a6a-b408-e91e34599b24.mp4
+
+
+
 
 4) Экран описания места содержит: 
   - Фото
