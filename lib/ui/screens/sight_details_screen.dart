@@ -34,7 +34,7 @@ class SightDetails extends StatelessWidget {
         color: Theme.of(context).colorScheme.secondary,
         child: BlocBuilder<PlaceBloc, PlaceState>(
           builder: (context, state) {
-            if (state is PlaceLoaded) {
+            if (state is PlaceDetailsLoaded) {
               return ConstrainedBox(
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.9,
@@ -51,10 +51,10 @@ class SightDetails extends StatelessWidget {
               );
             }
 
-            if(state is PlaceLoadError){
-return const NetworkException();
+            if (state is PlaceDetailsLoadError) {
+              return const NetworkException();
             }
-            
+
             return SizedBox.shrink();
           },
         ),
