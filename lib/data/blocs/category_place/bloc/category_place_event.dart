@@ -8,3 +8,12 @@ abstract class PlaceCategoriesEvent extends Equatable {
 }
 
 class LoadPlaceCategories extends PlaceCategoriesEvent {}
+
+class ToggleCategory extends PlaceCategoriesEvent {
+  final String name;
+
+  ToggleCategory(this.name);
+
+  @override
+  List<Object> get props => [name];
+}

@@ -18,15 +18,16 @@ class FilteredPlacesBloc
   ) async* {
     try {
       if (event is LoadFilteredPlaces) {
-        yield* _mapFilteredPlacesLoadToState();
+        yield* _mapFilteredPlacesLoadToState(event.filters);
       }
     } catch (e) {
       yield LoadFilteredPlacesError(e.toString());
     }
   }
 
-  Stream<FilteredPlacesState> _mapFilteredPlacesLoadToState(
-      {SettingsFilter? filters = null}) async* {
+  Stream<FilteredPlacesState> _mapFilteredPlacesLoadToState([
+    SettingsFilter? filters = null,
+  ]) async* {
     try {
       final filteredPlaces = await _searchRepository.getFiltredPlaces(
         filters ?? SettingsFilter(),

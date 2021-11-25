@@ -5,7 +5,7 @@ abstract class FilteredPlacesState extends Equatable {
   const FilteredPlacesState();
 
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
 class LoadFilteredPlacesInProgress extends FilteredPlacesState {}
@@ -16,7 +16,7 @@ class LoadFilteredPlacesError extends FilteredPlacesState {
   const LoadFilteredPlacesError(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object> get props => [message];
 }
 
 class LoadFilteredPlacesSuccess extends FilteredPlacesState {
@@ -25,5 +25,5 @@ class LoadFilteredPlacesSuccess extends FilteredPlacesState {
   const LoadFilteredPlacesSuccess(this.places);
 
   @override
-  List<Object?> get props => [places];
+  List<Object> get props => [places];
 }

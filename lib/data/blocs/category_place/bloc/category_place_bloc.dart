@@ -8,6 +8,7 @@ part 'category_place_state.dart';
 class PlaceCategoriesBloc
     extends Bloc<PlaceCategoriesEvent, PlaceCategoriesState> {
   final SearchRepository searchRepository;
+  List<String> selectedCategories = [];
   PlaceCategoriesBloc(this.searchRepository) : super(PlaceCategoriesInitial());
 
   @override
@@ -29,6 +30,16 @@ class PlaceCategoriesBloc
         yield LoadPlaceCategoriesError(e.toString());
       }
     }
+
+    if (event is ToggleCategory) {
+        if (selectedCategories.contains(event.name)) {
+          selectedCategories.remove(event.name);
+        } else {
+          selectedCategories.add(event.name);
+        }
+
+        yield CategoryToggled(selectedCategories);
+      }
   }
 
   Future<List<String>> getCategories() async {

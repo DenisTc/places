@@ -28,3 +28,12 @@ class LoadPlaceCategoriesError extends PlaceCategoriesState {
   @override
   List<Object> get props => [message];
 }
+
+class CategoryToggled extends PlaceCategoriesState {
+  final List<String> categories;
+
+  CategoryToggled(this.categories);
+
+  @override
+  List<Object> get props => [categories];
+}

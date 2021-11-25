@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:places/domain/settings_filter.dart';
 
 class FilteredPlacesEvent extends Equatable {
   const FilteredPlacesEvent();
@@ -7,4 +8,12 @@ class FilteredPlacesEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadFilteredPlaces extends FilteredPlacesEvent {}
+class LoadFilteredPlaces extends FilteredPlacesEvent {
+  final SettingsFilter? filters;
+
+  LoadFilteredPlaces([this.filters]);
+
+  @override
+  List<Object> get props => [];
+}
+

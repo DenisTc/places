@@ -37,7 +37,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<FilteredPlacesBloc>(context).add(LoadFilteredPlaces());
+    BlocProvider.of<FilteredPlacesBloc>(context).add(LoadFilteredPlaces(widget.settingsFilter));
   }
 
   @override
