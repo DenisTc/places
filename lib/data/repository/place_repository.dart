@@ -8,7 +8,7 @@ final api = ApiClient().client;
 
 class PlaceRepository {
   final List<Place> favoritePlaces = [];
-  final List<Place> visitPlaces = [];
+  final Map<Place, DateTime> visitPlaces = {};
 
   PlaceRepository();
 
@@ -55,23 +55,41 @@ class PlaceRepository {
     return favoritePlaces;
   }
 
-  Future<List<Place>> getVisitPlaces() async {
+  Future<Map<Place,DateTime>> getVisitPlaces() async {
     return visitPlaces;
   }
 
   bool isFavoritePlace(Place place) {
-    return favoritePlaces.contains(place);
+    final isFavorite = favoritePlaces.any((item) => item.id == place.id);
+    return isFavorite;
   }
 
-  Future<void> addToFavorites(Place place) async {
-    favoritePlaces.add(place);
+  bool isVisitedPlace(Place place) {
+    final isVisited = visitPlaces.containsKey(place);
+    return isVisited;
   }
 
-  Future<void> removeFromFavorites(Place place) async {
-    favoritePlaces.remove(place);
+  Future<void> toggleInFavorites(Place place) async {
+    bool isContain = favoritePlaces.contains(place);
+
+    if (isContain) {
+      favoritePlaces.remove(place);
+    } else {
+      favoritePlaces.add(place);
+    }
   }
 
   Future<void> removeFromVisit(Place place) async {
     favoritePlaces.remove(place);
+  }
+
+  Future<void> toggleInVisited(Place place, DateTime date) async {
+    bool isContain = visitPlaces.containsKey(place);
+
+    if (isContain) {
+      visitPlaces.remove(place);
+    } else {
+      visitPlaces[place] = date;
+    }
   }
 }

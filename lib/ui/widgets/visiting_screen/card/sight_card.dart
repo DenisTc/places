@@ -11,7 +11,7 @@ import 'package:places/ui/screens/sight_details_screen.dart';
 import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
 import 'package:places/ui/widgets/visiting_screen/card/favorite_card_bottom.dart';
 import 'package:places/ui/widgets/visiting_screen/card/favorite_card_top.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 class SightCard extends StatefulWidget {
   final GlobalKey globalKey;
@@ -33,7 +33,7 @@ class SightCard extends StatefulWidget {
 class __SightCardState extends State<SightCard> {
   @override
   Widget build(BuildContext context) {
-    final _placeInteractor = context.watch<PlaceInteractor>();
+    // final _placeInteractor = context.watch<PlaceInteractor>();
     return Material(
       borderRadius: const BorderRadius.all(Radius.circular(16)),
       child: Container(
@@ -170,8 +170,8 @@ class __SightCardState extends State<SightCard> {
                             clipBehavior: Clip.antiAlias,
                             child: IconButton(
                               onPressed: () {
-                                _placeInteractor
-                                    .removeFromFavorites(widget.place);
+                                // _placeInteractor
+                                //     .removeFromFavorites(widget.place);
                               },
                               icon: const Icon(
                                 Icons.clear_outlined,

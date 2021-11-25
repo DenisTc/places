@@ -5,7 +5,7 @@ import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/visiting_screen/card/sight_visiting_portrain_widget.dart';
 import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
 import 'package:places/ui/widgets/visiting_screen/visiting_app_bar.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 /// Screen for displaying planned and visited places
 class VisitingScreen extends StatelessWidget {
@@ -40,9 +40,9 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
 
   @override
   void initState() {
-    _placeInteractor = context.read<PlaceInteractor>();
-    _isVisited = _placeInteractor.getVisitPlaces();
-    _notVisited = _placeInteractor.getFavoritesPlaces();
+    // _placeInteractor = context.read<PlaceInteractor>();
+    // _isVisited = _placeInteractor.getVisitPlaces();
+    // _notVisited = _placeInteractor.getFavoritesPlaces();
     super.initState();
   }
 
@@ -207,7 +207,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
       if (visited) {
         _placeInteractor.removeFromVisit(place);
       } else {
-        _placeInteractor.removeFromFavorites(place);
+        // _placeInteractor.removeFromFavorites(place);
       }
     });
   }

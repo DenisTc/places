@@ -341,10 +341,10 @@ class _FunctionButtons extends StatelessWidget {
                     builder: (context, isFavorite, child) {
                       return TextButton.icon(
                         onPressed: () {
-                          isFavorite
-                              ? _favoriteIconController
-                                  .removeFromFavorites(place)
-                              : _favoriteIconController.addToFavorites(place);
+                          // isFavorite
+                          //     ? _favoriteIconController
+                          //         .removeFromFavorites(place)
+                          //     : _favoriteIconController.addToFavorites(place);
                         },
                         icon: SvgPicture.asset(
                           isFavorite ? iconFavoriteSelected : iconFavorite,
