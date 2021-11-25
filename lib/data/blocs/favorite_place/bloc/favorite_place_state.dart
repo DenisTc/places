@@ -12,10 +12,10 @@ class FavoritePlaceInitial extends FavoritePlaceState {}
 class ListFavoritePlacesLoading extends FavoritePlaceState {}
 
 class ListFavoritePlacesLoaded extends FavoritePlaceState {
-  final Set<int> favoriteList;
+  final List<Place> places;
 
-  ListFavoritePlacesLoaded(this.favoriteList);
+  ListFavoritePlacesLoaded(this.places);
 
   @override
-  List<Object> get props => [favoriteList];
+  List<Object> get props => [places];
 }

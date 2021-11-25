@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/screens/settings_screen.dart';
 import 'package:places/ui/screens/sight_list_screen.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
-import 'package:places/ui/screens/visiting_screen.dart';
+import 'package:places/ui/screens/favorites_screen.dart';
 import 'package:places/ui/widgets/sight_bottom_nav_bar.dart';
 
 class MainScreen extends StatefulWidget {
@@ -54,7 +54,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         children: const [
           SightListScreen(),
           SightMapScreen(),
-          VisitingScreen(),
+          FavoritesScreen(),
           SettingsScreen(),
         ],
       ),

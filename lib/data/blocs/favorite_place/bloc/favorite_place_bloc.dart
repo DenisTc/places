@@ -8,7 +8,7 @@ part 'favorite_place_state.dart';
 
 class FavoritePlaceBloc extends Bloc<FavoritePlaceEvent, FavoritePlaceState> {
   final PlaceRepository placeRepository;
-  Set<int> favoriteList = {};
+  List<Place> favoriteList = [];
 
   FavoritePlaceBloc(this.placeRepository) : super(FavoritePlaceInitial());
 
@@ -23,9 +23,9 @@ class FavoritePlaceBloc extends Bloc<FavoritePlaceEvent, FavoritePlaceState> {
       var status = await placeRepository.isFavoritePlace(event.place);
 
       if (status) {
-        favoriteList.add(event.place.id);
+        favoriteList.add(event.place);
       } else {
-        favoriteList.remove(event.place.id);
+        favoriteList.remove(event.place);
       }
       yield ListFavoritePlacesLoaded(favoriteList);
     }

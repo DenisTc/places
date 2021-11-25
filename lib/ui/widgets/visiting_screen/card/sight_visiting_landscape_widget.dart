@@ -32,7 +32,6 @@ class SightVisitingLandscapeWidget extends StatelessWidget {
                     place: place,
                     visited: visited,
                     moveItemInList: moveItemInList,
-                    removeSight: removeSight,
                   ),
                 );
               },

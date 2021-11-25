@@ -341,13 +341,13 @@ class _FunctionButtons extends StatelessWidget {
                                 .add(TogglePlaceInFavorites(place));
                           },
                           icon: SvgPicture.asset(
-                            state.favoriteList.contains(place.id)
+                            state.places.contains(place)
                                 ? iconFavoriteSelected
                                 : iconFavorite,
                             color: Theme.of(context).iconTheme.color,
                           ),
                           label: Text(
-                            state.favoriteList.contains(place.id)
+                            state.places.contains(place)
                                 ? constants.textInFavorite
                                 : constants.textToFavorite,
                             style: Theme.of(context).textTheme.bodyText1,

@@ -66,7 +66,7 @@ class SightCard extends StatelessWidget {
                                 .add(TogglePlaceInFavorites(place));
                           },
                           icon: SvgPicture.asset(
-                            state.favoriteList.contains(place.id)
+                            state.places.contains(place)
                                 ? iconFavoriteSelected
                                 : iconFavorite,
                             color: Colors.white,

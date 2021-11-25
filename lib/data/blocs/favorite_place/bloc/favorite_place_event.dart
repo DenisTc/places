@@ -13,7 +13,16 @@ class TogglePlaceInFavorites extends FavoritePlaceEvent {
   TogglePlaceInFavorites(this.place);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [place];
 }
 
 class LoadListFavoritePlaces extends FavoritePlaceEvent {}
+
+class RemovePlaceFromFavoritesList extends FavoritePlaceEvent {
+  final Place place;
+
+  RemovePlaceFromFavoritesList(this.place);
+
+  @override
+  List<Object> get props => [place];
+}
