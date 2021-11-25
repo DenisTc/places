@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/category.dart';
-import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_category_screen.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/sight_gallery.dart';
 import 'package:places/ui/widgets/add_sight_screen/new_sight_app_bar.dart';
-import 'package:provider/provider.dart';
 
 class AddSightScreen extends StatefulWidget {
   const AddSightScreen({Key? key}) : super(key: key);
@@ -64,9 +61,6 @@ class _AddSightScreenState extends State<AddSightScreen> {
                     controllerCat: _controllerCat,
                     notifyParent: () {
                       refresh();
-                    },
-                    setValue: (id) {
-                      setCategory(id);
                     },
                   ),
                   const SizedBox(height: 24),
@@ -142,14 +136,6 @@ class _AddSightScreenState extends State<AddSightScreen> {
       },
     );
   }
-
-  void setCategory(int id) {
-    setState(
-      () {
-        // _controllerCat.text = mocks[id].placeType;
-      },
-    );
-  }
 }
 
 class _SelectOnMapButton extends StatelessWidget {
@@ -175,12 +161,10 @@ class _SelectOnMapButton extends StatelessWidget {
 class _CategoryField extends StatefulWidget {
   final TextEditingController controllerCat;
   final Function() notifyParent;
-  final Function(int id) setValue;
 
   const _CategoryField({
     required this.controllerCat,
     required this.notifyParent,
-    required this.setValue,
     Key? key,
   }) : super(key: key);
 
@@ -198,7 +182,7 @@ class __CategoryFieldState extends State<_CategoryField> {
         selectedCategory = await Navigator.push<String>(
           context,
           MaterialPageRoute(
-            builder: (context) => const SightCategoryScreen(),
+            builder: (context) => SightCategoryScreen(selectedCategory),
           ),
         );
         if (selectedCategory != null) {
@@ -647,30 +631,23 @@ class _CreateSightButton extends StatefulWidget {
 }
 
 class _CreateSightButtonState extends State<_CreateSightButton> {
-  late PlaceInteractor _placeInteractor;
-
-  @override
-  void initState() {
-    super.initState();
-    _placeInteractor = context.read<PlaceInteractor>();
-  }
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
         if (widget.formKey.currentState!.validate() && widget.enable) {
-          _placeInteractor.addNewPlace(
-            Place(
-              id: 99999,
-              name: widget.controllerName.text,
-              lat: double.parse(widget.controllerLat.text),
-              lng: double.parse(widget.controllerLng.text),
-              urls: const [''],
-              description: widget.controllerDesc.text,
-              placeType: widget.controllerCat.text,
-            ),
-          );
+          // _placeInteractor.addNewPlace(
+          //   Place(
+          //     id: 99999,
+          //     name: widget.controllerName.text,
+          //     lat: double.parse(widget.controllerLat.text),
+          //     lng: double.parse(widget.controllerLng.text),
+          //     urls: const [''],
+          //     description: widget.controllerDesc.text,
+          //     placeType: widget.controllerCat.text,
+          //   ),
+          // );
         }
       },
       child: Text(
