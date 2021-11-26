@@ -8,7 +8,7 @@ part 'theme_state.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   final ThemeRepository themeRepository;
-  
+
   ThemeBloc(this.themeRepository)
       : super(
           ThemeState(
@@ -21,11 +21,12 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   Stream<ThemeState> mapEventToState(
     ThemeEvent event,
   ) async* {
-    final theme = await themeRepository.getTheme;
-    final themeStatus = await themeRepository.getThemeStatus;
-
     if (event is ToggleTheme) {
       themeRepository.changeTheme();
+      
+      final theme = await themeRepository.getTheme;
+      final themeStatus = await themeRepository.getThemeStatus;
+
       if (theme is ThemeData) {
         yield ThemeState(theme: theme, themeStatus: themeStatus);
       }
