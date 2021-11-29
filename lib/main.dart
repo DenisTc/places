@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/data/blocs/category_place/bloc/category_place_bloc.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/data/blocs/place/bloc/place_bloc.dart';
@@ -22,8 +21,6 @@ void main() {
             create: (context) => FavoritePlaceBloc(PlaceRepository())),
         BlocProvider<ThemeBloc>(
             create: (context) => ThemeBloc(ThemeRepository())),
-        BlocProvider<PlaceCategoriesBloc>(
-            create: (context) => PlaceCategoriesBloc(SearchRepository())),
       ],
       child: MyApp(),
     ),

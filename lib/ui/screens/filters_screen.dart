@@ -1,25 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/blocs/category_place/bloc/category_place_bloc.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/network_exception.dart';
-
-RangeValues distanceRangeValues = constants.defaultDistanceRange;
-RangeValues currentDistanceReange = constants.defaultDistanceRange;
-SettingsFilter settingsFilter = SettingsFilter(
-  lat: constants.userLocation.lat,
-  lng: constants.userLocation.lng,
-  distance: constants.defaultDistanceRange,
-);
 
 class FiltersScreen extends StatefulWidget {
   const FiltersScreen({
@@ -37,7 +27,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<PlaceCategoriesBloc>(context).add(LoadPlaceCategories());
+    BlocProvider.of<FilteredPlacesBloc>(context).add(LoadPlaceCategories());
+    BlocProvider.of<FilteredPlacesBloc>(context).add(LoadFilter());
   }
 
   @override
@@ -50,8 +41,9 @@ class _FiltersScreenState extends State<FiltersScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              // _searchInteractor.setRangeValue(constants.defaultDistanceRange);
-              settingsFilter = SettingsFilter();
+              setState(() {
+                BlocProvider.of<FilteredPlacesBloc>(context).add(ClearFilter());
+              });
             },
             child: Text(
               constants.textBtnClear,
@@ -70,7 +62,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             left: 16,
             right: 16,
           ),
-          child: BlocBuilder<PlaceCategoriesBloc, PlaceCategoriesState>(
+          child: BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
             buildWhen: (context, state) {
               return state is PlaceCategoriesLoaded;
             },
@@ -132,64 +124,77 @@ class _DistanceState extends State<_Distance> {
   RangeValues _rangeValues = constants.defaultDistanceRange;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            const Expanded(
-              child: Text(
-                constants.textDistance,
-                style: TextStyle(fontSize: 16),
+    return BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
+      buildWhen: (context, state) {
+        return state is LoadFilterSuccess || state is ClearSlider;
+      },
+      builder: (context, state) {
+        if (state is ClearSlider) {
+          _rangeValues = state.rangeValues;
+        }
+
+        if (state is LoadFilterSuccess) {
+          return Column(
+            children: [
+              Row(
+                children: [
+                  const Expanded(
+                    child: Text(
+                      constants.textDistance,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                  Expanded(
+                    child: RichText(
+                      textAlign: TextAlign.end,
+                      text: TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: 'от ',
+                            style: TextStyle(color: myLightSecondaryTwo),
+                          ),
+                          TextSpan(
+                            text: _rangeValues.start.round().toString(),
+                            style: const TextStyle(color: myLightSecondaryTwo),
+                          ),
+                          const TextSpan(
+                            text: ' до ',
+                            style: TextStyle(color: myLightSecondaryTwo),
+                          ),
+                          TextSpan(
+                            text: _rangeValues.end.round().toString(),
+                            style: const TextStyle(color: myLightSecondaryTwo),
+                          ),
+                          const TextSpan(
+                            text: ' м',
+                            style: TextStyle(color: myLightSecondaryTwo),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-            Expanded(
-              child: RichText(
-                textAlign: TextAlign.end,
-                text: TextSpan(
-                  children: [
-                    const TextSpan(
-                      text: 'от ',
-                      style: TextStyle(color: myLightSecondaryTwo),
-                    ),
-                    TextSpan(
-                      text: _rangeValues.start.round().toString(),
-                      style: const TextStyle(color: myLightSecondaryTwo),
-                    ),
-                    const TextSpan(
-                      text: ' до ',
-                      style: TextStyle(color: myLightSecondaryTwo),
-                    ),
-                    TextSpan(
-                      text: _rangeValues.end.round().toString(),
-                      style: const TextStyle(color: myLightSecondaryTwo),
-                    ),
-                    const TextSpan(
-                      text: ' м',
-                      style: TextStyle(color: myLightSecondaryTwo),
-                    ),
-                  ],
+              const SizedBox(height: 10),
+              SizedBox(
+                width: MediaQuery.of(context).size.width - 32,
+                child: RangeSlider(
+                  values: _rangeValues,
+                  max: constants.defaultDistanceRange.end,
+                  divisions: 100,
+                  onChanged: (value) {
+                    setState(() {});
+                    _rangeValues = value;
+                    BlocProvider.of<FilteredPlacesBloc>(context)
+                        .add(UpdateDistance(value));
+                  },
                 ),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          width: MediaQuery.of(context).size.width - 32,
-          child: RangeSlider(
-            values: settingsFilter.distance!,
-            max: constants.defaultDistanceRange.end,
-            divisions: 100,
-            onChanged: (value) {
-              setState(() {});
-              settingsFilter.distance = value;
-              BlocProvider.of<FilteredPlacesBloc>(context).add(
-                LoadFilteredPlaces(settingsFilter),
-              );
-            },
-          ),
-        ),
-      ],
+            ],
+          );
+        }
+        return SizedBox.shrink();
+      },
     );
   }
 }
@@ -207,12 +212,46 @@ class _ShowButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
       builder: (context, state) {
-        if (state is LoadFilteredPlacesSuccess) {
-          int count = state.places.length;
+        if (state is LoadFilterSuccess) {
+          int count = state.count;
           return ElevatedButton(
             onPressed: () {
               if (count != 0) {
-                Navigator.pop(context, settingsFilter);
+                Navigator.pop(context, state.placeFilter);
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              primary: count != 0
+                  ? Theme.of(context).buttonColor
+                  : Theme.of(context).primaryColor,
+              fixedSize: const Size(double.infinity, 48),
+              elevation: 0.0,
+              shadowColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '${constants.textBtnShow} ${count.toString()}',
+                  style: TextStyle(
+                    color: count != 0
+                        ? Colors.white
+                        : myLightSecondaryTwo.withOpacity(0.56),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else if (state is LoadFilterSuccess) {
+          int count = state.count;
+          return ElevatedButton(
+            onPressed: () {
+              if (count != 0) {
+                Navigator.pop(context, state.placeFilter);
               }
             },
             style: ElevatedButton.styleFrom(
@@ -340,7 +379,7 @@ class _CategoryCircle extends StatelessWidget {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(40)),
       onTap: () {
-        BlocProvider.of<PlaceCategoriesBloc>(context)
+        BlocProvider.of<FilteredPlacesBloc>(context)
             .add(ToggleCategory(category.type.toLowerCase()));
       },
       child: Column(
@@ -365,36 +404,13 @@ class _CategoryCircle extends StatelessWidget {
                     ),
                   ),
                 ),
-                BlocBuilder<PlaceCategoriesBloc, PlaceCategoriesState>(
+                BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
                   builder: (context, state) {
-                    if (state is CategoryToggled)
-                      settingsFilter.typeFilter = state.categories.length == 0
-                          ? null
-                          : state.categories;
-                    BlocProvider.of<FilteredPlacesBloc>(context).add(
-                      LoadFilteredPlaces(settingsFilter),
-                    );
-                    if (state is CategoryToggled &&
-                        state.categories.contains(
-                          category.type.toLowerCase(),
-                        )) {
-                      return Positioned(
-                        right: 0,
-                        bottom: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(3),
-                          height: checkSize,
-                          width: checkSize,
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).secondaryHeaderColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: SvgPicture.asset(
-                            iconCheck,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        ),
-                      );
+                    if (state is LoadFilterSuccess) {
+                      if (state.placeFilter.typeFilter!
+                          .contains(category.type.toLowerCase())) {
+                        return IconCheck(checkSize: checkSize);
+                      }
                     }
                     return SizedBox.shrink();
                   },
@@ -417,4 +433,34 @@ class _CategoryCircle extends StatelessWidget {
   }
 
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
+}
+
+class IconCheck extends StatelessWidget {
+  const IconCheck({
+    Key? key,
+    required this.checkSize,
+  }) : super(key: key);
+
+  final double checkSize;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 0,
+      bottom: 0,
+      child: Container(
+        padding: const EdgeInsets.all(3),
+        height: checkSize,
+        width: checkSize,
+        decoration: BoxDecoration(
+          color: Theme.of(context).secondaryHeaderColor,
+          shape: BoxShape.circle,
+        ),
+        child: SvgPicture.asset(
+          iconCheck,
+          color: Theme.of(context).colorScheme.secondary,
+        ),
+      ),
+    );
+  }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/blocs/category_place/bloc/category_place_bloc.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
+
 import 'package:places/domain/category.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
@@ -19,7 +22,8 @@ class SightCategoryScreen extends StatefulWidget {
 class _SightCategoryScreenState extends State<SightCategoryScreen> {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<PlaceCategoriesBloc>(context).add(LoadPlaceCategories());
+    BlocProvider.of<FilteredPlacesBloc>(context)
+        .add(LoadPlaceCategories());
     return Scaffold(
       appBar: const _AppBar(),
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -28,7 +32,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
           const SizedBox(height: 24),
           Expanded(
             child: Scrollbar(
-              child: BlocBuilder<PlaceCategoriesBloc, PlaceCategoriesState>(
+              child: BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
                 buildWhen: (context, state) {
                   return state is PlaceCategoriesLoaded;
                 },
