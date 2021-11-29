@@ -31,7 +31,6 @@ class SightCard extends StatefulWidget {
 class __SightCardState extends State<SightCard> {
   @override
   Widget build(BuildContext context) {
-    // final _placeInteractor = context.watch<PlaceInteractor>();
     return Material(
       borderRadius: const BorderRadius.all(Radius.circular(16)),
       child: Container(
@@ -47,6 +46,7 @@ class __SightCardState extends State<SightCard> {
             children: [
               Container(
                 width: MediaQuery.of(context).size.width,
+                height: 197,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.centerRight,
@@ -56,7 +56,7 @@ class __SightCardState extends State<SightCard> {
                       Theme.of(context).colorScheme.secondary,
                     ],
                   ),
-                  borderRadius: const BorderRadius.all(Radius.circular(16)),
+                  borderRadius: const BorderRadius.all(Radius.circular(18)),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16),
