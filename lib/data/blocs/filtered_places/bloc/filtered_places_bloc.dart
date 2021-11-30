@@ -3,6 +3,7 @@ import 'package:places/data/repository/search_repository.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
+import 'package:rxdart/rxdart.dart';
 
 import 'filtered_places_event.dart';
 import 'filtered_places_state.dart';
@@ -20,6 +21,19 @@ class FilteredPlacesBloc
 
   FilteredPlacesBloc(this._searchRepository)
       : super(LoadFilteredPlacesInProgress());
+
+  @override
+  Stream<Transition<FilteredPlacesEvent, FilteredPlacesState>> transformEvents(
+      Stream<FilteredPlacesEvent> events, transitionFn) {
+    final nonDebounceStream = events.where((event) => event is! UpdateDistance);
+
+    final debounceStream = events
+        .where((event) => event is UpdateDistance)
+        .debounceTime(const Duration(milliseconds: 500));
+
+    return super.transformEvents(
+        MergeStream([nonDebounceStream, debounceStream]), transitionFn);
+  }
 
   @override
   Stream<FilteredPlacesState> mapEventToState(
@@ -61,7 +75,7 @@ class FilteredPlacesBloc
 
       if (event is ClearFilter) {
         yield ClearSlider(constants.defaultDistanceRange);
-        
+
         placeFilter = SettingsFilter(
           lat: constants.userLocation.lat,
           lng: constants.userLocation.lng,
