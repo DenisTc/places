@@ -47,9 +47,9 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                       itemCount: categories.length,
                       itemBuilder: (context, index) {
                         final categoryName =
-                            Category.getCategory(categories[index]).name;
+                            Category.getCategoryByType(categories[index]).name;
                         final categoryType =
-                            Category.getCategory(categories[index]).type;
+                            Category.getCategoryByType(categories[index]).type;
                         return InkWell(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),

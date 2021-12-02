@@ -338,7 +338,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
           itemCount: widget.categories!.length,
           itemBuilder: (context, index) {
             return _CategoryCircle(
-              category: Category.getCategory(widget.categories![index]),
+              category: Category.getCategoryByType(widget.categories![index]),
             );
           },
         );
@@ -354,7 +354,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return _CategoryCircle(
-            category: Category.getCategory(widget.categories![index]),
+            category: Category.getCategoryByType(widget.categories![index]),
           );
         },
       ),

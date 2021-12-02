@@ -28,3 +28,16 @@ class PlaceDetailsLoadError extends PlaceState {
   @override
   List<Object> get props => [message];
 }
+
+class AddNewPlaceInProcess extends PlaceState {}
+
+class AddNewPlaceSuccess extends PlaceState {}
+
+class AddNewPlaceError extends PlaceState {
+  final String message;
+
+  const AddNewPlaceError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}

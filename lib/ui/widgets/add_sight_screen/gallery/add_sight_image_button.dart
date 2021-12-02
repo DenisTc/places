@@ -176,7 +176,12 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
   }
 
   Future<void> _imgFromGallery() async {
-    final selectedImages = await imagePicker.pickMultiImage();
+    final selectedImages = await imagePicker.pickMultiImage(
+      maxHeight: 1000,
+      maxWidth: 1000,
+      imageQuality: 70,
+    );
+
     if (selectedImages == null) return;
     imageFileList = selectedImages;
   }

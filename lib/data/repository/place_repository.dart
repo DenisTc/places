@@ -1,3 +1,8 @@
+import 'dart:async';
+
+import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime_type/mime_type.dart';
 import 'package:places/data/api/api_client.dart';
 import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/model/place_dto.dart';
@@ -24,14 +29,11 @@ class PlaceRepository {
         .toList();
   }
 
-  Future<Place> addNewPlace(Place place) async {
-    final data = place;
-    final response = await api.post<Map<String, dynamic>>(
-      ApiConstants.placeUrl,
-      data: data,
-    );
+  Future<dynamic> addNewPlace(Place place) async {
+    final data = place.toJson();
+    final response = await api.post(ApiConstants.placeUrl, data: data);
 
-    return PlaceMapper.toModel(PlaceDto.fromJson(response.data!));
+    return response;
   }
 
   Future<Place> getPlaceDetails({required int id}) async {
@@ -55,7 +57,7 @@ class PlaceRepository {
     return favoritePlaces;
   }
 
-  Future<Map<Place,DateTime>> getVisitPlaces() async {
+  Future<Map<Place, DateTime>> getVisitPlaces() async {
     return visitPlaces;
   }
 
@@ -91,5 +93,38 @@ class PlaceRepository {
     } else {
       visitPlaces[place] = date;
     }
+  }
+
+  Future<String> uploadImage(String image) async {
+    String mimeType = mime(image)!;
+    String type = mimeType.split('/')[0];
+    String subtype = mimeType.split('/')[1];
+    String fileName = image.split('/').last;
+
+    FormData formData = FormData.fromMap(
+      {
+        "image": [
+          await MultipartFile.fromFile(
+            image,
+            filename: fileName,
+            contentType: MediaType(type, subtype),
+          ),
+        ],
+      },
+    );
+
+    final response = await api.post(ApiConstants.uploadFile, data: formData);
+
+    return '${ApiConstants.baseUrl}/${response.headers['location']!.first}';
+  }
+
+  Future<int> getMaxPlaceId() async {
+    final listPlace = await getPlaces();
+
+    listPlace.sort((Place place, Place nextPlace) => place.id - nextPlace.id);
+
+    int maxId = listPlace.last.id;
+
+    return maxId;
   }
 }

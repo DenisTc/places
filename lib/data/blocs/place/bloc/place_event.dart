@@ -15,3 +15,22 @@ class LoadPlaceDetails extends PlaceEvent {
   @override
   List<Object> get props => [id];
 }
+
+class AddNewPlace extends PlaceEvent {
+  final Place place;
+
+  AddNewPlace(this.place);
+
+  @override
+  List<Object> get props => [place];
+}
+
+class UpdatePlaceImages extends PlaceEvent {
+  final List<String> images;
+
+  UpdatePlaceImages(this.images);
+
+  @override
+  List<Object> get props => [images];
+}
+

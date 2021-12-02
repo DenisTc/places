@@ -25,6 +25,9 @@ class SightListScreen extends StatelessWidget {
               slivers: [
                 const SliverAppBarList(),
                 BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
+                  buildWhen: (context, state) {
+                    return state is LoadFilteredPlacesSuccess;
+                  },
                   builder: (context, state) {
                     if (state is LoadFilteredPlacesInProgress) {
                       return const SliverFillRemaining(

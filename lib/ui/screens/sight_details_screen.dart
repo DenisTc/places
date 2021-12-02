@@ -255,7 +255,7 @@ class _Description extends StatelessWidget {
         ),
         const SizedBox(height: 2),
         Text(
-          Category.getCategory(place.placeType).name,
+          Category.getCategoryByType(place.placeType).name,
           style: Theme.of(context).textTheme.subtitle1,
         ),
         const SizedBox(height: 24),

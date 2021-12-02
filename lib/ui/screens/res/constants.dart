@@ -44,3 +44,7 @@ const String textTryChangeOptions = 'Попробуйте изменить па�
 const String textBtnDelete = 'Удалить';
 const String textScrWantToVisit = 'Отмечайте понравившиеся\nместа и они появятся здесь.';
 const String textScrVisited = 'Завершите маршрут,\nчтобы место попало сюда.';
+const String textAddNewPlaceSuccess = 'Место успешно добавлено!';
+const String textBtnBackToMainScreen = 'Вернуться на главный экран';
+const String textAddNewPlaceError = 'При добавлении нового места возникла ошибка. Попробуйте добавить новое место позже.';
+const String textAddNewPlaceInProcess = 'Подождите, добавляем место...';

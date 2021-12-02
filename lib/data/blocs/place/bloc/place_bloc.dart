@@ -8,6 +8,7 @@ part 'place_state.dart';
 
 class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   final PlaceRepository placeRepository;
+  List<String> images = [];
   PlaceBloc(this.placeRepository) : super(PlaceInitial());
 
   @override
@@ -28,6 +29,40 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
       } catch (e) {
         yield PlaceDetailsLoadError(e.toString());
       }
+    }
+
+    if (event is AddNewPlace) {
+      yield AddNewPlaceInProcess();
+
+      try {
+        List<String> uploadImages = [];
+        final maxId = await placeRepository.getMaxPlaceId();
+
+        for (int i = 0; i < images.length; i++) {
+          final url = await placeRepository.uploadImage(images[i]);
+          uploadImages.add(url);
+        }
+
+        final newPlace = Place(
+          id: maxId + 1,
+          lat: event.place.lat,
+          lng: event.place.lng,
+          name: event.place.name,
+          description: event.place.description,
+          placeType: event.place.placeType,
+          urls: uploadImages,
+        );
+
+        await placeRepository.addNewPlace(newPlace);
+
+        yield AddNewPlaceSuccess();
+      } catch (e) {
+        yield AddNewPlaceError(e.toString());
+      }
+    }
+
+    if (event is UpdatePlaceImages) {
+      images = event.images;
     }
   }
 }

@@ -21,4 +21,14 @@ class Place extends Equatable {
     required this.placeType,
     required this.description,
   });
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "lat": lat,
+        "lng": lng,
+        "name": name,
+        "urls": urls,
+        "placeType": placeType,
+        "description": description,
+    };
 }

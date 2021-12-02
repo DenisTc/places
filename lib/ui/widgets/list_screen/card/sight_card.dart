@@ -43,7 +43,7 @@ class SightCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  Category.getCategory(place.placeType).name,
+                  Category.getCategoryByType(place.placeType).name,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
