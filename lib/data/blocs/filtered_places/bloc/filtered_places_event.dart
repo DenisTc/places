@@ -18,7 +18,7 @@ class LoadFilteredPlaces extends FilteredPlacesEvent {
   List<Object> get props => [];
 }
 
-class LoadFilter extends FilteredPlacesEvent {}
+class LoadFilterParameters extends FilteredPlacesEvent {}
 
 class ClearFilter extends FilteredPlacesEvent {}
 

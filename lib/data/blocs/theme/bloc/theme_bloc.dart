@@ -15,21 +15,20 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
             theme: themeRepository.getTheme,
             themeStatus: themeRepository.getThemeStatus,
           ),
-        );
+        ) {
+    on<ToggleTheme>(
+      (event, emit) => _toggleTheme(event, emit),
+    );
+  }
 
-  @override
-  Stream<ThemeState> mapEventToState(
-    ThemeEvent event,
-  ) async* {
-    if (event is ToggleTheme) {
-      themeRepository.changeTheme();
-      
-      final theme = await themeRepository.getTheme;
-      final themeStatus = await themeRepository.getThemeStatus;
+  void _toggleTheme(ToggleTheme event, Emitter<ThemeState> emit) async {
+    themeRepository.changeTheme();
 
-      if (theme is ThemeData) {
-        yield ThemeState(theme: theme, themeStatus: themeStatus);
-      }
-    }
+    final theme = await themeRepository.getTheme;
+    final themeStatus = await themeRepository.getThemeStatus;
+
+    emit(
+      ThemeState(theme: theme, themeStatus: themeStatus),
+    );
   }
 }

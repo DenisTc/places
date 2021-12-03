@@ -19,110 +19,138 @@ class FilteredPlacesBloc
   );
   List<Place> filtredPlaces = [];
 
+  EventTransformer<GetProductosEvent> debounce<GetProductosEvent>(
+      Duration duration) {
+    return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+  }
+
   FilteredPlacesBloc(this._searchRepository)
-      : super(LoadFilteredPlacesInProgress());
+      : super(LoadFilteredPlacesInProgress()) {
+    on<LoadFilteredPlaces>(
+      (event, emit) => _loadFilteredPlaces(event, emit, placeFilter),
+    );
 
-  @override
-  Stream<Transition<FilteredPlacesEvent, FilteredPlacesState>> transformEvents(
-      Stream<FilteredPlacesEvent> events, transitionFn) {
-    final nonDebounceStream = events.where((event) => event is! UpdateDistance);
+    on<LoadPlaceCategories>(
+      (event, emit) => _loadPlaceCategories(event, emit),
+    );
 
-    final debounceStream = events
-        .where((event) => event is UpdateDistance)
-        .debounceTime(const Duration(milliseconds: 500));
+    on<LoadFilterParameters>(
+      (event, emit) => _loadFilterParameters(event, emit),
+    );
 
-    return super.transformEvents(
-        MergeStream([nonDebounceStream, debounceStream]), transitionFn);
+    on<ToggleCategory>(
+      (event, emit) => _toggleCategory(event, emit),
+    );
+
+    on<UpdateDistance>(
+      (event, emit) => _updateDistance(event, emit),
+      transformer: debounce(Duration(milliseconds: 500)),
+    );
+
+    on<ClearFilter>(
+      (event, emit) => _clearFilter(event, emit),
+    );
   }
 
-  @override
-  Stream<FilteredPlacesState> mapEventToState(
-    FilteredPlacesEvent event,
-  ) async* {
-    try {
-      if (event is LoadFilteredPlaces) {
-        yield* _mapFilteredPlacesLoadToState(placeFilter);
-      }
-
-      if (event is LoadFilter) {
-        final filteredPlaces =
-            await _searchRepository.getFiltredPlaces(placeFilter);
-        yield LoadFilterSuccess(
-            count: filteredPlaces.length, placeFilter: placeFilter);
-      }
-
-      if (event is ToggleCategory) {
-        if (placeFilter.typeFilter!.contains(event.name)) {
-          placeFilter.typeFilter!.remove(event.name);
-        } else {
-          placeFilter.typeFilter!.add(event.name);
-        }
-
-        final filteredPlaces =
-            await _searchRepository.getFiltredPlaces(placeFilter);
-        yield CategoryToggled(placeFilter.typeFilter!);
-        yield LoadFilterSuccess(
-            count: filteredPlaces.length, placeFilter: placeFilter);
-      }
-
-      if (event is UpdateDistance) {
-        placeFilter.distance = event.distance;
-        final filteredPlaces =
-            await _searchRepository.getFiltredPlaces(placeFilter);
-        yield LoadFilterSuccess(
-            count: filteredPlaces.length, placeFilter: placeFilter);
-      }
-
-      if (event is ClearFilter) {
-        yield ClearSlider(constants.defaultDistanceRange);
-
-        placeFilter = SettingsFilter(
-          lat: constants.userLocation.lat,
-          lng: constants.userLocation.lng,
-          distance: constants.defaultDistanceRange,
-          typeFilter: [],
-        );
-
-        final filteredPlaces =
-            await _searchRepository.getFiltredPlaces(placeFilter);
-
-        yield LoadFilterSuccess(
-            count: filteredPlaces.length, placeFilter: placeFilter);
-      }
-
-      if (event is LoadPlaceCategories) {
-        try {
-          var allCategories = await getCategories();
-
-          if (allCategories is List<String>) {
-            yield PlaceCategoriesLoaded(
-              categories: allCategories,
-              selectedCategories: placeFilter.typeFilter!,
-            );
-          } else {
-            yield LoadPlaceCategoriesError(allCategories.toString());
-          }
-        } catch (e) {
-          yield LoadPlaceCategoriesError(e.toString());
-        }
-      }
-    } catch (e) {
-      yield LoadFilteredPlacesError(e.toString());
-    }
-  }
-
-  Stream<FilteredPlacesState> _mapFilteredPlacesLoadToState([
-    SettingsFilter? filters = null,
-  ]) async* {
+  //TODO: refactoring
+  void _loadFilteredPlaces(
+      LoadFilteredPlaces event, Emitter<FilteredPlacesState> emit,
+      [SettingsFilter? filters = null]) async {
     try {
       final filteredPlaces = await _searchRepository.getFiltredPlaces(
-        filters ?? SettingsFilter(),
+        event.filters ??
+            SettingsFilter(
+              lat: constants.userLocation.lat,
+              lng: constants.userLocation.lng,
+              distance: constants.defaultDistanceRange,
+              typeFilter: ['other', 'monument'],
+            ),
       );
 
-      yield LoadFilteredPlacesSuccess(filteredPlaces);
+      emit(LoadFilteredPlacesSuccess(filteredPlaces));
     } catch (e) {
-      yield LoadFilteredPlacesError(e.toString());
+      emit(LoadFilteredPlacesError(e.toString()));
     }
+  }
+
+  void _loadPlaceCategories(
+      LoadPlaceCategories event, Emitter<FilteredPlacesState> emit) async {
+    try {
+      var allCategories = await getCategories();
+
+      emit(
+        PlaceCategoriesLoaded(
+          categories: allCategories,
+          selectedCategories: placeFilter.typeFilter!,
+        ),
+      );
+    } catch (e) {
+      emit(LoadPlaceCategoriesError(e.toString()));
+    }
+  }
+
+  void _loadFilterParameters(
+      LoadFilterParameters event, Emitter<FilteredPlacesState> emit) async {
+    final filteredPlaces =
+        await _searchRepository.getFiltredPlaces(placeFilter);
+    emit(
+      LoadFilterSuccess(
+        count: filteredPlaces.length,
+        placeFilter: placeFilter,
+      ),
+    );
+  }
+
+  void _toggleCategory(
+      ToggleCategory event, Emitter<FilteredPlacesState> emit) async {
+    if (placeFilter.typeFilter!.contains(event.name)) {
+      placeFilter.typeFilter!.remove(event.name);
+    } else {
+      placeFilter.typeFilter!.add(event.name);
+    }
+
+    final filteredPlaces =
+        await _searchRepository.getFiltredPlaces(placeFilter);
+
+    emit(
+      CategoryToggled(placeFilter.typeFilter!),
+    );
+
+    emit(
+      LoadFilterSuccess(
+        count: filteredPlaces.length,
+        placeFilter: placeFilter,
+      ),
+    );
+  }
+
+  void _updateDistance(
+      UpdateDistance event, Emitter<FilteredPlacesState> emit) async {
+    placeFilter.distance = event.distance;
+    final filteredPlaces =
+        await _searchRepository.getFiltredPlaces(placeFilter);
+
+    emit(
+      LoadFilterSuccess(count: filteredPlaces.length, placeFilter: placeFilter),
+    );
+  }
+
+  void _clearFilter(
+      ClearFilter event, Emitter<FilteredPlacesState> emit) async {
+    emit(ClearSlider(constants.defaultDistanceRange));
+
+    placeFilter = SettingsFilter(
+      lat: constants.userLocation.lat,
+      lng: constants.userLocation.lng,
+      distance: constants.defaultDistanceRange,
+      typeFilter: [],
+    );
+
+    final filteredPlaces =
+        await _searchRepository.getFiltredPlaces(placeFilter);
+
+    emit(LoadFilterSuccess(
+        count: filteredPlaces.length, placeFilter: placeFilter));
   }
 
   Future<List<String>> getCategories() async {

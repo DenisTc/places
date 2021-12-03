@@ -28,12 +28,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<FilteredPlacesBloc>(context).add(LoadPlaceCategories());
-    BlocProvider.of<FilteredPlacesBloc>(context).add(LoadFilter());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -72,6 +72,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               }
 
               if (state is PlaceCategoriesLoaded) {
+                BlocProvider.of<FilteredPlacesBloc>(context).add(LoadFilterParameters());
                 return Column(
                   children: [
                     const SizedBox(height: 20),

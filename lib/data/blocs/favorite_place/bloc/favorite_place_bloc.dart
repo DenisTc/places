@@ -10,29 +10,42 @@ class FavoritePlaceBloc extends Bloc<FavoritePlaceEvent, FavoritePlaceState> {
   final PlaceRepository placeRepository;
   List<Place> favoriteList = [];
 
-  FavoritePlaceBloc(this.placeRepository) : super(FavoritePlaceInitial());
+  FavoritePlaceBloc(this.placeRepository) : super(FavoritePlaceInitial()) {
+    on<LoadListFavoritePlaces>(
+      (event, emit) => _loadListFavoritePlaces(event, emit),
+    );
 
-  @override
-  Stream<FavoritePlaceState> mapEventToState(
-    FavoritePlaceEvent event,
-  ) async* {
-    yield ListFavoritePlacesLoading();
+    on<TogglePlaceInFavorites>(
+      (event, emit) => _togglePlaceInFavorites(event, emit),
+    );
+  }
 
-    if (event is TogglePlaceInFavorites) {
-      await placeRepository.toggleInFavorites(event.place);
-      var status = await placeRepository.isFavoritePlace(event.place);
+  void _loadListFavoritePlaces(
+    LoadListFavoritePlaces event,
+    Emitter<FavoritePlaceState> emit,
+  ) {
+    emit(
+      ListFavoritePlacesLoaded(favoriteList),
+    );
+  }
 
-      if (status) {
-        favoriteList.add(event.place);
-      } else {
-        favoriteList.remove(event.place);
-      }
-      yield ListFavoritePlacesLoaded(favoriteList);
+  void _togglePlaceInFavorites(
+    TogglePlaceInFavorites event,
+    Emitter<FavoritePlaceState> emit,
+  ) async {
+    emit(ListFavoritePlacesLoading());
+
+    await placeRepository.toggleInFavorites(event.place);
+    var status = await placeRepository.isFavoritePlace(event.place);
+
+    if (status) {
+      favoriteList.add(event.place);
+    } else {
+      favoriteList.remove(event.place);
     }
 
-    if(event is LoadListFavoritePlaces) {
-      yield ListFavoritePlacesLoaded(favoriteList);
-    }
-    
+    emit(
+      ListFavoritePlacesLoaded(favoriteList),
+    );
   }
 }
