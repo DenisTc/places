@@ -12,13 +12,13 @@ class HomeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int index = fromSettings ? 3 : 0;
     return ElevatedButton(
       onPressed: () {
         Navigator.pushReplacement<void, void>(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                fromSettings ? const SettingsScreen() : const MainScreen(),
+            builder: (context) => MainScreen(selectedTab: index),
           ),
         );
       },
