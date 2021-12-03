@@ -23,7 +23,7 @@ class HomeButton extends StatelessWidget {
         );
       },
       style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).buttonColor,
+        primary: Theme.of(context).colorScheme.primaryVariant,
         fixedSize: const Size(328, 48),
         elevation: 0.0,
         shadowColor: Colors.transparent,

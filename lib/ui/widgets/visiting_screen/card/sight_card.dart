@@ -137,7 +137,7 @@ class __SightCardState extends State<SightCard> {
                                           data: ThemeData.light().copyWith(
                                             colorScheme: ColorScheme.light(
                                               primary:
-                                                  Theme.of(context).buttonColor,
+                                                  Theme.of(context).colorScheme.primaryVariant,
                                             ),
                                           ),
                                           child: child!,

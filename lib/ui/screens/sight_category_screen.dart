@@ -12,18 +12,24 @@ import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 
 class SightCategoryScreen extends StatefulWidget {
-  String? selectedType;
-  SightCategoryScreen([this.selectedType]);
+  final String? placeType;
+  SightCategoryScreen([this.placeType]);
 
   @override
   _SightCategoryScreenState createState() => _SightCategoryScreenState();
 }
 
 class _SightCategoryScreenState extends State<SightCategoryScreen> {
+  String? selectedType;
+  @override
+  void initState() {
+    super.initState();
+    selectedType = widget.placeType;
+  }
+
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<FilteredPlacesBloc>(context)
-        .add(LoadPlaceCategories());
+    BlocProvider.of<FilteredPlacesBloc>(context).add(LoadPlaceCategories());
     return Scaffold(
       appBar: const _AppBar(),
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -69,12 +75,14 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                                         fontSize: 16,
                                       ),
                                     ),
-                                    if (widget.selectedType == categoryType)
+                                    if (selectedType == categoryType)
                                       SvgPicture.asset(
                                         iconCheck,
                                         height: 15,
                                         width: 15,
-                                        color: Theme.of(context).buttonColor,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primaryVariant,
                                       ),
                                   ],
                                 ),
@@ -88,10 +96,10 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                           ),
                           onTap: () => {
                             setState(() {
-                              if (widget.selectedType != categoryType) {
-                                widget.selectedType = categoryType;
+                              if (selectedType != categoryType) {
+                                selectedType = categoryType;
                               } else {
-                                widget.selectedType = null;
+                                selectedType = null;
                               }
                             }),
                           },
@@ -109,7 +117,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
               ),
             ),
           ),
-          _SaveButton(selectedType: widget.selectedType),
+          _SaveButton(selectedType: selectedType),
           const SizedBox(height: 30),
         ],
       ),
@@ -150,7 +158,7 @@ class __SaveButtonState extends State<_SaveButton> {
           backgroundColor: MaterialStateProperty.all(
             (widget.selectedType == null)
                 ? Theme.of(context).primaryColor
-                : Theme.of(context).buttonColor,
+                : Theme.of(context).colorScheme.primaryVariant,
           ),
           minimumSize:
               MaterialStateProperty.all(const Size(double.infinity, 48)),

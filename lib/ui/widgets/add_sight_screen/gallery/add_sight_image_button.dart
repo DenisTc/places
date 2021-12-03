@@ -133,7 +133,7 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                         constants.textCancel.toUpperCase(),
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          color: Theme.of(context).buttonColor,
+                          color: Theme.of(context).colorScheme.primaryVariant,
                         ),
                       ),
                     ),
@@ -155,14 +155,14 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                 Radius.circular(12.0),
               ),
               border: Border.all(
-                color: Theme.of(context).buttonColor.withOpacity(0.56),
+                color: Theme.of(context).colorScheme.primaryVariant.withOpacity(0.56),
               ),
             ),
           ),
           SvgPicture.asset(
             iconPlus,
             width: 25,
-            color: Theme.of(context).buttonColor,
+            color: Theme.of(context).colorScheme.primaryVariant,
           ),
         ],
       ),

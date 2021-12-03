@@ -75,7 +75,7 @@ class _SearchBarState extends State<SearchBar> {
                 iconOptions,
                 height: 15,
                 width: 15,
-                color: Theme.of(context).buttonColor,
+                color: Theme.of(context).colorScheme.primaryVariant,
               ),
               onPressed: () {
                 widget.textFieldFocusNode.unfocus();

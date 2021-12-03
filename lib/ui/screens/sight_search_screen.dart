@@ -32,7 +32,6 @@ class SightSearchScreen extends StatefulWidget {
 
 class _SightSearchScreenState extends State<SightSearchScreen> {
   final _controllerSearch = TextEditingController();
-  late Stream<List<Place>>? _filteredPlaces;
 
   @override
   void initState() {
@@ -293,7 +292,7 @@ class __ClearHistoryButtonState extends State<_ClearHistoryButton> {
         child: Text(
           constants.textBtnClearHistory,
           style: TextStyle(
-            color: Theme.of(context).buttonColor,
+            color: Theme.of(context).colorScheme.primaryVariant,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),

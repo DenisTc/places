@@ -385,7 +385,7 @@ class _CreateRouteButton extends StatelessWidget {
         );
       },
       style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).buttonColor,
+        primary: Theme.of(context).colorScheme.primaryVariant,
         fixedSize: const Size(double.infinity, 48),
         elevation: 0.0,
         shadowColor: Colors.transparent,

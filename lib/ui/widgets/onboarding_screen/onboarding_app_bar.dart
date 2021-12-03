@@ -37,7 +37,7 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Text(
               constants.textBtnSkip,
               style: TextStyle(
-                color: Theme.of(context).buttonColor,
+                color: Theme.of(context).colorScheme.primaryVariant,
                 fontWeight: FontWeight.w500,
               ),
             ),

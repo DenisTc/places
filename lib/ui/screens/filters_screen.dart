@@ -50,7 +50,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: Theme.of(context).buttonColor,
+                color: Theme.of(context).colorScheme.primaryVariant,
               ),
             ),
           ),
@@ -222,7 +222,7 @@ class _ShowButton extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
               primary: count != 0
-                  ? Theme.of(context).buttonColor
+                  ? Theme.of(context).colorScheme.primaryVariant
                   : Theme.of(context).primaryColor,
               fixedSize: const Size(double.infinity, 48),
               elevation: 0.0,
@@ -256,7 +256,7 @@ class _ShowButton extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
               primary: count != 0
-                  ? Theme.of(context).buttonColor
+                  ? Theme.of(context).colorScheme.primaryVariant
                   : Theme.of(context).primaryColor,
               fixedSize: const Size(double.infinity, 48),
               elevation: 0.0,
@@ -389,7 +389,7 @@ class _CategoryCircle extends StatelessWidget {
             height: iconSize,
             width: iconSize,
             decoration: BoxDecoration(
-              color: Theme.of(context).buttonColor.withOpacity(0.16),
+              color: Theme.of(context).colorScheme.primaryVariant.withOpacity(0.16),
               shape: BoxShape.circle,
             ),
             child: Stack(
@@ -400,7 +400,7 @@ class _CategoryCircle extends StatelessWidget {
                       category.icon,
                       height: 40,
                       width: 40,
-                      color: Theme.of(context).buttonColor,
+                      color: Theme.of(context).colorScheme.primaryVariant,
                     ),
                   ),
                 ),

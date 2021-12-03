@@ -153,7 +153,7 @@ class _SelectOnMapButton extends StatelessWidget {
       child: Text(
         constants.textBtnShowOnMap,
         style: TextStyle(
-          color: Theme.of(context).buttonColor,
+          color: Theme.of(context).colorScheme.primaryVariant,
           fontSize: 16,
         ),
       ),
@@ -232,7 +232,7 @@ class __CategoryFieldState extends State<_CategoryField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerCat.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : Colors.grey,
           ),
         ),
@@ -240,7 +240,7 @@ class __CategoryFieldState extends State<_CategoryField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerCat.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : Colors.grey,
           ),
         ),
@@ -301,7 +301,7 @@ class _NameFieldState extends State<_NameField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerName.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : Colors.grey,
           ),
         ),
@@ -309,7 +309,7 @@ class _NameFieldState extends State<_NameField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerName.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : Colors.grey,
           ),
         ),
@@ -413,7 +413,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLat.text.isNotEmpty
-                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -421,7 +421,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLat.text.isNotEmpty
-                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -496,7 +496,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLng.text.isNotEmpty
-                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -504,7 +504,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLng.text.isNotEmpty
-                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -592,7 +592,7 @@ class __DescriptionFieldState extends State<_DescriptionField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerDesc.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : myLightSecondaryTwo.withOpacity(0.56),
           ),
         ),
@@ -600,7 +600,7 @@ class __DescriptionFieldState extends State<_DescriptionField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerDesc.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : myLightSecondaryTwo.withOpacity(0.56),
           ),
         ),
@@ -668,7 +668,7 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(
           widget.enable
-              ? Theme.of(context).buttonColor
+              ? Theme.of(context).colorScheme.primaryVariant
               : Theme.of(context).primaryColor,
         ),
         minimumSize: MaterialStateProperty.all(const Size(double.infinity, 48)),
@@ -696,7 +696,7 @@ showAlertDialog(BuildContext context) {
             children: [
               state is AddNewPlaceInProcess
                   ? CircularProgressIndicator(
-                      color: Theme.of(context).buttonColor,
+                      color: Theme.of(context).colorScheme.primaryVariant,
                     )
                   : SizedBox.shrink(),
               state is AddNewPlaceError
@@ -709,7 +709,7 @@ showAlertDialog(BuildContext context) {
               state is AddNewPlaceSuccess
                   ? Icon(
                       Icons.check,
-                      color: Theme.of(context).buttonColor,
+                      color: Theme.of(context).colorScheme.primaryVariant,
                       size: 50.0,
                     )
                   : SizedBox.shrink(),
@@ -736,7 +736,7 @@ showAlertDialog(BuildContext context) {
                             child: Text(
                               constants.textBtnBackToMainScreen,
                               style: TextStyle(
-                                color: Theme.of(context).buttonColor,
+                                color: Theme.of(context).colorScheme.primaryVariant,
                               ),
                             ),
                             style: TextButton.styleFrom(

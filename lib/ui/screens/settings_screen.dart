@@ -76,7 +76,7 @@ class SettingsScreen extends StatelessWidget {
                   constraints: const BoxConstraints(),
                   icon: Icon(
                     Icons.info_outline_rounded,
-                    color: Theme.of(context).buttonColor,
+                    color: Theme.of(context).colorScheme.primaryVariant,
                   ),
                 ),
               ],
