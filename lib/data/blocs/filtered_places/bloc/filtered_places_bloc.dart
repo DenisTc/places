@@ -15,7 +15,7 @@ class FilteredPlacesBloc
     lat: constants.userLocation.lat,
     lng: constants.userLocation.lng,
     distance: constants.defaultDistanceRange,
-    typeFilter: [],
+    typeFilter: ['other', 'monument'],
   );
   List<Place> filtredPlaces = [];
 
@@ -41,7 +41,7 @@ class FilteredPlacesBloc
   ) async* {
     try {
       if (event is LoadFilteredPlaces) {
-        yield* _mapFilteredPlacesLoadToState(event.filters);
+        yield* _mapFilteredPlacesLoadToState(placeFilter);
       }
 
       if (event is LoadFilter) {
