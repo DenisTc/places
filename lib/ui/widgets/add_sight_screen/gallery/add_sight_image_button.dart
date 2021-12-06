@@ -62,7 +62,6 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                           },
                           child: Row(
                             children: [
-                              // TODO: Need make the text color as on the layout in figma
                               SvgPicture.asset(
                                 iconCamera,
                                 color: myLightSecondaryTwo,
@@ -155,6 +154,7 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                 Radius.circular(12.0),
               ),
               border: Border.all(
+                width: 2,
                 color: Theme.of(context).colorScheme.primaryVariant.withOpacity(0.56),
               ),
             ),

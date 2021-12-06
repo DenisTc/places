@@ -413,7 +413,10 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLat.text.isNotEmpty
-                          ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primaryVariant
+                              .withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -421,7 +424,10 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLat.text.isNotEmpty
-                          ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primaryVariant
+                              .withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -496,7 +502,10 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLng.text.isNotEmpty
-                          ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primaryVariant
+                              .withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -504,7 +513,10 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLng.text.isNotEmpty
-                          ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primaryVariant
+                              .withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -688,78 +700,82 @@ showAlertDialog(BuildContext context) {
     barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
-      return BlocBuilder<PlaceBloc, PlaceState>(builder: (context, state) {
-        return AlertDialog(
-          scrollable: true,
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          content: Row(
-            children: [
-              state is AddNewPlaceInProcess
-                  ? CircularProgressIndicator(
-                      color: Theme.of(context).colorScheme.primaryVariant,
-                    )
-                  : SizedBox.shrink(),
-              state is AddNewPlaceError
-                  ? Icon(
-                      Icons.error_outline,
-                      color: Colors.red,
-                      size: 50.0,
-                    )
-                  : SizedBox.shrink(),
-              state is AddNewPlaceSuccess
-                  ? Icon(
-                      Icons.check,
-                      color: Theme.of(context).colorScheme.primaryVariant,
-                      size: 50.0,
-                    )
-                  : SizedBox.shrink(),
-              SizedBox(width: 10),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 5),
-                  child: Builder(builder: (context) {
-                    if (state is AddNewPlaceSuccess) {
-                      debugPrint('Место успешно добавлено!');
-                      Future.delayed(const Duration(seconds: 2)).then(
-                        (_) => Navigator.pop(context),
-                      );
-                    }
-                    if (state is AddNewPlaceError) {
-                      return Column(
-                        children: [
-                          Text(constants.textAddNewPlaceError),
-                          SizedBox(height: 16),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text(
-                              constants.textBtnBackToMainScreen,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primaryVariant,
+      return BlocBuilder<PlaceBloc, PlaceState>(
+        builder: (context, state) {
+          return AlertDialog(
+            scrollable: true,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            content: Row(
+              children: [
+                state is AddNewPlaceInProcess
+                    ? CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.primaryVariant,
+                      )
+                    : SizedBox.shrink(),
+                state is AddNewPlaceError
+                    ? Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 50.0,
+                      )
+                    : SizedBox.shrink(),
+                state is AddNewPlaceSuccess
+                    ? Icon(
+                        Icons.check,
+                        color: Theme.of(context).colorScheme.primaryVariant,
+                        size: 50.0,
+                      )
+                    : SizedBox.shrink(),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 5),
+                    child: Builder(builder: (context) {
+                      if (state is AddNewPlaceSuccess) {
+                        debugPrint(constants.textAddNewPlaceSuccess);
+                        Future.delayed(const Duration(seconds: 2)).then(
+                          (_) => Navigator.pop(context),
+                        );
+                      }
+                      if (state is AddNewPlaceError) {
+                        return Column(
+                          children: [
+                            Text(constants.textAddNewPlaceError),
+                            SizedBox(height: 16),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                constants.textBtnBackToMainScreen,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryVariant,
+                                ),
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
                             ),
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: Size.zero,
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                          ),
-                        ],
-                      );
-                    }
+                          ],
+                        );
+                      }
 
-                    if (state is AddNewPlaceSuccess) {
-                      return const Text(constants.textAddNewPlaceSuccess);
-                    }
-                    return const Text(constants.textAddNewPlaceInProcess);
-                  }),
+                      if (state is AddNewPlaceSuccess) {
+                        return const Text(constants.textAddNewPlaceSuccess);
+                      }
+                      return const Text(constants.textAddNewPlaceInProcess);
+                    }),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        );
-      });
+              ],
+            ),
+          );
+        },
+      );
     },
   ).whenComplete(() => Navigator.pop(context));
 }
