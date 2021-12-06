@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/main_screen.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
-import 'package:places/ui/screens/settings_screen.dart';
 
 class HomeButton extends StatelessWidget {
   final bool fromSettings;
@@ -12,18 +11,18 @@ class HomeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int index = fromSettings ? 3 : 0;
     return ElevatedButton(
       onPressed: () {
         Navigator.pushReplacement<void, void>(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                fromSettings ? const SettingsScreen() : const MainScreen(),
+            builder: (context) => MainScreen(selectedTab: index),
           ),
         );
       },
       style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).buttonColor,
+        primary: Theme.of(context).colorScheme.primaryVariant,
         fixedSize: const Size(328, 48),
         elevation: 0.0,
         shadowColor: Colors.transparent,

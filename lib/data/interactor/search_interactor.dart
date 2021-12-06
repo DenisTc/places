@@ -18,12 +18,6 @@ class SearchInteractor extends ChangeNotifier {
 
   SearchInteractor();
 
-  @override
-  void dispose() {
-    _listFiltredController.close();
-    _listCategoriesController.close();
-  }
-
   void setRangeValue(RangeValues rangeValues) {
     _distanceRangeValue = rangeValues;
     notifyListeners();

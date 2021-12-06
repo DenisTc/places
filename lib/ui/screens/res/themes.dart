@@ -11,7 +11,6 @@ final lightTheme = ThemeData(
   primaryColor: myLightBackground,
   primaryColorLight: myLightSecondaryTwo.withOpacity(0),
   errorColor: myLightRed,
-  buttonColor: myLightGreen,
   secondaryHeaderColor: myLightMain,
   iconTheme: const IconThemeData(color: myLightMain),
   textTheme: TextTheme(
@@ -36,7 +35,7 @@ final lightTheme = ThemeData(
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: Colors.transparent,
   ),
-  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
+  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white, primaryVariant: myLightGreen),
 );
 
 final darkTheme = ThemeData(
@@ -45,7 +44,6 @@ final darkTheme = ThemeData(
   primaryColor: myDark,
   errorColor: myDarkRed,
   primaryColorLight: myDarkSecondaryTwo.withOpacity(0.2),
-  buttonColor: myDarkGreen,
   secondaryHeaderColor: Colors.white,
   primaryTextTheme: TextTheme(headline6: mainText),
   textTheme: TextTheme(
@@ -68,5 +66,5 @@ final darkTheme = ThemeData(
     inactiveTrackColor: myLightSecondaryTwo.withOpacity(0.56),
     thumbColor: Colors.white,
   ),
-  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: myDarkMain),
+  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: myDarkMain, primaryVariant: myDarkGreen),
 );

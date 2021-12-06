@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class SettingsFilter {
-  final double? lat;
-  final double? lng;
-  final RangeValues? distance;
-  final List<String>? typeFilter;
-  final String? nameFilter;
+  double? lat;
+  double? lng;
+  RangeValues? distance;
+  List<String>? typeFilter;
+  String? nameFilter;
 
   SettingsFilter({
     this.lat,

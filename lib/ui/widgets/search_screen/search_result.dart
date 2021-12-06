@@ -26,7 +26,7 @@ class SearchResult extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SightDetails(
-                id: place.id,
+                id: place.id!,
               ),
             ),
           );
@@ -87,7 +87,7 @@ class _SightDesc extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            Category.getCategory(placeType).name,
+            Category.getCategoryByType(placeType).name,
             style: const TextStyle(color: myLightSecondaryTwo),
           ),
           const SizedBox(height: 8),

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:places/data/interactor/place_interactor.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/visiting_screen/card/sight_visiting_portrain_widget.dart';
 import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
 import 'package:places/ui/widgets/visiting_screen/visiting_app_bar.dart';
-import 'package:provider/provider.dart';
+import 'package:places/ui/screens/res/constants.dart' as constants;
 
 /// Screen for displaying planned and visited places
-class VisitingScreen extends StatelessWidget {
-  const VisitingScreen({Key? key}) : super(key: key);
+class FavoritesScreen extends StatelessWidget {
+  const FavoritesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,20 +35,9 @@ class _FavoriteTabBarView extends StatefulWidget {
 }
 
 class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
-  late PlaceInteractor _placeInteractor;
-  late Future<List<Place>> _isVisited;
-  late Future<List<Place>> _notVisited;
-
-  @override
-  void initState() {
-    _placeInteractor = context.read<PlaceInteractor>();
-    _isVisited = _placeInteractor.getVisitPlaces();
-    _notVisited = _placeInteractor.getFavoritesPlaces();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
     // final isPortrait =
     //     MediaQuery.of(context).orientation == Orientation.portrait;
 
@@ -56,34 +46,28 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
       child: SafeArea(
         child: TabBarView(
           children: [
-            FutureBuilder<List<Place>>(
-              future: _notVisited,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+            BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+              builder: (context, state) {
+                if (state is ListFavoritePlacesLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                if (snapshot.hasData &&
-                    !snapshot.hasError &&
-                    snapshot.data!.isNotEmpty) {
+                if (state is ListFavoritePlacesLoaded &&
+                    state.places.isNotEmpty) {
                   return SightVisitingPortrainWidget(
-                    places: snapshot.data!,
+                    places: state.places,
                     visited: false,
                     moveItemInList: (data, place, places, visited) {
-                      moveItemInList(data, place, snapshot.data!, visited);
+                      moveItemInList(data, place, state.places, visited);
                     },
-                    removeSight: (place, visited) {
-                      removePlace(place, visited);
-                    },
-                  );
-                } else {
-                  return const FavoritesEmpty(
-                    icon: iconRoute,
-                    title: 'Пусто',
-                    desc:
-                        'Отмечайте понравившиеся\nместа и они появятся здесь.',
                   );
                 }
+
+                return const FavoritesEmpty(
+                  icon: iconAddCard,
+                  title: 'Пусто',
+                  desc: constants.textScrWantToVisit,
+                );
               },
             ),
             // TODO: Customize the display of items in portrait and landscape orientation for the Favorites screen.
@@ -116,34 +100,28 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
             //     desc: 'Отмечайте понравившиеся\nместа и они появятся здесь.',
             //   ),
 
-            FutureBuilder<List<Place>>(
-              future: _isVisited,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+            BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+              builder: (context, state) {
+                if (state is ListFavoritePlacesLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                if (snapshot.hasData &&
-                    !snapshot.hasError &&
-                    snapshot.data!.isNotEmpty) {
+                if (state is ListFavoritePlacesLoaded &&
+                    state.places.isNotEmpty) {
                   return SightVisitingPortrainWidget(
-                    places: snapshot.data!,
+                    places: state.places,
                     visited: true,
                     moveItemInList: (data, place, places, visited) {
-                      moveItemInList(data, place, snapshot.data!, visited);
+                      moveItemInList(data, place, state.places, visited);
                     },
-                    removeSight: (place, visited) {
-                      removePlace(place, visited);
-                    },
-                  );
-                } else {
-                  return const FavoritesEmpty(
-                    icon: iconRoute,
-                    title: 'Пусто',
-                    desc:
-                        'Отмечайте понравившиеся\nместа и они появятся здесь.',
                   );
                 }
+
+                return const FavoritesEmpty(
+                  icon: iconAddCard,
+                  title: 'Пусто',
+                  desc: constants.textScrVisited,
+                );
               },
             ),
 
@@ -182,10 +160,6 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
     );
   }
 
-  void refresh() {
-    setState(() {});
-  }
-
   void moveItemInList(
     Place data,
     Place place,
@@ -202,13 +176,4 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
     );
   }
 
-  void removePlace(Place place, bool visited) {
-    setState(() {
-      if (visited) {
-        _placeInteractor.removeFromVisit(place);
-      } else {
-        _placeInteractor.removeFromFavorites(place);
-      }
-    });
-  }
 }

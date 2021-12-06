@@ -30,7 +30,7 @@ class PageIndicator extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: i == currentPage
-                            ? Theme.of(context).buttonColor
+                            ? Theme.of(context).colorScheme.primaryVariant
                             : myLightSecondaryTwo.withOpacity(0.56),
                       ),
                     ),

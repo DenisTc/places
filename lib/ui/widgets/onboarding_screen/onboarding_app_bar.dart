@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/main_screen.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
-import 'package:places/ui/screens/settings_screen.dart';
 
 class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double currentPage;
@@ -18,6 +17,7 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final int index = fromSettings ? 3 : 0;
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -28,16 +28,14 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
               Navigator.pushReplacement<void, void>(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => fromSettings
-                      ? const SettingsScreen()
-                      : const MainScreen(),
+                  builder: (context) => MainScreen(selectedTab: index),
                 ),
               );
             },
             child: Text(
               constants.textBtnSkip,
               style: TextStyle(
-                color: Theme.of(context).buttonColor,
+                color: Theme.of(context).colorScheme.primaryVariant,
                 fontWeight: FontWeight.w500,
               ),
             ),

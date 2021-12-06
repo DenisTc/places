@@ -64,7 +64,7 @@ class _PhotoViewState extends State<PhotoView> {
                           iconClose,
                           height: 20,
                           width: 20,
-                          color: Theme.of(context).buttonColor,
+                          color: Theme.of(context).colorScheme.primaryVariant,
                         ),
                       ),
                     ),

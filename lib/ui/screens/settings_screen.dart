@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:places/data/interactor/settings_interactor.dart';
+import 'package:places/data/blocs/theme/bloc/theme_bloc.dart';
 import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
-import 'package:provider/provider.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
-  _SettingsScreenState createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  @override
   Widget build(BuildContext context) {
-    final _settingsInteractor = Provider.of<SettingsInteractor>(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
       appBar: const _AppBarSettings(),
@@ -36,19 +30,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                   ),
                 ),
-                FlutterSwitch(
-                  height: 32.0,
-                  width: 56.0,
-                  padding: 2.0,
-                  toggleSize: 28.0,
-                  borderRadius: 16.0,
-                  inactiveColor: myInactiveBlack.withOpacity(0.56),
-                  activeColor: myDarkGreen,
-                  value: _settingsInteractor.getThemeValue,
-                  onToggle: (value) {
-                    setState(() {
-                      _settingsInteractor.changeTheme(toggleValue: value);
-                    });
+                BlocBuilder<ThemeBloc, ThemeState>(
+                  builder: (context, state) {
+                    return FlutterSwitch(
+                      height: 32.0,
+                      width: 56.0,
+                      padding: 2.0,
+                      toggleSize: 28.0,
+                      borderRadius: 16.0,
+                      inactiveColor: myInactiveBlack.withOpacity(0.56),
+                      activeColor: myDarkGreen,
+                      value: state.themeStatus,
+                      onToggle: (value) {
+                        BlocProvider.of<ThemeBloc>(context).add(ToggleTheme());
+                      },
+                    );
                   },
                 ),
               ],
@@ -80,7 +76,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   constraints: const BoxConstraints(),
                   icon: Icon(
                     Icons.info_outline_rounded,
-                    color: Theme.of(context).buttonColor,
+                    color: Theme.of(context).colorScheme.primaryVariant,
                   ),
                 ),
               ],

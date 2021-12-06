@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/domain/filters.dart';
 import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/filters_screen.dart';
@@ -72,7 +75,7 @@ class _SearchBarState extends State<SearchBar> {
                 iconOptions,
                 height: 15,
                 width: 15,
-                color: Theme.of(context).buttonColor,
+                color: Theme.of(context).colorScheme.primaryVariant,
               ),
               onPressed: () {
                 widget.textFieldFocusNode.unfocus();
@@ -120,5 +123,8 @@ class _SearchBarState extends State<SearchBar> {
         builder: (context) => const FiltersScreen(),
       ),
     );
+
+    BlocProvider.of<FilteredPlacesBloc>(context)
+        .add(LoadFilteredPlaces(settingsFilter));
   }
 }

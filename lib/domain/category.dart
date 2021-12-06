@@ -23,7 +23,11 @@ class Category {
     required this.icon,
   });
 
-  static Category getCategory(String type) {
+  static Category getCategoryByType(String type) {
     return catList.where((element) => element.type == type).single;
+  }
+
+  static Category getCategoryByName(String name) {
+    return catList.where((element) => element.name == name).single;
   }
 }

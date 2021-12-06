@@ -62,7 +62,6 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                           },
                           child: Row(
                             children: [
-                              // TODO: Need make the text color as on the layout in figma
                               SvgPicture.asset(
                                 iconCamera,
                                 color: myLightSecondaryTwo,
@@ -133,7 +132,7 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                         constants.textCancel.toUpperCase(),
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          color: Theme.of(context).buttonColor,
+                          color: Theme.of(context).colorScheme.primaryVariant,
                         ),
                       ),
                     ),
@@ -155,14 +154,15 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
                 Radius.circular(12.0),
               ),
               border: Border.all(
-                color: Theme.of(context).buttonColor.withOpacity(0.56),
+                width: 2,
+                color: Theme.of(context).colorScheme.primaryVariant.withOpacity(0.56),
               ),
             ),
           ),
           SvgPicture.asset(
             iconPlus,
             width: 25,
-            color: Theme.of(context).buttonColor,
+            color: Theme.of(context).colorScheme.primaryVariant,
           ),
         ],
       ),
@@ -176,7 +176,12 @@ class _AddSightImageButtonState extends State<AddSightImageButton> {
   }
 
   Future<void> _imgFromGallery() async {
-    final selectedImages = await imagePicker.pickMultiImage();
+    final selectedImages = await imagePicker.pickMultiImage(
+      maxHeight: 1000,
+      maxWidth: 1000,
+      imageQuality: 70,
+    );
+
     if (selectedImages == null) return;
     imageFileList = selectedImages;
   }

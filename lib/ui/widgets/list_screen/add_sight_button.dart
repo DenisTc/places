@@ -21,7 +21,7 @@ class AddSightButton extends StatelessWidget {
         ),
         child: ElevatedButton(
           onPressed: () {
-            Navigator.push<List>(
+            Navigator.push<void>(
             context,
             MaterialPageRoute(
               builder: (context) => const AddSightScreen(),

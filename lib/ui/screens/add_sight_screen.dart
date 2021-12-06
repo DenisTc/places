@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/blocs/place/bloc/place_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -10,7 +11,6 @@ import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_category_screen.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/sight_gallery.dart';
 import 'package:places/ui/widgets/add_sight_screen/new_sight_app_bar.dart';
-import 'package:provider/provider.dart';
 
 class AddSightScreen extends StatefulWidget {
   const AddSightScreen({Key? key}) : super(key: key);
@@ -64,9 +64,6 @@ class _AddSightScreenState extends State<AddSightScreen> {
                     controllerCat: _controllerCat,
                     notifyParent: () {
                       refresh();
-                    },
-                    setValue: (id) {
-                      setCategory(id);
                     },
                   ),
                   const SizedBox(height: 24),
@@ -142,14 +139,6 @@ class _AddSightScreenState extends State<AddSightScreen> {
       },
     );
   }
-
-  void setCategory(int id) {
-    setState(
-      () {
-        // _controllerCat.text = mocks[id].placeType;
-      },
-    );
-  }
 }
 
 class _SelectOnMapButton extends StatelessWidget {
@@ -164,7 +153,7 @@ class _SelectOnMapButton extends StatelessWidget {
       child: Text(
         constants.textBtnShowOnMap,
         style: TextStyle(
-          color: Theme.of(context).buttonColor,
+          color: Theme.of(context).colorScheme.primaryVariant,
           fontSize: 16,
         ),
       ),
@@ -175,12 +164,10 @@ class _SelectOnMapButton extends StatelessWidget {
 class _CategoryField extends StatefulWidget {
   final TextEditingController controllerCat;
   final Function() notifyParent;
-  final Function(int id) setValue;
 
   const _CategoryField({
     required this.controllerCat,
     required this.notifyParent,
-    required this.setValue,
     Key? key,
   }) : super(key: key);
 
@@ -198,13 +185,13 @@ class __CategoryFieldState extends State<_CategoryField> {
         selectedCategory = await Navigator.push<String>(
           context,
           MaterialPageRoute(
-            builder: (context) => const SightCategoryScreen(),
+            builder: (context) => SightCategoryScreen(selectedCategory),
           ),
         );
         if (selectedCategory != null) {
           setState(() {
             widget.controllerCat.text =
-                Category.getCategory(selectedCategory!).name;
+                Category.getCategoryByType(selectedCategory!).name;
           });
         }
       },
@@ -245,7 +232,7 @@ class __CategoryFieldState extends State<_CategoryField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerCat.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : Colors.grey,
           ),
         ),
@@ -253,7 +240,7 @@ class __CategoryFieldState extends State<_CategoryField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerCat.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : Colors.grey,
           ),
         ),
@@ -314,7 +301,7 @@ class _NameFieldState extends State<_NameField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerName.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : Colors.grey,
           ),
         ),
@@ -322,7 +309,7 @@ class _NameFieldState extends State<_NameField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerName.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : Colors.grey,
           ),
         ),
@@ -426,7 +413,10 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLat.text.isNotEmpty
-                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primaryVariant
+                              .withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -434,7 +424,10 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLat.text.isNotEmpty
-                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primaryVariant
+                              .withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -509,7 +502,10 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLng.text.isNotEmpty
-                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primaryVariant
+                              .withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -517,7 +513,10 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                     borderRadius: BorderRadius.circular(8),
                     borderSide: BorderSide(
                       color: widget.controllerLng.text.isNotEmpty
-                          ? Theme.of(context).buttonColor.withOpacity(0.4)
+                          ? Theme.of(context)
+                              .colorScheme
+                              .primaryVariant
+                              .withOpacity(0.4)
                           : Colors.grey,
                     ),
                   ),
@@ -605,7 +604,7 @@ class __DescriptionFieldState extends State<_DescriptionField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerDesc.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : myLightSecondaryTwo.withOpacity(0.56),
           ),
         ),
@@ -613,7 +612,7 @@ class __DescriptionFieldState extends State<_DescriptionField> {
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
             color: widget.controllerDesc.text.isNotEmpty
-                ? Theme.of(context).buttonColor.withOpacity(0.4)
+                ? Theme.of(context).colorScheme.primaryVariant.withOpacity(0.4)
                 : myLightSecondaryTwo.withOpacity(0.56),
           ),
         ),
@@ -647,30 +646,26 @@ class _CreateSightButton extends StatefulWidget {
 }
 
 class _CreateSightButtonState extends State<_CreateSightButton> {
-  late PlaceInteractor _placeInteractor;
-
-  @override
-  void initState() {
-    super.initState();
-    _placeInteractor = context.read<PlaceInteractor>();
-  }
-
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
         if (widget.formKey.currentState!.validate() && widget.enable) {
-          _placeInteractor.addNewPlace(
-            Place(
-              id: 99999,
-              name: widget.controllerName.text,
-              lat: double.parse(widget.controllerLat.text),
-              lng: double.parse(widget.controllerLng.text),
-              urls: const [''],
-              description: widget.controllerDesc.text,
-              placeType: widget.controllerCat.text,
-            ),
+          final placeType =
+              Category.getCategoryByName(widget.controllerCat.text).type;
+          final newPlace = Place(
+            id: null,
+            name: widget.controllerName.text,
+            lat: double.parse(widget.controllerLat.text),
+            lng: double.parse(widget.controllerLng.text),
+            urls: const [''],
+            description: widget.controllerDesc.text,
+            placeType: placeType,
           );
+
+          BlocProvider.of<PlaceBloc>(context).add(AddNewPlace(newPlace));
+
+          showAlertDialog(context);
         }
       },
       child: Text(
@@ -685,7 +680,7 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(
           widget.enable
-              ? Theme.of(context).buttonColor
+              ? Theme.of(context).colorScheme.primaryVariant
               : Theme.of(context).primaryColor,
         ),
         minimumSize: MaterialStateProperty.all(const Size(double.infinity, 48)),
@@ -698,4 +693,89 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
       ),
     );
   }
+}
+
+showAlertDialog(BuildContext context) {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (BuildContext context) {
+      return BlocBuilder<PlaceBloc, PlaceState>(
+        builder: (context, state) {
+          return AlertDialog(
+            scrollable: true,
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            content: Row(
+              children: [
+                state is AddNewPlaceInProcess
+                    ? CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.primaryVariant,
+                      )
+                    : SizedBox.shrink(),
+                state is AddNewPlaceError
+                    ? Icon(
+                        Icons.error_outline,
+                        color: Colors.red,
+                        size: 50.0,
+                      )
+                    : SizedBox.shrink(),
+                state is AddNewPlaceSuccess
+                    ? Icon(
+                        Icons.check,
+                        color: Theme.of(context).colorScheme.primaryVariant,
+                        size: 50.0,
+                      )
+                    : SizedBox.shrink(),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 5),
+                    child: Builder(builder: (context) {
+                      if (state is AddNewPlaceSuccess) {
+                        debugPrint(constants.textAddNewPlaceSuccess);
+                        Future.delayed(const Duration(seconds: 2)).then(
+                          (_) => Navigator.pop(context),
+                        );
+                      }
+                      if (state is AddNewPlaceError) {
+                        return Column(
+                          children: [
+                            Text(constants.textAddNewPlaceError),
+                            SizedBox(height: 16),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                constants.textBtnBackToMainScreen,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryVariant,
+                                ),
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+
+                      if (state is AddNewPlaceSuccess) {
+                        return const Text(constants.textAddNewPlaceSuccess);
+                      }
+                      return const Text(constants.textAddNewPlaceInProcess);
+                    }),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    },
+  ).whenComplete(() => Navigator.pop(context));
 }

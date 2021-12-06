@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/search_interactor.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
+
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -11,7 +15,6 @@ import 'package:places/ui/widgets/network_exception.dart';
 import 'package:places/ui/widgets/search_screen/empty_search_result.dart';
 import 'package:places/ui/widgets/search_screen/search_bar.dart';
 import 'package:places/ui/widgets/search_screen/search_result_list.dart';
-import 'package:provider/provider.dart';
 
 List<String> historyList = [];
 
@@ -29,13 +32,11 @@ class SightSearchScreen extends StatefulWidget {
 
 class _SightSearchScreenState extends State<SightSearchScreen> {
   final _controllerSearch = TextEditingController();
-  late Stream<List<Place>>? _filteredPlaces;
-  late SearchInteractor _searchInteractor;
 
   @override
   void initState() {
-    _searchInteractor = Provider.of<SearchInteractor>(context, listen: false);
     super.initState();
+    BlocProvider.of<FilteredPlacesBloc>(context).add(LoadFilteredPlaces(widget.settingsFilter));
   }
 
   @override
@@ -96,28 +97,20 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                   return const SizedBox.shrink();
                 }
 
-                _filteredPlaces = _searchInteractor.getFiltredPlacesStream(
-                  widget.settingsFilter ?? SettingsFilter(),
-                );
-
-                return StreamBuilder<List<Place>>(
-                  stream: _filteredPlaces,
-                  builder: (context, snapshot) {
-                    /// Wating request
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                return BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
+                  builder: (context, state) {
+                    if (state is LoadFilteredPlacesInProgress) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    /// Display search result
-                    if (snapshot.hasData &&
-                        !snapshot.hasError &&
-                        snapshot.data!.isNotEmpty) {
+                    if (state is LoadFilteredPlacesSuccess) {
                       final searchRes = _filterPlacesByName(
                         _controllerSearch.text,
-                        snapshot.data!,
+                        state.places,
                       );
 
-                      if (searchRes.isEmpty) return const EmptySearchResult();
+                      if (searchRes.length == 0)
+                        return const EmptySearchResult();
 
                       return SearchResultList(
                         filteredSights: searchRes,
@@ -128,10 +121,13 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                       );
                     }
 
-                    /// snapshot.hasError
-                    return const Center(
-                      child: NetworkException(),
-                    );
+                    if (state is LoadFilteredPlacesError) {
+                      return const SliverFillRemaining(
+                        child: NetworkException(),
+                      );
+                    }
+
+                    return const EmptySearchResult();
                   },
                 );
               },
@@ -296,7 +292,7 @@ class __ClearHistoryButtonState extends State<_ClearHistoryButton> {
         child: Text(
           constants.textBtnClearHistory,
           style: TextStyle(
-            color: Theme.of(context).buttonColor,
+            color: Theme.of(context).colorScheme.primaryVariant,
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),

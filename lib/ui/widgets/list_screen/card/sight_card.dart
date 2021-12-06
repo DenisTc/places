@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
+// import 'package:places/data/blocs/favorite_places/bloc/favorite_places_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_details_screen.dart';
-import 'package:provider/provider.dart';
 
 /// A card of an interesting place to be displayed on the main screen of the application.
 class SightCard extends StatelessWidget {
   final Place place;
-  const SightCard({required this.place, Key? key}) : super(key: key);
+  SightCard({required this.place, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _favoriteIconController = context.watch<PlaceInteractor>();
+    BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
+
     return SizedBox(
       height: 188,
       child: Stack(
@@ -31,7 +33,7 @@ class SightCard extends StatelessWidget {
             child: InkWell(
               borderRadius: const BorderRadius.all(Radius.circular(16)),
               onTap: () {
-                _showSight(context, place.id);
+                _showSight(context, place.id!);
               },
             ),
           ),
@@ -41,17 +43,18 @@ class SightCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  Category.getCategory(place.placeType).name,
+                  Category.getCategoryByType(place.placeType).name,
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                StreamProvider<bool>.value(
-                  value: _favoriteIconController.isFavoritePlace(place),
-                  initialData: false,
-                  child: Consumer<bool>(
-                    builder: (context, isFavorite, child) {
+                BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+                  buildWhen: (context, state) {
+                    return state != ListFavoritePlacesLoaded;
+                  },
+                  builder: (context, state) {
+                    if (state is ListFavoritePlacesLoaded) {
                       return Material(
                         color: Colors.transparent,
                         borderRadius:
@@ -59,19 +62,21 @@ class SightCard extends StatelessWidget {
                         clipBehavior: Clip.antiAlias,
                         child: IconButton(
                           onPressed: () {
-                            isFavorite
-                                ? _favoriteIconController
-                                    .removeFromFavorites(place)
-                                : _favoriteIconController.addToFavorites(place);
+                            BlocProvider.of<FavoritePlaceBloc>(context)
+                                .add(TogglePlaceInFavorites(place));
                           },
                           icon: SvgPicture.asset(
-                            isFavorite ? iconFavoriteSelected : iconFavorite,
+                            state.places.contains(place)
+                                ? iconFavoriteSelected
+                                : iconFavorite,
                             color: Colors.white,
                           ),
                         ),
                       );
-                    },
-                  ),
+                    }
+
+                    return const SizedBox.shrink();
+                  },
                 ),
               ],
             ),

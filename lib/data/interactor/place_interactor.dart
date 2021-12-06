@@ -16,11 +16,6 @@ class PlaceInteractor extends ChangeNotifier {
 
   PlaceInteractor();
 
-  @override
-  void dispose() {
-    _listPlacesController.close();
-  }
-
   void addErrorToPlacesController(Object error) {
     _listPlacesController.addError(error);
   }
@@ -47,7 +42,7 @@ class PlaceInteractor extends ChangeNotifier {
     }
   }
 
-  // Methods for working with favorites places
+  /// Methods for working with favorites places
 
   Future<List<Place>> getFavoritesPlaces() async {
     return _placeRepository.getFavoritesPlaces();
@@ -57,38 +52,8 @@ class PlaceInteractor extends ChangeNotifier {
     yield _placeRepository.isFavoritePlace(place);
   }
 
-  Future<void> addToFavorites(Place place) async {
-    await _placeRepository.addToFavorites(place);
+  Future<void> toggleInFavorites(Place place) async {
+    await _placeRepository.toggleInFavorites(place);
     notifyListeners();
-  }
-
-  Future<void> removeFromFavorites(Place place) async {
-    await _placeRepository.removeFromFavorites(place);
-    notifyListeners();
-  }
-
-  // Methods for working with visited places
-
-  Future<List<Place>> getVisitPlaces() async {
-    return _placeRepository.getVisitPlaces();
-  }
-
-  Future<bool> addToVisitingPlaces(Place place) async {
-    try {
-      //TODO: It is necessary to implement a method for adding a place to the list of visited places.
-      //await _placeRepository.addToVisitingPlaces(place);
-      return true;
-    } on Exception catch (_) {
-      return false;
-    }
-  }
-
-  Future<bool> removeFromVisit(Place place) async {
-    try {
-      await _placeRepository.removeFromVisit(place);
-      return true;
-    } on Exception catch (_) {
-      return false;
-    }
   }
 }

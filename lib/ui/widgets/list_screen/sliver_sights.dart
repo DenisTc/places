@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/mocks.dart';
 import 'package:places/ui/widgets/list_screen/card/sight_card.dart';
 
 class SliverSights extends StatelessWidget {
@@ -60,13 +59,13 @@ class SightLandscapeWidget extends StatelessWidget {
     return SliverGrid(
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          final place = mocks[index];
+          final place = places[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16),
             child: SightCard(place: place),
           );
         },
-        childCount: mocks.length,
+        childCount: places.length,
       ),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
