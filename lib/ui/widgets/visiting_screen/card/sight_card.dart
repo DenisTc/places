@@ -109,7 +109,7 @@ class __SightCardState extends State<SightCard> {
                       child: InkWell(
                         borderRadius: const BorderRadius.all(Radius.circular(16)),
                         onTap: () {
-                          _showSight(widget.place.id);
+                          _showSight(widget.place.id!);
                         },
                       ),
                     ),

@@ -26,7 +26,7 @@ class SearchResult extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => SightDetails(
-                id: place.id,
+                id: place.id!,
               ),
             ),
           );

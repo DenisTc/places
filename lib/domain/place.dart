@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Place extends Equatable {
-  final int id;
+  final int? id;
   final double? lat;
   final double? lng;
   final String name;

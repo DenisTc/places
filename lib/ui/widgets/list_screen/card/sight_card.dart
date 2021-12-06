@@ -33,7 +33,7 @@ class SightCard extends StatelessWidget {
             child: InkWell(
               borderRadius: const BorderRadius.all(Radius.circular(16)),
               onTap: () {
-                _showSight(context, place.id);
+                _showSight(context, place.id!);
               },
             ),
           ),

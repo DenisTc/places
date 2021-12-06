@@ -642,7 +642,7 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
           final placeType =
               Category.getCategoryByName(widget.controllerCat.text).type;
           final newPlace = Place(
-            id: 0,
+            id: null,
             name: widget.controllerName.text,
             lat: double.parse(widget.controllerLat.text),
             lng: double.parse(widget.controllerLng.text),

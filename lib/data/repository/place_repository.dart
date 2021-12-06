@@ -117,14 +117,4 @@ class PlaceRepository {
 
     return '${ApiConstants.baseUrl}/${response.headers['location']!.first}';
   }
-
-  Future<int> getMaxPlaceId() async {
-    final listPlace = await getPlaces();
-
-    listPlace.sort((Place place, Place nextPlace) => place.id - nextPlace.id);
-
-    int maxId = listPlace.last.id;
-
-    return maxId;
-  }
 }

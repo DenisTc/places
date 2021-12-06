@@ -46,7 +46,6 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
 
     try {
       List<String> uploadImages = [];
-      final maxId = await placeRepository.getMaxPlaceId();
 
       for (int i = 0; i < images.length; i++) {
         final url = await placeRepository.uploadImage(images[i]);
@@ -54,7 +53,7 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
       }
 
       final newPlace = Place(
-        id: maxId + 1,
+        id: null,
         lat: event.place.lat,
         lng: event.place.lng,
         name: event.place.name,
