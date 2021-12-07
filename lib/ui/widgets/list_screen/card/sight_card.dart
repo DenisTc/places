@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
+// import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 // import 'package:places/data/blocs/favorite_places/bloc/favorite_places_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
@@ -15,7 +15,7 @@ class SightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
+    // BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
 
     return SizedBox(
       height: 188,
@@ -49,35 +49,35 @@ class SightCard extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
-                  buildWhen: (context, state) {
-                    return state != ListFavoritePlacesLoaded;
-                  },
-                  builder: (context, state) {
-                    if (state is ListFavoritePlacesLoaded) {
-                      return Material(
-                        color: Colors.transparent,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(50)),
-                        clipBehavior: Clip.antiAlias,
-                        child: IconButton(
-                          onPressed: () {
-                            BlocProvider.of<FavoritePlaceBloc>(context)
-                                .add(TogglePlaceInFavorites(place));
-                          },
-                          icon: SvgPicture.asset(
-                            state.places.contains(place)
-                                ? iconFavoriteSelected
-                                : iconFavorite,
-                            color: Colors.white,
-                          ),
-                        ),
-                      );
-                    }
+                // BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+                //   buildWhen: (context, state) {
+                //     return state != ListFavoritePlacesLoaded;
+                //   },
+                //   builder: (context, state) {
+                //     if (state is ListFavoritePlacesLoaded) {
+                //       return Material(
+                //         color: Colors.transparent,
+                //         borderRadius:
+                //             const BorderRadius.all(Radius.circular(50)),
+                //         clipBehavior: Clip.antiAlias,
+                //         child: IconButton(
+                //           onPressed: () {
+                //             BlocProvider.of<FavoritePlaceBloc>(context)
+                //                 .add(TogglePlaceInFavorites(place));
+                //           },
+                //           icon: SvgPicture.asset(
+                //             state.places.contains(place)
+                //                 ? iconFavoriteSelected
+                //                 : iconFavorite,
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //       );
+                //     }
 
-                    return const SizedBox.shrink();
-                  },
-                ),
+                //     return const SizedBox.shrink();
+                //   },
+                // ),
               ],
             ),
           ),
