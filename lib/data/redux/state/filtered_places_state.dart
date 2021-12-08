@@ -11,5 +11,4 @@ class FilteredPlacesDataState extends FilteredPlacesState {
   final List<Place> places;
 
   FilteredPlacesDataState(this.places);
-
 }

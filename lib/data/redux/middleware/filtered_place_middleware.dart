@@ -1,7 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:places/data/redux/action/filtered_places_action.dart';
 import 'package:places/data/redux/state/app_state.dart';
-import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:redux/redux.dart';
 

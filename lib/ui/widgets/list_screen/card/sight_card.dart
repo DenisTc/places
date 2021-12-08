@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-// import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
-// import 'package:places/data/blocs/favorite_places/bloc/favorite_places_bloc.dart';
+import 'package:places/data/redux/action/favorite_places_action.dart';
+import 'package:places/data/redux/state/app_state.dart';
+import 'package:places/data/redux/state/favorite_places_state.dart';
+
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/icons.dart';
@@ -48,6 +50,45 @@ class SightCard extends StatelessWidget {
                     color: Colors.white,
                     fontWeight: FontWeight.w700,
                   ),
+                ),
+                StoreConnector<AppState, FavoritePlacesState>(
+                  onInit: (store) {
+                    store.dispatch(LoadFavoritePlacesAction());
+                  },
+                  converter: (store) {
+                    return store.state.favoritePlacesState;
+                  },
+                  builder: (BuildContext context, FavoritePlacesState vm) {
+                    if (vm is FavoritePlacesLoadingState) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: CircularProgressIndicator(color: Colors.green),
+                      );
+                    }
+
+                    if (vm is FavoritePlacesDataState) {
+                      return Material(
+                        color: Colors.transparent,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(50)),
+                        clipBehavior: Clip.antiAlias,
+                        child: IconButton(
+                          onPressed: () {
+                            StoreProvider.of<AppState>(context)
+                                .dispatch(ToggleInFavoriteAction(place));
+                          },
+                          icon: SvgPicture.asset(
+                            vm.places.contains(place)
+                                ? iconFavoriteSelected
+                                : iconFavorite,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    }
+
+                    return const SizedBox.shrink();
+                  },
                 ),
                 // BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
                 //   buildWhen: (context, state) {

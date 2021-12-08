@@ -5,8 +5,10 @@ import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/data/blocs/place/bloc/place_bloc.dart';
 import 'package:places/data/blocs/theme/bloc/theme_bloc.dart';
+import 'package:places/data/redux/middleware/favorite_places_middleware.dart';
 import 'package:places/data/redux/middleware/filtered_place_middleware.dart';
 import 'package:places/data/redux/reducer/reducer.dart';
+import 'package:places/data/redux/state/favorite_places_state.dart';
 import 'package:places/data/redux/state/filtered_places_state.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/repository/search_repository.dart';
@@ -20,9 +22,13 @@ import 'data/redux/state/app_state.dart';
 void main() {
   final _store = Store<AppState>(
     reducerApp,
-    initialState: AppState(filteredPlacesState: FilteredPlacesInitialState()),
+    initialState: AppState(
+      filteredPlacesState: FilteredPlacesInitialState(),
+      favoritePlacesState: FavoritePlacesInitialState(),
+    ),
     middleware: [
       PlaceMiddleware(SearchRepository()),
+      FavoriteMiddleware(),
     ],
   );
 
