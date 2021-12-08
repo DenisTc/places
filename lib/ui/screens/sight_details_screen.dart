@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
-import 'package:places/data/blocs/place/bloc/place_bloc.dart';
-
+import 'package:places/data/redux/action/favorite_places_action.dart';
+import 'package:places/data/redux/action/place_action.dart';
+import 'package:places/data/redux/state/app_state.dart';
+import 'package:places/data/redux/state/favorite_places_state.dart';
+import 'package:places/data/redux/state/place_state.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -27,14 +29,27 @@ class SightDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PageController _pageController = PageController();
-    BlocProvider.of<PlaceBloc>(context).add(LoadPlaceDetails(id));
 
     return Material(
       child: Container(
         color: Theme.of(context).colorScheme.secondary,
-        child: BlocBuilder<PlaceBloc, PlaceState>(
-          builder: (context, state) {
-            if (state is PlaceDetailsLoaded) {
+        child: StoreConnector<AppState, PlaceState>(
+          onInit: (store) {
+            store.dispatch(LoadPlaceDetailsAction(id));
+          },
+          converter: (store) {
+            return store.state.placeState;
+          },
+          builder: (BuildContext context, PlaceState vm) {
+            if (vm is PlaceLoadingState) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (vm is PlaceErrorState) {
+              return const NetworkException();
+            }
+
+            if (vm is PlaceDataState) {
               return ConstrainedBox(
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.9,
@@ -43,16 +58,12 @@ class SightDetails extends StatelessWidget {
                   slivers: [
                     _GalleryPlace(
                       pageController: _pageController,
-                      place: state.place,
+                      place: vm.place,
                     ),
-                    _DescriptionPlace(place: state.place),
+                    _DescriptionPlace(place: vm.place),
                   ],
                 ),
               );
-            }
-
-            if (state is PlaceDetailsLoadError) {
-              return const NetworkException();
             }
 
             return SizedBox.shrink();
@@ -288,7 +299,6 @@ class _FunctionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -324,12 +334,22 @@ class _FunctionButtons extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
-                  buildWhen: (context, state) {
-                    return state is ListFavoritePlacesLoaded;
+                StoreConnector<AppState, FavoritePlacesState>(
+                  onInit: (store) {
+                    store.dispatch(LoadFavoritePlacesAction());
                   },
-                  builder: (context, state) {
-                    if (state is ListFavoritePlacesLoaded) {
+                  converter: (store) {
+                    return store.state.favoritePlacesState;
+                  },
+                  builder: (BuildContext context, FavoritePlacesState vm) {
+                    if (vm is FavoritePlacesLoadingState) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: CircularProgressIndicator(color: Colors.green),
+                      );
+                    }
+
+                    if (vm is FavoritePlacesDataState) {
                       return Material(
                         color: Colors.transparent,
                         borderRadius:
@@ -337,17 +357,17 @@ class _FunctionButtons extends StatelessWidget {
                         clipBehavior: Clip.antiAlias,
                         child: TextButton.icon(
                           onPressed: () {
-                            BlocProvider.of<FavoritePlaceBloc>(context)
-                                .add(TogglePlaceInFavorites(place));
+                            StoreProvider.of<AppState>(context)
+                                .dispatch(ToggleInFavoriteAction(place));
                           },
                           icon: SvgPicture.asset(
-                            state.places.contains(place)
+                            vm.places.contains(place)
                                 ? iconFavoriteSelected
                                 : iconFavorite,
                             color: Theme.of(context).iconTheme.color,
                           ),
                           label: Text(
-                            state.places.contains(place)
+                            vm.places.contains(place)
                                 ? constants.textInFavorite
                                 : constants.textToFavorite,
                             style: Theme.of(context).textTheme.bodyText1,
