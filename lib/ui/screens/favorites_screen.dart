@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:places/data/redux/action/favorite_places_action.dart';
+import 'package:places/data/redux/state/app_state.dart';
+import 'package:places/data/redux/state/favorite_places_state.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/visiting_screen/card/sight_visiting_portrain_widget.dart';
@@ -37,7 +39,6 @@ class _FavoriteTabBarView extends StatefulWidget {
 class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
     // final isPortrait =
     //     MediaQuery.of(context).orientation == Orientation.portrait;
 
@@ -46,19 +47,24 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
       child: SafeArea(
         child: TabBarView(
           children: [
-            BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
-              builder: (context, state) {
-                if (state is ListFavoritePlacesLoading) {
+            StoreConnector<AppState, FavoritePlacesState>(
+              onInit: (store) {
+                store.dispatch(LoadFavoritePlacesAction());
+              },
+              converter: (store) {
+                return store.state.favoritePlacesState;
+              },
+              builder: (BuildContext context, FavoritePlacesState vm) {
+                if (vm is FavoritePlacesLoadingState) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                if (state is ListFavoritePlacesLoaded &&
-                    state.places.isNotEmpty) {
+                if (vm is FavoritePlacesDataState && vm.places.isNotEmpty) {
                   return SightVisitingPortrainWidget(
-                    places: state.places,
+                    places: vm.places,
                     visited: false,
                     moveItemInList: (data, place, places, visited) {
-                      moveItemInList(data, place, state.places, visited);
+                      moveItemInList(data, place, vm.places, visited);
                     },
                   );
                 }
@@ -70,6 +76,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                 );
               },
             ),
+
             // TODO: Customize the display of items in portrait and landscape orientation for the Favorites screen.
             // if (_notVisited.isNotEmpty)
             //   isPortrait
@@ -100,19 +107,24 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
             //     desc: 'Отмечайте понравившиеся\nместа и они появятся здесь.',
             //   ),
 
-            BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
-              builder: (context, state) {
-                if (state is ListFavoritePlacesLoading) {
+            StoreConnector<AppState, FavoritePlacesState>(
+              onInit: (store) {
+                store.dispatch(LoadFavoritePlacesAction());
+              },
+              converter: (store) {
+                return store.state.favoritePlacesState;
+              },
+              builder: (BuildContext context, FavoritePlacesState vm) {
+                if (vm is FavoritePlacesLoadingState) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                if (state is ListFavoritePlacesLoaded &&
-                    state.places.isNotEmpty) {
+                if (vm is FavoritePlacesDataState && vm.places.isNotEmpty) {
                   return SightVisitingPortrainWidget(
-                    places: state.places,
-                    visited: true,
+                    places: vm.places,
+                    visited: false,
                     moveItemInList: (data, place, places, visited) {
-                      moveItemInList(data, place, state.places, visited);
+                      moveItemInList(data, place, vm.places, visited);
                     },
                   );
                 }
@@ -175,5 +187,4 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
       },
     );
   }
-
 }

@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   void initState() {
     initialIndex = widget.selectedTab ?? 0;
     _tabController = TabController(
-      length: 1,
+      length: 3,
       vsync: this,
       initialIndex: initialIndex,
     );
@@ -55,8 +55,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         controller: _tabController,
         children: const [
           SightListScreen(),
-          // SightMapScreen(),
-          // FavoritesScreen(),
+          SightMapScreen(),
+          FavoritesScreen(),
           // SettingsScreen(),
         ],
       ),
