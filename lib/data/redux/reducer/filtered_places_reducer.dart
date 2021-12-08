@@ -6,6 +6,11 @@ AppState loadFilteredPlacesReducer(AppState state, LoadFilteredPlacesAction acti
   return state.copyWith(filteredPlacesState: FilteredPlacesLoadingState());
 }
 
+AppState errorFilteredPlacesReducer(AppState state, ErrorFilteredPlacesAction action){
+  return state.copyWith(filteredPlacesState: FilteredPlacesErrorState(action.message));
+}
+
 AppState resultFilteredPlacesReducer(AppState state, ResultFilteredPlacesAction action){
   return state.copyWith(filteredPlacesState: FilteredPlacesDataState(action.places));
 }
+

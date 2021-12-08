@@ -11,9 +11,18 @@ class PlaceMiddleware implements MiddlewareClass<AppState> {
   @override
   call(Store<AppState> store, dynamic action, NextDispatcher next) {
     if (action is LoadFilteredPlacesAction) {
-      _searchRepository.getFiltredPlaces(action.filter).then(
-            (result) => store.dispatch(ResultFilteredPlacesAction(result)),
-          );
+      _searchRepository
+          .getFiltredPlaces(action.filter)
+          .then((result) => store.dispatch(ResultFilteredPlacesAction(result)))
+          .catchError((errMsg) =>
+              store.dispatch(ErrorFilteredPlacesAction(errMsg.toString())));
+
+      // try {
+      //   final result = await _searchRepository.getFiltredPlaces(action.filter).;
+      //   return store.dispatch(ResultFilteredPlacesAction(result));
+      // } catch (error) {
+      //   return store.dispatch(ErrorFilteredPlacesAction(error.toString()));
+      // }
     }
     next(action);
   }

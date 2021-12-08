@@ -11,6 +11,13 @@ class LoadFilteredPlacesAction extends FilteredPlacesActions {
   LoadFilteredPlacesAction(this.filter);
 }
 
+/// Returning Error while getting the list of filtered places
+class ErrorFilteredPlacesAction extends FilteredPlacesActions {
+  final String message;
+
+  ErrorFilteredPlacesAction(this.message);
+}
+
 /// Result of loading filtered places
 class ResultFilteredPlacesAction extends FilteredPlacesActions {
   final List<Place> places;

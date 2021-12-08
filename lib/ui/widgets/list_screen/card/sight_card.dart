@@ -17,8 +17,6 @@ class SightCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
-
     return SizedBox(
       height: 188,
       child: Stack(
@@ -90,35 +88,6 @@ class SightCard extends StatelessWidget {
                     return const SizedBox.shrink();
                   },
                 ),
-                // BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
-                //   buildWhen: (context, state) {
-                //     return state != ListFavoritePlacesLoaded;
-                //   },
-                //   builder: (context, state) {
-                //     if (state is ListFavoritePlacesLoaded) {
-                //       return Material(
-                //         color: Colors.transparent,
-                //         borderRadius:
-                //             const BorderRadius.all(Radius.circular(50)),
-                //         clipBehavior: Clip.antiAlias,
-                //         child: IconButton(
-                //           onPressed: () {
-                //             BlocProvider.of<FavoritePlaceBloc>(context)
-                //                 .add(TogglePlaceInFavorites(place));
-                //           },
-                //           icon: SvgPicture.asset(
-                //             state.places.contains(place)
-                //                 ? iconFavoriteSelected
-                //                 : iconFavorite,
-                //             color: Colors.white,
-                //           ),
-                //         ),
-                //       );
-                //     }
-
-                //     return const SizedBox.shrink();
-                //   },
-                // ),
               ],
             ),
           ),

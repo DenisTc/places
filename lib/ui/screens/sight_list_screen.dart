@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-// import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
-// import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
-// import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/data/redux/action/filtered_places_action.dart';
 import 'package:places/data/redux/state/app_state.dart';
 import 'package:places/data/redux/state/filtered_places_state.dart';
@@ -19,7 +15,6 @@ class SightListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // BlocProvider.of<FilteredPlacesBloc>(context).add(LoadFilteredPlaces());
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
       body: Stack(
@@ -45,54 +40,23 @@ class SightListScreen extends StatelessWidget {
                       );
                     }
 
+                    if (vm is FilteredPlacesErrorState) {
+                      return const SliverFillRemaining(
+                        child: NetworkException(),
+                      );
+                    }
+
                     if (vm is FilteredPlacesDataState) {
                       return SliverSights(
                         places: vm.places,
                       );
                     }
 
-                    // return const SliverFillRemaining(
-                    //   child: SizedBox.shrink(),
-                    // );
                     return const SliverFillRemaining(
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.red,
-                        ),
-                      ),
+                      child: SizedBox.shrink(),
                     );
                   },
                 ),
-                // BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
-                //   buildWhen: (context, state) {
-                //     return state is LoadFilteredPlacesSuccess;
-                //   },
-                //   builder: (context, state) {
-                //     if (state is LoadFilteredPlacesInProgress) {
-                //       return const SliverFillRemaining(
-                //         child: Center(
-                //           child: CircularProgressIndicator(),
-                //         ),
-                //       );
-                //     }
-
-                //     if (state is LoadFilteredPlacesSuccess) {
-                //       return SliverSights(
-                //         places: state.places,
-                //       );
-                //     }
-
-                //     if (state is LoadFilteredPlacesError) {
-                //       return const SliverFillRemaining(
-                //         child: NetworkException(),
-                //       );
-                //     }
-
-                //     return const SliverFillRemaining(
-                //       child: SizedBox.shrink(),
-                //     );
-                //   },
-                // ),
               ],
             ),
           ),

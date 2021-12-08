@@ -7,6 +7,7 @@ import 'package:redux/redux.dart';
 
 final reducerApp = combineReducers<AppState>([
   TypedReducer<AppState, LoadFilteredPlacesAction>(loadFilteredPlacesReducer),
+  TypedReducer<AppState, ErrorFilteredPlacesAction>(errorFilteredPlacesReducer),
   TypedReducer<AppState, ResultFilteredPlacesAction>(resultFilteredPlacesReducer),
   TypedReducer<AppState, LoadFavoritePlacesAction>(loadFavoritePlacesReducer),
   TypedReducer<AppState, ResultFavoritePlacesAction>(resultFavoritePlacesReducer),
