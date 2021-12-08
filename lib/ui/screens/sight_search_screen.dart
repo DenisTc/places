@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/redux/action/filtered_places_action.dart';
 import 'package:places/data/redux/state/app_state.dart';
 import 'package:places/data/redux/state/filtered_places_state.dart';
-// import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
-// import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
-// import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
-
 import 'package:places/domain/place.dart';
 import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -36,12 +31,6 @@ class SightSearchScreen extends StatefulWidget {
 
 class _SightSearchScreenState extends State<SightSearchScreen> {
   final _controllerSearch = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    // BlocProvider.of<FilteredPlacesBloc>(context).add(LoadFilteredPlaces(widget.settingsFilter));
-  }
 
   @override
   Widget build(BuildContext context) {
