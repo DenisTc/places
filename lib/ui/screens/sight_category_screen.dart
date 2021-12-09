@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
+import 'package:places/data/redux/action/filtered_places_action.dart';
+import 'package:places/data/redux/state/app_state.dart';
+import 'package:places/data/redux/state/filtered_places_state.dart';
 
 import 'package:places/domain/category.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -29,7 +29,6 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<FilteredPlacesBloc>(context).add(LoadPlaceCategories());
     return Scaffold(
       appBar: const _AppBar(),
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -38,17 +37,24 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
           const SizedBox(height: 24),
           Expanded(
             child: Scrollbar(
-              child: BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
-                buildWhen: (context, state) {
-                  return state is PlaceCategoriesLoaded;
+              child: StoreConnector<AppState, FilteredPlacesState>(
+                onInit: (store) {
+                  store.dispatch(LoadCategoriesAction());
                 },
-                builder: (context, state) {
-                  if (state is PlaceCategoriesLoading) {
+                converter: (store) {
+                  return store.state.filteredPlacesState;
+                },
+                builder: (BuildContext context, FilteredPlacesState vm) {
+                  if (vm is FilteredCategoriesLoadingState) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
-                  if (state is PlaceCategoriesLoaded) {
-                    final categories = state.categories;
+                  if (vm is FilteredCategoriesErrorState) {
+                    return const NetworkException();
+                  }
+
+                  if (vm is CategoriesDataState) {
+                    final categories = vm.categories;
                     return ListView.builder(
                       itemCount: categories.length,
                       itemBuilder: (context, index) {
@@ -108,11 +114,7 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
                     );
                   }
 
-                  if (state is LoadPlaceCategoriesError) {
-                    return const NetworkException();
-                  }
-
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 },
               ),
             ),

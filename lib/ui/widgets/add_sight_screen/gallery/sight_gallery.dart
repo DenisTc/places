@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:places/data/blocs/place/bloc/place_bloc.dart';
+import 'package:places/data/redux/action/place_action.dart';
+import 'package:places/data/redux/state/app_state.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/add_sight_image_button.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/sight_image.dart';
 
@@ -65,7 +66,8 @@ class _SightGalleryState extends State<SightGallery> {
   void addImage(List<XFile>? xFileList) {
     setState(() {
       images.addAll(xFileList!.map((image) => image.path));
-      BlocProvider.of<PlaceBloc>(context).add(UpdatePlaceImages(images));
+      StoreProvider.of<AppState>(context)
+                    .dispatch(UpdatePlaceImagesAction(images));
     });
   }
 }

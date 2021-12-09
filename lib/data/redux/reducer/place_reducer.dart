@@ -13,3 +13,15 @@ AppState errorPlaceReducer(AppState state, ErrorPlaceAction action){
 AppState resultPlaceDetailsReducer(AppState state, ResultPlaceDetailsAction action){
   return state.copyWith(placeState: PlaceDataState(action.place));
 }
+
+AppState processAddNewPlaceReducer(AppState state, AddNewPlaceAction action){
+  return state.copyWith(placeState: AddnewPlaceInProcessState());
+}
+
+AppState resultAddNewPlaceReducer(AppState state, ResultAddNewPlaceAction action){
+  return state.copyWith(placeState: AddnewPlaceSuccessState());
+}
+
+AppState errorAddNewPlaceReducer(AppState state, ErrorAddNewPlaceAction action){
+  return state.copyWith(placeState: AddnewPlaceErrorState(action.message));
+}

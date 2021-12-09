@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:places/data/redux/action/filtered_places_action.dart';
 import 'package:places/data/redux/state/app_state.dart';

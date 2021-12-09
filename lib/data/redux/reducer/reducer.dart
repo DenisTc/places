@@ -35,4 +35,10 @@ final reducerApp = combineReducers<AppState>([
 
   /// Responsible for loading filters to the screen 
   TypedReducer<AppState, ResultFilterAction>(resultFilterReducer),
+
+  /// Responsible for add new place
+  TypedReducer<AppState, AddNewPlaceAction>(processAddNewPlaceReducer),
+  TypedReducer<AppState, ErrorAddNewPlaceAction>(errorAddNewPlaceReducer),
+  TypedReducer<AppState, ResultAddNewPlaceAction>(resultAddNewPlaceReducer),
+  
 ]);

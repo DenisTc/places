@@ -18,3 +18,13 @@ class PlaceDataState extends PlaceState {
 
   PlaceDataState(this.place);
 }
+
+class AddnewPlaceSuccessState extends PlaceState {}
+
+class AddnewPlaceInProcessState extends PlaceState {}
+
+class AddnewPlaceErrorState extends PlaceState {
+  final String message;
+
+  AddnewPlaceErrorState(this.message);
+}
