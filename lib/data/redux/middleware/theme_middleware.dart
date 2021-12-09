@@ -10,17 +10,13 @@ class ThemeMiddleware implements MiddlewareClass<AppState> {
 
   @override
   call(Store<AppState> store, dynamic action, NextDispatcher next) async {
-
-
     if (action is ToggleThemeAction) {
-      
       await themeRepository.changeTheme();
 
       final theme = await themeRepository.getTheme;
       final themeStatus = await themeRepository.getThemeStatus;
-      
-      return store.dispatch(ResultToggleThemeAction(theme,themeStatus));
-      
+
+      return store.dispatch(ResultToggleThemeAction(theme, themeStatus));
     }
 
     next(action);

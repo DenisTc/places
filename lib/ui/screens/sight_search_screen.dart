@@ -159,7 +159,8 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
     final _filredPlaces = <Place>[];
     for (final place in places) {
       final _indexName = place.name.toLowerCase().indexOf(name.toLowerCase());
-      if (_indexName == 0) {
+
+      if (_indexName >= 0) {
         _filredPlaces.add(place);
       }
     }
