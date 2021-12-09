@@ -58,19 +58,24 @@ class _SearchBarState extends State<SearchBar> {
               color: myLightSecondaryTwo.withOpacity(0.56),
             ),
           ),
-          suffixIcon: IconButton(
-            onPressed: () {
-              widget.controllerSearch.clear();
-              setState(() {
-                widget.notifyParent();
-              });
-            },
-            icon: SvgPicture.asset(
-              iconClearField,
-              height: 20,
-              color: widget.controllerSearch.text.isNotEmpty
-                  ? Theme.of(context).iconTheme.color
-                  : Colors.transparent,
+          suffixIcon: Material(
+            color: Colors.transparent,
+            borderRadius: const BorderRadius.all(Radius.circular(50)),
+            clipBehavior: Clip.antiAlias,
+            child: IconButton(
+              onPressed: () {
+                widget.controllerSearch.clear();
+                setState(() {
+                  widget.notifyParent();
+                });
+              },
+              icon: SvgPicture.asset(
+                iconClearField,
+                height: 20,
+                color: widget.controllerSearch.text.isNotEmpty
+                    ? Theme.of(context).iconTheme.color
+                    : Colors.transparent,
+              ),
             ),
           ),
           border: InputBorder.none,
