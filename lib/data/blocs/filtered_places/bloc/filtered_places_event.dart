@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:places/domain/settings_filter.dart';
+import 'package:places/domain/search_filter.dart';
 
 class FilteredPlacesEvent extends Equatable {
   const FilteredPlacesEvent();
@@ -10,7 +10,7 @@ class FilteredPlacesEvent extends Equatable {
 }
 
 class LoadFilteredPlaces extends FilteredPlacesEvent {
-  final SettingsFilter? filters;
+  final SearchFilter? filters;
 
   LoadFilteredPlaces([this.filters]);
 

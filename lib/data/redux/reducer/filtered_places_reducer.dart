@@ -14,3 +14,10 @@ AppState resultFilteredPlacesReducer(AppState state, ResultFilteredPlacesAction 
   return state.copyWith(filteredPlacesState: FilteredPlacesDataState(action.places));
 }
 
+AppState loadCategoriesReducer(AppState state, LoadCategoriesAction action){
+  return state.copyWith(filteredPlacesState: FilteredCategoriesLoadingState());
+}
+
+AppState resultCategoriesReducer(AppState state, ResultCategoriesAction action){
+  return state.copyWith(filteredPlacesState: CategoriesDataState(action.categories));
+}

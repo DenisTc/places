@@ -17,6 +17,7 @@ class PlaceMiddleware implements MiddlewareClass<AppState> {
           .catchError(
               (errMsg) => store.dispatch(ErrorPlaceAction(errMsg.toString())));
     }
+    
     next(action);
   }
 }

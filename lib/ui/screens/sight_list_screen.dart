@@ -4,7 +4,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:places/data/redux/action/filtered_places_action.dart';
 import 'package:places/data/redux/state/app_state.dart';
 import 'package:places/data/redux/state/filtered_places_state.dart';
-import 'package:places/domain/settings_filter.dart';
 import 'package:places/ui/widgets/list_screen/add_sight_button.dart';
 import 'package:places/ui/widgets/list_screen/sliver_app_bar_list.dart';
 import 'package:places/ui/widgets/list_screen/sliver_sights.dart';
@@ -26,7 +25,7 @@ class SightListScreen extends StatelessWidget {
                 const SliverAppBarList(),
                 StoreConnector<AppState, FilteredPlacesState>(
                   onInit: (store) {
-                    store.dispatch(LoadFilteredPlacesAction(SettingsFilter()));
+                    store.dispatch(LoadFilteredPlacesAction());
                   },
                   converter: (store) {
                     return store.state.filteredPlacesState;

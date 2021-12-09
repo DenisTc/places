@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 /// Abstract class for interaction with theme
 abstract class ThemeActions {}
 
+/// Toggle theme
+class ToggleThemeAction extends ThemeActions {}
+
+/// Result of toggle theme
 class ResultToggleThemeAction extends ThemeActions {
   final ThemeData theme;
   final bool themeStatus;
@@ -10,5 +14,4 @@ class ResultToggleThemeAction extends ThemeActions {
   ResultToggleThemeAction(this.theme, this.themeStatus);
 }
 
-/// Toggle theme
-class ToggleThemeAction extends ThemeActions {}
+

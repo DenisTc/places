@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
+import 'package:places/data/redux/action/filter_action.dart';
+import 'package:places/data/redux/action/filtered_places_action.dart';
+import 'package:places/data/redux/state/app_state.dart';
+import 'package:places/data/redux/state/filter_state.dart';
+import 'package:places/data/redux/state/filtered_places_state.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -25,12 +27,6 @@ class _FiltersScreenState extends State<FiltersScreen> {
   int countPlaces = 0;
 
   @override
-  void initState() {
-    super.initState();
-    BlocProvider.of<FilteredPlacesBloc>(context).add(LoadPlaceCategories());
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -42,7 +38,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
           TextButton(
             onPressed: () {
               setState(() {
-                BlocProvider.of<FilteredPlacesBloc>(context).add(ClearFilter());
+                StoreProvider.of<AppState>(context)
+                    .dispatch(ClearFilterAction());
               });
             },
             child: Text(
@@ -62,17 +59,23 @@ class _FiltersScreenState extends State<FiltersScreen> {
             left: 16,
             right: 16,
           ),
-          child: BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
-            buildWhen: (context, state) {
-              return state is PlaceCategoriesLoaded;
+          child: StoreConnector<AppState, FilteredPlacesState>(
+            onInit: (store) {
+              store.dispatch(LoadCategoriesAction());
             },
-            builder: (context, state) {
-              if (state is PlaceCategoriesLoading) {
+            converter: (store) {
+              return store.state.filteredPlacesState;
+            },
+            builder: (BuildContext context, FilteredPlacesState vm) {
+              if (vm is FilteredCategoriesLoadingState) {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              if (state is PlaceCategoriesLoaded) {
-                BlocProvider.of<FilteredPlacesBloc>(context).add(LoadFilterParameters());
+              if (vm is FilteredCategoriesErrorState) {
+                return const NetworkException();
+              }
+
+              if (vm is CategoriesDataState) {
                 return Column(
                   children: [
                     const SizedBox(height: 20),
@@ -88,7 +91,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                     ),
                     const SizedBox(height: 20),
                     _FiltersCategory(
-                      categories: state.categories,
+                      categories: vm.categories,
                     ),
                     const SizedBox(height: 20),
                     _Distance(),
@@ -101,11 +104,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 );
               }
 
-              if (state is LoadPlaceCategoriesError) {
-                return const NetworkException();
-              }
-
-              return SizedBox.shrink();
+              return const SizedBox.shrink();
             },
           ),
         ),
@@ -125,16 +124,16 @@ class _DistanceState extends State<_Distance> {
   RangeValues _rangeValues = constants.defaultDistanceRange;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
-      buildWhen: (context, state) {
-        return state is LoadFilterSuccess || state is ClearSlider;
+    return StoreConnector<AppState, FilterState>(
+      onInit: (store) {
+        store.dispatch(LoadFilterAction());
       },
-      builder: (context, state) {
-        if (state is ClearSlider) {
-          _rangeValues = state.rangeValues;
-        }
-
-        if (state is LoadFilterSuccess) {
+      converter: (store) {
+        return store.state.filterState;
+      },
+      builder: (BuildContext context, FilterState vm) {
+        if (vm is FilterLoadSuccessState) {
+          _rangeValues = vm.filter.distance ?? constants.defaultDistanceRange;
           return Column(
             children: [
               Row(
@@ -186,8 +185,8 @@ class _DistanceState extends State<_Distance> {
                   onChanged: (value) {
                     setState(() {});
                     _rangeValues = value;
-                    BlocProvider.of<FilteredPlacesBloc>(context)
-                        .add(UpdateDistance(value));
+                    StoreProvider.of<AppState>(context)
+                        .dispatch(ChangeDistanceFilterAction(value));
                   },
                 ),
               ),
@@ -211,18 +210,25 @@ class _ShowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
-      builder: (context, state) {
-        if (state is LoadFilterSuccess) {
-          int count = state.count;
+    return StoreConnector<AppState, FilterState>(
+      onInit: (store) {
+        store.dispatch(LoadCountFilteredPlacesAction());
+      },
+      converter: (store) {
+        return store.state.filterState;
+      },
+      builder: (BuildContext context, FilterState vm) {
+        if (vm is FilterLoadSuccessState) {
           return ElevatedButton(
             onPressed: () {
-              if (count != 0) {
-                Navigator.pop(context, state.placeFilter);
+              if (vm.count != 0) {
+                StoreProvider.of<AppState>(context)
+                    .dispatch(UpdateFilterAction());
+                Navigator.pop(context);
               }
             },
             style: ElevatedButton.styleFrom(
-              primary: count != 0
+              primary: vm.count != 0
                   ? Theme.of(context).colorScheme.primaryVariant
                   : Theme.of(context).primaryColor,
               fixedSize: const Size(double.infinity, 48),
@@ -236,43 +242,9 @@ class _ShowButton extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${constants.textBtnShow} ${count.toString()}',
+                  '${constants.textBtnShow} ${vm.count.toString()}',
                   style: TextStyle(
-                    color: count != 0
-                        ? Colors.white
-                        : myLightSecondaryTwo.withOpacity(0.56),
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ],
-            ),
-          );
-        } else if (state is LoadFilterSuccess) {
-          int count = state.count;
-          return ElevatedButton(
-            onPressed: () {
-              if (count != 0) {
-                Navigator.pop(context, state.placeFilter);
-              }
-            },
-            style: ElevatedButton.styleFrom(
-              primary: count != 0
-                  ? Theme.of(context).colorScheme.primaryVariant
-                  : Theme.of(context).primaryColor,
-              fixedSize: const Size(double.infinity, 48),
-              elevation: 0.0,
-              shadowColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '${constants.textBtnShow} ${count.toString()}',
-                  style: TextStyle(
-                    color: count != 0
+                    color: vm.count != 0
                         ? Colors.white
                         : myLightSecondaryTwo.withOpacity(0.56),
                     fontWeight: FontWeight.w700,
@@ -282,6 +254,7 @@ class _ShowButton extends StatelessWidget {
             ),
           );
         }
+
         return ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(
@@ -380,8 +353,8 @@ class _CategoryCircle extends StatelessWidget {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(40)),
       onTap: () {
-        BlocProvider.of<FilteredPlacesBloc>(context)
-            .add(ToggleCategory(category.type.toLowerCase()));
+        StoreProvider.of<AppState>(context)
+            .dispatch(ToggleCategoryAction(category.type.toLowerCase()));
       },
       child: Column(
         children: [
@@ -390,7 +363,10 @@ class _CategoryCircle extends StatelessWidget {
             height: iconSize,
             width: iconSize,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryVariant.withOpacity(0.16),
+              color: Theme.of(context)
+                  .colorScheme
+                  .primaryVariant
+                  .withOpacity(0.16),
               shape: BoxShape.circle,
             ),
             child: Stack(
@@ -405,11 +381,18 @@ class _CategoryCircle extends StatelessWidget {
                     ),
                   ),
                 ),
-                BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
-                  builder: (context, state) {
-                    if (state is LoadFilterSuccess) {
-                      if (state.placeFilter.typeFilter!
-                          .contains(category.type.toLowerCase())) {
+                StoreConnector<AppState, FilterState>(
+                  onInit: (store) {
+                    store.dispatch(LoadFilterAction());
+                  },
+                  converter: (store) {
+                    return store.state.filterState;
+                  },
+                  builder: (BuildContext context, FilterState vm) {
+                    if (vm is FilterLoadSuccessState) {
+                      if (vm.filter.typeFilter != null &&
+                          vm.filter.typeFilter!
+                              .contains(category.type.toLowerCase())) {
                         return IconCheck(checkSize: checkSize);
                       }
                     }

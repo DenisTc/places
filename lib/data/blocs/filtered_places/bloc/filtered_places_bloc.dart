@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/domain/settings_filter.dart';
+import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:rxdart/rxdart.dart';
 
@@ -11,7 +11,7 @@ import 'filtered_places_state.dart';
 class FilteredPlacesBloc
     extends Bloc<FilteredPlacesEvent, FilteredPlacesState> {
   final SearchRepository _searchRepository;
-  SettingsFilter placeFilter = SettingsFilter(
+  SearchFilter placeFilter = SearchFilter(
     lat: constants.userLocation.lat,
     lng: constants.userLocation.lng,
     distance: constants.defaultDistanceRange,
@@ -55,11 +55,11 @@ class FilteredPlacesBloc
   //TODO: refactoring
   void _loadFilteredPlaces(
       LoadFilteredPlaces event, Emitter<FilteredPlacesState> emit,
-      [SettingsFilter? filters = null]) async {
+      [SearchFilter? filters = null]) async {
     try {
       final filteredPlaces = await _searchRepository.getFiltredPlaces(
         event.filters ??
-            SettingsFilter(
+            SearchFilter(
               lat: constants.userLocation.lat,
               lng: constants.userLocation.lng,
               distance: constants.defaultDistanceRange,
@@ -139,7 +139,7 @@ class FilteredPlacesBloc
       ClearFilter event, Emitter<FilteredPlacesState> emit) async {
     emit(ClearSlider(constants.defaultDistanceRange));
 
-    placeFilter = SettingsFilter(
+    placeFilter = SearchFilter(
       lat: constants.userLocation.lat,
       lng: constants.userLocation.lng,
       distance: constants.defaultDistanceRange,

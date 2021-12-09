@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
-import 'package:places/domain/filters.dart';
-import 'package:places/domain/settings_filter.dart';
+import 'package:places/data/redux/action/filtered_places_action.dart';
+import 'package:places/data/redux/state/app_state.dart';
+import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/sight_search_screen.dart';
-
-final filters = Filters();
 
 class SearchBar extends StatefulWidget {
   final textFieldFocusNode = FocusNode();
@@ -24,7 +21,7 @@ class SearchBar extends StatefulWidget {
 }
 
 class _SearchBarState extends State<SearchBar> {
-  SettingsFilter? settingsFilter;
+  SearchFilter? settingsFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +121,6 @@ class _SearchBarState extends State<SearchBar> {
       ),
     );
 
-    BlocProvider.of<FilteredPlacesBloc>(context)
-        .add(LoadFilteredPlaces(settingsFilter));
+    StoreProvider.of<AppState>(context).dispatch(LoadFilteredPlacesAction());
   }
 }

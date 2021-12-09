@@ -5,7 +5,7 @@ import 'package:places/data/redux/action/filtered_places_action.dart';
 import 'package:places/data/redux/state/app_state.dart';
 import 'package:places/data/redux/state/filtered_places_state.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/domain/settings_filter.dart';
+import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
@@ -18,7 +18,7 @@ import 'package:places/ui/widgets/search_screen/search_result_list.dart';
 List<String> historyList = [];
 
 class SightSearchScreen extends StatefulWidget {
-  final SettingsFilter? settingsFilter;
+  final SearchFilter? settingsFilter;
 
   const SightSearchScreen({
     required this.settingsFilter,
@@ -92,7 +92,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
 
                 return StoreConnector<AppState, FilteredPlacesState>(
                   onInit: (store) {
-                    store.dispatch(LoadFilteredPlacesAction(SettingsFilter()));
+                    store.dispatch(LoadFilteredPlacesAction());
                   },
                   converter: (store) {
                     return store.state.filteredPlacesState;

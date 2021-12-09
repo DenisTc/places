@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/screens/res/constants.dart' as constants;
 
-class SettingsFilter {
-  double? lat;
-  double? lng;
-  RangeValues? distance;
-  List<String>? typeFilter;
+class SearchFilter {
+  double? lat = constants.userLocation.lat;
+  double? lng = constants.userLocation.lng;
+  RangeValues? distance = constants.defaultDistanceRange;
+  List<String>? typeFilter = [];
   String? nameFilter;
 
-  SettingsFilter({
+  SearchFilter({
     this.lat,
     this.lng,
     this.distance,

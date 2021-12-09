@@ -37,7 +37,6 @@ class SettingsScreen extends StatelessWidget {
                     return store.state.themeState;
                   },
                   builder: (BuildContext context, ThemeState vm) {
-                    debugPrint('Draw FlutterSwitch! ' + vm.themeStatus.toString());
                     return FlutterSwitch(
                       height: 32.0,
                       width: 56.0,
@@ -48,8 +47,6 @@ class SettingsScreen extends StatelessWidget {
                       activeColor: myDarkGreen,
                       value: vm.themeStatus,
                       onToggle: (value) {
-                        debugPrint('onToggle!' + vm.themeStatus.toString());
-
                         StoreProvider.of<AppState>(context)
                             .dispatch(ToggleThemeAction());
                       },
