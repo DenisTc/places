@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
+import 'package:places/data/redux/action/favorite_places_action.dart';
+import 'package:places/data/redux/state/app_state.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
@@ -86,8 +86,8 @@ class __SightCardState extends State<SightCard> {
                 key: ValueKey(widget.place),
                 direction: DismissDirection.endToStart,
                 onDismissed: (direction) {
-                  BlocProvider.of<FavoritePlaceBloc>(context)
-                                .add(TogglePlaceInFavorites(widget.place));
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(ToggleInFavoriteAction(widget.place));
                 },
                 child: Stack(
                   children: [
@@ -107,7 +107,8 @@ class __SightCardState extends State<SightCard> {
                     Material(
                       color: Colors.transparent,
                       child: InkWell(
-                        borderRadius: const BorderRadius.all(Radius.circular(16)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(16)),
                         onTap: () {
                           _showSight(widget.place.id!);
                         },
@@ -136,8 +137,9 @@ class __SightCardState extends State<SightCard> {
                                         return Theme(
                                           data: ThemeData.light().copyWith(
                                             colorScheme: ColorScheme.light(
-                                              primary:
-                                                  Theme.of(context).colorScheme.primaryVariant,
+                                              primary: Theme.of(context)
+                                                  .colorScheme
+                                                  .primaryVariant,
                                             ),
                                           ),
                                           child: child!,
@@ -169,8 +171,8 @@ class __SightCardState extends State<SightCard> {
                             clipBehavior: Clip.antiAlias,
                             child: IconButton(
                               onPressed: () {
-                                BlocProvider.of<FavoritePlaceBloc>(context)
-                                .add(TogglePlaceInFavorites(widget.place));
+                                StoreProvider.of<AppState>(context).dispatch(
+                                    ToggleInFavoriteAction(widget.place));
                               },
                               icon: const Icon(
                                 Icons.clear_outlined,

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/domain/settings_filter.dart';
+import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 
 class SearchInteractor extends ChangeNotifier {
@@ -32,7 +32,7 @@ class SearchInteractor extends ChangeNotifier {
     notifyListeners();
   }
 
-  Stream<List<Place>> getFiltredPlacesStream(SettingsFilter? settingsFilter) {
+  Stream<List<Place>> getFiltredPlacesStream(SearchFilter? settingsFilter) {
     _searchRepository
         .getFiltredPlaces(settingsFilter)
         .then(_listFiltredController.add);

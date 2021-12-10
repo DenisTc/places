@@ -118,8 +118,9 @@ class _RichNameState extends State<RichName> {
     final startIndex =
         widget.name.toLowerCase().indexOf(widget.searchString.toLowerCase());
     final endIndex = startIndex + widget.searchString.length;
-    final richText = widget.name.substring(0, endIndex);
-    final text = widget.name.substring(endIndex);
+    final textStart = widget.name.substring(0, startIndex);
+    final richText = widget.name.substring(startIndex, endIndex);
+    final textEnd = widget.name.substring(endIndex);
 
     return RichText(
       maxLines: 2,
@@ -128,6 +129,13 @@ class _RichNameState extends State<RichName> {
         style: DefaultTextStyle.of(context).style,
         children: [
           TextSpan(
+            text: textStart,
+            style: const TextStyle(
+              fontSize: 16,
+              color: myLightMain,
+            ),
+          ),
+          TextSpan(
             text: richText,
             style: const TextStyle(
               fontSize: 16,
@@ -135,7 +143,7 @@ class _RichNameState extends State<RichName> {
             ),
           ),
           TextSpan(
-            text: text,
+            text: textEnd,
             style: const TextStyle(
               fontSize: 16,
               color: myLightMain,

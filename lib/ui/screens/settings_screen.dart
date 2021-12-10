@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:places/data/blocs/theme/bloc/theme_bloc.dart';
+import 'package:places/data/redux/action/theme_action.dart';
+import 'package:places/data/redux/state/app_state.dart';
+import 'package:places/data/redux/state/theme_state.dart';
 import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
@@ -30,8 +32,11 @@ class SettingsScreen extends StatelessWidget {
                         ),
                   ),
                 ),
-                BlocBuilder<ThemeBloc, ThemeState>(
-                  builder: (context, state) {
+                StoreConnector<AppState, ThemeState>(
+                  converter: (store) {
+                    return store.state.themeState;
+                  },
+                  builder: (BuildContext context, ThemeState vm) {
                     return FlutterSwitch(
                       height: 32.0,
                       width: 56.0,
@@ -40,9 +45,10 @@ class SettingsScreen extends StatelessWidget {
                       borderRadius: 16.0,
                       inactiveColor: myInactiveBlack.withOpacity(0.56),
                       activeColor: myDarkGreen,
-                      value: state.themeStatus,
+                      value: vm.themeStatus,
                       onToggle: (value) {
-                        BlocProvider.of<ThemeBloc>(context).add(ToggleTheme());
+                        StoreProvider.of<AppState>(context)
+                            .dispatch(ToggleThemeAction());
                       },
                     );
                   },

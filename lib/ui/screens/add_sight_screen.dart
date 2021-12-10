@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/blocs/place/bloc/place_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:places/data/redux/action/place_action.dart';
+import 'package:places/data/redux/state/app_state.dart';
+import 'package:places/data/redux/state/place_state.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -32,6 +35,8 @@ class _AddSightScreenState extends State<AddSightScreen> {
   late FocusNode nodeDesc = FocusNode();
   late bool _isButtonEnabled = false;
 
+  List<String> placeImages = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +58,15 @@ class _AddSightScreenState extends State<AddSightScreen> {
                     style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 24),
-                  const SightGallery(),
+                  SightGallery(
+                    images: placeImages,
+                    addImage: (List<XFile>? xFileList) {
+                      addImage(xFileList);
+                    },
+                    deleteImage: (String imgUrl) {
+                      deleteImage(imgUrl);
+                    },
+                  ),
                   const SizedBox(height: 24),
                   Text(
                     constants.textCategory.toUpperCase(),
@@ -107,6 +120,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   ),
                   const SizedBox(height: 50),
                   _CreateSightButton(
+                    placeImages: placeImages,
                     enable: _isButtonEnabled,
                     formKey: _formKey,
                     controllerCat: _controllerCat,
@@ -138,6 +152,18 @@ class _AddSightScreenState extends State<AddSightScreen> {
         }
       },
     );
+  }
+
+  void deleteImage(String imgUrl) {
+    setState(() {
+      placeImages.remove(imgUrl);
+    });
+  }
+
+  void addImage(List<XFile>? xFileList) {
+    setState(() {
+      placeImages.addAll(xFileList!.map((image) => image.path));
+    });
   }
 }
 
@@ -191,13 +217,13 @@ class __CategoryFieldState extends State<_CategoryField> {
         if (selectedCategory != null) {
           setState(() {
             widget.controllerCat.text =
-                Category.getCategoryByType(selectedCategory!).name;
+                capitalize(Category.getCategoryByType(selectedCategory!).name);
           });
         }
       },
       validator: (value) {
         if (value!.isEmpty) {
-          return 'Выберите категорию';
+          return constants.textSelectCategory;
         }
       },
       onChanged: (value) {
@@ -216,7 +242,7 @@ class __CategoryFieldState extends State<_CategoryField> {
       decoration: InputDecoration(
         contentPadding:
             const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-        hintText: 'Не выбрано',
+        hintText: constants.textNotSelected,
         hintStyle: const TextStyle(
           color: myLightSecondaryTwo,
           fontSize: 16,
@@ -247,6 +273,8 @@ class __CategoryFieldState extends State<_CategoryField> {
       ),
     );
   }
+
+  String capitalize(String s) => s[0].toUpperCase() + s.substring(1);
 }
 
 class _NameField extends StatefulWidget {
@@ -276,7 +304,7 @@ class _NameFieldState extends State<_NameField> {
       },
       validator: (value) {
         if (value!.isEmpty) {
-          return 'Введите название места';
+          return constants.textEnterNamePlace;
         }
       },
       onChanged: (value) {
@@ -568,7 +596,7 @@ class __DescriptionFieldState extends State<_DescriptionField> {
     return TextFormField(
       validator: (value) {
         if (value!.isEmpty) {
-          return 'Заполните описание';
+          return constants.textEnterDescPlace;
         }
       },
       onChanged: (value) {
@@ -589,7 +617,7 @@ class __DescriptionFieldState extends State<_DescriptionField> {
         color: Theme.of(context).secondaryHeaderColor,
       ),
       decoration: InputDecoration(
-        hintText: 'введите текст',
+        hintText: constants.textEnterText,
         hintStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w400,
@@ -622,6 +650,7 @@ class __DescriptionFieldState extends State<_DescriptionField> {
 }
 
 class _CreateSightButton extends StatefulWidget {
+  final List<String> placeImages;
   final bool enable;
   final GlobalKey<FormState> formKey;
   final TextEditingController controllerCat;
@@ -631,6 +660,7 @@ class _CreateSightButton extends StatefulWidget {
   final TextEditingController controllerDesc;
 
   const _CreateSightButton({
+    required this.placeImages,
     required this.enable,
     required this.formKey,
     required this.controllerCat,
@@ -651,8 +681,9 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
     return ElevatedButton(
       onPressed: () {
         if (widget.formKey.currentState!.validate() && widget.enable) {
-          final placeType =
-              Category.getCategoryByName(widget.controllerCat.text).type;
+          final placeType = Category.getCategoryByName(
+                  widget.controllerCat.text.toLowerCase())
+              .type;
           final newPlace = Place(
             id: null,
             name: widget.controllerName.text,
@@ -663,7 +694,8 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
             placeType: placeType,
           );
 
-          BlocProvider.of<PlaceBloc>(context).add(AddNewPlace(newPlace));
+          StoreProvider.of<AppState>(context).dispatch(
+              AddNewPlaceAction(place: newPlace, images: widget.placeImages));
 
           showAlertDialog(context);
         }
@@ -700,26 +732,29 @@ showAlertDialog(BuildContext context) {
     barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
-      return BlocBuilder<PlaceBloc, PlaceState>(
-        builder: (context, state) {
+      return StoreConnector<AppState, PlaceState>(
+        converter: (store) {
+          return store.state.placeState;
+        },
+        builder: (BuildContext context, PlaceState vm) {
           return AlertDialog(
             scrollable: true,
             backgroundColor: Theme.of(context).colorScheme.secondary,
             content: Row(
               children: [
-                state is AddNewPlaceInProcess
+                vm is AddnewPlaceInProcessState
                     ? CircularProgressIndicator(
                         color: Theme.of(context).colorScheme.primaryVariant,
                       )
                     : SizedBox.shrink(),
-                state is AddNewPlaceError
+                vm is AddnewPlaceErrorState
                     ? Icon(
                         Icons.error_outline,
                         color: Colors.red,
                         size: 50.0,
                       )
                     : SizedBox.shrink(),
-                state is AddNewPlaceSuccess
+                vm is AddnewPlaceSuccessState
                     ? Icon(
                         Icons.check,
                         color: Theme.of(context).colorScheme.primaryVariant,
@@ -730,45 +765,48 @@ showAlertDialog(BuildContext context) {
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 5),
-                    child: Builder(builder: (context) {
-                      if (state is AddNewPlaceSuccess) {
-                        debugPrint(constants.textAddNewPlaceSuccess);
-                        Future.delayed(const Duration(seconds: 2)).then(
-                          (_) => Navigator.pop(context),
-                        );
-                      }
-                      if (state is AddNewPlaceError) {
-                        return Column(
-                          children: [
-                            Text(constants.textAddNewPlaceError),
-                            SizedBox(height: 16),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                constants.textBtnBackToMainScreen,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryVariant,
+                    child: Builder(
+                      builder: (context) {
+                        if (vm is AddnewPlaceSuccessState) {
+                          debugPrint(constants.textAddNewPlaceSuccess);
+                          Future.delayed(const Duration(seconds: 2)).then(
+                            (_) => Navigator.pop(context),
+                          );
+                        }
+                        if (vm is AddnewPlaceErrorState) {
+                          return Column(
+                            children: [
+                              Text(constants.textAddNewPlaceError),
+                              SizedBox(height: 16),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  constants.textBtnBackToMainScreen,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryVariant,
+                                  ),
+                                ),
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
                                 ),
                               ),
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                            ),
-                          ],
-                        );
-                      }
+                            ],
+                          );
+                        }
 
-                      if (state is AddNewPlaceSuccess) {
-                        return const Text(constants.textAddNewPlaceSuccess);
-                      }
-                      return const Text(constants.textAddNewPlaceInProcess);
-                    }),
+                        if (vm is AddnewPlaceSuccessState) {
+                          return const Text(constants.textAddNewPlaceSuccess);
+                        }
+                        return const Text(constants.textAddNewPlaceInProcess);
+                      },
+                    ),
                   ),
                 ),
               ],

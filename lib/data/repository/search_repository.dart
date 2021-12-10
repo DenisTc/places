@@ -6,14 +6,14 @@ import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/data/repository/mapper/place_mapper.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/domain/settings_filter.dart';
+import 'package:places/domain/search_filter.dart';
 
 class SearchRepository {
   final api = ApiClient().client;
 
   SearchRepository();
 
-  Future<List<Place>> getFiltredPlaces(SettingsFilter? settingsFilter) async {
+  Future<List<Place>> getFiltredPlaces(SearchFilter? settingsFilter) async {
     final data = settingsFilter!.toMap();
 
     final response = await ApiClient().client.post<String>(

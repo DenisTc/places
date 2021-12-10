@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/widgets/list_screen/search_bar.dart';

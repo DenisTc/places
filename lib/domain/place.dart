@@ -13,7 +13,7 @@ class Place extends Equatable {
   List<Object?> get props => [id, lat, lng, name, urls, placeType, description];
 
   const Place({
-    required this.id,
+    this.id,
     required this.lat,
     required this.lng,
     required this.name,
@@ -23,7 +23,6 @@ class Place extends Equatable {
   });
 
   Map<String, dynamic> toJson() => {
-        "id": id,
         "lat": lat,
         "lng": lng,
         "name": name,

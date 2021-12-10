@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/domain/settings_filter.dart';
+import 'package:places/domain/search_filter.dart';
 
 abstract class FilteredPlacesState extends Equatable {
   const FilteredPlacesState();
@@ -32,7 +32,7 @@ class LoadFilteredPlacesSuccess extends FilteredPlacesState {
 
 class LoadFilterSuccess extends FilteredPlacesState {
   final int count;
-  final SettingsFilter placeFilter;
+  final SearchFilter placeFilter;
 
   const LoadFilterSuccess({required this.count, required this.placeFilter});
 
@@ -42,7 +42,7 @@ class LoadFilterSuccess extends FilteredPlacesState {
 
 class LoadCountPlaceSuccess extends FilteredPlacesState {
   final int count;
-  final SettingsFilter placeFilter;
+  final SearchFilter placeFilter;
 
   const LoadCountPlaceSuccess({required this.count, required this.placeFilter});
 
