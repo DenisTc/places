@@ -1,8 +1,10 @@
+import 'package:places/data/redux/action/category_action.dart';
 import 'package:places/data/redux/action/favorite_places_action.dart';
 import 'package:places/data/redux/action/filter_action.dart';
 import 'package:places/data/redux/action/filtered_places_action.dart';
 import 'package:places/data/redux/action/place_action.dart';
 import 'package:places/data/redux/action/theme_action.dart';
+import 'package:places/data/redux/reducer/category_reducer.dart';
 import 'package:places/data/redux/reducer/favorite_places_reducer.dart';
 import 'package:places/data/redux/reducer/filter_reducer.dart';
 import 'package:places/data/redux/reducer/filtered_places_reducer.dart';
@@ -31,6 +33,7 @@ final reducerApp = combineReducers<AppState>([
 
   /// Responsible for loading categories on the filter screen
   TypedReducer<AppState, LoadCategoriesAction>(loadCategoriesReducer),
+  TypedReducer<AppState, ErrorCategoriesAction>(errorCategoriesReducer),
   TypedReducer<AppState, ResultCategoriesAction>(resultCategoriesReducer),
 
   /// Responsible for loading filters to the screen 

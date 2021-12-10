@@ -1,7 +1,9 @@
 import 'package:places/domain/search_filter.dart';
 
 /// State of filter
-class FilterState {}
+abstract class FilterState {}
+
+class FilterInitialState extends FilterState {}
 
 class FilterLoadSuccessState extends FilterState {
   final SearchFilter filter;

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
 
 /// Abstract class for interaction with filtered places
@@ -19,21 +18,4 @@ class ResultFilteredPlacesAction extends FilteredPlacesActions {
   final List<Place> places;
 
   ResultFilteredPlacesAction(this.places);
-}
-
-/// Loading categories for the filters screen
-class LoadCategoriesAction extends FilteredPlacesActions {}
-
-/// Result of loading categories for the filters screen
-class ResultCategoriesAction extends FilteredPlacesActions {
-  final List<String> categories;
-
-  ResultCategoriesAction(this.categories);
-}
-
-/// Update distance value in filter
-class UpdateFilterDistanceAction extends FilteredPlacesActions {
-  final RangeValues values;
-
-  UpdateFilterDistanceAction(this.values);
 }

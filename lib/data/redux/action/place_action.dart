@@ -24,22 +24,24 @@ class ResultPlaceDetailsAction extends PlaceActions {
   ResultPlaceDetailsAction(this.place);
 }
 
-class UpdatePlaceImagesAction extends PlaceActions {
-  final List<String> images;
-
-  UpdatePlaceImagesAction(this.images);
-}
-
+/// Action for working with a remote repository
 class AddNewPlaceAction extends PlaceActions {
   final Place place;
 
   AddNewPlaceAction(this.place);
 }
 
-class ResultAddNewPlaceAction extends PlaceActions {}
-
 class ErrorAddNewPlaceAction extends PlaceActions {
   final String message;
 
   ErrorAddNewPlaceAction(this.message);
+}
+
+class ResultAddNewPlaceAction extends PlaceActions {}
+
+///-------------
+class UpdatePlaceImagesAction extends PlaceActions {
+  final List<String> images;
+
+  UpdatePlaceImagesAction(this.images);
 }

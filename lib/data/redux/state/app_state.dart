@@ -1,3 +1,4 @@
+import 'package:places/data/redux/state/category_state.dart';
 import 'package:places/data/redux/state/favorite_places_state.dart';
 import 'package:places/data/redux/state/filter_state.dart';
 import 'package:places/data/redux/state/filtered_places_state.dart';
@@ -10,6 +11,7 @@ class AppState {
   final PlaceState placeState;
   final ThemeState themeState;
   final FilterState filterState;
+  final CategoryState categoryState;
 
   AppState({
     required this.filteredPlacesState,
@@ -17,6 +19,7 @@ class AppState {
     required this.placeState,
     required this.themeState,
     required this.filterState,
+    required this.categoryState,
   });
 
   AppState copyWith({
@@ -25,6 +28,7 @@ class AppState {
     placeState,
     themeState,
     filterState,
+    categoryState,
   }) =>
       AppState(
         filteredPlacesState: filteredPlacesState ?? this.filteredPlacesState,
@@ -32,5 +36,6 @@ class AppState {
         placeState: placeState ?? this.placeState,
         themeState: themeState ?? this.themeState,
         filterState: filterState ?? this.filterState,
+        categoryState: categoryState ?? this.categoryState,
       );
 }

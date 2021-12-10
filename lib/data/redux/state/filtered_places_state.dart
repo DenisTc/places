@@ -19,18 +19,3 @@ class FilteredPlacesDataState extends FilteredPlacesState {
   FilteredPlacesDataState(this.places);
 }
 
-// filters
-class FilteredCategoriesLoadingState extends FilteredPlacesState {}
-
-class FilteredCategoriesErrorState extends FilteredPlacesState {
-  final String message;
-
-  FilteredCategoriesErrorState(this.message);
-}
-
-// categories
-class CategoriesDataState extends FilteredPlacesState {
-  final List<String> categories;
-
-  CategoriesDataState(this.categories);
-}

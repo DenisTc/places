@@ -18,19 +18,6 @@ class FilteredMiddleware implements MiddlewareClass<AppState> {
               store.dispatch(ErrorFilteredPlacesAction(errMsg.toString())));
     }
 
-    if (action is LoadCategoriesAction) {
-      final _placesList = await _searchRepository.getCategories();
-      final _categoryList = <String>[];
-
-      for (final place in _placesList) {
-        if (!_categoryList.contains(place.placeType)) {
-          _categoryList.add(place.placeType);
-        }
-      }
-
-      return store.dispatch(ResultCategoriesAction(_categoryList));
-    }
-
     next(action);
   }
 }

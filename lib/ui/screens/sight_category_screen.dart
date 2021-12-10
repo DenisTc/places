@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/redux/action/filtered_places_action.dart';
+import 'package:places/data/redux/action/category_action.dart';
 import 'package:places/data/redux/state/app_state.dart';
-import 'package:places/data/redux/state/filtered_places_state.dart';
-
+import 'package:places/data/redux/state/category_state.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
@@ -37,19 +36,19 @@ class _SightCategoryScreenState extends State<SightCategoryScreen> {
           const SizedBox(height: 24),
           Expanded(
             child: Scrollbar(
-              child: StoreConnector<AppState, FilteredPlacesState>(
+              child: StoreConnector<AppState, CategoryState>(
                 onInit: (store) {
                   store.dispatch(LoadCategoriesAction());
                 },
                 converter: (store) {
-                  return store.state.filteredPlacesState;
+                  return store.state.categoryState;
                 },
-                builder: (BuildContext context, FilteredPlacesState vm) {
-                  if (vm is FilteredCategoriesLoadingState) {
+                builder: (BuildContext context, CategoryState vm) {
+                  if (vm is CategoriesLoadingState) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
-                  if (vm is FilteredCategoriesErrorState) {
+                  if (vm is CategoriesErrorState) {
                     return const NetworkException();
                   }
 
