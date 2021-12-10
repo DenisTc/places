@@ -40,7 +40,7 @@ final reducerApp = combineReducers<AppState>([
   TypedReducer<AppState, ResultFilterAction>(resultFilterReducer),
 
   /// Responsible for add new place
-  TypedReducer<AppState, AddNewPlaceAction>(processAddNewPlaceReducer),
+  TypedReducer<AppState, ProcessAddNewPlaceAction>(processAddNewPlaceReducer),
   TypedReducer<AppState, ErrorAddNewPlaceAction>(errorAddNewPlaceReducer),
   TypedReducer<AppState, ResultAddNewPlaceAction>(resultAddNewPlaceReducer),
   

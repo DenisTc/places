@@ -14,7 +14,7 @@ AppState resultPlaceDetailsReducer(AppState state, ResultPlaceDetailsAction acti
   return state.copyWith(placeState: PlaceDataState(action.place));
 }
 
-AppState processAddNewPlaceReducer(AppState state, AddNewPlaceAction action){
+AppState processAddNewPlaceReducer(AppState state, ProcessAddNewPlaceAction action){
   return state.copyWith(placeState: AddnewPlaceInProcessState());
 }
 

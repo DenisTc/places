@@ -20,15 +20,17 @@ class PlaceMiddleware implements MiddlewareClass<AppState> {
               (errMsg) => store.dispatch(ErrorPlaceAction(errMsg.toString())));
     }
 
-    if (action is UpdatePlaceImagesAction) {
-      for (int i = 0; i < action.images.length; i++) {
-        final url = await _placeRepository.uploadImage(action.images[i]);
-        uploadImages.add(url);
-      }
-    }
-
     if (action is AddNewPlaceAction) {
       try {
+        store.dispatch(ProcessAddNewPlaceAction());
+
+        uploadImages.clear();
+
+        for (int i = 0; i < action.images.length; i++) {
+          final url = await _placeRepository.uploadImage(action.images[i]);
+          uploadImages.add(url);
+        }
+
         final newPlace = Place(
           lat: action.place.lat,
           lng: action.place.lng,

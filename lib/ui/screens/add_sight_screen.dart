@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:places/data/redux/action/place_action.dart';
 import 'package:places/data/redux/state/app_state.dart';
 import 'package:places/data/redux/state/place_state.dart';
@@ -34,6 +35,8 @@ class _AddSightScreenState extends State<AddSightScreen> {
   late FocusNode nodeDesc = FocusNode();
   late bool _isButtonEnabled = false;
 
+  List<String> placeImages = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +58,15 @@ class _AddSightScreenState extends State<AddSightScreen> {
                     style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 24),
-                  const SightGallery(),
+                  SightGallery(
+                    images: placeImages,
+                    addImage: (List<XFile>? xFileList) {
+                      addImage(xFileList);
+                    },
+                    deleteImage: (String imgUrl) {
+                      deleteImage(imgUrl);
+                    },
+                  ),
                   const SizedBox(height: 24),
                   Text(
                     constants.textCategory.toUpperCase(),
@@ -109,6 +120,7 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   ),
                   const SizedBox(height: 50),
                   _CreateSightButton(
+                    placeImages: placeImages,
                     enable: _isButtonEnabled,
                     formKey: _formKey,
                     controllerCat: _controllerCat,
@@ -140,6 +152,18 @@ class _AddSightScreenState extends State<AddSightScreen> {
         }
       },
     );
+  }
+
+  void deleteImage(String imgUrl) {
+    setState(() {
+      placeImages.remove(imgUrl);
+    });
+  }
+
+  void addImage(List<XFile>? xFileList) {
+    setState(() {
+      placeImages.addAll(xFileList!.map((image) => image.path));
+    });
   }
 }
 
@@ -626,6 +650,7 @@ class __DescriptionFieldState extends State<_DescriptionField> {
 }
 
 class _CreateSightButton extends StatefulWidget {
+  final List<String> placeImages;
   final bool enable;
   final GlobalKey<FormState> formKey;
   final TextEditingController controllerCat;
@@ -635,6 +660,7 @@ class _CreateSightButton extends StatefulWidget {
   final TextEditingController controllerDesc;
 
   const _CreateSightButton({
+    required this.placeImages,
     required this.enable,
     required this.formKey,
     required this.controllerCat,
@@ -668,8 +694,8 @@ class _CreateSightButtonState extends State<_CreateSightButton> {
             placeType: placeType,
           );
 
-          StoreProvider.of<AppState>(context)
-              .dispatch(AddNewPlaceAction(newPlace));
+          StoreProvider.of<AppState>(context).dispatch(
+              AddNewPlaceAction(place: newPlace, images: widget.placeImages));
 
           showAlertDialog(context);
         }

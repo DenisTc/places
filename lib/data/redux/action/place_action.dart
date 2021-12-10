@@ -27,9 +27,15 @@ class ResultPlaceDetailsAction extends PlaceActions {
 /// Action for working with a remote repository
 class AddNewPlaceAction extends PlaceActions {
   final Place place;
+  final List<String> images;
 
-  AddNewPlaceAction(this.place);
+  AddNewPlaceAction({
+    required this.place,
+    required this.images,
+  });
 }
+
+class ProcessAddNewPlaceAction extends PlaceActions {}
 
 class ErrorAddNewPlaceAction extends PlaceActions {
   final String message;
@@ -38,10 +44,3 @@ class ErrorAddNewPlaceAction extends PlaceActions {
 }
 
 class ResultAddNewPlaceAction extends PlaceActions {}
-
-///-------------
-class UpdatePlaceImagesAction extends PlaceActions {
-  final List<String> images;
-
-  UpdatePlaceImagesAction(this.images);
-}
