@@ -4,9 +4,10 @@ import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/exceptions/network_exception.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/search_interactor.dart';
+import 'package:places/data/repository/search_repository.dart';
 
 final placeInteractor = PlaceInteractor();
-final searchInteractor = SearchInteractor();
+final searchInteractor = SearchInteractor(SearchRepository());
 
 class ApiClient {
   final _baseOptions = BaseOptions(

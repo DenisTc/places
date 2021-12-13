@@ -6,8 +6,9 @@ import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 
-class SearchInteractor extends ChangeNotifier {
-  final _searchRepository = SearchRepository();
+class SearchInteractor {
+  final SearchRepository _searchRepository;
+
   final StreamController<List<Place>> _listFiltredController =
       StreamController<List<Place>>.broadcast();
   final StreamController<List<String>> _listCategoriesController =
@@ -16,11 +17,11 @@ class SearchInteractor extends ChangeNotifier {
   RangeValues get getRangeValue => _distanceRangeValue;
   RangeValues _distanceRangeValue = constants.defaultDistanceRange;
 
-  SearchInteractor();
+  SearchInteractor(this._searchRepository);
 
   void setRangeValue(RangeValues rangeValues) {
     _distanceRangeValue = rangeValues;
-    notifyListeners();
+    // notifyListeners();
   }
 
   void selectCategory(String category) {
@@ -29,13 +30,18 @@ class SearchInteractor extends ChangeNotifier {
     } else {
       selectedFilters.add(category.toLowerCase());
     }
-    notifyListeners();
+    // notifyListeners();
   }
 
   Stream<List<Place>> getFiltredPlacesStream(SearchFilter? settingsFilter) {
     _searchRepository
         .getFiltredPlaces(settingsFilter)
-        .then(_listFiltredController.add);
+        .then(_listFiltredController.add)
+        .onError(
+      (error, stackTrace) {
+        addErrorToFiltredController(error!);
+      },
+    );
     return _listFiltredController.stream;
   }
 

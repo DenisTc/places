@@ -49,45 +49,45 @@ class SightCard extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                StoreConnector<AppState, FavoritePlacesState>(
-                  onInit: (store) {
-                    store.dispatch(LoadFavoritePlacesAction());
-                  },
-                  converter: (store) {
-                    return store.state.favoritePlacesState;
-                  },
-                  builder: (BuildContext context, FavoritePlacesState vm) {
-                    if (vm is FavoritePlacesLoadingState) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: CircularProgressIndicator(color: Colors.green),
-                      );
-                    }
+                // StoreConnector<AppState, FavoritePlacesState>(
+                //   onInit: (store) {
+                //     store.dispatch(LoadFavoritePlacesAction());
+                //   },
+                //   converter: (store) {
+                //     return store.state.favoritePlacesState;
+                //   },
+                //   builder: (BuildContext context, FavoritePlacesState vm) {
+                //     if (vm is FavoritePlacesLoadingState) {
+                //       return Padding(
+                //         padding: const EdgeInsets.only(top: 10),
+                //         child: CircularProgressIndicator(color: Colors.green),
+                //       );
+                //     }
 
-                    if (vm is FavoritePlacesDataState) {
-                      return Material(
-                        color: Colors.transparent,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(50)),
-                        clipBehavior: Clip.antiAlias,
-                        child: IconButton(
-                          onPressed: () {
-                            StoreProvider.of<AppState>(context)
-                                .dispatch(ToggleInFavoriteAction(place));
-                          },
-                          icon: SvgPicture.asset(
-                            vm.places.contains(place)
-                                ? iconFavoriteSelected
-                                : iconFavorite,
-                            color: Colors.white,
-                          ),
-                        ),
-                      );
-                    }
+                //     if (vm is FavoritePlacesDataState) {
+                //       return Material(
+                //         color: Colors.transparent,
+                //         borderRadius:
+                //             const BorderRadius.all(Radius.circular(50)),
+                //         clipBehavior: Clip.antiAlias,
+                //         child: IconButton(
+                //           onPressed: () {
+                //             StoreProvider.of<AppState>(context)
+                //                 .dispatch(ToggleInFavoriteAction(place));
+                //           },
+                //           icon: SvgPicture.asset(
+                //             vm.places.contains(place)
+                //                 ? iconFavoriteSelected
+                //                 : iconFavorite,
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //       );
+                //     }
 
-                    return const SizedBox.shrink();
-                  },
-                ),
+                //     return const SizedBox.shrink();
+                //   },
+                // ),
               ],
             ),
           ),

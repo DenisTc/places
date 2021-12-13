@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/settings_screen.dart';
-import 'package:places/ui/screens/sight_list_screen.dart';
+import 'package:places/ui/screens/sight_list_screen/sight_list_screen.dart';
 import 'package:places/ui/screens/sight_map_screen.dart';
 import 'package:places/ui/screens/favorites_screen.dart';
 import 'package:places/ui/widgets/sight_bottom_nav_bar.dart';
@@ -22,7 +22,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   void initState() {
     initialIndex = widget.selectedTab ?? 0;
     _tabController = TabController(
-      length: 4,
+      length: 1,
       vsync: this,
       initialIndex: initialIndex,
     );
@@ -55,9 +55,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         controller: _tabController,
         children: const [
           SightListScreen(),
-          SightMapScreen(),
-          FavoritesScreen(),
-          SettingsScreen(),
+          // SightMapScreen(),
+          // FavoritesScreen(),
+          // SettingsScreen(),
         ],
       ),
       bottomNavigationBar: isPortrait
