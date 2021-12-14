@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:places/common/error_handler.dart';
-import 'package:places/data/exceptions/network_exception.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';

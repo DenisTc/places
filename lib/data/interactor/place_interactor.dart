@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/place.dart';
 
-class PlaceInteractor extends ChangeNotifier {
-  final PlaceRepository _placeRepository = PlaceRepository();
+class PlaceInteractor {
+  final PlaceRepository _placeRepository;
   final StreamController<List<Place>> _listPlacesController =
       StreamController<List<Place>>.broadcast();
 
@@ -14,7 +13,7 @@ class PlaceInteractor extends ChangeNotifier {
     return _listPlacesController.stream;
   }
 
-  PlaceInteractor();
+  PlaceInteractor(this._placeRepository);
 
   void addErrorToPlacesController(Object error) {
     _listPlacesController.addError(error);
@@ -33,13 +32,8 @@ class PlaceInteractor extends ChangeNotifier {
     return _placeRepository.getPlaceDetails(id: id);
   }
 
-  Future<bool> addNewPlace(Place place) async {
-    try {
-      await _placeRepository.addNewPlace(place);
-      return true;
-    } on Exception catch (_) {
-      return false;
-    }
+  Stream<Place> addNewPlace(Place place) async* {
+    _placeRepository.addNewPlace(place);
   }
 
   /// Methods for working with favorites places
@@ -54,6 +48,6 @@ class PlaceInteractor extends ChangeNotifier {
 
   Future<void> toggleInFavorites(Place place) async {
     await _placeRepository.toggleInFavorites(place);
-    notifyListeners();
+    // notifyListeners();
   }
 }
