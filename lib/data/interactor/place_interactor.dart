@@ -32,8 +32,19 @@ class PlaceInteractor {
     return _placeRepository.getPlaceDetails(id: id);
   }
 
-  Stream<Place> addNewPlace(Place place) async* {
-    _placeRepository.addNewPlace(place);
+  Future<List<String>> uploadPlaceImages(List<String> images) async {
+    List<String> uploadImages = [];
+
+    for (int i = 0; i < images.length; i++) {
+      final url = await _placeRepository.uploadImage(images[i]);
+      uploadImages.add(url);
+    }
+
+    return uploadImages;
+  }
+
+  Stream<dynamic> addNewPlace(Place place) async* {
+    yield _placeRepository.addNewPlace(place);
   }
 
   /// Methods for working with favorites places

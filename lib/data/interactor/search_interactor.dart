@@ -46,7 +46,11 @@ class SearchInteractor {
   }
 
   Stream<List<String>> getCategoriesStream() {
-    getCategories().then(_listCategoriesController.add);
+    getCategories().then(_listCategoriesController.add).onError(
+      (error, stackTrace) {
+        addErrorToFiltredController(error!);
+      },
+    );
     return _listCategoriesController.stream;
   }
 

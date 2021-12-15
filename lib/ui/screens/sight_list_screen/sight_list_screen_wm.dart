@@ -50,8 +50,8 @@ class SightListScreenWidgetModel extends WidgetModel {
 
     subscribeHandleError<List<Place>>(
       _searchInteractor.getFiltredPlacesStream(SearchFilter()),
-      (place) {
-        placeListState.content(place);
+      (places) {
+        placeListState.content(places);
       },
       onError: (error) {
         placeListState.error();

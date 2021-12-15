@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:places/common/error_handler.dart';
 import 'package:places/data/interactor/place_interactor.dart';
+import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:provider/src/provider.dart';
 import 'package:relation/relation.dart';
@@ -9,10 +10,15 @@ import 'package:relation/relation.dart';
 class AddSightScreenWidgetModel extends WidgetModel {
   final PlaceInteractor placeInteractor;
 
-  final placeState = EntityStreamedState<Place>();
+  final placeState = EntityStreamedState<void>();
 
   final addNewPlaceAction = StreamedAction<void>();
-  final submitTextField = StreamedAction<FocusNode>();
+  final submitTextField = StreamedAction<void>();
+  final addImagesAction = StreamedAction<List<String>>();
+  final deleteImagesAction = StreamedAction<void>();
+
+  List<String> placeImages = [];
+
 
   /// FormFields
   final controllerCat = TextEditingController();
@@ -26,41 +32,11 @@ class AddSightScreenWidgetModel extends WidgetModel {
   final FocusNode lngFocusNode = FocusNode();
   final FocusNode descFocusNode = FocusNode();
 
-  /// Button
-  bool isButtonEnabled = false;
-  final StreamedState<bool> isSubmitEnabled = StreamedState(false);
+  /// Button state
+  final StreamedState<bool> buttonState = StreamedState(false);
 
-  double? _lat;
-  double? _lng;
-  String? _name;
-  List<String>? _urls;
-  String? _placeType;
-  String? _description;
-  List<String> _images = [];
-
-  set lat(double lat) {
-    _lat = lat;
-  }
-
-  set lng(double lng) {
-    _lng = lng;
-  }
-
-  set name(String name) {
-    _name = name;
-  }
-
-  set urls(List<String> urls) {
-    _urls = urls;
-  }
-
-  set placeType(String placeType) {
-    _placeType = placeType;
-  }
-
-  set description(String description) {
-    _description = description;
-  }
+  /// Gallery state of the new place
+  final StreamedState<List<String>> galleryState = StreamedState([]);
 
   AddSightScreenWidgetModel(
     WidgetModelDependencies baseDependencies,
@@ -80,56 +56,68 @@ class AddSightScreenWidgetModel extends WidgetModel {
   @override
   void onLoad() {
     super.onLoad();
-
-    // addNewPlace();
   }
 
   @override
   void onBind() {
     super.onBind();
 
-    // subscribe(submitTextField.stream, checkFields);
+    subscribe<List<String>>(addImagesAction.stream, uploadImages);
 
-    // subscribe<void>(addNewPlaceAction.stream, (_) {
-    // _addNewPlace(hidden: false, place: _place);
-    // });
-    // if (
-    // controllerCat.text.isNotEmpty &&
-    // controllerName.text.isNotEmpty &&
-    // controllerLat.text.isNotEmpty &&
-    // controllerLng.text.isNotEmpty &&
-    //     controllerDesc.text.isNotEmpty) {
-    //   isButtonEnabled = true;
-    // } else {
-    //   isButtonEnabled = false;
-    // }
+    subscribe<void>(addNewPlaceAction.stream, (_) {
+      addNewPlace();
+    });
   }
 
   void checkFields() {
-    if (
-        controllerCat.text.isNotEmpty &&
+    if (controllerCat.text.isNotEmpty &&
         controllerName.text.isNotEmpty &&
         controllerLat.text.isNotEmpty &&
         controllerLng.text.isNotEmpty &&
         controllerDesc.text.isNotEmpty) {
-      isSubmitEnabled.accept(true);
+      buttonState.accept(true);
     } else {
-      isSubmitEnabled.accept(false);
+      buttonState.accept(false);
     }
   }
 
-  void addNewPlace({bool hidden = true, Place? place}) {
-    if (hidden) placeState.loading();
+  void uploadImages(List<String> images) async {
+    placeImages.addAll(images);
+    galleryState.accept(placeImages);
+  }
 
-    // subscribeHandleError<Place>(
-    //   // _searchInteractor.getFiltredPlacesStream(SearchFilter()),
-    //   placeInteractor.addNewPlace(place!),
-    //   (place) {
-    //     placeState.content(place);
-    //   },
-    //   onError: (error) {
-    //     placeState.error();
-    //   },
-    // );
+  void deleteImage(String image) async {
+    placeImages.remove(image);
+    galleryState.accept(placeImages);
+  }
+
+  void addNewPlace() async {
+    placeState.loading();
+    // debugPrint('addNewPlace start');
+    // await Future.delayed(Duration(seconds: 5));
+
+    final imagesUrls = await placeInteractor.uploadPlaceImages(placeImages);
+    final placeType =
+        Category.getCategoryByName(controllerCat.text.toLowerCase()).type;
+    final newPlace = Place(
+      lat: double.parse(controllerLat.text),
+      lng: double.parse(controllerLng.text),
+      name: controllerName.text,
+      placeType: placeType,
+      description: controllerDesc.text,
+      urls: imagesUrls,
+    );
+
+    subscribeHandleError<dynamic>(
+      placeInteractor.addNewPlace(newPlace),
+      (response) {
+        placeState.content(response);
+        debugPrint('content push');
+      },
+      onError: (error) {
+        placeState.error();
+      },
+    );
+    // debugPrint('addNewPlace end');
   }
 }
