@@ -9,16 +9,15 @@ import 'package:places/data/model/place_dto.dart';
 import 'package:places/data/repository/mapper/place_mapper.dart';
 import 'package:places/domain/place.dart';
 
-final api = ApiClient().client;
-
 class PlaceRepository {
+  final ApiClient api;
   final List<Place> favoritePlaces = [];
   final Map<Place, DateTime> visitPlaces = {};
 
-  PlaceRepository();
+  PlaceRepository(this.api);
 
   Future<List<Place>> getPlaces() async {
-    final response = await api.get<List<dynamic>>(ApiConstants.placeUrl);
+    final response = await api.client.get<List<dynamic>>(ApiConstants.placeUrl);
 
     return response.data!
         .map(
@@ -31,25 +30,27 @@ class PlaceRepository {
 
   Future<dynamic> addNewPlace(Place place) async {
     final data = place.toJson();
-    final response = await api.post(ApiConstants.placeUrl, data: data);
+    final response = await api.client.post(ApiConstants.placeUrl, data: data);
 
     return response;
   }
 
   Future<Place> getPlaceDetails({required int id}) async {
-    final response =
-        await api.get<Map<String, dynamic>>('${ApiConstants.placeUrl}/$id');
+    final response = await api.client
+        .get<Map<String, dynamic>>('${ApiConstants.placeUrl}/$id');
 
     return PlaceMapper.toModel(PlaceDto.fromJson(response.data!));
   }
 
   Future<Place?> deletePlace(int id) async {
-    final response = await api.delete<Place>('${ApiConstants.placeUrl}/$id');
+    final response =
+        await api.client.delete<Place>('${ApiConstants.placeUrl}/$id');
     return response.data;
   }
 
   Future<Place?> putPlace(int id) async {
-    final response = await api.put<Place>('${ApiConstants.placeUrl}/$id');
+    final response =
+        await api.client.put<Place>('${ApiConstants.placeUrl}/$id');
     return response.data;
   }
 
@@ -113,7 +114,8 @@ class PlaceRepository {
       },
     );
 
-    final response = await api.post(ApiConstants.uploadFile, data: formData);
+    final response =
+        await api.client.post(ApiConstants.uploadFile, data: formData);
 
     return '${ApiConstants.baseUrl}/${response.headers['location']!.first}';
   }

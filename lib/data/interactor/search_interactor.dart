@@ -21,7 +21,6 @@ class SearchInteractor {
 
   void setRangeValue(RangeValues rangeValues) {
     _distanceRangeValue = rangeValues;
-    // notifyListeners();
   }
 
   void selectCategory(String category) {
@@ -30,7 +29,6 @@ class SearchInteractor {
     } else {
       selectedFilters.add(category.toLowerCase());
     }
-    // notifyListeners();
   }
 
   Stream<List<Place>> getFiltredPlacesStream(SearchFilter? settingsFilter) {

@@ -15,10 +15,6 @@ class PlaceInteractor {
 
   PlaceInteractor(this._placeRepository);
 
-  void addErrorToPlacesController(Object error) {
-    _listPlacesController.addError(error);
-  }
-
   // Methods for working with a remote repository
 
   Future<List<Place>> getPlaces([
