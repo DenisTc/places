@@ -5,9 +5,6 @@ import 'package:places/data/exceptions/network_exception.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 
-final placeInteractor = PlaceInteractor();
-final searchInteractor = SearchInteractor();
-
 class ApiClient {
   final _baseOptions = BaseOptions(
     baseUrl: ApiConstants.baseUrl,
@@ -15,6 +12,8 @@ class ApiClient {
     receiveTimeout: 5000,
     sendTimeout: 5000,
   );
+
+  ApiClient();
 
   Dio get client {
     final _dio = Dio(_baseOptions);
@@ -35,11 +34,6 @@ class ApiClient {
           },
           onError: (error, errorInterceptorHandler) {
             debugPrint(NetworkException.fromDioError(error).toString());
-            if (error.requestOptions.path == ApiConstants.placeUrl) {
-              placeInteractor.addErrorToPlacesController(error);
-            } else {
-              searchInteractor.addErrorToFiltredController(error);
-            }
             return errorInterceptorHandler.next(error);
           },
         ),

@@ -1,41 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:places/data/redux/action/place_action.dart';
-import 'package:places/data/redux/state/app_state.dart';
-import 'package:places/data/redux/state/place_state.dart';
+import 'package:mwwm/mwwm.dart';
 import 'package:places/domain/category.dart';
-import 'package:places/domain/place.dart';
+import 'package:places/ui/screens/add_sight_screen/add_sight_screen_wm.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/sight_category_screen.dart';
+import 'package:places/ui/screens/sight_category_screen/sight_category_screen.dart';
 import 'package:places/ui/widgets/add_sight_screen/gallery/sight_gallery.dart';
 import 'package:places/ui/widgets/add_sight_screen/new_sight_app_bar.dart';
+import 'package:relation/relation.dart';
 
-class AddSightScreen extends StatefulWidget {
-  const AddSightScreen({Key? key}) : super(key: key);
+class AddSightScreen extends CoreMwwmWidget<AddSightScreenWidgetModel> {
+  const AddSightScreen({
+    WidgetModelBuilder? widgetModelBuilder,
+  }) : super(widgetModelBuilder: AddSightScreenWidgetModel.builder);
 
   @override
-  _AddSightScreenState createState() => _AddSightScreenState();
+  WidgetState<CoreMwwmWidget<AddSightScreenWidgetModel>,
+      AddSightScreenWidgetModel> createWidgetState() => _AddSightScreenState();
 }
 
-class _AddSightScreenState extends State<AddSightScreen> {
-  final _controllerCat = TextEditingController();
-  final _controllerName = TextEditingController();
-  final _controllerLat = TextEditingController();
-  final _controllerLng = TextEditingController();
-  final _controllerDesc = TextEditingController();
+class _AddSightScreenState
+    extends WidgetState<AddSightScreen, AddSightScreenWidgetModel> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  late FocusNode nodeLat = FocusNode();
-  late FocusNode nodeLng = FocusNode();
-  late FocusNode nodeDesc = FocusNode();
-  late bool _isButtonEnabled = false;
-
-  List<String> placeImages = [];
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +49,13 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   ),
                   const SizedBox(height: 24),
                   SightGallery(
-                    images: placeImages,
                     addImage: (List<XFile>? xFileList) {
                       addImage(xFileList);
                     },
                     deleteImage: (String imgUrl) {
                       deleteImage(imgUrl);
                     },
+                    galleryState: wm.galleryState,
                   ),
                   const SizedBox(height: 24),
                   Text(
@@ -74,10 +64,8 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   ),
                   const SizedBox(height: 5),
                   _CategoryField(
-                    controllerCat: _controllerCat,
-                    notifyParent: () {
-                      refresh();
-                    },
+                    controllerCat: wm.controllerCat,
+                    fillFilds: wm.checkFields,
                   ),
                   const SizedBox(height: 24),
                   const Text(
@@ -87,22 +75,18 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   const SizedBox(height: 12),
                   _NameField(
                     formKey: _formKey,
-                    focusNodeLat: nodeLat,
-                    controllerName: _controllerName,
-                    notifyParent: () {
-                      refresh();
-                    },
+                    focusNodeLat: wm.nameFocusNode,
+                    controllerName: wm.controllerName,
+                    fillFilds: wm.checkFields,
                   ),
                   const SizedBox(height: 24),
                   _CoordinatesFields(
-                    focusNodeLat: nodeLat,
-                    focusNodeLng: nodeLng,
-                    focusNodeDesc: nodeDesc,
-                    controllerLat: _controllerLat,
-                    controllerLng: _controllerLng,
-                    notifyParent: () {
-                      refresh();
-                    },
+                    focusNodeLat: wm.latFocusNode,
+                    focusNodeLng: wm.lngFocusNode,
+                    focusNodeDesc: wm.descFocusNode,
+                    controllerLat: wm.controllerLat,
+                    controllerLng: wm.controllerLng,
+                    fillFilds: wm.checkFields,
                   ),
                   const _SelectOnMapButton(),
                   const SizedBox(height: 30),
@@ -112,22 +96,21 @@ class _AddSightScreenState extends State<AddSightScreen> {
                   ),
                   const SizedBox(height: 12),
                   _DescriptionField(
-                    focusNode: nodeDesc,
-                    notifyParent: () {
-                      refresh();
-                    },
-                    controllerDesc: _controllerDesc,
+                    focusNode: wm.descFocusNode,
+                    controllerDesc: wm.controllerDesc,
+                    fillFilds: wm.checkFields,
                   ),
                   const SizedBox(height: 50),
                   _CreateSightButton(
-                    placeImages: placeImages,
-                    enable: _isButtonEnabled,
+                    buttonState: wm.buttonState,
                     formKey: _formKey,
-                    controllerCat: _controllerCat,
-                    controllerName: _controllerName,
-                    controllerDesc: _controllerDesc,
-                    controllerLat: _controllerLat,
-                    controllerLng: _controllerLng,
+                    placeState: wm.placeState,
+                    addPlace: () {
+                      wm.addNewPlace();
+                    },
+                    uploadImages: (images) {
+                      wm.uploadImages(images);
+                    },
                   ),
                 ],
               ),
@@ -138,32 +121,14 @@ class _AddSightScreenState extends State<AddSightScreen> {
     );
   }
 
-  void refresh() {
-    setState(
-      () {
-        if (_controllerCat.text.isNotEmpty &&
-            _controllerName.text.isNotEmpty &&
-            _controllerLat.text.isNotEmpty &&
-            _controllerLng.text.isNotEmpty &&
-            _controllerDesc.text.isNotEmpty) {
-          _isButtonEnabled = true;
-        } else {
-          _isButtonEnabled = false;
-        }
-      },
-    );
-  }
 
   void deleteImage(String imgUrl) {
-    setState(() {
-      placeImages.remove(imgUrl);
-    });
+    wm.deleteImage(imgUrl);
   }
 
   void addImage(List<XFile>? xFileList) {
-    setState(() {
-      placeImages.addAll(xFileList!.map((image) => image.path));
-    });
+    final List<String> images = xFileList!.map((image) => image.path).toList();
+    wm.uploadImages(images);
   }
 }
 
@@ -189,11 +154,11 @@ class _SelectOnMapButton extends StatelessWidget {
 
 class _CategoryField extends StatefulWidget {
   final TextEditingController controllerCat;
-  final Function() notifyParent;
+  final Function() fillFilds;
 
   const _CategoryField({
     required this.controllerCat,
-    required this.notifyParent,
+    required this.fillFilds,
     Key? key,
   }) : super(key: key);
 
@@ -227,11 +192,10 @@ class __CategoryFieldState extends State<_CategoryField> {
         }
       },
       onChanged: (value) {
-        setState(() {
-          widget.notifyParent();
-        });
+        setState(() {});
       },
       controller: widget.controllerCat,
+      onEditingComplete: widget.fillFilds(),
       readOnly: true,
       textInputAction: TextInputAction.next,
       style: TextStyle(
@@ -281,13 +245,13 @@ class _NameField extends StatefulWidget {
   final GlobalKey<FormState> formKey;
   final TextEditingController controllerName;
   final FocusNode focusNodeLat;
-  final Function() notifyParent;
+  final Function() fillFilds;
 
   const _NameField({
     required this.formKey,
     required this.focusNodeLat,
     required this.controllerName,
-    required this.notifyParent,
+    required this.fillFilds,
     Key? key,
   }) : super(key: key);
 
@@ -308,11 +272,10 @@ class _NameFieldState extends State<_NameField> {
         }
       },
       onChanged: (value) {
-        setState(() {
-          widget.notifyParent();
-        });
+        setState(() {});
       },
       controller: widget.controllerName,
+      onEditingComplete: widget.fillFilds(),
       textInputAction: TextInputAction.next,
       keyboardType: TextInputType.text,
       cursorColor: Theme.of(context).secondaryHeaderColor,
@@ -344,9 +307,7 @@ class _NameFieldState extends State<_NameField> {
         suffixIcon: IconButton(
           onPressed: () {
             widget.controllerName.clear();
-            setState(() {
-              widget.notifyParent();
-            });
+            setState(() {});
           },
           iconSize: 10,
           padding: EdgeInsets.zero,
@@ -370,7 +331,7 @@ class _CoordinatesFields extends StatefulWidget {
   final FocusNode focusNodeDesc;
   final TextEditingController controllerLat;
   final TextEditingController controllerLng;
-  final Function() notifyParent;
+  final Function() fillFilds;
 
   const _CoordinatesFields({
     required this.focusNodeLat,
@@ -378,7 +339,7 @@ class _CoordinatesFields extends StatefulWidget {
     required this.focusNodeDesc,
     required this.controllerLat,
     required this.controllerLng,
-    required this.notifyParent,
+    required this.fillFilds,
     Key? key,
   }) : super(key: key);
 
@@ -412,11 +373,10 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                   }
                 },
                 onChanged: (value) {
-                  setState(() {
-                    widget.notifyParent();
-                  });
+                  setState(() {});
                 },
                 focusNode: widget.focusNodeLat,
+                onEditingComplete: widget.fillFilds(),
                 textInputAction: TextInputAction.next,
                 style: TextStyle(
                   fontSize: 16,
@@ -462,9 +422,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                   suffixIcon: IconButton(
                     onPressed: () {
                       widget.controllerLat.clear();
-                      setState(() {
-                        widget.notifyParent();
-                      });
+                      setState(() {});
                     },
                     icon: SvgPicture.asset(
                       iconClearField,
@@ -492,6 +450,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
               const SizedBox(height: 12),
               TextFormField(
                 controller: widget.controllerLng,
+                onEditingComplete: widget.fillFilds(),
                 focusNode: widget.focusNodeLng,
                 onFieldSubmitted: (value) {
                   FocusScope.of(context).requestFocus(widget.focusNodeDesc);
@@ -502,9 +461,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                   }
                 },
                 onChanged: (value) {
-                  setState(() {
-                    widget.notifyParent();
-                  });
+                  setState(() {});
                 },
                 style: TextStyle(
                   fontSize: 16,
@@ -551,9 +508,7 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
                   suffixIcon: IconButton(
                     onPressed: () {
                       widget.controllerLng.clear();
-                      setState(() {
-                        widget.notifyParent();
-                      });
+                      setState(() {});
                     },
                     icon: SvgPicture.asset(
                       iconClearField,
@@ -577,12 +532,12 @@ class __CoordinatesFieldsState extends State<_CoordinatesFields> {
 class _DescriptionField extends StatefulWidget {
   final FocusNode focusNode;
   final TextEditingController controllerDesc;
-  final Function() notifyParent;
+  final Function() fillFilds;
 
   const _DescriptionField({
     required this.focusNode,
-    required this.notifyParent,
     required this.controllerDesc,
+    required this.fillFilds,
     Key? key,
   }) : super(key: key);
 
@@ -600,12 +555,11 @@ class __DescriptionFieldState extends State<_DescriptionField> {
         }
       },
       onChanged: (value) {
-        setState(() {
-          widget.notifyParent();
-        });
+        setState(() {});
       },
       controller: widget.controllerDesc,
       focusNode: widget.focusNode,
+      onEditingComplete: widget.fillFilds(),
       textInputAction: TextInputAction.done,
       keyboardType: TextInputType.text,
       minLines: 4,
@@ -650,24 +604,18 @@ class __DescriptionFieldState extends State<_DescriptionField> {
 }
 
 class _CreateSightButton extends StatefulWidget {
-  final List<String> placeImages;
-  final bool enable;
+  final StreamedState<bool> buttonState;
   final GlobalKey<FormState> formKey;
-  final TextEditingController controllerCat;
-  final TextEditingController controllerName;
-  final TextEditingController controllerLat;
-  final TextEditingController controllerLng;
-  final TextEditingController controllerDesc;
+  final Function(List<String>) uploadImages;
+  final Function() addPlace;
+  final EntityStreamedState placeState;
 
   const _CreateSightButton({
-    required this.placeImages,
-    required this.enable,
+    required this.buttonState,
     required this.formKey,
-    required this.controllerCat,
-    required this.controllerName,
-    required this.controllerLat,
-    required this.controllerLng,
-    required this.controllerDesc,
+    required this.addPlace,
+    required this.placeState,
+    required this.uploadImages,
     Key? key,
   }) : super(key: key);
 
@@ -678,141 +626,211 @@ class _CreateSightButton extends StatefulWidget {
 class _CreateSightButtonState extends State<_CreateSightButton> {
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        if (widget.formKey.currentState!.validate() && widget.enable) {
-          final placeType = Category.getCategoryByName(
-                  widget.controllerCat.text.toLowerCase())
-              .type;
-          final newPlace = Place(
-            id: null,
-            name: widget.controllerName.text,
-            lat: double.parse(widget.controllerLat.text),
-            lng: double.parse(widget.controllerLng.text),
-            urls: const [''],
-            description: widget.controllerDesc.text,
-            placeType: placeType,
+    return StreamedStateBuilder<bool>(
+        streamedState: widget.buttonState,
+        builder: (context, buttonState) {
+          return ElevatedButton(
+            onPressed: buttonState
+                ? () {
+                    widget.addPlace();
+                    showAlertDialog(
+                      context: context,
+                      placeState: widget.placeState,
+                    );
+                  }
+                : null,
+            child: Text(
+              constants.textBtnCreate,
+              style: TextStyle(
+                color: buttonState
+                    ? Colors.white
+                    : myLightSecondaryTwo.withOpacity(0.56),
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                buttonState
+                    ? Theme.of(context).colorScheme.primaryVariant
+                    : Theme.of(context).primaryColor,
+              ),
+              minimumSize:
+                  MaterialStateProperty.all(const Size(double.infinity, 48)),
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+              ),
+            ),
           );
-
-          StoreProvider.of<AppState>(context).dispatch(
-              AddNewPlaceAction(place: newPlace, images: widget.placeImages));
-
-          showAlertDialog(context);
-        }
-      },
-      child: Text(
-        constants.textBtnCreate,
-        style: TextStyle(
-          color: widget.enable
-              ? Colors.white
-              : myLightSecondaryTwo.withOpacity(0.56),
-          fontWeight: FontWeight.w700,
-        ),
-      ),
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(
-          widget.enable
-              ? Theme.of(context).colorScheme.primaryVariant
-              : Theme.of(context).primaryColor,
-        ),
-        minimumSize: MaterialStateProperty.all(const Size(double.infinity, 48)),
-        shadowColor: MaterialStateProperty.all(Colors.transparent),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-        ),
-      ),
-    );
+        });
   }
 }
 
-showAlertDialog(BuildContext context) {
+showAlertDialog(
+    {required BuildContext context, required EntityStreamedState placeState}) {
   showDialog(
     barrierDismissible: false,
     context: context,
     builder: (BuildContext context) {
-      return StoreConnector<AppState, PlaceState>(
-        converter: (store) {
-          return store.state.placeState;
-        },
-        builder: (BuildContext context, PlaceState vm) {
-          return AlertDialog(
-            scrollable: true,
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-            content: Row(
+      return AlertDialog(
+        scrollable: true,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        content: EntityStateBuilder<void>(
+          streamedState: placeState,
+          builder: (ctx, places) {
+            Future.delayed(const Duration(seconds: 2)).then(
+              (_) => Navigator.pop(context),
+            );
+            return Row(
               children: [
-                vm is AddnewPlaceInProcessState
-                    ? CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.primaryVariant,
-                      )
-                    : SizedBox.shrink(),
-                vm is AddnewPlaceErrorState
-                    ? Icon(
-                        Icons.error_outline,
-                        color: Colors.red,
-                        size: 50.0,
-                      )
-                    : SizedBox.shrink(),
-                vm is AddnewPlaceSuccessState
-                    ? Icon(
-                        Icons.check,
-                        color: Theme.of(context).colorScheme.primaryVariant,
-                        size: 50.0,
-                      )
-                    : SizedBox.shrink(),
+                Icon(
+                  Icons.check,
+                  color: Theme.of(context).colorScheme.primaryVariant,
+                  size: 50.0,
+                ),
                 SizedBox(width: 10),
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 5),
                     child: Builder(
                       builder: (context) {
-                        if (vm is AddnewPlaceSuccessState) {
-                          debugPrint(constants.textAddNewPlaceSuccess);
-                          Future.delayed(const Duration(seconds: 2)).then(
-                            (_) => Navigator.pop(context),
-                          );
-                        }
-                        if (vm is AddnewPlaceErrorState) {
-                          return Column(
-                            children: [
-                              Text(constants.textAddNewPlaceError),
-                              SizedBox(height: 16),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  constants.textBtnBackToMainScreen,
-                                  style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primaryVariant,
-                                  ),
-                                ),
-                                style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  minimumSize: Size.zero,
-                                  tapTargetSize:
-                                      MaterialTapTargetSize.shrinkWrap,
-                                ),
-                              ),
-                            ],
-                          );
-                        }
-
-                        if (vm is AddnewPlaceSuccessState) {
-                          return const Text(constants.textAddNewPlaceSuccess);
-                        }
+                        return const Text(constants.textAddNewPlaceSuccess);
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+          loadingBuilder: (context, data) {
+            return Row(
+              children: [
+                CircularProgressIndicator(
+                  color: Theme.of(context).colorScheme.primaryVariant,
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 5),
+                    child: Builder(
+                      builder: (context) {
                         return const Text(constants.textAddNewPlaceInProcess);
                       },
                     ),
                   ),
                 ),
               ],
-            ),
-          );
-        },
+            );
+          },
+          loadingChild: Row(
+            children: [
+              CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primaryVariant,
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 5),
+                  child: Builder(
+                    builder: (context) {
+                      return const Text(constants.textAddNewPlaceInProcess);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+          errorDataBuilder: (context, data, e) {
+            return Row(
+              children: [
+                Icon(
+                  Icons.error_outline,
+                  color: Colors.red,
+                  size: 50.0,
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 5),
+                    child: Builder(
+                      builder: (context) {
+                        return Column(
+                          children: [
+                            Text(constants.textAddNewPlaceError),
+                            SizedBox(height: 16),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                constants.textBtnBackToMainScreen,
+                                style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primaryVariant,
+                                ),
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+          errorChild: Row(
+            children: [
+              Icon(
+                Icons.error_outline,
+                color: Colors.red,
+                size: 50.0,
+              ),
+              SizedBox(width: 10),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 5),
+                  child: Builder(
+                    builder: (context) {
+                      return Column(
+                        children: [
+                          Text(constants.textAddNewPlaceError),
+                          SizedBox(height: 16),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text(
+                              constants.textBtnBackToMainScreen,
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryVariant,
+                              ),
+                            ),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size.zero,
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     },
   ).whenComplete(() => Navigator.pop(context));

@@ -9,17 +9,17 @@ import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
 
 class SearchRepository {
-  final api = ApiClient().client;
+  final ApiClient api;
 
-  SearchRepository();
+  SearchRepository(this.api);
 
   Future<List<Place>> getFiltredPlaces(SearchFilter? settingsFilter) async {
     final data = settingsFilter!.toMap();
 
-    final response = await ApiClient().client.post<String>(
-          ApiConstants.filteredPlacesUrl,
-          data: data,
-        );
+    final response = await api.client.post<String>(
+      ApiConstants.filteredPlacesUrl,
+      data: data,
+    );
 
     var placeDtoList = (jsonDecode(response.toString()) as List<dynamic>)
         .map(
@@ -42,7 +42,7 @@ class SearchRepository {
   }
 
   Future<List<Place>> getCategories() async {
-    final response = await api.get<List<dynamic>>(ApiConstants.placeUrl);
+    final response = await api.client.get<List<dynamic>>(ApiConstants.placeUrl);
 
     return response.data!
         .map(

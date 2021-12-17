@@ -5,11 +5,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/screens/res/icons.dart';
 
 class SightImage extends StatelessWidget {
-  final Function(String imgUrl) notifyParent;
+  final Function(String imgUrl) deleteImage;
   final String image;
   const SightImage({
     required this.image,
-    required this.notifyParent,
+    required this.deleteImage,
     Key? key,
   }) : super(key: key);
 
@@ -43,7 +43,7 @@ class SightImage extends StatelessWidget {
               right: 6,
               child: InkWell(
                 onTap: () {
-                  notifyParent(image);
+                  deleteImage(image);
                 },
                 child: SvgPicture.asset(
                   iconCloseRound,

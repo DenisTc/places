@@ -1,11 +1,10 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/place.dart';
 
-class PlaceInteractor extends ChangeNotifier {
-  final PlaceRepository _placeRepository = PlaceRepository();
+class PlaceInteractor {
+  final PlaceRepository _placeRepository;
   final StreamController<List<Place>> _listPlacesController =
       StreamController<List<Place>>.broadcast();
 
@@ -14,11 +13,7 @@ class PlaceInteractor extends ChangeNotifier {
     return _listPlacesController.stream;
   }
 
-  PlaceInteractor();
-
-  void addErrorToPlacesController(Object error) {
-    _listPlacesController.addError(error);
-  }
+  PlaceInteractor(this._placeRepository);
 
   // Methods for working with a remote repository
 
@@ -33,13 +28,19 @@ class PlaceInteractor extends ChangeNotifier {
     return _placeRepository.getPlaceDetails(id: id);
   }
 
-  Future<bool> addNewPlace(Place place) async {
-    try {
-      await _placeRepository.addNewPlace(place);
-      return true;
-    } on Exception catch (_) {
-      return false;
+  Future<List<String>> uploadPlaceImages(List<String> images) async {
+    List<String> uploadImages = [];
+
+    for (int i = 0; i < images.length; i++) {
+      final url = await _placeRepository.uploadImage(images[i]);
+      uploadImages.add(url);
     }
+
+    return uploadImages;
+  }
+
+  Stream<dynamic> addNewPlace(Place place) async* {
+    yield _placeRepository.addNewPlace(place);
   }
 
   /// Methods for working with favorites places
@@ -54,6 +55,6 @@ class PlaceInteractor extends ChangeNotifier {
 
   Future<void> toggleInFavorites(Place place) async {
     await _placeRepository.toggleInFavorites(place);
-    notifyListeners();
+    // notifyListeners();
   }
 }
