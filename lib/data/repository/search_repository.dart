@@ -9,7 +9,7 @@ import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
 
 class SearchRepository {
-  final ApiClient api;
+  final api;
 
   SearchRepository(this.api);
 
