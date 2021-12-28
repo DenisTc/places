@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:places/ui/screens/favorites_screen.dart';
 // import 'package:places/ui/screens/settings_screen.dart';
 import 'package:places/ui/screens/place_list_screen.dart';
+import 'package:places/ui/screens/place_map_screen.dart';
+import 'package:places/ui/screens/settings_screen.dart';
 // import 'package:places/ui/screens/place_map_screen.dart';
 // import 'package:places/ui/screens/favorites_screen.dart';
 import 'package:places/ui/widgets/place_bottom_nav_bar.dart';
@@ -21,7 +24,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   void initState() {
     initialIndex = widget.selectedTab ?? 0;
     _tabController = TabController(
-      length: 1,
+      length: 4,
       vsync: this,
       initialIndex: initialIndex,
     );
@@ -51,9 +54,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
         controller: _tabController,
         children: [
           PlaceListScreen(),
-          // PlaceMapScreen(),
-          // FavoritesScreen(),
-          // SettingsScreen(),
+          PlaceMapScreen(),
+          FavoritesScreen(),
+          SettingsScreen(),
         ],
       ),
       bottomNavigationBar: PlaceBottomNavBar(

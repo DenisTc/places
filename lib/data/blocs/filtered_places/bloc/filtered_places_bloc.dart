@@ -30,24 +30,24 @@ class FilteredPlacesBloc
       (event, emit) => _loadFilteredPlaces(event, emit, placeFilter),
     );
 
-    on<LoadPlaceCategories>(
+    on<LoadPlaceCategoriesEvent>(
       (event, emit) => _loadPlaceCategories(event, emit),
     );
 
-    on<LoadFilterParameters>(
+    on<LoadFilterParamsEvent>(
       (event, emit) => _loadFilterParameters(event, emit),
     );
 
-    on<ToggleCategory>(
+    on<ToggleCategoryEvent>(
       (event, emit) => _toggleCategory(event, emit),
     );
 
-    on<UpdateDistance>(
+    on<UpdateDistanceEvent>(
       (event, emit) => _updateDistance(event, emit),
       transformer: debounce(Duration(milliseconds: 500)),
     );
 
-    on<ClearFilter>(
+    on<ClearFilterEvent>(
       (event, emit) => _clearFilter(event, emit),
     );
   }
@@ -74,7 +74,7 @@ class FilteredPlacesBloc
   }
 
   void _loadPlaceCategories(
-      LoadPlaceCategories event, Emitter<FilteredPlacesState> emit) async {
+      LoadPlaceCategoriesEvent event, Emitter<FilteredPlacesState> emit) async {
     try {
       var allCategories = await getCategories();
 
@@ -90,7 +90,7 @@ class FilteredPlacesBloc
   }
 
   void _loadFilterParameters(
-      LoadFilterParameters event, Emitter<FilteredPlacesState> emit) async {
+      LoadFilterParamsEvent event, Emitter<FilteredPlacesState> emit) async {
     final filteredPlaces =
         await _searchRepository.getFiltredPlaces(placeFilter);
     emit(
@@ -102,7 +102,7 @@ class FilteredPlacesBloc
   }
 
   void _toggleCategory(
-      ToggleCategory event, Emitter<FilteredPlacesState> emit) async {
+      ToggleCategoryEvent event, Emitter<FilteredPlacesState> emit) async {
     if (placeFilter.typeFilter!.contains(event.name)) {
       placeFilter.typeFilter!.remove(event.name);
     } else {
@@ -125,7 +125,7 @@ class FilteredPlacesBloc
   }
 
   void _updateDistance(
-      UpdateDistance event, Emitter<FilteredPlacesState> emit) async {
+      UpdateDistanceEvent event, Emitter<FilteredPlacesState> emit) async {
     placeFilter.distance = event.distance;
     final filteredPlaces =
         await _searchRepository.getFiltredPlaces(placeFilter);
@@ -136,7 +136,7 @@ class FilteredPlacesBloc
   }
 
   void _clearFilter(
-      ClearFilter event, Emitter<FilteredPlacesState> emit) async {
+      ClearFilterEvent event, Emitter<FilteredPlacesState> emit) async {
     emit(ClearSlider(constants.defaultDistanceRange));
 
     placeFilter = SearchFilter(

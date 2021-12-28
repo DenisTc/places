@@ -18,25 +18,25 @@ class LoadFilteredPlaces extends FilteredPlacesEvent {
   List<Object> get props => [];
 }
 
-class LoadFilterParameters extends FilteredPlacesEvent {}
+class LoadFilterParamsEvent extends FilteredPlacesEvent {}
 
-class ClearFilter extends FilteredPlacesEvent {}
+class ClearFilterEvent extends FilteredPlacesEvent {}
 
-class LoadPlaceCategories extends FilteredPlacesEvent {}
+class LoadPlaceCategoriesEvent extends FilteredPlacesEvent {}
 
-class ToggleCategory extends FilteredPlacesEvent {
+class ToggleCategoryEvent extends FilteredPlacesEvent {
   final String name;
 
-  ToggleCategory(this.name);
+  ToggleCategoryEvent(this.name);
 
   @override
   List<Object> get props => [name];
 }
 
-class UpdateDistance extends FilteredPlacesEvent {
+class UpdateDistanceEvent extends FilteredPlacesEvent {
   final RangeValues distance;
 
-  UpdateDistance(this.distance);
+  UpdateDistanceEvent(this.distance);
 
   @override
   List<Object> get props => [distance];

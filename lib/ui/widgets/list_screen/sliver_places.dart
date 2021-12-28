@@ -3,7 +3,6 @@ import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/place_details_screen.dart';
 
-//
 class SliverPlaces extends StatelessWidget {
   final List<Place> places;
 
