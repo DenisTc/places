@@ -7,23 +7,23 @@ import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
 import 'package:relation/relation.dart';
 
-class SightListScreenWidgetModel extends WidgetModel {
+class PlaceListScreenWidgetModel extends WidgetModel {
   final SearchInteractor _searchInteractor;
 
   final placeListState = EntityStreamedState<List<Place>>();
 
   final updatePlaceListAction = StreamedAction<void>();
 
-  SightListScreenWidgetModel(
+  PlaceListScreenWidgetModel(
     WidgetModelDependencies baseDependencies,
     this._searchInteractor,
   ) : super(baseDependencies);
 
-  static SightListScreenWidgetModel builder(BuildContext context) {
+  static PlaceListScreenWidgetModel builder(BuildContext context) {
     final wmDependencies = WidgetModelDependencies(
       errorHandler: context.read<StandardErrorHandler>(),
     );
-    return SightListScreenWidgetModel(
+    return PlaceListScreenWidgetModel(
       wmDependencies,
       context.read<SearchInteractor>(),
     );

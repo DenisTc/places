@@ -9,7 +9,7 @@ import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/widgets/list_screen/sight_app_bar.dart';
+import 'package:places/ui/widgets/list_screen/place_app_bar.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 import 'package:places/ui/widgets/search_screen/empty_search_result.dart';
 import 'package:places/ui/widgets/search_screen/search_bar.dart';
@@ -17,25 +17,25 @@ import 'package:places/ui/widgets/search_screen/search_result_list.dart';
 
 List<String> historyList = [];
 
-class SightSearchScreen extends StatefulWidget {
+class PlaceSearchScreen extends StatefulWidget {
   final SearchFilter? settingsFilter;
 
-  const SightSearchScreen({
+  const PlaceSearchScreen({
     required this.settingsFilter,
     Key? key,
   }) : super(key: key);
 
   @override
-  _SightSearchScreenState createState() => _SightSearchScreenState();
+  _PlaceSearchScreenState createState() => _PlaceSearchScreenState();
 }
 
-class _SightSearchScreenState extends State<SightSearchScreen> {
+class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
   final _controllerSearch = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const SightAppBar(),
+      appBar: const PlaceAppBar(),
       backgroundColor: Theme.of(context).colorScheme.secondary,
       body: Column(
         children: [
@@ -118,7 +118,7 @@ class _SightSearchScreenState extends State<SightSearchScreen> {
                         return const EmptySearchResult();
 
                       return SearchResultList(
-                        filteredSights: searchRes,
+                        filteredPlaces: searchRes,
                         searchString: _controllerSearch.text,
                         addPlaceToSearchHistory: (name) {
                           _addPlaceToSearchHistory(name);

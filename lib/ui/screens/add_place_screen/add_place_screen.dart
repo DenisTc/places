@@ -4,33 +4,33 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:places/domain/category.dart';
-import 'package:places/ui/screens/add_sight_screen/add_sight_screen_wm.dart';
+import 'package:places/ui/screens/add_place_screen/add_place_screen_wm.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/sight_category_screen/sight_category_screen.dart';
-import 'package:places/ui/widgets/add_sight_screen/gallery/sight_gallery.dart';
-import 'package:places/ui/widgets/add_sight_screen/new_sight_app_bar.dart';
+import 'package:places/ui/screens/place_category_screen/place_category_screen.dart';
+import 'package:places/ui/widgets/add_place_screen/gallery/place_gallery.dart';
+import 'package:places/ui/widgets/add_place_screen/new_place_app_bar.dart';
 import 'package:relation/relation.dart';
 
-class AddSightScreen extends CoreMwwmWidget<AddSightScreenWidgetModel> {
-  const AddSightScreen({
+class AddPlaceScreen extends CoreMwwmWidget<AddPlaceScreenWidgetModel> {
+  const AddPlaceScreen({
     WidgetModelBuilder? widgetModelBuilder,
-  }) : super(widgetModelBuilder: AddSightScreenWidgetModel.builder);
+  }) : super(widgetModelBuilder: AddPlaceScreenWidgetModel.builder);
 
   @override
-  WidgetState<CoreMwwmWidget<AddSightScreenWidgetModel>,
-      AddSightScreenWidgetModel> createWidgetState() => _AddSightScreenState();
+  WidgetState<CoreMwwmWidget<AddPlaceScreenWidgetModel>,
+      AddPlaceScreenWidgetModel> createWidgetState() => _AddPlaceScreenState();
 }
 
-class _AddSightScreenState
-    extends WidgetState<AddSightScreen, AddSightScreenWidgetModel> {
+class _AddPlaceScreenState
+    extends WidgetState<AddPlaceScreen, AddPlaceScreenWidgetModel> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const NewSightAppBar(),
+      appBar: const NewPlaceAppBar(),
       backgroundColor: Theme.of(context).colorScheme.secondary,
       body: ListView(
         shrinkWrap: true,
@@ -48,7 +48,7 @@ class _AddSightScreenState
                     style: TextStyle(color: myLightSecondaryTwo),
                   ),
                   const SizedBox(height: 24),
-                  SightGallery(
+                  PlaceGallery(
                     addImage: (List<XFile>? xFileList) {
                       addImage(xFileList);
                     },
@@ -101,7 +101,7 @@ class _AddSightScreenState
                     fillFilds: wm.checkFields,
                   ),
                   const SizedBox(height: 50),
-                  _CreateSightButton(
+                  _CreatePlaceButton(
                     buttonState: wm.buttonState,
                     formKey: _formKey,
                     placeState: wm.placeState,
@@ -176,7 +176,7 @@ class __CategoryFieldState extends State<_CategoryField> {
         selectedCategory = await Navigator.push<String>(
           context,
           MaterialPageRoute(
-            builder: (context) => SightCategoryScreen(selectedCategory),
+            builder: (context) => PlaceCategoryScreen(selectedCategory),
           ),
         );
         if (selectedCategory != null) {
@@ -603,14 +603,14 @@ class __DescriptionFieldState extends State<_DescriptionField> {
   }
 }
 
-class _CreateSightButton extends StatefulWidget {
+class _CreatePlaceButton extends StatefulWidget {
   final StreamedState<bool> buttonState;
   final GlobalKey<FormState> formKey;
   final Function(List<String>) uploadImages;
   final Function() addPlace;
   final EntityStreamedState placeState;
 
-  const _CreateSightButton({
+  const _CreatePlaceButton({
     required this.buttonState,
     required this.formKey,
     required this.addPlace,
@@ -620,10 +620,10 @@ class _CreateSightButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CreateSightButtonState createState() => _CreateSightButtonState();
+  _CreatePlaceButtonState createState() => _CreatePlaceButtonState();
 }
 
-class _CreateSightButtonState extends State<_CreateSightButton> {
+class _CreatePlaceButtonState extends State<_CreatePlaceButton> {
   @override
   Widget build(BuildContext context) {
     return StreamedStateBuilder<bool>(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/settings_screen.dart';
-import 'package:places/ui/screens/sight_list_screen/sight_list_screen.dart';
-import 'package:places/ui/screens/sight_map_screen.dart';
+import 'package:places/ui/screens/place_list_screen/place_list_screen.dart';
+import 'package:places/ui/screens/place_map_screen.dart';
 import 'package:places/ui/screens/favorites_screen.dart';
-import 'package:places/ui/widgets/sight_bottom_nav_bar.dart';
+import 'package:places/ui/widgets/place_bottom_nav_bar.dart';
 
 class MainScreen extends StatefulWidget {
   final int? selectedTab;
@@ -54,14 +54,14 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: const [
-          SightListScreen(),
-          // SightMapScreen(),
+          PlaceListScreen(),
+          // PlaceMapScreen(),
           // FavoritesScreen(),
           // SettingsScreen(),
         ],
       ),
       bottomNavigationBar: isPortrait
-          ? SightBottomNavBar(
+          ? PlaceBottomNavBar(
               currentIndex: initialIndex,
               onSelectTab: (index) {
                 onSelectTab(index);

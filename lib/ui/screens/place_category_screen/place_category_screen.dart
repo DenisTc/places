@@ -5,25 +5,25 @@ import 'package:places/domain/category.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/sight_category_screen/sight_category_screen_wm.dart';
+import 'package:places/ui/screens/place_category_screen/place_category_screen_wm.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 import 'package:relation/relation.dart';
 
-class SightCategoryScreen
-    extends CoreMwwmWidget<SightCategoryScreenWidgetModel> {
+class PlaceCategoryScreen
+    extends CoreMwwmWidget<PlaceCategoryScreenWidgetModel> {
   final String? placeType;
 
-  SightCategoryScreen([this.placeType])
-      : super(widgetModelBuilder: SightCategoryScreenWidgetModel.builder);
+  PlaceCategoryScreen([this.placeType])
+      : super(widgetModelBuilder: PlaceCategoryScreenWidgetModel.builder);
 
   @override
-  WidgetState<CoreMwwmWidget<SightCategoryScreenWidgetModel>,
-          SightCategoryScreenWidgetModel>
-      createWidgetState() => _SightCategoryScreenState();
+  WidgetState<CoreMwwmWidget<PlaceCategoryScreenWidgetModel>,
+          PlaceCategoryScreenWidgetModel>
+      createWidgetState() => _PlaceCategoryScreenState();
 }
 
-class _SightCategoryScreenState
-    extends WidgetState<SightCategoryScreen, SightCategoryScreenWidgetModel> {
+class _PlaceCategoryScreenState
+    extends WidgetState<PlaceCategoryScreen, PlaceCategoryScreenWidgetModel> {
   String? selectedType;
   @override
   void initState() {

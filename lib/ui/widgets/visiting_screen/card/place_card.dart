@@ -8,16 +8,16 @@ import 'package:places/data/redux/state/app_state.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/sight_details_screen.dart';
-import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
+import 'package:places/ui/screens/place_details_screen.dart';
+import 'package:places/ui/widgets/place_cupertino_date_picker.dart';
 import 'package:places/ui/widgets/visiting_screen/card/favorite_card_bottom.dart';
 import 'package:places/ui/widgets/visiting_screen/card/favorite_card_top.dart';
 
-class SightCard extends StatefulWidget {
+class PlaceCard extends StatefulWidget {
   final GlobalKey globalKey;
   final bool visited;
   final Place place;
-  const SightCard({
+  const PlaceCard({
     required this.visited,
     required this.place,
     required this.globalKey,
@@ -25,10 +25,10 @@ class SightCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  __SightCardState createState() => __SightCardState();
+  __PlaceCardState createState() => __PlaceCardState();
 }
 
-class __SightCardState extends State<SightCard> {
+class __PlaceCardState extends State<PlaceCard> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -110,7 +110,7 @@ class __SightCardState extends State<SightCard> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(16)),
                         onTap: () {
-                          _showSight(widget.place.id!);
+                          _showPlace(widget.place.id!);
                         },
                       ),
                     ),
@@ -150,7 +150,7 @@ class __SightCardState extends State<SightCard> {
                                     await showModalBottomSheet<void>(
                                       context: context,
                                       builder: (builder) {
-                                        return const SightCupertinoDatePicker();
+                                        return const PlaceCupertinoDatePicker();
                                       },
                                     );
                                   }
@@ -193,11 +193,11 @@ class __SightCardState extends State<SightCard> {
     );
   }
 
-  Future<void> _showSight(int id) async {
+  Future<void> _showPlace(int id) async {
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
-        return SightDetails(id: id);
+        return PlaceDetails(id: id);
       },
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(

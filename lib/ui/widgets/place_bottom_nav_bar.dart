@@ -3,21 +3,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/screens/res/icons.dart';
 
 /// Custom bottom navigation bar.
-class SightBottomNavBar extends StatefulWidget {
+class PlaceBottomNavBar extends StatefulWidget {
   final int currentIndex;
   final Function(int index) onSelectTab;
 
-  const SightBottomNavBar({
+  const PlaceBottomNavBar({
     required this.currentIndex,
     required this.onSelectTab,
     Key? key,
   }) : super(key: key);
 
   @override
-  _SightBottomNavBarState createState() => _SightBottomNavBarState();
+  _PlaceBottomNavBarState createState() => _PlaceBottomNavBarState();
 }
 
-class _SightBottomNavBarState extends State<SightBottomNavBar> {
+class _PlaceBottomNavBarState extends State<PlaceBottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Stack(

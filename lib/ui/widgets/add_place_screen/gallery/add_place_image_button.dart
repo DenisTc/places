@@ -7,22 +7,22 @@ import 'package:image_picker/image_picker.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
-// import 'package:places/ui/widgets/add_sight_screen/gallery/file_list.dart';
-// import 'package:places/ui/widgets/add_sight_screen/gallery/select_image_dialog.dart';
+// import 'package:places/ui/widgets/add_place_screen/gallery/file_list.dart';
+// import 'package:places/ui/widgets/add_place_screen/gallery/select_image_dialog.dart';
 
-class AddSightImageButton extends StatefulWidget {
+class AddPlaceImageButton extends StatefulWidget {
   final Function(List<XFile>?) addImage;
 
-  const AddSightImageButton({
+  const AddPlaceImageButton({
     required this.addImage,
     Key? key,
   }) : super(key: key);
 
   @override
-  _AddSightImageButtonState createState() => _AddSightImageButtonState();
+  _AddPlaceImageButtonState createState() => _AddPlaceImageButtonState();
 }
 
-class _AddSightImageButtonState extends State<AddSightImageButton> {
+class _AddPlaceImageButtonState extends State<AddPlaceImageButton> {
   final picker = ImagePicker();
   ImagePicker imagePicker = ImagePicker();
   List<XFile>? imageFileList = [];

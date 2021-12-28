@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/ui/widgets/visiting_screen/card/sight_card_favorite.dart';
+import 'package:places/ui/widgets/visiting_screen/card/place_card_favorite.dart';
 
 // Widget for displaying a list of places in horizontal orientation
-class SightVisitingLandscapeWidget extends StatelessWidget {
+class PlaceVisitingLandscapeWidget extends StatelessWidget {
   final List<Place> places;
   final bool visited;
   final Function(Place data, Place place, bool visited) moveItemInList;
-  final Function(Place place, bool visited) removeSight;
-  const SightVisitingLandscapeWidget({
+  final Function(Place place, bool visited) removePlace;
+  const PlaceVisitingLandscapeWidget({
     required this.places,
     required this.moveItemInList,
-    required this.removeSight,
+    required this.removePlace,
     required this.visited,
     Key? key,
   }) : super(key: key);
@@ -28,7 +28,7 @@ class SightVisitingLandscapeWidget extends StatelessWidget {
                 final place = places[index];
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16),
-                  child: FavoriteSightCard(
+                  child: FavoritePlaceCard(
                     place: place,
                     visited: visited,
                     moveItemInList: moveItemInList,

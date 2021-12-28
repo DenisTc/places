@@ -32,7 +32,7 @@ class App extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'Sights',
+        title: 'Places',
         theme: lightTheme,
         debugShowCheckedModeBanner: false,
         home: const SplashScreen(),

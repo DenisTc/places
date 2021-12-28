@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 
-class NewSightAppBar extends StatelessWidget implements PreferredSizeWidget {
+class NewPlaceAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(56);
 
-  const NewSightAppBar({
+  const NewPlaceAppBar({
     Key? key,
   }) : super(key: key);
 

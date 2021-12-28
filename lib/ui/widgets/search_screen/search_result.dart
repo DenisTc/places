@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/sight_details_screen.dart';
+import 'package:places/ui/screens/place_details_screen.dart';
 
 class SearchResult extends StatelessWidget {
   final Place place;
@@ -25,7 +25,7 @@ class SearchResult extends StatelessWidget {
           Navigator.push<List?>(
             context,
             MaterialPageRoute(
-              builder: (context) => SightDetails(
+              builder: (context) => PlaceDetails(
                 id: place.id!,
               ),
             ),
@@ -36,7 +36,7 @@ class SearchResult extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (place.urls.isNotEmpty)
-              _SightImage(imgUrl: place.urls.first)
+              _PlaceImage(imgUrl: place.urls.first)
             else
               Container(
                 height: 56,
@@ -51,7 +51,7 @@ class SearchResult extends StatelessWidget {
                 ),
               ),
             const SizedBox(width: 16),
-            _SightDesc(
+            _PlaceDesc(
               name: place.name,
               placeType: place.placeType,
               searchString: searchString,
@@ -63,12 +63,12 @@ class SearchResult extends StatelessWidget {
   }
 }
 
-class _SightDesc extends StatelessWidget {
+class _PlaceDesc extends StatelessWidget {
   final String name;
   final String placeType;
   final String searchString;
 
-  const _SightDesc({
+  const _PlaceDesc({
     required this.name,
     required this.placeType,
     required this.searchString,
@@ -155,10 +155,10 @@ class _RichNameState extends State<RichName> {
   }
 }
 
-class _SightImage extends StatelessWidget {
+class _PlaceImage extends StatelessWidget {
   final String imgUrl;
 
-  const _SightImage({
+  const _PlaceImage({
     required this.imgUrl,
     Key? key,
   }) : super(key: key);

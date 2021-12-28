@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:places/ui/widgets/add_sight_screen/gallery/add_sight_image_button.dart';
-import 'package:places/ui/widgets/add_sight_screen/gallery/sight_image.dart';
+import 'package:places/ui/widgets/add_place_screen/gallery/add_place_image_button.dart';
+import 'package:places/ui/widgets/add_place_screen/gallery/place_image.dart';
 import 'package:relation/relation.dart';
 
-class SightGallery extends StatelessWidget {
+class PlaceGallery extends StatelessWidget {
   final Function(List<XFile>? xFileList) addImage;
   final Function(String imgUrl) deleteImage;
   final StreamedState<List<String>> galleryState;
 
-  const SightGallery({
+  const PlaceGallery({
     Key? key,
     required this.addImage,
     required this.deleteImage,
@@ -23,7 +23,7 @@ class SightGallery extends StatelessWidget {
       builder: (context, images) {
         return Row(
           children: [
-            AddSightImageButton(
+            AddPlaceImageButton(
               addImage: (xFileList) {
                 addImage(xFileList);
               },
@@ -44,7 +44,7 @@ class SightGallery extends StatelessWidget {
                       },
                       direction: DismissDirection.up,
                       background: Container(),
-                      child: SightImage(
+                      child: PlaceImage(
                         image: images[index],
                         deleteImage: (imgUrl) {
                           deleteImage(imgUrl);

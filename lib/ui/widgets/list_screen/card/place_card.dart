@@ -8,12 +8,12 @@ import 'package:places/data/redux/state/favorite_places_state.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/sight_details_screen.dart';
+import 'package:places/ui/screens/place_details_screen.dart';
 
 /// A card of an interesting place to be displayed on the main screen of the application.
-class SightCard extends StatelessWidget {
+class PlaceCard extends StatelessWidget {
   final Place place;
-  SightCard({required this.place, Key? key}) : super(key: key);
+  PlaceCard({required this.place, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +24,8 @@ class SightCard extends StatelessWidget {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _SightCardTop(place: place),
-              _SightCardBottom(place: place),
+              _PlaceCardTop(place: place),
+              _PlaceCardBottom(place: place),
             ],
           ),
           Material(
@@ -33,7 +33,7 @@ class SightCard extends StatelessWidget {
             child: InkWell(
               borderRadius: const BorderRadius.all(Radius.circular(16)),
               onTap: () {
-                _showSight(context, place.id!);
+                _showPlace(context, place.id!);
               },
             ),
           ),
@@ -96,11 +96,11 @@ class SightCard extends StatelessWidget {
     );
   }
 
-  Future<void> _showSight(BuildContext context, int id) async {
+  Future<void> _showPlace(BuildContext context, int id) async {
     await showModalBottomSheet<Place>(
       context: context,
       builder: (_) {
-        return SightDetails(id: id);
+        return PlaceDetails(id: id);
       },
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -113,9 +113,9 @@ class SightCard extends StatelessWidget {
   }
 }
 
-class _SightCardBottom extends StatelessWidget {
+class _PlaceCardBottom extends StatelessWidget {
   final Place place;
-  const _SightCardBottom({
+  const _PlaceCardBottom({
     required this.place,
     Key? key,
   }) : super(key: key);
@@ -161,9 +161,9 @@ class _SightCardBottom extends StatelessWidget {
   }
 }
 
-class _SightCardTop extends StatelessWidget {
+class _PlaceCardTop extends StatelessWidget {
   final Place place;
-  const _SightCardTop({
+  const _PlaceCardTop({
     required this.place,
     Key? key,
   }) : super(key: key);

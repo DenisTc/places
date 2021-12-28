@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/ui/widgets/visiting_screen/card/sight_card_favorite.dart';
+import 'package:places/ui/widgets/visiting_screen/card/place_card_favorite.dart';
 
 // Widget for displaying a list of places in a vertical orientation
-class SightVisitingPortrainWidget extends StatelessWidget {
+class PlaceVisitingPortrainWidget extends StatelessWidget {
   final List<Place> places;
   final bool visited;
   final Function(
@@ -12,7 +12,7 @@ class SightVisitingPortrainWidget extends StatelessWidget {
     List<Place> places,
     bool visited,
   ) moveItemInList;
-  const SightVisitingPortrainWidget({
+  const PlaceVisitingPortrainWidget({
     required this.places,
     required this.moveItemInList,
     required this.visited,
@@ -29,7 +29,7 @@ class SightVisitingPortrainWidget extends StatelessWidget {
         final place = places[index];
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
-          child: FavoriteSightCard(
+          child: FavoritePlaceCard(
             place: place,
             visited: visited,
             moveItemInList: (data, place, visited) {
