@@ -5,22 +5,22 @@ import 'package:places/data/interactor/search_interactor.dart';
 import 'package:provider/src/provider.dart';
 import 'package:relation/relation.dart';
 
-class SightCategoryScreenWidgetModel extends WidgetModel {
+class PlaceCategoryScreenWidgetModel extends WidgetModel {
   final SearchInteractor _searchInteractor;
 
   final categoriesState = EntityStreamedState<List<String>>();
   final updateListCategories = StreamedAction<void>();
 
-  SightCategoryScreenWidgetModel(
+  PlaceCategoryScreenWidgetModel(
     WidgetModelDependencies baseDependencies,
     this._searchInteractor,
   ) : super(baseDependencies);
 
-  static SightCategoryScreenWidgetModel builder(BuildContext context) {
+  static PlaceCategoryScreenWidgetModel builder(BuildContext context) {
     final wmDependencies = WidgetModelDependencies(
       errorHandler: context.read<StandardErrorHandler>(),
     );
-    return SightCategoryScreenWidgetModel(
+    return PlaceCategoryScreenWidgetModel(
       wmDependencies,
       context.read<SearchInteractor>(),
     );

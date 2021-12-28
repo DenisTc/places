@@ -1,4 +1,4 @@
-// TODO: The functionality of this widget has been moved to the AddSightImageButton widget. The decision on the fate of this widget will be made later.
+// TODO: The functionality of this widget has been moved to the AddPlaceImageButton widget. The decision on the fate of this widget will be made later.
 
 // import 'dart:io';
 
@@ -10,7 +10,7 @@
 // import 'package:places/ui/screens/res/colors.dart';
 // import 'package:places/ui/screens/res/constants.dart' as constants;
 // import 'package:places/ui/screens/res/icons.dart';
-// import 'package:places/ui/widgets/add_sight_screen/gallery/file_list.dart';
+// import 'package:places/ui/widgets/add_place_screen/gallery/file_list.dart';
 
 // class SelectImageDialog extends StatefulWidget {
 //   const SelectImageDialog({Key? key}) : super(key: key);

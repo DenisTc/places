@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SightMapScreen extends StatelessWidget {
-  const SightMapScreen({Key? key}) : super(key: key);
+class PlaceMapScreen extends StatelessWidget {
+  const PlaceMapScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

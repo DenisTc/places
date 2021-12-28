@@ -12,16 +12,16 @@ import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/res/styles.dart';
-import 'package:places/ui/screens/sight_map_screen.dart';
+import 'package:places/ui/screens/place_map_screen.dart';
 import 'package:places/ui/widgets/network_exception.dart';
-import 'package:places/ui/widgets/sight_cupertino_date_picker.dart';
-import 'package:places/ui/widgets/sight_details_screen/photo_view.dart';
+import 'package:places/ui/widgets/place_cupertino_date_picker.dart';
+import 'package:places/ui/widgets/place_details_screen/photo_view.dart';
 
 /// A screen with a detailed description of the place
-class SightDetails extends StatelessWidget {
+class PlaceDetails extends StatelessWidget {
   final int id;
 
-  const SightDetails({
+  const PlaceDetails({
     required this.id,
     Key? key,
   }) : super(key: key);
@@ -308,7 +308,7 @@ class _FunctionButtons extends StatelessWidget {
               await showModalBottomSheet<void>(
                 context: context,
                 builder: (builder) {
-                  return const SightCupertinoDatePicker();
+                  return const PlaceCupertinoDatePicker();
                 },
               );
             },
@@ -400,7 +400,7 @@ class _CreateRouteButton extends StatelessWidget {
         Navigator.pushReplacement<void, void>(
           context,
           MaterialPageRoute(
-            builder: (context) => const SightMapScreen(),
+            builder: (context) => const PlaceMapScreen(),
           ),
         );
       },

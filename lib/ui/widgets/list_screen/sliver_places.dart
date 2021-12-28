@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/ui/widgets/list_screen/card/sight_card.dart';
+import 'package:places/ui/widgets/list_screen/card/place_card.dart';
 
-class SliverSights extends StatelessWidget {
+class SliverPlaces extends StatelessWidget {
   final List<Place> places;
 
-  const SliverSights({
+  const SliverPlaces({
     required this.places,
     Key? key,
   }) : super(key: key);
@@ -16,16 +16,16 @@ class SliverSights extends StatelessWidget {
         MediaQuery.of(context).orientation == Orientation.portrait;
     return SliverPadding(
       sliver: isPortrait
-          ? SightPortraitWidget(places: places)
-          : SightLandscapeWidget(places: places),
+          ? PlacePortraitWidget(places: places)
+          : PlaceLandscapeWidget(places: places),
       padding: const EdgeInsets.symmetric(horizontal: 16),
     );
   }
 }
 
-class SightPortraitWidget extends StatelessWidget {
+class PlacePortraitWidget extends StatelessWidget {
   final List<Place> places;
-  const SightPortraitWidget({
+  const PlacePortraitWidget({
     required this.places,
     Key? key,
   }) : super(key: key);
@@ -38,7 +38,7 @@ class SightPortraitWidget extends StatelessWidget {
           final place = places[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16, top: 18),
-            child: SightCard(place: place),
+            child: PlaceCard(place: place),
           );
         },
         childCount: places.length,
@@ -47,9 +47,9 @@ class SightPortraitWidget extends StatelessWidget {
   }
 }
 
-class SightLandscapeWidget extends StatelessWidget {
+class PlaceLandscapeWidget extends StatelessWidget {
   final List<Place> places;
-  const SightLandscapeWidget({
+  const PlaceLandscapeWidget({
     required this.places,
     Key? key,
   }) : super(key: key);
@@ -62,7 +62,7 @@ class SightLandscapeWidget extends StatelessWidget {
           final place = places[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16),
-            child: SightCard(place: place),
+            child: PlaceCard(place: place),
           );
         },
         childCount: places.length,

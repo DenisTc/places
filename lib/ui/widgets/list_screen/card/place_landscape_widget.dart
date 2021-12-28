@@ -1,10 +1,10 @@
 // import 'package:flutter/material.dart';
 // import 'package:places/mocks.dart';
-// import 'package:places/ui/widgets/list_screen/card/sight_card.dart';
+// import 'package:places/ui/widgets/list_screen/card/place_card.dart';
 
 // // Widget for displaying a list of favorites in landscape orientation
-// class SightLandscapeWidget extends StatelessWidget {
-//   const SightLandscapeWidget({Key? key}) : super(key: key);
+// class PlaceLandscapeWidget extends StatelessWidget {
+//   const PlaceLandscapeWidget({Key? key}) : super(key: key);
 
 //   @override
 //   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@
 //           final place = mocks[index];
 //           return Padding(
 //             padding: const EdgeInsets.only(bottom: 16),
-//             child: SightCard(place: place, refreshPlacesList: refreshPlacesList,),
+//             child: PlaceCard(place: place, refreshPlacesList: refreshPlacesList,),
 //           );
 //         },
 //         childCount: mocks.length,

@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/screens/res/icons.dart';
 
-class SightImage extends StatelessWidget {
+class PlaceImage extends StatelessWidget {
   final Function(String imgUrl) deleteImage;
   final String image;
-  const SightImage({
+  const PlaceImage({
     required this.image,
     required this.deleteImage,
     Key? key,

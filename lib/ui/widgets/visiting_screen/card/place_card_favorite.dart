@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/ui/widgets/visiting_screen/card/sight_card.dart';
+import 'package:places/ui/widgets/visiting_screen/card/place_card.dart';
 
 /// A card of an interesting place to display on the favourites' screen
-class FavoriteSightCard extends StatefulWidget {
+class FavoritePlaceCard extends StatefulWidget {
   final bool visited;
   final Place place;
   final Function(Place data, Place place, bool visited) moveItemInList;
 
-  const FavoriteSightCard({
+  const FavoritePlaceCard({
     required this.visited,
     required this.place,
     required this.moveItemInList,
@@ -17,10 +17,10 @@ class FavoriteSightCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _FavoriteSightCardState createState() => _FavoriteSightCardState();
+  _FavoritePlaceCardState createState() => _FavoritePlaceCardState();
 }
 
-class _FavoriteSightCardState extends State<FavoriteSightCard> {
+class _FavoritePlaceCardState extends State<FavoritePlaceCard> {
   GlobalKey globalKey = GlobalKey();
   bool isDrag = false;
   @override
@@ -56,7 +56,7 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
                   ),
                 ],
               ),
-              child: SightCard(
+              child: PlaceCard(
                 globalKey: globalKey,
                 place: widget.place,
                 visited: widget.visited,
@@ -65,7 +65,7 @@ class _FavoriteSightCardState extends State<FavoriteSightCard> {
           ),
           child: isDrag
               ? const SizedBox.shrink()
-              : SightCard(
+              : PlaceCard(
                   globalKey: globalKey,
                   place: widget.place,
                   visited: widget.visited,

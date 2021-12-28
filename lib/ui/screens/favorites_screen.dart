@@ -5,7 +5,7 @@ import 'package:places/data/redux/state/app_state.dart';
 import 'package:places/data/redux/state/favorite_places_state.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/widgets/visiting_screen/card/sight_visiting_portrain_widget.dart';
+import 'package:places/ui/widgets/visiting_screen/card/place_visiting_portrain_widget.dart';
 import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
 import 'package:places/ui/widgets/visiting_screen/visiting_app_bar.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
@@ -60,7 +60,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                 }
 
                 if (vm is FavoritePlacesDataState && vm.places.isNotEmpty) {
-                  return SightVisitingPortrainWidget(
+                  return PlaceVisitingPortrainWidget(
                     places: vm.places,
                     visited: false,
                     moveItemInList: (data, place, places, visited) {
@@ -80,23 +80,23 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
             // TODO: Customize the display of items in portrait and landscape orientation for the Favorites screen.
             // if (_notVisited.isNotEmpty)
             //   isPortrait
-            //       ? SightVisitingPortrainWidget(
+            //       ? PlaceVisitingPortrainWidget(
             //           places: notVisited,
             //           visited: false,
             //           moveItemInList: (data, place, visited) {
             //             moveItemInList(data, place, visited);
             //           },
-            //           removeSight: (place, visited) {
+            //           removePlace: (place, visited) {
             //             removePlace(place, visited);
             //           },
             //         )
-            //       : SightVisitingLandscapeWidget(
+            //       : PlaceVisitingLandscapeWidget(
             //           places: notVisited,
             //           visited: false,
             //           moveItemInList: (data, place, visited) {
             //             moveItemInList(data, place, visited);
             //           },
-            //           removeSight: (place, visited) {
+            //           removePlace: (place, visited) {
             //             removePlace(place, visited);
             //           },
             //         )
@@ -120,7 +120,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                 }
 
                 if (vm is FavoritePlacesDataState && vm.places.isNotEmpty) {
-                  return SightVisitingPortrainWidget(
+                  return PlaceVisitingPortrainWidget(
                     places: vm.places,
                     visited: false,
                     moveItemInList: (data, place, places, visited) {
@@ -140,23 +140,23 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
             // TODO: Customize the display of items in portrait and landscape orientation for the visited places screen.
             // if (_isVisited.isNotEmpty)
             //   isPortrait
-            //       ? SightVisitingPortrainWidget(
+            //       ? PlaceVisitingPortrainWidget(
             //           places: isVisited,
             //           visited: true,
             //           moveItemInList: (data, place, visited) {
             //             moveItemInList(data, place, visited);
             //           },
-            //           removeSight: (place, visited) {
+            //           removePlace: (place, visited) {
             //             removePlace(place, visited);
             //           },
             //         )
-            //       : SightVisitingLandscapeWidget(
+            //       : PlaceVisitingLandscapeWidget(
             //           places: isVisited,
             //           visited: true,
             //           moveItemInList: (data, place, visited) {
             //             moveItemInList(data, place, visited);
             //           },
-            //           removeSight: (place, visited) {
+            //           removePlace: (place, visited) {
             //             removePlace(place, visited);
             //           },
             //         )
