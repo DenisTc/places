@@ -21,6 +21,7 @@ dependencies:
   flutter_svg: ^0.22.0
   flutter_switch: ^0.3.2
   image_picker: ^0.8.4+4
+  cached_network_image: ^3.2.0
   intl: ^0.17.0
   mime_type: ^1.0.0
   mobx: ^2.0.5
@@ -32,7 +33,6 @@ dependencies:
   redux_thunk: ^0.4.0
   relation: ^3.1.0
   rxdart: ^0.27.3
-  
   
 
 dev_dependencies:

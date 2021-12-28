@@ -2,8 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/exceptions/network_exception.dart';
-import 'package:places/data/interactor/place_interactor.dart';
-import 'package:places/data/interactor/search_interactor.dart';
 
 class ApiClient {
   final _baseOptions = BaseOptions(

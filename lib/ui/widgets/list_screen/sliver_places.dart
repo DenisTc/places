@@ -1,7 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/place_details_screen.dart';
+import 'package:places/ui/screens/res/icons.dart';
 
 class SliverPlaces extends StatelessWidget {
   final List<Place> places;
@@ -46,6 +51,7 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
     return Stack(
       children: [
         Column(
@@ -76,45 +82,34 @@ class PlaceCard extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              // StoreConnector<AppState, FavoritePlacesState>(
-              //   onInit: (store) {
-              //     store.dispatch(LoadFavoritePlacesAction());
-              //   },
-              //   converter: (store) {
-              //     return store.state.favoritePlacesState;
-              //   },
-              //   builder: (BuildContext context, FavoritePlacesState vm) {
-              //     if (vm is FavoritePlacesLoadingState) {
-              //       return Padding(
-              //         padding: const EdgeInsets.only(top: 10),
-              //         child: CircularProgressIndicator(color: Colors.green),
-              //       );
-              //     }
+              BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+                buildWhen: (context, state) {
+                  return state != ListFavoritePlacesLoaded;
+                },
+                builder: (context, state) {
+                  if (state is ListFavoritePlacesLoaded) {
+                    return Material(
+                      color: Colors.transparent,
+                      borderRadius: const BorderRadius.all(Radius.circular(50)),
+                      clipBehavior: Clip.antiAlias,
+                      child: IconButton(
+                        onPressed: () {
+                          BlocProvider.of<FavoritePlaceBloc>(context)
+                              .add(TogglePlaceInFavorites(place));
+                        },
+                        icon: SvgPicture.asset(
+                          state.places.contains(place)
+                              ? iconFavoriteSelected
+                              : iconFavorite,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  }
 
-              //     if (vm is FavoritePlacesDataState) {
-              //       return Material(
-              //         color: Colors.transparent,
-              //         borderRadius:
-              //             const BorderRadius.all(Radius.circular(50)),
-              //         clipBehavior: Clip.antiAlias,
-              //         child: IconButton(
-              //           onPressed: () {
-              //             StoreProvider.of<AppState>(context)
-              //                 .dispatch(ToggleInFavoriteAction(place));
-              //           },
-              //           icon: SvgPicture.asset(
-              //             vm.places.contains(place)
-              //                 ? iconFavoriteSelected
-              //                 : iconFavorite,
-              //             color: Colors.white,
-              //           ),
-              //         ),
-              //       );
-              //     }
-
-              //     return const SizedBox.shrink();
-              //   },
-              // ),
+                  return const SizedBox.shrink();
+                },
+              ),
             ],
           ),
         ),
@@ -197,6 +192,7 @@ class _PlaceCardTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(place.urls.first);
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(
@@ -213,33 +209,31 @@ class _PlaceCardTop extends StatelessWidget {
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              child: place.urls.isNotEmpty
-                  ? Image.network(
-                      place.urls.first,
-                      fit: BoxFit.cover,
-                      height: double.infinity,
-                      width: double.infinity,
-                      loadingBuilder: (
-                        context,
-                        child,
-                        loadingProgress,
-                      ) {
-                        if (loadingProgress == null) return child;
-
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return const ImagePlaceholder();
-                      },
-                    )
-                  : const ImagePlaceholder(),
+              child: CachedNetworkImage(
+                imageUrl: place.urls.first,
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        bottomLeft: Radius.circular(8),
+                      ),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                },
+                placeholder: (context, url) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return ImagePlaceholder();
+                },
+              ),
             ),
           ],
         ),
