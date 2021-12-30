@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
 
@@ -30,28 +31,27 @@ class _FavoriteCardTopState extends State<FavoriteCardTop> {
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              child: widget.place.urls.isNotEmpty
-                  ? Image.network(
-                      widget.place.urls.first,
-                      fit: BoxFit.cover,
-                      height: double.infinity,
-                      width: double.infinity,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
-                        return Center(
-                          child: CircularProgressIndicator(
-                            value: loadingProgress.expectedTotalBytes != null
-                                ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
-                                : null,
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        return const ImagePlaceholder();
-                      },
-                    )
-                  : ImagePlaceholder(),
+              child: CachedNetworkImage(
+                imageUrl: widget.place.urls.first,
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                },
+                placeholder: (context, url) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return ImagePlaceholder();
+                },
+              ),
             ),
             Padding(
               padding: const EdgeInsets.all(16),
