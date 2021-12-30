@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/widgets/visiting_screen/card/place_card.dart';
 
-/// A card of an interesting place to display on the favourites' screen
 class FavoritePlaceCard extends StatefulWidget {
   final bool visited;
   final Place place;
