@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -421,28 +422,27 @@ class _PlaceImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return imgUrl.isNotEmpty
-        ? Image.network(
-            imgUrl,
-            fit: BoxFit.cover,
-            height: double.infinity,
-            width: double.infinity,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
-                ),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return const ImagePlaceholder();
-            },
-          )
-        : const ImagePlaceholder();
+    return CachedNetworkImage(
+      imageUrl: imgUrl,
+      imageBuilder: (context, imageProvider) {
+        return Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      },
+      placeholder: (context, url) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+      errorWidget: (context, url, error) {
+        return ImagePlaceholder();
+      },
+    );
   }
 }
 
