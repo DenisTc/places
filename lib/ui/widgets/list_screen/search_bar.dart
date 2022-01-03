@@ -4,7 +4,7 @@ import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/place_search_screen.dart';
+import 'package:places/ui/screens/search_screen.dart';
 
 class SearchBar extends StatefulWidget {
   final textFieldFocusNode = FocusNode();
@@ -29,7 +29,7 @@ class _SearchBarState extends State<SearchBar> {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  PlaceSearchScreen(settingsFilter: settingsFilter),
+                  SearchScreen(settingsFilter: settingsFilter),
             ),
           );
         }
