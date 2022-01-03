@@ -41,3 +41,5 @@ class UpdateDistanceEvent extends FilteredPlacesEvent {
   @override
   List<Object> get props => [distance];
 }
+
+class SaveSearchFilterEvent extends FilteredPlacesEvent {}

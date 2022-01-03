@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:places/data/api/api_client.dart';
 import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/data/repository/mapper/place_mapper.dart';
@@ -41,10 +40,29 @@ class SearchRepository {
     return placesList;
   }
 
-  Future<List<Place>> getCategories() async {
-    final response = await api.client.get<List<dynamic>>(ApiConstants.placeUrl);
+  // TODO: Удалить, переделать на интерактор
+  Future<List<dynamic>> getCategories() async {
+    try {
+      final response = await api.client.get<dynamic>(ApiConstants.placeUrl);
 
-    return response.data!
+      return response.data
+          .map(
+            (dynamic place) => PlaceMapper.toModel(
+              PlaceDto.fromJson(place as Map<String, dynamic>),
+            ),
+          )
+          .toList();
+    } catch (e) {
+      debugPrint(e.toString());
+      return [];
+    }
+  }
+
+  // TODO: Это должно быть в place_repository.dart
+  Future<List<dynamic>> getPlaces() async {
+    final response = await api.client.get<dynamic>(ApiConstants.placeUrl);
+
+    return response.data
         .map(
           (dynamic place) => PlaceMapper.toModel(
             PlaceDto.fromJson(place as Map<String, dynamic>),

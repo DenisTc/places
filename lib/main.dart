@@ -5,6 +5,7 @@ import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/data/blocs/place/bloc/place_bloc.dart';
 import 'package:places/data/blocs/theme/bloc/theme_bloc.dart';
+import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:places/data/repository/theme_repository.dart';
@@ -23,7 +24,7 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         BlocProvider<FilteredPlacesBloc>(
-            create: (context) => FilteredPlacesBloc(SearchRepository(api))),
+            create: (context) => FilteredPlacesBloc(SearchInteractor(SearchRepository(api)))),
         BlocProvider<PlaceBloc>(
             create: (context) => PlaceBloc(PlaceRepository(api))),
         BlocProvider<FavoritePlaceBloc>(

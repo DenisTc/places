@@ -192,7 +192,6 @@ class _PlaceCardTop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint(place.urls.first);
     return Expanded(
       child: Container(
         decoration: const BoxDecoration(

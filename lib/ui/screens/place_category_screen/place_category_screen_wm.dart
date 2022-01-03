@@ -45,14 +45,14 @@ class PlaceCategoryScreenWidgetModel extends WidgetModel {
   void _loadCategories(bool hidden) {
     if (hidden) categoriesState.loading();
 
-    subscribeHandleError<List<String>>(
-      _searchInteractor.getCategoriesStream(),
-      (categories) {
-        categoriesState.content(categories);
-      },
-      onError: (error) {
-        categoriesState.error();
-      },
-    );
+    // subscribeHandleError<List<String>>(
+    //   _searchInteractor.getCategoriesStream(),
+    //   (categories) {
+    //     categoriesState.content(categories);
+    //   },
+    //   onError: (error) {
+    //     categoriesState.error();
+    //   },
+    // );
   }
 }
