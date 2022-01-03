@@ -157,7 +157,7 @@ class FilteredPlacesBloc
   }
 
   Future<List<String>> getCategories() async {
-    final _placesList = await _searchInteractor.getCategories();
-    return _placesList;
+    final _categoryList = await _searchInteractor.getCategories();
+    return _categoryList;
   }
 }

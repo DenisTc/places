@@ -39,35 +39,4 @@ class SearchRepository {
 
     return placesList;
   }
-
-  // TODO: Удалить, переделать на интерактор
-  Future<List<dynamic>> getCategories() async {
-    try {
-      final response = await api.client.get<dynamic>(ApiConstants.placeUrl);
-
-      return response.data
-          .map(
-            (dynamic place) => PlaceMapper.toModel(
-              PlaceDto.fromJson(place as Map<String, dynamic>),
-            ),
-          )
-          .toList();
-    } catch (e) {
-      debugPrint(e.toString());
-      return [];
-    }
-  }
-
-  // TODO: Это должно быть в place_repository.dart
-  Future<List<dynamic>> getPlaces() async {
-    final response = await api.client.get<dynamic>(ApiConstants.placeUrl);
-
-    return response.data
-        .map(
-          (dynamic place) => PlaceMapper.toModel(
-            PlaceDto.fromJson(place as Map<String, dynamic>),
-          ),
-        )
-        .toList();
-  }
 }

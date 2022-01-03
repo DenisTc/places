@@ -14,7 +14,7 @@ class SearchInteractor {
   }
 
   Future<List<String>> getCategories() async {
-    final _placesList = await _searchRepository.getPlaces();
+    final _placesList = await _searchRepository.getFiltredPlaces(SearchFilter());
     final _categoryList = <String>[];
 
     for (final place in _placesList) {
