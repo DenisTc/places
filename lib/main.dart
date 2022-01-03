@@ -29,7 +29,7 @@ class App extends StatelessWidget {
         BlocProvider<PlaceBloc>(
             create: (context) => PlaceBloc(PlaceInteractor(PlaceRepository(api)))),
         BlocProvider<FavoritePlaceBloc>(
-            create: (context) => FavoritePlaceBloc(PlaceRepository(api))),
+            create: (context) => FavoritePlaceBloc(PlaceInteractor(PlaceRepository(api)))),
         BlocProvider<ThemeBloc>(
             create: (context) => ThemeBloc(ThemeRepository())),
       ],

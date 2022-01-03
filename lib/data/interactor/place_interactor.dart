@@ -52,8 +52,8 @@ class PlaceInteractor {
     return _placeRepository.getFavoritesPlaces();
   }
 
-  Stream<bool> isFavoritePlace(Place place) async* {
-    yield _placeRepository.isFavoritePlace(place);
+  Future<bool> isFavoritePlace(Place place) async {
+    return _placeRepository.isFavoritePlace(place);
   }
 
   Future<void> toggleInFavorites(Place place) async {

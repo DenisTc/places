@@ -1,16 +1,16 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:places/data/repository/place_repository.dart';
+import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/domain/place.dart';
 
 part 'favorite_place_event.dart';
 part 'favorite_place_state.dart';
 
 class FavoritePlaceBloc extends Bloc<FavoritePlaceEvent, FavoritePlaceState> {
-  final PlaceRepository placeRepository;
+  final PlaceInteractor _placeInteractor;
   List<Place> favoriteList = [];
 
-  FavoritePlaceBloc(this.placeRepository) : super(FavoritePlaceInitial()) {
+  FavoritePlaceBloc(this._placeInteractor) : super(FavoritePlaceInitial()) {
     on<LoadListFavoritePlaces>(
       (event, emit) => _loadListFavoritePlaces(event, emit),
     );
@@ -35,8 +35,8 @@ class FavoritePlaceBloc extends Bloc<FavoritePlaceEvent, FavoritePlaceState> {
   ) async {
     emit(ListFavoritePlacesLoading());
 
-    await placeRepository.toggleInFavorites(event.place);
-    var status = await placeRepository.isFavoritePlace(event.place);
+    await _placeInteractor.toggleInFavorites(event.place);
+    var status = await _placeInteractor.isFavoritePlace(event.place);
 
     if (status) {
       favoriteList.add(event.place);
