@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/place.dart';
 
@@ -39,6 +38,10 @@ class PlaceInteractor {
     return uploadImages;
   }
 
+  Future<String> uploadImage (String image) async{
+    return await _placeRepository.uploadImage(image);
+  }
+
   Stream<dynamic> addNewPlace(Place place) async* {
     yield _placeRepository.addNewPlace(place);
   }
@@ -55,6 +58,5 @@ class PlaceInteractor {
 
   Future<void> toggleInFavorites(Place place) async {
     await _placeRepository.toggleInFavorites(place);
-    // notifyListeners();
   }
 }
