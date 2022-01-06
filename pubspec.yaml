@@ -15,12 +15,6 @@ dependencies:
 
   # State management
   flutter_bloc: ^8.0.1
-  flutter_mobx: ^2.0.2
-  flutter_redux: ^0.8.2
-  mobx: ^2.0.5
-  mwwm: ^2.0.0
-  redux: ^5.0.0
-  redux_thunk: ^0.4.0
 
   # Network
   dio: ^4.0.0
@@ -51,7 +45,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
     
-  mobx_codegen: ^2.0.4
   dart_code_metrics: ^4.6.0
   build_runner: ^2.1.4
 

@@ -319,13 +319,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_mobx:
-    dependency: "direct main"
-    description:
-      name: flutter_mobx
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.2"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -333,13 +326,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.4"
-  flutter_redux:
-    dependency: "direct main"
-    description:
-      name: flutter_redux
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.2"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -497,27 +483,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  mobx:
-    dependency: "direct main"
-    description:
-      name: mobx
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.5"
-  mobx_codegen:
-    dependency: "direct dev"
-    description:
-      name: mobx_codegen
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.4"
-  mwwm:
-    dependency: "direct main"
-    description:
-      name: mwwm
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   nested:
     dependency: transitive
     description:
@@ -686,20 +651,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  redux:
-    dependency: "direct main"
-    description:
-      name: redux
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.0"
-  redux_thunk:
-    dependency: "direct main"
-    description:
-      name: redux_thunk
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.0"
   relation:
     dependency: "direct main"
     description:
@@ -789,13 +740,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  source_gen:
-    dependency: transitive
-    description:
-      name: source_gen
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.1"
   source_span:
     dependency: transitive
     description:
