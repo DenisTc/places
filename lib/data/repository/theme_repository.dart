@@ -8,6 +8,7 @@ class ThemeRepository{
 
   bool _isDarkMode = false;
 
+  // Switching the design theme from light to dark and vice versa
   Future<void> changeTheme() async{
     _isDarkMode = !_isDarkMode;
   }

@@ -1,66 +1,28 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
-import 'package:places/ui/screens/res/constants.dart' as constants;
 
 class SearchInteractor {
   final SearchRepository _searchRepository;
 
-  final StreamController<List<Place>> _listFiltredController =
-      StreamController<List<Place>>.broadcast();
-  final StreamController<List<String>> _listCategoriesController =
-      StreamController<List<String>>.broadcast();
-  List<String> selectedFilters = [];
-  RangeValues get getRangeValue => _distanceRangeValue;
-  RangeValues _distanceRangeValue = constants.defaultDistanceRange;
-
   SearchInteractor(this._searchRepository);
 
-  void setRangeValue(RangeValues rangeValues) {
-    _distanceRangeValue = rangeValues;
+  // Get a list of filtered places
+  Future<List<Place>> getFiltredPlaces(SearchFilter? filter) {
+    return _searchRepository.getFiltredPlaces(filter);
   }
 
-  void selectCategory(String category) {
-    if (selectedFilters.contains(category.toLowerCase())) {
-      selectedFilters.remove(category.toLowerCase());
-    } else {
-      selectedFilters.add(category.toLowerCase());
-    }
-  }
-
-  Stream<List<Place>> getFiltredPlacesStream(SearchFilter? settingsFilter) {
-    _searchRepository
-        .getFiltredPlaces(settingsFilter)
-        .then(_listFiltredController.add)
-        .onError(
-      (error, stackTrace) {
-        addErrorToFiltredController(error!);
-      },
-    );
-    return _listFiltredController.stream;
-  }
-
-  Stream<List<String>> getCategoriesStream() {
-    getCategories().then(_listCategoriesController.add).onError(
-      (error, stackTrace) {
-        addErrorToFiltredController(error!);
-      },
-    );
-    return _listCategoriesController.stream;
-  }
-
-  void addErrorToFiltredController(Object error) {
-    _listFiltredController.addError(error);
-    _listCategoriesController.addError(error);
-  }
-
+  // Get a list of all categories
   Future<List<String>> getCategories() async {
-    final _placesList = await _searchRepository.getCategories();
+    // Get a list of all places
+    final _placesList =
+        await _searchRepository.getFiltredPlaces(SearchFilter());
+
     final _categoryList = <String>[];
 
+    // Get a list with unique category values from the list of all places
     for (final place in _placesList) {
       if (!_categoryList.contains(place.placeType)) {
         _categoryList.add(place.placeType);

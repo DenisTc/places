@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:places/data/redux/action/favorite_places_action.dart';
-import 'package:places/data/redux/state/app_state.dart';
-import 'package:places/data/redux/state/favorite_places_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/widgets/visiting_screen/card/place_visiting_portrain_widget.dart';
+import 'package:places/ui/widgets/visiting_screen/card/place_card_favorite.dart';
 import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
 import 'package:places/ui/widgets/visiting_screen/visiting_app_bar.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 
-/// Screen for displaying planned and visited places
+// Screen for displaying planned and visited places
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({Key? key}) : super(key: key);
 
@@ -39,32 +37,27 @@ class _FavoriteTabBarView extends StatefulWidget {
 class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
   @override
   Widget build(BuildContext context) {
-    // final isPortrait =
-    //     MediaQuery.of(context).orientation == Orientation.portrait;
+    BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
 
     return Container(
       margin: const EdgeInsets.only(top: 28),
       child: SafeArea(
         child: TabBarView(
           children: [
-            StoreConnector<AppState, FavoritePlacesState>(
-              onInit: (store) {
-                store.dispatch(LoadFavoritePlacesAction());
-              },
-              converter: (store) {
-                return store.state.favoritePlacesState;
-              },
-              builder: (BuildContext context, FavoritePlacesState vm) {
-                if (vm is FavoritePlacesLoadingState) {
+            // Favorites tab
+            BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+              builder: (context, state) {
+                if (state is ListFavoritePlacesLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                if (vm is FavoritePlacesDataState && vm.places.isNotEmpty) {
+                if (state is ListFavoritePlacesLoaded &&
+                    state.places.isNotEmpty) {
                   return PlaceVisitingPortrainWidget(
-                    places: vm.places,
+                    places: state.places,
                     visited: false,
                     moveItemInList: (data, place, places, visited) {
-                      moveItemInList(data, place, vm.places, visited);
+                      moveItemInList(data, place, state.places, visited);
                     },
                   );
                 }
@@ -77,54 +70,20 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
               },
             ),
 
-            // TODO: Customize the display of items in portrait and landscape orientation for the Favorites screen.
-            // if (_notVisited.isNotEmpty)
-            //   isPortrait
-            //       ? PlaceVisitingPortrainWidget(
-            //           places: notVisited,
-            //           visited: false,
-            //           moveItemInList: (data, place, visited) {
-            //             moveItemInList(data, place, visited);
-            //           },
-            //           removePlace: (place, visited) {
-            //             removePlace(place, visited);
-            //           },
-            //         )
-            //       : PlaceVisitingLandscapeWidget(
-            //           places: notVisited,
-            //           visited: false,
-            //           moveItemInList: (data, place, visited) {
-            //             moveItemInList(data, place, visited);
-            //           },
-            //           removePlace: (place, visited) {
-            //             removePlace(place, visited);
-            //           },
-            //         )
-            // else
-            //   const FavoritesEmpty(
-            //     icon: iconRoute,
-            //     title: 'Пусто',
-            //     desc: 'Отмечайте понравившиеся\nместа и они появятся здесь.',
-            //   ),
-
-            StoreConnector<AppState, FavoritePlacesState>(
-              onInit: (store) {
-                store.dispatch(LoadFavoritePlacesAction());
-              },
-              converter: (store) {
-                return store.state.favoritePlacesState;
-              },
-              builder: (BuildContext context, FavoritePlacesState vm) {
-                if (vm is FavoritePlacesLoadingState) {
+            // Places visited tab
+            BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+              builder: (context, state) {
+                if (state is ListFavoritePlacesLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                if (vm is FavoritePlacesDataState && vm.places.isNotEmpty) {
+                if (state is ListFavoritePlacesLoaded &&
+                    state.places.isNotEmpty) {
                   return PlaceVisitingPortrainWidget(
-                    places: vm.places,
-                    visited: false,
+                    places: state.places,
+                    visited: true,
                     moveItemInList: (data, place, places, visited) {
-                      moveItemInList(data, place, vm.places, visited);
+                      moveItemInList(data, place, state.places, visited);
                     },
                   );
                 }
@@ -136,36 +95,6 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                 );
               },
             ),
-
-            // TODO: Customize the display of items in portrait and landscape orientation for the visited places screen.
-            // if (_isVisited.isNotEmpty)
-            //   isPortrait
-            //       ? PlaceVisitingPortrainWidget(
-            //           places: isVisited,
-            //           visited: true,
-            //           moveItemInList: (data, place, visited) {
-            //             moveItemInList(data, place, visited);
-            //           },
-            //           removePlace: (place, visited) {
-            //             removePlace(place, visited);
-            //           },
-            //         )
-            //       : PlaceVisitingLandscapeWidget(
-            //           places: isVisited,
-            //           visited: true,
-            //           moveItemInList: (data, place, visited) {
-            //             moveItemInList(data, place, visited);
-            //           },
-            //           removePlace: (place, visited) {
-            //             removePlace(place, visited);
-            //           },
-            //         )
-            // else
-            // const FavoritesEmpty(
-            //   icon: iconAddCard,
-            //   title: 'Пусто',
-            //   desc: 'Завершите маршрут,\nчтобы место попало сюда.',
-            // ),
           ],
         ),
       ),
@@ -184,6 +113,55 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
           placeList.remove(data);
           placeList.insert(placeList.indexOf(place), data);
         }
+      },
+    );
+  }
+}
+
+class PlaceVisitingPortrainWidget extends StatelessWidget {
+  final List<Place> places;
+  final bool visited;
+  final Function(
+    Place data,
+    Place place,
+    List<Place> places,
+    bool visited,
+  ) moveItemInList;
+  const PlaceVisitingPortrainWidget({
+    required this.places,
+    required this.moveItemInList,
+    required this.visited,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
+    return GridView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      shrinkWrap: true,
+      itemCount: places.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: isPortrait ? 1 : 2,
+        mainAxisSpacing: 0,
+        crossAxisSpacing: 36,
+        childAspectRatio: 1.8,
+      ),
+      itemBuilder: (context, index) {
+        final place = places[index];
+
+        return Container(
+          margin: const EdgeInsets.only(bottom: 16),
+          child: FavoritePlaceCard(
+            place: place,
+            visited: visited,
+            moveItemInList: (data, place, visited) {
+              moveItemInList(data, place, places, visited);
+            },
+          ),
+        );
       },
     );
   }

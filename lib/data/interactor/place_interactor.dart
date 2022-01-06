@@ -1,60 +1,39 @@
 import 'dart:async';
-
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/place.dart';
 
 class PlaceInteractor {
   final PlaceRepository _placeRepository;
-  final StreamController<List<Place>> _listPlacesController =
-      StreamController<List<Place>>.broadcast();
-
-  Stream<List<Place>> get getStreamPlaces {
-    _placeRepository.getPlaces().then(_listPlacesController.add);
-    return _listPlacesController.stream;
-  }
 
   PlaceInteractor(this._placeRepository);
 
-  // Methods for working with a remote repository
-
-  Future<List<Place>> getPlaces([
-    int? radius,
-    String? category,
-  ]) async {
+  // Get a list of all places
+  Future<List<Place>> getPlaces() async {
     return _placeRepository.getPlaces();
   }
 
+  // Get a detailed description of the place
   Future<Place> getPlaceDetails({required int id}) async {
     return _placeRepository.getPlaceDetails(id: id);
   }
 
-  Future<List<String>> uploadPlaceImages(List<String> images) async {
-    List<String> uploadImages = [];
-
-    for (int i = 0; i < images.length; i++) {
-      final url = await _placeRepository.uploadImage(images[i]);
-      uploadImages.add(url);
-    }
-
-    return uploadImages;
+  // Upload image on remote server
+  Future<String> uploadImage(String image) async {
+    return await _placeRepository.uploadImage(image);
   }
 
-  Stream<dynamic> addNewPlace(Place place) async* {
-    yield _placeRepository.addNewPlace(place);
+  // Add a new place
+  Future<dynamic> addNewPlace(Place place) async {
+    return _placeRepository.addNewPlace(place);
   }
 
-  /// Methods for working with favorites places
-
-  Future<List<Place>> getFavoritesPlaces() async {
-    return _placeRepository.getFavoritesPlaces();
+  // Checking if the place is a favorite
+  Future<bool> isFavoritePlace(Place place) async {
+    return _placeRepository.isFavoritePlace(place);
   }
 
-  Stream<bool> isFavoritePlace(Place place) async* {
-    yield _placeRepository.isFavoritePlace(place);
-  }
-
-  Future<void> toggleInFavorites(Place place) async {
-    await _placeRepository.toggleInFavorites(place);
-    // notifyListeners();
+  // Change the favorite status for a place
+  Future<void> toggleToFavorites(Place place) async {
+    await _placeRepository.toggleToFavorites(place);
   }
 }

@@ -16,6 +16,7 @@ class PlaceRepository {
 
   PlaceRepository(this.api);
 
+  // Getting a list of all places
   Future<List<Place>> getPlaces() async {
     final response = await api.client.get<List<dynamic>>(ApiConstants.placeUrl);
 
@@ -28,13 +29,7 @@ class PlaceRepository {
         .toList();
   }
 
-  Future<dynamic> addNewPlace(Place place) async {
-    final data = place.toJson();
-    final response = await api.client.post(ApiConstants.placeUrl, data: data);
-
-    return response;
-  }
-
+  // Get a detailed description of the place
   Future<Place> getPlaceDetails({required int id}) async {
     final response = await api.client
         .get<Map<String, dynamic>>('${ApiConstants.placeUrl}/$id');
@@ -42,38 +37,23 @@ class PlaceRepository {
     return PlaceMapper.toModel(PlaceDto.fromJson(response.data!));
   }
 
-  Future<Place?> deletePlace(int id) async {
-    final response =
-        await api.client.delete<Place>('${ApiConstants.placeUrl}/$id');
-    return response.data;
+  // Sending information about the new place to a remote server
+  Future<dynamic> addNewPlace(Place place) async {
+    final data = place.toJson();
+    final response = await api.client.post(ApiConstants.placeUrl, data: data);
+
+    return response;
   }
 
-  Future<Place?> putPlace(int id) async {
-    final response =
-        await api.client.put<Place>('${ApiConstants.placeUrl}/$id');
-    return response.data;
-  }
-
-  Future<List<Place>> getFavoritesPlaces() async {
-    return favoritePlaces;
-  }
-
-  Future<Map<Place, DateTime>> getVisitPlaces() async {
-    return visitPlaces;
-  }
-
+  // Checking for a place on the list of favorite places
   bool isFavoritePlace(Place place) {
     final isFavorite = favoritePlaces.any((item) => item.id == place.id);
     return isFavorite;
   }
 
-  bool isVisitedPlace(Place place) {
-    final isVisited = visitPlaces.containsKey(place);
-    return isVisited;
-  }
-
-  Future<void> toggleInFavorites(Place place) async {
-    bool isContain = favoritePlaces.contains(place);
+  // Add or remove a place from the list of favorite places
+  Future<void> toggleToFavorites(Place place) async {
+    bool isContain = isFavoritePlace(place);
 
     if (isContain) {
       favoritePlaces.remove(place);
@@ -82,20 +62,7 @@ class PlaceRepository {
     }
   }
 
-  Future<void> removeFromVisit(Place place) async {
-    favoritePlaces.remove(place);
-  }
-
-  Future<void> toggleInVisited(Place place, DateTime date) async {
-    bool isContain = visitPlaces.containsKey(place);
-
-    if (isContain) {
-      visitPlaces.remove(place);
-    } else {
-      visitPlaces[place] = date;
-    }
-  }
-
+  // Upload image on remote server
   Future<String> uploadImage(String image) async {
     String mimeType = mime(image)!;
     String type = mimeType.split('/')[0];

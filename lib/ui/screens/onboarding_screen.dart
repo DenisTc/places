@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/widgets/onboarding_screen/onboarding_app_bar.dart';
-import 'package:places/ui/widgets/onboarding_screen/onboarding_screens.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/ui/screens/main_screen.dart';
+import 'package:places/ui/screens/res/colors.dart';
+import 'package:places/ui/screens/res/icons.dart';
+import 'package:places/ui/screens/res/constants.dart' as constants;
 
 class OnboardingScreen extends StatefulWidget {
   final bool fromSettings;
@@ -46,5 +49,233 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     setState(() {
       currentPage = page;
     });
+  }
+}
+
+class OnboardingScreens extends StatefulWidget {
+  final PageController pageController;
+  final Function(double page) setCurrentPage;
+  final double currentPage;
+  final bool fromSettings;
+
+  const OnboardingScreens({
+    required this.pageController,
+    required this.setCurrentPage,
+    required this.currentPage,
+    required this.fromSettings,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _OnboardingScreensState createState() => _OnboardingScreensState();
+}
+
+class _OnboardingScreensState extends State<OnboardingScreens> {
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        PageView(
+          onPageChanged: (page) {
+            setState(() {
+              widget.setCurrentPage(page.toDouble());
+            });
+          },
+          controller: widget.pageController,
+          children: const [
+            Screen(
+              icon: iconPointer,
+              title: constants.textOnboardingScreenFirstTitle,
+              description: constants.textOnboardingScreenFirstDesc,
+            ),
+            Screen(
+              icon: iconBackpack,
+              title: constants.textOnboardingScreenSecondTitle,
+              description: constants.textOnboardingScreenSecondDesc,
+            ),
+            Screen(
+              icon: iconHandTouch,
+              title: constants.textOnboardingScreenThirdTitle,
+              description: constants.textOnboardingScreenThirdDesc,
+            ),
+          ],
+        ),
+        PageIndicator(
+          currentPage: widget.currentPage,
+          fromSettings: widget.fromSettings,
+        ),
+      ],
+    );
+  }
+}
+
+class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final double currentPage;
+  final bool fromSettings;
+
+  @override
+  Size get preferredSize => const Size.fromHeight(56);
+
+  const OnboardingAppBar({
+    required this.currentPage,
+    required this.fromSettings,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final int index = fromSettings ? 3 : 0;
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      actions: [
+        if (currentPage != 2)
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacement<void, void>(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MainScreen(selectedTab: index),
+                ),
+              );
+            },
+            child: Text(
+              constants.textBtnSkip,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryVariant,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class Screen extends StatelessWidget {
+  final String icon;
+  final String title;
+  final String description;
+
+  const Screen({
+    required this.icon,
+    required this.title,
+    required this.description,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+          icon,
+          height: 98,
+          color: Theme.of(context).iconTheme.color,
+        ),
+        const SizedBox(height: 40),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w700,
+            color: Theme.of(context).secondaryHeaderColor,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          description,
+          textAlign: TextAlign.center,
+          style: const TextStyle(color: myLightSecondaryTwo),
+        ),
+      ],
+    );
+  }
+}
+
+class PageIndicator extends StatelessWidget {
+  final double currentPage;
+  final bool fromSettings;
+  const PageIndicator({
+    required this.currentPage,
+    required this.fromSettings,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 90,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (int i = 0; i < 3; i++)
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(5),
+                      width: i == currentPage ? 24 : 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: i == currentPage
+                            ? Theme.of(context).colorScheme.primaryVariant
+                            : myLightSecondaryTwo.withOpacity(0.56),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                ),
+            ],
+          ),
+          SizedBox(height: (currentPage == 2) ? 32 : 80),
+          if (currentPage == 2) HomeButton(fromSettings: fromSettings),
+        ],
+      ),
+    );
+  }
+}
+
+class HomeButton extends StatelessWidget {
+  final bool fromSettings;
+  const HomeButton({
+    required this.fromSettings,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final int index = fromSettings ? 3 : 0;
+    return ElevatedButton(
+      onPressed: () {
+        Navigator.pushReplacement<void, void>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MainScreen(selectedTab: index),
+          ),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        primary: Theme.of(context).colorScheme.primaryVariant,
+        fixedSize: const Size(328, 48),
+        elevation: 0.0,
+        shadowColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: const Text(
+        constants.textBtnStart,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
   }
 }

@@ -1,8 +1,5 @@
 import 'dart:ui';
 
-// Семантические алиасы
-// Пополняются по мере необходимости
-// Используют только основную палитру
 const Color myLightGreen = _myLightGreen;
 const Color myDarkGreen = _myDarkGreen;
 const Color myLightYellow = _myLightYellow;
@@ -20,7 +17,7 @@ const Color myDarkSecondaryTwo = _myDarkSecondaryTwo;
 const Color myInactiveBlack = _myInactiveBlack;
 const Color nightRider = _nightRider;
 
-// Основная палитра (http://www.color-blindness.com/color-name-hue/)
+// Main palette (http://www.color-blindness.com/color-name-hue/)
 const Color _myLightGreen = Color(0xFF4CAF50);
 const Color _myDarkGreen = Color(0xFF6ADA6F);
 const Color _myLightYellow = Color(0xFFFCDD3D);

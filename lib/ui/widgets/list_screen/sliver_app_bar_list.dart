@@ -37,8 +37,8 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
                   child: isPortrait ? const BigTitle() : const MiniTitle(),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 8.0, horizontal: 16.0),
                   child: SearchBar(),
                 ),
               ],
@@ -74,10 +74,10 @@ class BigTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       constants.textBigListPlaces,
-      style: Theme.of(context)
-          .textTheme
-          .headline1!
-          .copyWith(fontSize: 32, fontWeight: FontWeight.w700),
+      style: Theme.of(context).textTheme.headline1!.copyWith(
+            fontSize: 32,
+            fontWeight: FontWeight.w700,
+          ),
     );
   }
 }

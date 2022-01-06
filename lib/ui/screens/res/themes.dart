@@ -35,7 +35,11 @@ final lightTheme = ThemeData(
   bottomSheetTheme: const BottomSheetThemeData(
     backgroundColor: Colors.transparent,
   ),
-  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.white, primaryVariant: myLightGreen),
+  colorScheme: ColorScheme.fromSwatch().copyWith(
+    secondary: Colors.white,
+    primaryVariant: myLightGreen,
+    primary: myLightBackground,
+  ),
 );
 
 final darkTheme = ThemeData(
@@ -66,5 +70,9 @@ final darkTheme = ThemeData(
     inactiveTrackColor: myLightSecondaryTwo.withOpacity(0.56),
     thumbColor: Colors.white,
   ),
-  colorScheme: ColorScheme.fromSwatch().copyWith(secondary: myDarkMain, primaryVariant: myDarkGreen),
+  colorScheme: ColorScheme.fromSwatch().copyWith(
+    secondary: myDarkMain,
+    primaryVariant: myDarkGreen,
+    primary: myLightBackground,
+  ),
 );

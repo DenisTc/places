@@ -1,11 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/redux/action/favorite_places_action.dart';
-import 'package:places/data/redux/action/place_action.dart';
-import 'package:places/data/redux/state/app_state.dart';
-import 'package:places/data/redux/state/favorite_places_state.dart';
-import 'package:places/data/redux/state/place_state.dart';
+import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
+import 'package:places/data/blocs/place/bloc/place_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -29,27 +27,14 @@ class PlaceDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PageController _pageController = PageController();
+    BlocProvider.of<PlaceBloc>(context).add(LoadPlaceDetails(id));
 
     return Material(
       child: Container(
         color: Theme.of(context).colorScheme.secondary,
-        child: StoreConnector<AppState, PlaceState>(
-          onInit: (store) {
-            store.dispatch(LoadPlaceDetailsAction(id));
-          },
-          converter: (store) {
-            return store.state.placeState;
-          },
-          builder: (BuildContext context, PlaceState vm) {
-            if (vm is PlaceLoadingState) {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            if (vm is PlaceErrorState) {
-              return const NetworkException();
-            }
-
-            if (vm is PlaceDataState) {
+        child: BlocBuilder<PlaceBloc, PlaceState>(
+          builder: (context, state) {
+            if (state is PlaceDetailsLoaded) {
               return ConstrainedBox(
                 constraints: BoxConstraints(
                   maxHeight: MediaQuery.of(context).size.height * 0.9,
@@ -58,12 +43,16 @@ class PlaceDetails extends StatelessWidget {
                   slivers: [
                     _GalleryPlace(
                       pageController: _pageController,
-                      place: vm.place,
+                      place: state.place,
                     ),
-                    _DescriptionPlace(place: vm.place),
+                    _DescriptionPlace(place: state.place),
                   ],
                 ),
               );
+            }
+
+            if (state is PlaceDetailsLoadError) {
+              return const NetworkException();
             }
 
             return SizedBox.shrink();
@@ -299,6 +288,7 @@ class _FunctionButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -334,22 +324,12 @@ class _FunctionButtons extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                StoreConnector<AppState, FavoritePlacesState>(
-                  onInit: (store) {
-                    store.dispatch(LoadFavoritePlacesAction());
+                BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+                  buildWhen: (context, state) {
+                    return state is ListFavoritePlacesLoaded;
                   },
-                  converter: (store) {
-                    return store.state.favoritePlacesState;
-                  },
-                  builder: (BuildContext context, FavoritePlacesState vm) {
-                    if (vm is FavoritePlacesLoadingState) {
-                      return Padding(
-                        padding: const EdgeInsets.only(top: 10),
-                        child: CircularProgressIndicator(color: Colors.green),
-                      );
-                    }
-
-                    if (vm is FavoritePlacesDataState) {
+                  builder: (context, state) {
+                    if (state is ListFavoritePlacesLoaded) {
                       return Material(
                         color: Colors.transparent,
                         borderRadius:
@@ -357,17 +337,17 @@ class _FunctionButtons extends StatelessWidget {
                         clipBehavior: Clip.antiAlias,
                         child: TextButton.icon(
                           onPressed: () {
-                            StoreProvider.of<AppState>(context)
-                                .dispatch(ToggleInFavoriteAction(place));
+                            BlocProvider.of<FavoritePlaceBloc>(context)
+                                .add(TogglePlaceInFavorites(place));
                           },
                           icon: SvgPicture.asset(
-                            vm.places.contains(place)
+                            state.places.contains(place)
                                 ? iconFavoriteSelected
                                 : iconFavorite,
                             color: Theme.of(context).iconTheme.color,
                           ),
                           label: Text(
-                            vm.places.contains(place)
+                            state.places.contains(place)
                                 ? constants.textInFavorite
                                 : constants.textToFavorite,
                             style: Theme.of(context).textTheme.bodyText1,
@@ -442,28 +422,27 @@ class _PlaceImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return imgUrl.isNotEmpty
-        ? Image.network(
-            imgUrl,
-            fit: BoxFit.cover,
-            height: double.infinity,
-            width: double.infinity,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
-                ),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return const ImagePlaceholder();
-            },
-          )
-        : const ImagePlaceholder();
+    return CachedNetworkImage(
+      imageUrl: imgUrl,
+      imageBuilder: (context, imageProvider) {
+        return Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: imageProvider,
+              fit: BoxFit.cover,
+            ),
+          ),
+        );
+      },
+      placeholder: (context, url) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+      errorWidget: (context, url, error) {
+        return ImagePlaceholder();
+      },
+    );
   }
 }
 

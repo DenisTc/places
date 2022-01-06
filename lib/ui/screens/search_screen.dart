@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/redux/action/filtered_places_action.dart';
-import 'package:places/data/redux/state/app_state.dart';
-import 'package:places/data/redux/state/filtered_places_state.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -17,10 +17,10 @@ import 'package:places/ui/widgets/search_screen/search_result_list.dart';
 
 List<String> historyList = [];
 
-class PlaceSearchScreen extends StatefulWidget {
+class SearchScreen extends StatefulWidget {
   final SearchFilter? settingsFilter;
 
-  const PlaceSearchScreen({
+  const SearchScreen({
     required this.settingsFilter,
     Key? key,
   }) : super(key: key);
@@ -29,8 +29,15 @@ class PlaceSearchScreen extends StatefulWidget {
   _PlaceSearchScreenState createState() => _PlaceSearchScreenState();
 }
 
-class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
+class _PlaceSearchScreenState extends State<SearchScreen> {
   final _controllerSearch = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<FilteredPlacesBloc>(context)
+        .add(LoadFilteredPlaces(widget.settingsFilter));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,28 +97,16 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                   return const SizedBox.shrink();
                 }
 
-                return StoreConnector<AppState, FilteredPlacesState>(
-                  onInit: (store) {
-                    store.dispatch(LoadFilteredPlacesAction());
-                  },
-                  converter: (store) {
-                    return store.state.filteredPlacesState;
-                  },
-                  builder: (BuildContext context, FilteredPlacesState vm) {
-                    if (vm is FilteredPlacesLoadingState) {
+                return BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
+                  builder: (context, state) {
+                    if (state is LoadFilteredPlacesInProgress) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
-                    if (vm is FilteredPlacesErrorState) {
-                      return const SliverFillRemaining(
-                        child: NetworkException(),
-                      );
-                    }
-
-                    if (vm is FilteredPlacesDataState) {
+                    if (state is LoadFilteredPlacesSuccess) {
                       final searchRes = _filterPlacesByName(
                         _controllerSearch.text,
-                        vm.places,
+                        state.places,
                       );
 
                       if (searchRes.length == 0)
@@ -123,6 +118,12 @@ class _PlaceSearchScreenState extends State<PlaceSearchScreen> {
                         addPlaceToSearchHistory: (name) {
                           _addPlaceToSearchHistory(name);
                         },
+                      );
+                    }
+
+                    if (state is LoadFilteredPlacesError) {
+                      return const SliverFillRemaining(
+                        child: NetworkException(),
                       );
                     }
 

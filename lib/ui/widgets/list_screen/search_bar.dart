@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/redux/action/filtered_places_action.dart';
-import 'package:places/data/redux/state/app_state.dart';
 import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/place_search_screen.dart';
+import 'package:places/ui/screens/search_screen.dart';
 
 class SearchBar extends StatefulWidget {
   final textFieldFocusNode = FocusNode();
@@ -32,7 +29,7 @@ class _SearchBarState extends State<SearchBar> {
             context,
             MaterialPageRoute(
               builder: (context) =>
-                  PlaceSearchScreen(settingsFilter: settingsFilter),
+                  SearchScreen(settingsFilter: settingsFilter),
             ),
           );
         }
@@ -114,13 +111,11 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   Future<void> _navigateGetDataFromFilters(BuildContext context) async {
-    settingsFilter = await Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => const FiltersScreen(),
       ),
     );
-
-    StoreProvider.of<AppState>(context).dispatch(LoadFilteredPlacesAction());
   }
 }

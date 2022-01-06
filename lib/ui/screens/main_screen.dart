@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/screens/settings_screen.dart';
-import 'package:places/ui/screens/place_list_screen/place_list_screen.dart';
-import 'package:places/ui/screens/place_map_screen.dart';
 import 'package:places/ui/screens/favorites_screen.dart';
+import 'package:places/ui/screens/place_list_screen.dart';
+import 'package:places/ui/screens/place_map_screen.dart';
+import 'package:places/ui/screens/settings_screen.dart';
 import 'package:places/ui/widgets/place_bottom_nav_bar.dart';
 
 class MainScreen extends StatefulWidget {
@@ -16,13 +16,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   int initialIndex = 0;
   late TabController _tabController;
-  
 
   @override
   void initState() {
     initialIndex = widget.selectedTab ?? 0;
     _tabController = TabController(
-      length: 1,
+      length: 4,
       vsync: this,
       initialIndex: initialIndex,
     );
@@ -47,27 +46,22 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
-
     return Scaffold(
       body: TabBarView(
         controller: _tabController,
-        children: const [
+        children: [
           PlaceListScreen(),
-          // PlaceMapScreen(),
-          // FavoritesScreen(),
-          // SettingsScreen(),
+          PlaceMapScreen(),
+          FavoritesScreen(),
+          SettingsScreen(),
         ],
       ),
-      bottomNavigationBar: isPortrait
-          ? PlaceBottomNavBar(
-              currentIndex: initialIndex,
-              onSelectTab: (index) {
-                onSelectTab(index);
-              },
-            )
-          : const SizedBox.shrink(),
+      bottomNavigationBar: PlaceBottomNavBar(
+        currentIndex: initialIndex,
+        onSelectTab: (index) {
+          onSelectTab(index);
+        },
+      ),
     );
   }
 

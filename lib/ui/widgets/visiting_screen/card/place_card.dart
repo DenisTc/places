@@ -1,10 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/redux/action/favorite_places_action.dart';
-import 'package:places/data/redux/state/app_state.dart';
+import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
@@ -86,8 +85,8 @@ class __PlaceCardState extends State<PlaceCard> {
                 key: ValueKey(widget.place),
                 direction: DismissDirection.endToStart,
                 onDismissed: (direction) {
-                  StoreProvider.of<AppState>(context)
-                      .dispatch(ToggleInFavoriteAction(widget.place));
+                  BlocProvider.of<FavoritePlaceBloc>(context)
+                      .add(TogglePlaceInFavorites(widget.place));
                 },
                 child: Stack(
                   children: [
@@ -171,8 +170,8 @@ class __PlaceCardState extends State<PlaceCard> {
                             clipBehavior: Clip.antiAlias,
                             child: IconButton(
                               onPressed: () {
-                                StoreProvider.of<AppState>(context).dispatch(
-                                    ToggleInFavoriteAction(widget.place));
+                                BlocProvider.of<FavoritePlaceBloc>(context)
+                                    .add(TogglePlaceInFavorites(widget.place));
                               },
                               icon: const Icon(
                                 Icons.clear_outlined,

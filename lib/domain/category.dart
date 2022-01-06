@@ -28,6 +28,6 @@ class Category {
   }
 
   static Category getCategoryByName(String name) {
-    return catList.where((element) => element.name == name).single;
+    return catList.where((element) => element.name == name.toLowerCase()).single;
   }
 }
