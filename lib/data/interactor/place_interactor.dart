@@ -8,7 +8,7 @@ class PlaceInteractor {
   PlaceInteractor(this._placeRepository);
 
   // Get a list of all places
-  Future<List<Place>> getPlaces([int? radius, String? category]) async {
+  Future<List<Place>> getPlaces() async {
     return _placeRepository.getPlaces();
   }
 

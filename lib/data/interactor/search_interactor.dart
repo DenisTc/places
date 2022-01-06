@@ -17,7 +17,9 @@ class SearchInteractor {
   // Get a list of all categories
   Future<List<String>> getCategories() async {
     // Get a list of all places
-    final _placesList = await _searchRepository.getFiltredPlaces(SearchFilter());
+    final _placesList =
+        await _searchRepository.getFiltredPlaces(SearchFilter());
+
     final _categoryList = <String>[];
 
     // Get a list with unique category values from the list of all places

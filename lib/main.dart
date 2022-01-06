@@ -25,13 +25,31 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         BlocProvider<FilteredPlacesBloc>(
-            create: (context) => FilteredPlacesBloc(SearchInteractor(SearchRepository(api)))),
+          create: (context) => FilteredPlacesBloc(
+            SearchInteractor(
+              SearchRepository(api),
+            ),
+          ),
+        ),
         BlocProvider<PlaceBloc>(
-            create: (context) => PlaceBloc(PlaceInteractor(PlaceRepository(api)))),
+          create: (context) => PlaceBloc(
+            PlaceInteractor(
+              PlaceRepository(api),
+            ),
+          ),
+        ),
         BlocProvider<FavoritePlaceBloc>(
-            create: (context) => FavoritePlaceBloc(PlaceInteractor(PlaceRepository(api)))),
+          create: (context) => FavoritePlaceBloc(
+            PlaceInteractor(
+              PlaceRepository(api),
+            ),
+          ),
+        ),
         BlocProvider<ThemeBloc>(
-            create: (context) => ThemeBloc(ThemeRepository())),
+          create: (context) => ThemeBloc(
+            ThemeRepository(),
+          ),
+        ),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {

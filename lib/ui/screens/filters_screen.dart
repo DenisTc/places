@@ -42,10 +42,8 @@ class _FiltersScreenState extends State<FiltersScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              setState(() {
                 BlocProvider.of<FilteredPlacesBloc>(context)
                     .add(ClearFilterEvent());
-              });
             },
             child: Text(
               constants.textBtnClear,
