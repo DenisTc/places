@@ -35,7 +35,7 @@ class FavoritePlaceBloc extends Bloc<FavoritePlaceEvent, FavoritePlaceState> {
   ) async {
     emit(ListFavoritePlacesLoading());
 
-    await _placeInteractor.toggleInFavorites(event.place);
+    await _placeInteractor.toggleToFavorites(event.place);
     var status = await _placeInteractor.isFavoritePlace(event.place);
 
     if (status) {

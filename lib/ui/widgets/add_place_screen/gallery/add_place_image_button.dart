@@ -1,14 +1,9 @@
-// import 'dart:io';
-// import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
-// import 'package:open_file/open_file.dart';
 import 'package:places/ui/screens/res/colors.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
-// import 'package:places/ui/widgets/add_place_screen/gallery/file_list.dart';
-// import 'package:places/ui/widgets/add_place_screen/gallery/select_image_dialog.dart';
 
 class AddPlaceImageButton extends StatefulWidget {
   final Function(List<XFile>?) addImage;

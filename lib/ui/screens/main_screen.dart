@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:places/ui/screens/favorites_screen.dart';
-// import 'package:places/ui/screens/settings_screen.dart';
 import 'package:places/ui/screens/place_list_screen.dart';
 import 'package:places/ui/screens/place_map_screen.dart';
 import 'package:places/ui/screens/settings_screen.dart';
-// import 'package:places/ui/screens/place_map_screen.dart';
-// import 'package:places/ui/screens/favorites_screen.dart';
 import 'package:places/ui/widgets/place_bottom_nav_bar.dart';
 
 class MainScreen extends StatefulWidget {

@@ -9,14 +9,18 @@ class SearchInteractor {
 
   SearchInteractor(this._searchRepository);
 
+  // Get a list of filtered places
   Future<List<Place>> getFiltredPlaces(SearchFilter? filter) {
     return _searchRepository.getFiltredPlaces(filter);
   }
 
+  // Get a list of all categories
   Future<List<String>> getCategories() async {
+    // Get a list of all places
     final _placesList = await _searchRepository.getFiltredPlaces(SearchFilter());
     final _categoryList = <String>[];
 
+    // Get a list with unique category values from the list of all places
     for (final place in _placesList) {
       if (!_categoryList.contains(place.placeType)) {
         _categoryList.add(place.placeType);

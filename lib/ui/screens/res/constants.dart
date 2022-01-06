@@ -59,3 +59,5 @@ const String textOnboardingScreenSecondTitle = 'Построй маршрут\n�
 const String textOnboardingScreenSecondDesc = 'Достигай цели максимально\nбыстро и комфортно.';
 const String textOnboardingScreenThirdTitle = 'Добавляй места,\nкоторые нашёл сам';
 const String textOnboardingScreenThirdDesc = 'Делись самыми интересными\nи помоги нам стать лучше!';
+const String textFavoriteTab = 'Хочу посетить';
+const String textVisitedTab = 'Посетил';

@@ -4,12 +4,11 @@ import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/widgets/visiting_screen/card/place_card_favorite.dart';
-// import 'package:places/ui/widgets/visiting_screen/card/place_visiting_portrain_widget.dart';
 import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
 import 'package:places/ui/widgets/visiting_screen/visiting_app_bar.dart';
 import 'package:places/ui/screens/res/constants.dart' as constants;
 
-/// Screen for displaying planned and visited places
+// Screen for displaying planned and visited places
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({Key? key}) : super(key: key);
 
@@ -39,8 +38,6 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
-    // final isPortrait =
-    //     MediaQuery.of(context).orientation == Orientation.portrait;
 
     return Container(
       margin: const EdgeInsets.only(top: 28),
@@ -141,6 +138,7 @@ class PlaceVisitingPortrainWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
+
     return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       shrinkWrap: true,
@@ -153,6 +151,7 @@ class PlaceVisitingPortrainWidget extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         final place = places[index];
+
         return Container(
           margin: const EdgeInsets.only(bottom: 16),
           child: FavoritePlaceCard(

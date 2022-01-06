@@ -35,10 +35,10 @@ class VisitingAppbar extends StatelessWidget implements PreferredSizeWidget {
             child: TabBar(
               tabs: const [
                 Tab(
-                  text: 'Хочу посетить',
+                  text: constants.textFavoriteTab,
                 ),
                 Tab(
-                  text: 'Посетил',
+                  text: constants.textVisitedTab,
                 ),
               ],
               indicator: BoxDecoration(

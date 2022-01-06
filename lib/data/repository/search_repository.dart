@@ -12,20 +12,24 @@ class SearchRepository {
 
   SearchRepository(this.api);
 
+  // Getting a list of places by the specified filter
   Future<List<Place>> getFiltredPlaces(SearchFilter? settingsFilter) async {
     final data = settingsFilter!.toMap();
 
+    // Get data(json) from remote repository
     final response = await api.client.post<String>(
       ApiConstants.filteredPlacesUrl,
       data: data,
     );
 
+    // Convert json to List<PlaceDto>
     var placeDtoList = (jsonDecode(response.toString()) as List<dynamic>)
         .map(
           (dynamic place) => PlaceDto.fromJson(place as Map<String, dynamic>),
         )
         .toList();
 
+    // Filtering the list by radius (distance) 
     if (settingsFilter.distance != null) {
       placeDtoList = placeDtoList
           .where((place) =>
@@ -33,6 +37,7 @@ class SearchRepository {
           .toList();
     }
 
+    // Convert List<PlaceDto> to List<Place>
     final placesList = placeDtoList
         .map((dynamic place) => PlaceMapper.toModel(place as PlaceDto))
         .toList();
