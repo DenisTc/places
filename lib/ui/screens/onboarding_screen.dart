@@ -153,7 +153,7 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class Screen extends StatelessWidget {
+class Screen extends StatefulWidget {
   final String icon;
   final String title;
   final String description;
@@ -166,32 +166,72 @@ class Screen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<Screen> createState() => _ScreenState();
+}
+
+class _ScreenState extends State<Screen> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _sizeAnimation;
+
+  @override
+  void initState() {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _sizeAnimation = Tween<double>(begin: 0, end: 100).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.linear),
+    );
+
+    _animationController.forward();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SvgPicture.asset(
-          icon,
-          height: 98,
-          color: Theme.of(context).iconTheme.color,
-        ),
-        const SizedBox(height: 40),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: Theme.of(context).secondaryHeaderColor,
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) {
+              return SizedBox(
+                height: 100,
+                child: SvgPicture.asset(
+                  widget.icon,
+                  height: _sizeAnimation.value,
+                  color: Theme.of(context).iconTheme.color,
+                ),
+              );
+            },
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          description,
-          textAlign: TextAlign.center,
-          style: const TextStyle(color: myLightSecondaryTwo),
-        ),
-      ],
+          const SizedBox(height: 40),
+          Text(
+            widget.title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.w700,
+              color: Theme.of(context).secondaryHeaderColor,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            widget.description,
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: myLightSecondaryTwo),
+          ),
+        ],
+      ),
     );
   }
 }
