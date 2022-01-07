@@ -210,6 +210,7 @@ class _PlaceCardTop extends StatelessWidget {
               ),
               child: CachedNetworkImage(
                 imageUrl: place.urls.first,
+                fadeOutDuration: const Duration(milliseconds: 200),
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     decoration: BoxDecoration(
@@ -221,10 +222,15 @@ class _PlaceCardTop extends StatelessWidget {
                   );
                 },
                 placeholder: (context, url) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+                  return Center(
+                    child: Icon(
+                      Icons.photo_size_select_actual_outlined,
+                      color: Colors.grey[300],
+                      size: 70.0,
+                    ),
                   );
                 },
+                
                 errorWidget: (context, url, error) {
                   return ImagePlaceholder();
                 },
