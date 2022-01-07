@@ -92,16 +92,16 @@ class PlaceCard extends StatelessWidget {
                       color: Colors.transparent,
                       borderRadius: const BorderRadius.all(Radius.circular(50)),
                       clipBehavior: Clip.antiAlias,
-                      child: IconButton(
-                        onPressed: () {
+                      child: GestureDetector(
+                        onTap: () {
                           BlocProvider.of<FavoritePlaceBloc>(context)
                               .add(TogglePlaceInFavorites(place));
                         },
-                        icon: SvgPicture.asset(
-                          state.places.contains(place)
-                              ? iconFavoriteSelected
-                              : iconFavorite,
-                          color: Colors.white,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 400),
+                          child: state.places.contains(place)
+                              ? favoriteIcon
+                              : notFavoriteIcon,
                         ),
                       ),
                     );
@@ -116,6 +116,22 @@ class PlaceCard extends StatelessWidget {
       ],
     );
   }
+
+  Widget notFavoriteIcon = SvgPicture.asset(
+    iconFavorite,
+    key: UniqueKey(),
+    width: 28,
+    height: 28,
+    color: Colors.white,
+  );
+
+  Widget favoriteIcon = SvgPicture.asset(
+    iconFavoriteSelected,
+    key: UniqueKey(),
+    width: 28,
+    height: 28,
+    color: Colors.white,
+  );
 
   Future<void> _showPlace(BuildContext context, int id) async {
     await showModalBottomSheet<Place>(
@@ -230,7 +246,6 @@ class _PlaceCardTop extends StatelessWidget {
                     ),
                   );
                 },
-                
                 errorWidget: (context, url, error) {
                   return ImagePlaceholder();
                 },
