@@ -71,7 +71,7 @@ class PlaceCard extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -120,16 +120,16 @@ class PlaceCard extends StatelessWidget {
   Widget notFavoriteIcon = SvgPicture.asset(
     iconFavorite,
     key: UniqueKey(),
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
     color: Colors.white,
   );
 
   Widget favoriteIcon = SvgPicture.asset(
     iconFavoriteSelected,
     key: UniqueKey(),
-    width: 28,
-    height: 28,
+    width: 24,
+    height: 24,
     color: Colors.white,
   );
 
