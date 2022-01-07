@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/icons.dart';
+import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/visiting_screen/card/place_card_favorite.dart';
 import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
 import 'package:places/ui/widgets/visiting_screen/visiting_app_bar.dart';
@@ -48,7 +49,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
             BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
               builder: (context, state) {
                 if (state is ListFavoritePlacesLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const CustomLoaderWidget();
                 }
 
                 if (state is ListFavoritePlacesLoaded &&
