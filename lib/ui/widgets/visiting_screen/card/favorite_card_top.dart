@@ -31,26 +31,29 @@ class _FavoriteCardTopState extends State<FavoriteCardTop> {
                 topLeft: Radius.circular(16),
                 topRight: Radius.circular(16),
               ),
-              child: CachedNetworkImage(
-                imageUrl: widget.place.urls.first,
-                imageBuilder: (context, imageProvider) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
+              child: Hero(
+                tag: widget.place.id.toString(),
+                child: CachedNetworkImage(
+                  imageUrl: widget.place.urls.first,
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                placeholder: (context, url) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-                errorWidget: (context, url, error) {
-                  return ImagePlaceholder();
-                },
+                    );
+                  },
+                  placeholder: (context, url) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return ImagePlaceholder();
+                  },
+                ),
               ),
             ),
             Padding(

@@ -109,7 +109,24 @@ class __PlaceCardState extends State<PlaceCard> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(16)),
                         onTap: () {
-                          _showPlace(widget.place.id!);
+                          Navigator.of(context).push(
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) {
+                                return PlaceDetails(
+                                  place: widget.place,
+                                );
+                              },
+                              transitionDuration: Duration(milliseconds: 200),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                return FadeTransition(
+                                  opacity: animation,
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
                         },
                       ),
                     ),
@@ -189,22 +206,6 @@ class __PlaceCardState extends State<PlaceCard> {
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _showPlace(int id) async {
-    await showModalBottomSheet<Place>(
-      context: context,
-      builder: (_) {
-        return PlaceDetails(id: id);
-      },
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
     );
   }
 }

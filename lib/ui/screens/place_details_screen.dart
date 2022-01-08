@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
-import 'package:places/data/blocs/place/bloc/place_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -11,52 +10,37 @@ import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/screens/place_map_screen.dart';
-import 'package:places/ui/widgets/network_exception.dart';
 import 'package:places/ui/widgets/place_cupertino_date_picker.dart';
 import 'package:places/ui/widgets/place_details_screen/photo_view.dart';
 
 /// A screen with a detailed description of the place
 class PlaceDetails extends StatelessWidget {
-  final int id;
+  final Place place;
 
   const PlaceDetails({
-    required this.id,
+    required this.place,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     PageController _pageController = PageController();
-    BlocProvider.of<PlaceBloc>(context).add(LoadPlaceDetails(id));
-
     return Material(
       child: Container(
         color: Theme.of(context).colorScheme.secondary,
-        child: BlocBuilder<PlaceBloc, PlaceState>(
-          builder: (context, state) {
-            if (state is PlaceDetailsLoaded) {
-              return ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.9,
-                ),
-                child: CustomScrollView(
-                  slivers: [
-                    _GalleryPlace(
-                      pageController: _pageController,
-                      place: state.place,
-                    ),
-                    _DescriptionPlace(place: state.place),
-                  ],
-                ),
-              );
-            }
-
-            if (state is PlaceDetailsLoadError) {
-              return const NetworkException();
-            }
-
-            return SizedBox.shrink();
-          },
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.9,
+          ),
+          child: CustomScrollView(
+            slivers: [
+              _GalleryPlace(
+                pageController: _pageController,
+                place: place,
+              ),
+              _DescriptionPlace(place: place),
+            ],
+          ),
         ),
       ),
     );

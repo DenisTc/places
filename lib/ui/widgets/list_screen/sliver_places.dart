@@ -72,16 +72,13 @@ class PlaceCard extends StatelessWidget {
               Navigator.of(context).push(
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) {
-                    return PlaceDetails(id: place.id!);
+                    return PlaceDetails(place: place);
                   },
                   transitionDuration: Duration(milliseconds: 200),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
                     return FadeTransition(
-                      opacity: Tween<double>(
-                        begin: 0.0,
-                        end: 1.0,
-                      ).animate(animation),
+                      opacity: animation,
                       child: child,
                     );
                   },
@@ -134,22 +131,6 @@ class PlaceCard extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Future<void> _showPlace(BuildContext context, int id) async {
-    await showModalBottomSheet<Place>(
-      context: context,
-      builder: (_) {
-        return PlaceDetails(id: id);
-      },
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
-      ),
-      clipBehavior: Clip.antiAliasWithSaveLayer,
     );
   }
 }
