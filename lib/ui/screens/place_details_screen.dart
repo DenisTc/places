@@ -111,60 +111,63 @@ class _GalleryPlaceState extends State<_GalleryPlace> {
       automaticallyImplyLeading: false,
       expandedHeight: 360,
       flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          height: 360,
-          color: Colors.white,
-          child: Stack(
-            children: [
-              if (widget.place.urls.isNotEmpty)
-                PageView.builder(
-                  onPageChanged: (page) {
-                    setState(() {
-                      currentPage = page.toDouble();
-                    });
-                  },
-                  allowImplicitScrolling: true,
-                  physics: const ClampingScrollPhysics(),
-                  controller: widget._pageController,
-                  itemCount: widget.place.urls.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (widget.place.urls.isNotEmpty) {
-                          Navigator.of(context).push<void>(
-                            MaterialPageRoute(
-                              builder: (context) => PhotoView(
-                                imageList: widget.place.urls,
-                                currentImage: 0,
+        background: Hero(
+          tag: widget.place.id.toString(),
+          child: Container(
+            height: 360,
+            color: Colors.white,
+            child: Stack(
+              children: [
+                if (widget.place.urls.isNotEmpty)
+                  PageView.builder(
+                    onPageChanged: (page) {
+                      setState(() {
+                        currentPage = page.toDouble();
+                      });
+                    },
+                    allowImplicitScrolling: true,
+                    physics: const ClampingScrollPhysics(),
+                    controller: widget._pageController,
+                    itemCount: widget.place.urls.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          if (widget.place.urls.isNotEmpty) {
+                            Navigator.of(context).push<void>(
+                              MaterialPageRoute(
+                                builder: (context) => PhotoView(
+                                  imageList: widget.place.urls,
+                                  currentImage: 0,
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      },
-                      child: _PlaceImage(
-                        imgUrl: widget.place.urls[index],
+                            );
+                          }
+                        },
+                        child: _PlaceImage(
+                          imgUrl: widget.place.urls[index],
+                        ),
+                      );
+                    },
+                  )
+                else
+                  Container(
+                    color: Colors.white,
+                    child: const Center(
+                      child: Icon(
+                        Icons.photo_size_select_actual_outlined,
+                        color: Colors.grey,
+                        size: 100.0,
                       ),
-                    );
-                  },
-                )
-              else
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Icon(
-                      Icons.photo_size_select_actual_outlined,
-                      color: Colors.grey,
-                      size: 100.0,
                     ),
                   ),
-                ),
-              const _ArrowBackButton(),
-              if (widget.place.urls.length > 1)
-                PageIndicator(
-                  countImages: widget.place.urls.length,
-                  currentPage: currentPage,
-                ),
-            ],
+                const _ArrowBackButton(),
+                if (widget.place.urls.length > 1)
+                  PageIndicator(
+                    countImages: widget.place.urls.length,
+                    currentPage: currentPage,
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -476,24 +479,27 @@ class _ArrowBackButton extends StatelessWidget {
     return Positioned(
       top: 16.0,
       right: 16.0,
-      child: SafeArea(
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-            ),
-            child: Align(
-              child: SvgPicture.asset(
-                iconClose,
-                height: 20,
-                width: 20,
-                color: myLightMain,
+      child: Material(
+        color: Colors.transparent,
+        child: SafeArea(
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Align(
+                child: SvgPicture.asset(
+                  iconClose,
+                  height: 20,
+                  width: 20,
+                  color: myLightMain,
+                ),
               ),
             ),
           ),

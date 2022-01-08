@@ -54,19 +54,39 @@ class PlaceCard extends StatelessWidget {
     BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
     return Stack(
       children: [
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _PlaceCardTop(place: place),
-            _PlaceCardBottom(place: place),
-          ],
+        Hero(
+          tag: place.id.toString(),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _PlaceCardTop(place: place),
+              _PlaceCardBottom(place: place),
+            ],
+          ),
         ),
         Material(
           color: Colors.transparent,
           child: InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(16)),
             onTap: () {
-              _showPlace(context, place.id!);
+              Navigator.of(context).push(
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return PlaceDetails(id: place.id!);
+                  },
+                  transitionDuration: Duration(milliseconds: 200),
+                  transitionsBuilder:
+                      (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(
+                      opacity: Tween<double>(
+                        begin: 0.0,
+                        end: 1.0,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
           ),
         ),
