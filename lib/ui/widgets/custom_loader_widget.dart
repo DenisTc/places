@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:places/ui/screens/res/constants.dart' as constants;
 
 // The custom widget is used to display the loading process
 class CustomLoaderWidget extends StatefulWidget {
@@ -48,7 +49,7 @@ class _CustomLoaderWidgetState extends State<CustomLoaderWidget>
           return Transform.rotate(
             angle: rotation.value,
             child: Image(
-              image: AssetImage('res/images/loader.png'),
+              image: AssetImage(constants.pathLoader),
               height: 50,
               width: 50,
             ),
