@@ -6,6 +6,7 @@ import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dar
 import 'package:places/ui/widgets/list_screen/add_place_button.dart';
 import 'package:places/ui/widgets/list_screen/sliver_app_bar_list.dart';
 import 'package:places/ui/widgets/list_screen/sliver_places.dart';
+import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 
 class PlaceListScreen extends StatelessWidget {
@@ -26,10 +27,8 @@ class PlaceListScreen extends StatelessWidget {
                 BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
                   builder: (context, state) {
                     if (state is LoadFilteredPlacesInProgress) {
-                      return const SliverFillRemaining(
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
+                      return SliverFillRemaining(
+                        child: CustomLoaderWidget(),
                       );
                     }
 

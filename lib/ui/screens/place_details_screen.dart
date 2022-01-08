@@ -11,6 +11,7 @@ import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/screens/place_map_screen.dart';
+import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 import 'package:places/ui/widgets/place_cupertino_date_picker.dart';
 import 'package:places/ui/widgets/place_details_screen/photo_view.dart';
@@ -34,6 +35,10 @@ class PlaceDetails extends StatelessWidget {
         color: Theme.of(context).colorScheme.secondary,
         child: BlocBuilder<PlaceBloc, PlaceState>(
           builder: (context, state) {
+            if (state is PlaceDetailsLoading) {
+              return const CustomLoaderWidget();
+            }
+
             if (state is PlaceDetailsLoaded) {
               return ConstrainedBox(
                 constraints: BoxConstraints(
