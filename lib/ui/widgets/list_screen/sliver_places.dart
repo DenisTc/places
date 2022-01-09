@@ -6,7 +6,7 @@ import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/place_details_screen.dart';
-import 'package:places/ui/screens/res/icons.dart';
+import 'package:places/ui/res/icons.dart';
 
 class SliverPlaces extends StatelessWidget {
   final List<Place> places;

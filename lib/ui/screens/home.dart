@@ -14,6 +14,12 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
+  static List<Widget> pages = [
+    PlaceListScreen(),
+    PlaceMapScreen(),
+    FavoritesScreen(),
+    SettingsScreen(),
+  ];
   int initialIndex = 0;
   late TabController _tabController;
 
@@ -21,8 +27,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   void initState() {
     initialIndex = widget.selectedTab ?? 0;
     _tabController = TabController(
-      length: 4,
       vsync: this,
+      length: pages.length,
       initialIndex: initialIndex,
     );
 
@@ -49,12 +55,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     return Scaffold(
       body: TabBarView(
         controller: _tabController,
-        children: [
-          PlaceListScreen(),
-          PlaceMapScreen(),
-          FavoritesScreen(),
-          SettingsScreen(),
-        ],
+        children: pages,
       ),
       bottomNavigationBar: PlaceBottomNavBar(
         currentIndex: initialIndex,

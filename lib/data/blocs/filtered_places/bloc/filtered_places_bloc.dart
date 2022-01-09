@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
-import 'package:places/ui/screens/res/constants.dart' as constants;
+import 'package:places/ui/res/constants.dart' as constants;
 import 'package:rxdart/rxdart.dart';
 
 import 'filtered_places_event.dart';

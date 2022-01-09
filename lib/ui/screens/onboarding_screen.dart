@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/ui/screens/main_screen.dart';
-import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/icons.dart';
-import 'package:places/ui/screens/res/constants.dart' as constants;
+import 'package:places/ui/screens/home.dart';
+import 'package:places/ui/res/colors.dart';
+import 'package:places/ui/res/icons.dart';
+import 'package:places/ui/res/constants.dart' as constants;
 
 class OnboardingScreen extends StatefulWidget {
   final bool fromSettings;

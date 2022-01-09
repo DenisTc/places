@@ -6,9 +6,9 @@ import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dar
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as constants;
-import 'package:places/ui/screens/res/icons.dart';
+import 'package:places/ui/res/colors.dart';
+import 'package:places/ui/res/constants.dart' as constants;
+import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 
 class FiltersScreen extends StatefulWidget {

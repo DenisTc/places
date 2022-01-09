@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/ui/screens/res/icons.dart';
+import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/visiting_screen/card/place_card_favorite.dart';
 import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
 import 'package:places/ui/widgets/visiting_screen/visiting_app_bar.dart';
-import 'package:places/ui/screens/res/constants.dart' as constants;
+import 'package:places/ui/res/constants.dart' as constants;
 
 // Screen for displaying planned and visited places
 class FavoritesScreen extends StatelessWidget {

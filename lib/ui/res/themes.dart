@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/styles.dart';
+import 'package:places/ui/res/colors.dart';
+import 'package:places/ui/res/styles.dart';
 
 final lightTheme = ThemeData(
   appBarTheme: AppBarTheme(
