@@ -116,9 +116,15 @@ class PlaceCard extends StatelessWidget {
                         },
                         child: AnimatedSwitcher(
                           duration: const Duration(milliseconds: 400),
-                          child: state.places.contains(place)
-                              ? favoriteIcon
-                              : notFavoriteIcon,
+                          child: SvgPicture.asset(
+                            state.places.contains(place)
+                                ? iconFavoriteSelected
+                                : iconFavorite,
+                            key: UniqueKey(),
+                            width: 24,
+                            height: 24,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     );
@@ -133,22 +139,6 @@ class PlaceCard extends StatelessWidget {
       ],
     );
   }
-
-  Widget notFavoriteIcon = SvgPicture.asset(
-    iconFavorite,
-    key: UniqueKey(),
-    width: 24,
-    height: 24,
-    color: Colors.white,
-  );
-
-  Widget favoriteIcon = SvgPicture.asset(
-    iconFavoriteSelected,
-    key: UniqueKey(),
-    width: 24,
-    height: 24,
-    color: Colors.white,
-  );
 }
 
 class _PlaceCardBottom extends StatelessWidget {
