@@ -10,6 +10,7 @@ import 'package:places/ui/screens/res/constants.dart' as constants;
 import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/screens/place_map_screen.dart';
+import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/place_cupertino_date_picker.dart';
 import 'package:places/ui/widgets/place_details_screen/photo_view.dart';
 

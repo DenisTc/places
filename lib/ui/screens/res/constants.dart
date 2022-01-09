@@ -61,3 +61,4 @@ const String textOnboardingScreenThirdTitle = 'Добавляй места,\nк�
 const String textOnboardingScreenThirdDesc = 'Делись самыми интересными\nи помоги нам стать лучше!';
 const String textFavoriteTab = 'Хочу посетить';
 const String textVisitedTab = 'Посетил';
+const String pathLoader = 'res/images/loader.png';

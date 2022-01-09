@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/ui/screens/onboarding_screen.dart';
@@ -11,18 +13,38 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   late Future<void> isInitialized;
+  late AnimationController _animationController;
+  late Animation<double> rotation;
 
   @override
   void initState() {
-    super.initState();
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 3000));
+    rotation = Tween(begin: 0.0, end: -pi * 2).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeInOutCubic,
+      ),
+    );
 
+    _animationController.repeat();
+    
     try {
       _navigateToNext();
     } on Exception catch (e) {
       debugPrint('Ошибка при переходе на следующий экран: $e');
     }
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -40,7 +62,15 @@ class _SplashScreenState extends State<SplashScreen> {
           ),
         ),
         child: Center(
-          child: SvgPicture.asset(iconSplash, color: Colors.white),
+          child: AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) {
+              return Transform.rotate(
+                angle: rotation.value,
+                child: SvgPicture.asset(iconSplash, color: Colors.white),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -48,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _navigateToNext() async {
     return Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 3),
       () => {
         Navigator.pushReplacement<void, void>(
           context,
