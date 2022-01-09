@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
-import 'package:places/data/blocs/place/bloc/place_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/screens/res/colors.dart';
@@ -12,56 +11,37 @@ import 'package:places/ui/screens/res/icons.dart';
 import 'package:places/ui/screens/res/styles.dart';
 import 'package:places/ui/screens/place_map_screen.dart';
 import 'package:places/ui/widgets/custom_loader_widget.dart';
-import 'package:places/ui/widgets/network_exception.dart';
 import 'package:places/ui/widgets/place_cupertino_date_picker.dart';
 import 'package:places/ui/widgets/place_details_screen/photo_view.dart';
 
 /// A screen with a detailed description of the place
 class PlaceDetails extends StatelessWidget {
-  final int id;
+  final Place place;
 
   const PlaceDetails({
-    required this.id,
+    required this.place,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     PageController _pageController = PageController();
-    BlocProvider.of<PlaceBloc>(context).add(LoadPlaceDetails(id));
-
     return Material(
       child: Container(
         color: Theme.of(context).colorScheme.secondary,
-        child: BlocBuilder<PlaceBloc, PlaceState>(
-          builder: (context, state) {
-            if (state is PlaceDetailsLoading) {
-              return const CustomLoaderWidget();
-            }
-
-            if (state is PlaceDetailsLoaded) {
-              return ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.9,
-                ),
-                child: CustomScrollView(
-                  slivers: [
-                    _GalleryPlace(
-                      pageController: _pageController,
-                      place: state.place,
-                    ),
-                    _DescriptionPlace(place: state.place),
-                  ],
-                ),
-              );
-            }
-
-            if (state is PlaceDetailsLoadError) {
-              return const NetworkException();
-            }
-
-            return SizedBox.shrink();
-          },
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.9,
+          ),
+          child: CustomScrollView(
+            slivers: [
+              _GalleryPlace(
+                pageController: _pageController,
+                place: place,
+              ),
+              _DescriptionPlace(place: place),
+            ],
+          ),
         ),
       ),
     );
@@ -116,60 +96,63 @@ class _GalleryPlaceState extends State<_GalleryPlace> {
       automaticallyImplyLeading: false,
       expandedHeight: 360,
       flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          height: 360,
-          color: Colors.white,
-          child: Stack(
-            children: [
-              if (widget.place.urls.isNotEmpty)
-                PageView.builder(
-                  onPageChanged: (page) {
-                    setState(() {
-                      currentPage = page.toDouble();
-                    });
-                  },
-                  allowImplicitScrolling: true,
-                  physics: const ClampingScrollPhysics(),
-                  controller: widget._pageController,
-                  itemCount: widget.place.urls.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (widget.place.urls.isNotEmpty) {
-                          Navigator.of(context).push<void>(
-                            MaterialPageRoute(
-                              builder: (context) => PhotoView(
-                                imageList: widget.place.urls,
-                                currentImage: 0,
+        background: Hero(
+          tag: widget.place.id.toString(),
+          child: Container(
+            height: 360,
+            color: Colors.white,
+            child: Stack(
+              children: [
+                if (widget.place.urls.isNotEmpty)
+                  PageView.builder(
+                    onPageChanged: (page) {
+                      setState(() {
+                        currentPage = page.toDouble();
+                      });
+                    },
+                    allowImplicitScrolling: true,
+                    physics: const ClampingScrollPhysics(),
+                    controller: widget._pageController,
+                    itemCount: widget.place.urls.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          if (widget.place.urls.isNotEmpty) {
+                            Navigator.of(context).push<void>(
+                              MaterialPageRoute(
+                                builder: (context) => PhotoView(
+                                  imageList: widget.place.urls,
+                                  currentImage: 0,
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      },
-                      child: _PlaceImage(
-                        imgUrl: widget.place.urls[index],
+                            );
+                          }
+                        },
+                        child: _PlaceImage(
+                          imgUrl: widget.place.urls[index],
+                        ),
+                      );
+                    },
+                  )
+                else
+                  Container(
+                    color: Colors.white,
+                    child: const Center(
+                      child: Icon(
+                        Icons.photo_size_select_actual_outlined,
+                        color: Colors.grey,
+                        size: 100.0,
                       ),
-                    );
-                  },
-                )
-              else
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Icon(
-                      Icons.photo_size_select_actual_outlined,
-                      color: Colors.grey,
-                      size: 100.0,
                     ),
                   ),
-                ),
-              const _ArrowBackButton(),
-              if (widget.place.urls.length > 1)
-                PageIndicator(
-                  countImages: widget.place.urls.length,
-                  currentPage: currentPage,
-                ),
-            ],
+                const _ArrowBackButton(),
+                if (widget.place.urls.length > 1)
+                  PageIndicator(
+                    countImages: widget.place.urls.length,
+                    currentPage: currentPage,
+                  ),
+              ],
+            ),
           ),
         ),
       ),
@@ -481,24 +464,27 @@ class _ArrowBackButton extends StatelessWidget {
     return Positioned(
       top: 16.0,
       right: 16.0,
-      child: SafeArea(
-        child: InkWell(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-            ),
-            child: Align(
-              child: SvgPicture.asset(
-                iconClose,
-                height: 20,
-                width: 20,
-                color: myLightMain,
+      child: Material(
+        color: Colors.transparent,
+        child: SafeArea(
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: Align(
+                child: SvgPicture.asset(
+                  iconClose,
+                  height: 20,
+                  width: 20,
+                  color: myLightMain,
+                ),
               ),
             ),
           ),
