@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/screens/res/themes.dart';
+import 'package:places/ui/res/themes.dart';
 
 class ThemeRepository{
   bool get getThemeStatus => _isDarkMode;

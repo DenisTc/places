@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/ui/screens/res/icons.dart';
+import 'package:places/ui/res/icons.dart';
 
 class PlaceImage extends StatelessWidget {
   final Function(String imgUrl) deleteImage;

@@ -1,4 +1,4 @@
-import 'package:places/ui/screens/res/icons.dart';
+import 'package:places/ui/res/icons.dart';
 
 class Category {
   static List<Category> catList = [

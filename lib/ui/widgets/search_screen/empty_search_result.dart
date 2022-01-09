@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as constants;
-import 'package:places/ui/screens/res/icons.dart';
+import 'package:places/ui/res/colors.dart';
+import 'package:places/ui/res/constants.dart' as constants;
+import 'package:places/ui/res/icons.dart';
 
 class EmptySearchResult extends StatelessWidget {
   const EmptySearchResult({

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:places/ui/screens/res/constants.dart' as constants;
+import 'package:places/ui/res/constants.dart' as constants;
 
 class SearchFilter {
   double? lat = constants.userLocation.lat;

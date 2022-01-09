@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:places/data/blocs/theme/bloc/theme_bloc.dart';
 import 'package:places/ui/screens/onboarding_screen.dart';
-import 'package:places/ui/screens/res/colors.dart';
-import 'package:places/ui/screens/res/constants.dart' as constants;
+import 'package:places/ui/res/colors.dart';
+import 'package:places/ui/res/constants.dart' as constants;
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
