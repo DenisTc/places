@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
+import 'package:places/data/blocs/filter_bloc/filter_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/res/colors.dart';
@@ -27,8 +25,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<FilteredPlacesBloc>(context)
-        .add(LoadPlaceCategoriesEvent());
+    BlocProvider.of<FilterBloc>(context).add(LoadFilterEvent());
   }
 
   @override
@@ -42,8 +39,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
         actions: [
           TextButton(
             onPressed: () {
-                BlocProvider.of<FilteredPlacesBloc>(context)
-                    .add(ClearFilterEvent());
+              BlocProvider.of<FilterBloc>(context).add(ClearFilterEvent());
             },
             child: Text(
               constants.textBtnClear,
@@ -62,18 +58,12 @@ class _FiltersScreenState extends State<FiltersScreen> {
             left: 16,
             right: 16,
           ),
-          child: BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
+          child: BlocBuilder<FilterBloc, FilterState>(
             buildWhen: (context, state) {
-              return state is PlaceCategoriesLoaded || state is LoadPlaceCategoriesError;
+              return state is LoadFilterCategoriesSuccess;
             },
             builder: (context, state) {
-              if (state is PlaceCategoriesLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              if (state is PlaceCategoriesLoaded) {
-                BlocProvider.of<FilteredPlacesBloc>(context)
-                    .add(LoadFilterParamsEvent());
+              if (state is LoadFilterCategoriesSuccess) {
                 return Column(
                   children: [
                     const SizedBox(height: 20),
@@ -102,7 +92,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 );
               }
 
-              if(state is LoadPlaceCategoriesError){
+              if(state is LoadFilterCategoriesError){
                 return const NetworkException();
               }
 
@@ -126,76 +116,72 @@ class _DistanceState extends State<_Distance> {
   RangeValues _rangeValues = constants.defaultDistanceRange;
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
-      buildWhen: (context, state) {
-        return state is LoadFilterSuccess || state is ClearSlider;
-      },
+    return BlocBuilder<FilterBloc, FilterState>(
       builder: (context, state) {
-        if (state is ClearSlider) {
-          _rangeValues = state.rangeValues;
+        if (state is LoadFiltersSuccess) {
+          _rangeValues = state.filter.distance!;
         }
 
-        if (state is LoadFilterSuccess) {
-          return Column(
-            children: [
-              Row(
-                children: [
-                  const Expanded(
-                    child: Text(
-                      constants.textDistance,
-                      style: TextStyle(fontSize: 16),
-                    ),
+        return Column(
+          children: [
+            Row(
+              children: [
+                const Expanded(
+                  child: Text(
+                    constants.textDistance,
+                    style: TextStyle(fontSize: 16),
                   ),
-                  Expanded(
-                    child: RichText(
-                      textAlign: TextAlign.end,
-                      text: TextSpan(
-                        children: [
-                          const TextSpan(
-                            text: 'от ',
-                            style: TextStyle(color: myLightSecondaryTwo),
-                          ),
-                          TextSpan(
-                            text: _rangeValues.start.round().toString(),
-                            style: const TextStyle(color: myLightSecondaryTwo),
-                          ),
-                          const TextSpan(
-                            text: ' до ',
-                            style: TextStyle(color: myLightSecondaryTwo),
-                          ),
-                          TextSpan(
-                            text: _rangeValues.end.round().toString(),
-                            style: const TextStyle(color: myLightSecondaryTwo),
-                          ),
-                          const TextSpan(
-                            text: ' м',
-                            style: TextStyle(color: myLightSecondaryTwo),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 32,
-                child: RangeSlider(
-                  values: _rangeValues,
-                  max: constants.defaultDistanceRange.end,
-                  divisions: 100,
-                  onChanged: (value) {
-                    setState(() {});
-                    _rangeValues = value;
-                    BlocProvider.of<FilteredPlacesBloc>(context)
-                        .add(UpdateDistanceEvent(value));
-                  },
                 ),
+                Expanded(
+                  child: RichText(
+                    textAlign: TextAlign.end,
+                    text: TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: 'от ',
+                          style: TextStyle(color: myLightSecondaryTwo),
+                        ),
+                        TextSpan(
+                          text: _rangeValues.start.round().toString(),
+                          style: const TextStyle(color: myLightSecondaryTwo),
+                        ),
+                        const TextSpan(
+                          text: ' до ',
+                          style: TextStyle(color: myLightSecondaryTwo),
+                        ),
+                        TextSpan(
+                          text: _rangeValues.end.round().toString(),
+                          style: const TextStyle(color: myLightSecondaryTwo),
+                        ),
+                        const TextSpan(
+                          text: ' м',
+                          style: TextStyle(color: myLightSecondaryTwo),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            SizedBox(
+              width: MediaQuery.of(context).size.width - 32,
+              child: RangeSlider(
+                values: _rangeValues,
+                max: constants.defaultDistanceRange.end,
+                divisions: 100,
+                onChanged: (value) {
+                  setState(() {});
+
+                  _rangeValues = value;
+
+                  BlocProvider.of<FilterBloc>(context)
+                      .add(UpdateFilterDistanceEvent(value));
+                },
               ),
-            ],
-          );
-        }
-        return SizedBox.shrink();
+            ),
+          ],
+        );
       },
     );
   }
@@ -212,18 +198,17 @@ class _ShowButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
+    return BlocBuilder<FilterBloc, FilterState>(
       buildWhen: (context, state) {
-        return state is LoadFilterSuccess;
+        return state is LoadCountFilteredPlacesSuccess;
       },
       builder: (context, state) {
-        if (state is LoadFilterSuccess) {
+        if (state is LoadCountFilteredPlacesSuccess) {
           int count = state.count;
           return ElevatedButton(
             onPressed: () {
               if (count != 0) {
-                BlocProvider.of<FilteredPlacesBloc>(context)
-                    .add(SaveSearchFilterEvent());
+                BlocProvider.of<FilterBloc>(context).add(SaveFilterEvent());
                 Navigator.pop(context);
               }
             },
@@ -253,12 +238,12 @@ class _ShowButton extends StatelessWidget {
               ],
             ),
           );
-        } else if (state is LoadFilterSuccess) {
+        } else if (state is LoadCountFilteredPlacesSuccess) {
           int count = state.count;
           return ElevatedButton(
             onPressed: () {
               if (count != 0) {
-                Navigator.pop(context, state.placeFilter);
+                Navigator.pop(context);
               }
             },
             style: ElevatedButton.styleFrom(
@@ -386,7 +371,7 @@ class _CategoryCircle extends StatelessWidget {
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(40)),
       onTap: () {
-        BlocProvider.of<FilteredPlacesBloc>(context)
+        BlocProvider.of<FilterBloc>(context)
             .add(ToggleCategoryEvent(category.type.toLowerCase()));
       },
       child: Column(
@@ -414,13 +399,13 @@ class _CategoryCircle extends StatelessWidget {
                     ),
                   ),
                 ),
-                BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
+                BlocBuilder<FilterBloc, FilterState>(
                   buildWhen: (context, state) {
-                    return state is LoadFilterSuccess;
+                    return state is LoadFiltersSuccess;
                   },
                   builder: (context, state) {
-                    if (state is LoadFilterSuccess) {
-                      if (state.placeFilter.typeFilter!
+                    if (state is LoadFiltersSuccess) {
+                      if (state.filter.typeFilter!
                           .contains(category.type.toLowerCase())) {
                         return IconCheck(checkSize: checkSize);
                       }

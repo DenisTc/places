@@ -1,8 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/interactor/search_interactor.dart';
-import 'package:places/domain/place.dart';
-import 'package:places/domain/search_filter.dart';
-import 'package:places/ui/res/constants.dart' as constants;
+import 'package:places/data/storage/shared_storage.dart';
 import 'package:rxdart/rxdart.dart';
 
 import 'filtered_places_event.dart';
@@ -11,24 +9,7 @@ import 'filtered_places_state.dart';
 class FilteredPlacesBloc
     extends Bloc<FilteredPlacesEvent, FilteredPlacesState> {
   final SearchInteractor _searchInteractor;
-
-  // Filter to display the selected parameters on the FiltersScreen
-  SearchFilter temporaryFilter = SearchFilter(
-    lat: constants.userLocation.lat,
-    lng: constants.userLocation.lng,
-    distance: constants.defaultDistanceRange,
-    typeFilter: ['other', 'monument'],
-  );
-
-  // Filter used to display data on PlaceListScreen and SearchScreen
-  SearchFilter searchFilter = SearchFilter(
-    lat: constants.userLocation.lat,
-    lng: constants.userLocation.lng,
-    distance: constants.defaultDistanceRange,
-    typeFilter: ['other', 'monument'],
-  );
-
-  List<Place> filtredPlaces = [];
+  final SharedStorage _storage = SharedStorage();
 
   EventTransformer<GetProductosEvent> debounce<GetProductosEvent>(
       Duration duration) {
@@ -38,42 +19,25 @@ class FilteredPlacesBloc
   FilteredPlacesBloc(this._searchInteractor)
       : super(LoadFilteredPlacesInProgress()) {
     on<LoadFilteredPlaces>(
-      (event, emit) => _loadFilteredPlaces(event, emit, temporaryFilter),
+      (event, emit) => _loadFilteredPlaces(event, emit),
     );
 
     on<LoadPlaceCategoriesEvent>(
       (event, emit) => _loadPlaceCategories(event, emit),
     );
-
-    on<LoadFilterParamsEvent>(
-      (event, emit) => _loadFilterParameters(event, emit),
-    );
-
-    on<ToggleCategoryEvent>(
-      (event, emit) => _toggleCategory(event, emit),
-    );
-
-    on<UpdateDistanceEvent>(
-      (event, emit) => _updateDistance(event, emit),
-      transformer: debounce(Duration(milliseconds: 500)),
-    );
-
-    on<ClearFilterEvent>(
-      (event, emit) => _clearFilter(event, emit),
-    );
-
-    on<SaveSearchFilterEvent>((event, emit) => searchFilter = temporaryFilter);
   }
 
-  // Getting a list of filtered places
+  // Get the list of filtered places
   void _loadFilteredPlaces(
-      LoadFilteredPlaces event, Emitter<FilteredPlacesState> emit,
-      [SearchFilter? filters = null]) async {
+    LoadFilteredPlaces event,
+    Emitter<FilteredPlacesState> emit,
+  ) async {
     try {
-      final filteredPlaces =
-          await _searchInteractor.getFiltredPlaces(searchFilter);
+      final _filter = await _storage.getSearchFilter();
 
-      emit(LoadFilteredPlacesSuccess(filteredPlaces));
+      final _filteredPlaces = await _searchInteractor.getFiltredPlaces(_filter);
+
+      emit(LoadFilteredPlacesSuccess(_filteredPlaces));
     } catch (e) {
       emit(LoadFilteredPlacesError(e.toString()));
     }
@@ -81,94 +45,15 @@ class FilteredPlacesBloc
 
   // Get the list of categories
   void _loadPlaceCategories(
-      LoadPlaceCategoriesEvent event, Emitter<FilteredPlacesState> emit) async {
+    LoadPlaceCategoriesEvent event,
+    Emitter<FilteredPlacesState> emit,
+  ) async {
     try {
       var allCategories = await _searchInteractor.getCategories();
 
-      emit(
-        PlaceCategoriesLoaded(
-          categories: allCategories,
-          selectedCategories: temporaryFilter.typeFilter!,
-        ),
-      );
+      emit(PlaceCategoriesLoaded(categories: allCategories));
     } catch (e) {
       emit(LoadPlaceCategoriesError(e.toString()));
     }
-  }
-
-  void _loadFilterParameters(
-    LoadFilterParamsEvent event,
-    Emitter<FilteredPlacesState> emit,
-  ) async {
-    final filteredPlaces =
-        await _searchInteractor.getFiltredPlaces(temporaryFilter);
-
-    emit(LoadFilterSuccess(
-        count: filteredPlaces.length, placeFilter: temporaryFilter));
-  }
-
-  void _toggleCategory(
-    ToggleCategoryEvent event,
-    Emitter<FilteredPlacesState> emit,
-  ) async {
-    if (temporaryFilter.typeFilter!.contains(event.name)) {
-      temporaryFilter.typeFilter!.remove(event.name);
-    } else {
-      temporaryFilter.typeFilter!.add(event.name);
-    }
-
-    final filteredPlaces =
-        await _searchInteractor.getFiltredPlaces(temporaryFilter);
-
-    emit(CategoryToggled(temporaryFilter.typeFilter!));
-
-    emit(LoadFilterSuccess(
-        count: filteredPlaces.length, placeFilter: temporaryFilter));
-  }
-
-  // Update the slider value (distance) in the filter
-  void _updateDistance(
-    UpdateDistanceEvent event,
-    Emitter<FilteredPlacesState> emit,
-  ) async {
-    temporaryFilter.distance = event.distance;
-    final filteredPlaces =
-        await _searchInteractor.getFiltredPlaces(temporaryFilter);
-
-    emit(
-      LoadFilterSuccess(
-        count: filteredPlaces.length,
-        placeFilter: temporaryFilter,
-      ),
-    );
-  }
-
-  // Reset the filter to default values
-  void _clearFilter(
-    ClearFilterEvent event,
-    Emitter<FilteredPlacesState> emit,
-  ) async {
-    // Assigning a default value to the slider
-    emit(ClearSlider(constants.defaultDistanceRange));
-
-    temporaryFilter = SearchFilter(
-      lat: constants.userLocation.lat,
-      lng: constants.userLocation.lng,
-      distance: constants.defaultDistanceRange,
-      typeFilter: [],
-    );
-
-    searchFilter = temporaryFilter;
-
-    // Getting a list of places when using the filter with the default value
-    final filteredPlaces =
-        await _searchInteractor.getFiltredPlaces(temporaryFilter);
-
-    emit(
-      LoadFilterSuccess(
-        count: filteredPlaces.length,
-        placeFilter: temporaryFilter,
-      ),
-    );
   }
 }

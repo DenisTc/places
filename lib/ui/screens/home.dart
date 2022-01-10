@@ -20,12 +20,15 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     FavoritesScreen(),
     SettingsScreen(),
   ];
-  int initialIndex = 0;
+
   late TabController _tabController;
+
+  int initialIndex = 0;
 
   @override
   void initState() {
     initialIndex = widget.selectedTab ?? 0;
+
     _tabController = TabController(
       vsync: this,
       length: pages.length,
@@ -35,6 +38,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     _tabController.addListener(() {
       onSelectTab(_tabController.index);
     });
+    
     super.initState();
   }
 

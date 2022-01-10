@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:places/domain/category.dart';
 import 'package:places/domain/location.dart';
+import 'package:places/ui/res/icons.dart';
 
-const Location userLocation = Location(lat: 56.8490809, lng: 53.247786);
+const Location userLocation = Location(lat: 56.846271, lng: 53.2196675);
 const RangeValues defaultDistanceRange = RangeValues(0, 10000.0);
 const String textToFavorite = 'В избранное';
 const String textInFavorite = 'В избранном';
@@ -62,3 +64,18 @@ const String textOnboardingScreenThirdDesc = 'Делись самыми инте
 const String textFavoriteTab = 'Хочу посетить';
 const String textVisitedTab = 'Посетил';
 const String pathLoader = 'res/images/loader.png';
+const List<Category> categories = [
+    Category(type: 'other', name: 'прочее', icon: iconParticularPlace),
+    Category(type: 'monument', name: 'памятник', icon: iconParticularPlace),
+    Category(type: 'park', name: 'парк', icon: iconPark),
+    Category(type: 'hotel', name: 'отель', icon: iconHotel),
+    Category(type: 'museum', name: 'музей', icon: iconMuseum),
+    Category(type: 'theatre', name: 'театр', icon: iconParticularPlace),
+    Category(type: 'cafe', name: 'кафе', icon: iconCafe),
+    Category(type: 'temple', name: 'храм', icon: iconParticularPlace),
+    Category(type: 'restaurant', name: 'ресторан', icon: iconRestourant),
+  ];
+const String keySPCategory = 'CategoriesFilter';
+const String keySPDistance = 'DistanceFilter';
+const String keySPFilter = 'SearchFilter';
+const List<String> selectedCategories = ['monument', 'other', 'theatre'];
