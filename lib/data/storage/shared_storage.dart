@@ -42,4 +42,14 @@ class SharedStorage {
 
     await _storage.setString(constants.keySPFilter, json);
   }
+
+  Future<void> setTheme(bool isDark) async {
+    await _init();
+    await _storage.setBool(constants.keySPTheme, isDark);
+  }
+
+  Future<bool> getTheme() async {
+    await _init();
+    return await _storage.getBool(constants.keySPTheme) ?? false;
+  }
 }

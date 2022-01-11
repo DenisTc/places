@@ -75,7 +75,6 @@ const List<Category> categories = [
     Category(type: 'temple', name: 'храм', icon: iconParticularPlace),
     Category(type: 'restaurant', name: 'ресторан', icon: iconRestourant),
   ];
-const String keySPCategory = 'CategoriesFilter';
-const String keySPDistance = 'DistanceFilter';
 const String keySPFilter = 'SearchFilter';
+const String keySPTheme = 'Theme';
 const List<String> selectedCategories = ['monument', 'other', 'theatre'];
