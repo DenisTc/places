@@ -77,4 +77,5 @@ const List<Category> categories = [
   ];
 const String keySPFilter = 'SearchFilter';
 const String keySPTheme = 'Theme';
+const String keySPOnboarding = 'Onboarding';
 const List<String> selectedCategories = ['monument', 'other', 'theatre'];

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/storage/shared_storage.dart';
 import 'package:places/ui/screens/home.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/icons.dart';
@@ -17,6 +18,7 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+  final SharedStorage _storage = SharedStorage();
   double currentPage = 0;
   late PageController _pageController;
 
@@ -24,6 +26,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void initState() {
     super.initState();
     _pageController = PageController();
+    _storage.setOnboardingStatus();
   }
 
   @override
@@ -136,7 +139,7 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
               Navigator.pushReplacement<void, void>(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => MainScreen(selectedTab: index),
+                  builder: (context) => Home(selectedTab: index),
                 ),
               );
             },
@@ -296,7 +299,7 @@ class HomeButton extends StatelessWidget {
         Navigator.pushReplacement<void, void>(
           context,
           MaterialPageRoute(
-            builder: (context) => MainScreen(selectedTab: index),
+            builder: (context) => Home(selectedTab: index),
           ),
         );
       },

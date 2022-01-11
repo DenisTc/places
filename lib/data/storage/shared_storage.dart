@@ -52,4 +52,14 @@ class SharedStorage {
     await _init();
     return await _storage.getBool(constants.keySPTheme) ?? false;
   }
+
+  Future<bool> getOnboardingStatus() async{
+    await _init();
+    return await _storage.getBool(constants.keySPOnboarding) ?? false;
+  }
+
+  Future<bool> setOnboardingStatus() async{
+    await _init();
+    return await _storage.setBool(constants.keySPOnboarding, true);
+  }
 }
