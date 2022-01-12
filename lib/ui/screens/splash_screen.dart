@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/storage/shared_storage.dart';
+import 'package:places/ui/screens/home.dart';
 import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/icons.dart';
@@ -15,6 +17,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+  final SharedStorage _storage = SharedStorage();
   late Future<void> isInitialized;
   late AnimationController _animationController;
   late Animation<double> rotation;
@@ -31,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     _animationController.repeat();
-    
+
     try {
       _navigateToNext();
     } on Exception catch (e) {
@@ -77,13 +80,16 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Future<void> _navigateToNext() async {
+    final isOnboardingComplete = await _storage.getOnboardingStatus();
     return Future.delayed(
       const Duration(seconds: 3),
       () => {
         Navigator.pushReplacement<void, void>(
           context,
           MaterialPageRoute(
-            builder: (context) => const OnboardingScreen(fromSettings: false),
+            builder: (context) => isOnboardingComplete
+                ? Home()
+                : OnboardingScreen(fromSettings: false),
           ),
         ),
       },

@@ -15,6 +15,7 @@ class PlaceListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<FilteredPlacesBloc>(context).add(LoadFilteredPlaces());
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
       body: Stack(
@@ -25,6 +26,9 @@ class PlaceListScreen extends StatelessWidget {
               slivers: [
                 const SliverAppBarList(),
                 BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
+                  buildWhen: (context, state) {
+                    return state is LoadFilteredPlacesSuccess;
+                  },
                   builder: (context, state) {
                     if (state is LoadFilteredPlacesInProgress) {
                       return SliverFillRemaining(

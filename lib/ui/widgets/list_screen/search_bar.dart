@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
 import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/res/colors.dart';
@@ -116,6 +119,9 @@ class _SearchBarState extends State<SearchBar> {
       MaterialPageRoute(
         builder: (context) => const FiltersScreen(),
       ),
+    ).whenComplete(
+      () => BlocProvider.of<FilteredPlacesBloc>(context)
+          .add(LoadFilteredPlaces()),
     );
   }
 }

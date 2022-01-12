@@ -5,27 +5,30 @@ import 'package:places/ui/screens/place_map_screen.dart';
 import 'package:places/ui/screens/settings_screen.dart';
 import 'package:places/ui/widgets/place_bottom_nav_bar.dart';
 
-class MainScreen extends StatefulWidget {
+class Home extends StatefulWidget {
   final int? selectedTab;
-  const MainScreen({Key? key, this.selectedTab}) : super(key: key);
+  const Home({Key? key, this.selectedTab}) : super(key: key);
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _HomeState createState() => _HomeState();
 }
 
-class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
+class _HomeState extends State<Home> with TickerProviderStateMixin {
   static List<Widget> pages = [
     PlaceListScreen(),
     PlaceMapScreen(),
     FavoritesScreen(),
     SettingsScreen(),
   ];
-  int initialIndex = 0;
+
   late TabController _tabController;
+
+  int initialIndex = 0;
 
   @override
   void initState() {
     initialIndex = widget.selectedTab ?? 0;
+
     _tabController = TabController(
       vsync: this,
       length: pages.length,
@@ -35,6 +38,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     _tabController.addListener(() {
       onSelectTab(_tabController.index);
     });
+    
     super.initState();
   }
 
