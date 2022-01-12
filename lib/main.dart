@@ -9,6 +9,7 @@ import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/repository/search_repository.dart';
+import 'package:places/database/database.dart';
 import 'package:places/domain/theme_app.dart';
 import 'package:places/ui/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +52,9 @@ class App extends StatelessWidget {
               PlaceRepository(api),
             ),
           ),
+        ),
+        Provider<LocalDatabase>(
+          create: (_) => LocalDatabase(),
         ),
       ],
       child: ChangeNotifierProvider<ThemeApp>(

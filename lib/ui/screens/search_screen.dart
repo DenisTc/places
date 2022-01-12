@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
+import 'package:places/database/database.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/res/colors.dart';
@@ -31,10 +32,17 @@ class SearchScreen extends StatefulWidget {
 
 class _PlaceSearchScreenState extends State<SearchScreen> {
   final _controllerSearch = TextEditingController();
+  late LocalDatabase _db;
+  late List<SearchHistorie> _searchHistory;
 
   @override
   void initState() {
     super.initState();
+
+    _db = context.read<LocalDatabase>();
+
+    _loadHistory();
+
     BlocProvider.of<FilteredPlacesBloc>(context)
         .add(LoadFilteredPlaces(widget.settingsFilter));
   }
@@ -57,6 +65,7 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
             child: Builder(
               builder: (context) {
                 if (historyList.isNotEmpty && _controllerSearch.text == '') {
+                  _loadHistory();
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -75,8 +84,8 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
                           children: [
                             _HistoryList(
                               historyList: historyList.toList(),
-                              deletePlaceFromHistory: (name) {
-                                _deletePlaceFromHistory(name);
+                              deleteSearchRequest: (name) {
+                                _deleteSearchRequest(name);
                               },
                               controllerSearch: _controllerSearch,
                               notifyParent: () {
@@ -85,7 +94,7 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
                             ),
                             _ClearHistoryButton(
                               historyList: historyList.toList(),
-                              clearHistory: _clearHistory,
+                              clearSearchHistory: _clearSearchHistory,
                             ),
                           ],
                         ),
@@ -115,8 +124,8 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
                       return SearchResultList(
                         filteredPlaces: searchRes,
                         searchString: _controllerSearch.text,
-                        addPlaceToSearchHistory: (name) {
-                          _addPlaceToSearchHistory(name);
+                        saveSearchRequest: (request) {
+                          _saveSearchRequest(request);
                         },
                       );
                     }
@@ -138,22 +147,32 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
     );
   }
 
-  void _addPlaceToSearchHistory(String name) {
-    setState(() {
-      if (!historyList.contains(name)) historyList.add(name);
-    });
+  void _loadHistory() async {
+    _searchHistory = await _db.searchHistoriesDao.allRequests;
+    historyList.clear();
+    _searchHistory.map((row) => historyList.add(row.request)).toList();
+    
+    setState(() {});
   }
 
-  void _deletePlaceFromHistory(String name) {
-    setState(() {
-      historyList.remove(name);
-    });
+  void _saveSearchRequest(String request) {
+    _db.searchHistoriesDao.saveSearchRequest(request);
+
+    setState(() {});
   }
 
-  void _clearHistory() {
-    setState(() {
-      historyList.clear();
-    });
+  void _deleteSearchRequest(String text) {
+    _db.searchHistoriesDao.deleteSearchRequest(text);
+    historyList.remove(text);
+
+    setState(() {});
+  }
+
+  void _clearSearchHistory() {
+    _db.searchHistoriesDao.clearSearchHistory();
+    historyList.clear();
+
+    setState(() {});
   }
 
   List<Place> _filterPlacesByName(String name, List<Place> places) {
@@ -173,12 +192,12 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
 class _HistoryList extends StatefulWidget {
   final List<String> historyList;
   final TextEditingController controllerSearch;
-  final Function(String) deletePlaceFromHistory;
+  final Function(String) deleteSearchRequest;
   final Function() notifyParent;
 
   const _HistoryList({
     required this.historyList,
-    required this.deletePlaceFromHistory,
+    required this.deleteSearchRequest,
     required this.controllerSearch,
     required this.notifyParent,
     Key? key,
@@ -239,8 +258,7 @@ class _HistoryListState extends State<_HistoryList> {
                     child: IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
-                        widget
-                            .deletePlaceFromHistory(widget.historyList[index]);
+                        widget.deleteSearchRequest(widget.historyList[index]);
                       },
                       icon: SvgPicture.asset(
                         iconClose,
@@ -264,11 +282,11 @@ class _HistoryListState extends State<_HistoryList> {
 
 class _ClearHistoryButton extends StatefulWidget {
   final List<String> historyList;
-  final Function() clearHistory;
+  final Function() clearSearchHistory;
 
   const _ClearHistoryButton({
     required this.historyList,
-    required this.clearHistory,
+    required this.clearSearchHistory,
     Key? key,
   }) : super(key: key);
 
@@ -285,7 +303,7 @@ class __ClearHistoryButtonState extends State<_ClearHistoryButton> {
         onPressed: () {
           setState(
             () {
-              widget.clearHistory();
+              widget.clearSearchHistory();
             },
           );
         },
