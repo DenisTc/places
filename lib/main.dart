@@ -23,7 +23,7 @@ void main() {
 
 class App extends StatelessWidget {
   final api = ApiClient();
-  final localDB = LocalDatabase();
+  final localDb = LocalDatabase();
 
   @override
   Widget build(BuildContext context) {
@@ -46,21 +46,21 @@ class App extends StatelessWidget {
         BlocProvider<PlaceBloc>(
           create: (context) => PlaceBloc(
             PlaceInteractor(
-              PlaceRepository(api),
+              PlaceRepository(api: api, db: localDb),
             ),
           ),
         ),
         BlocProvider<FavoritePlaceBloc>(
           create: (context) => FavoritePlaceBloc(
             PlaceInteractor(
-              PlaceRepository(api),
+              PlaceRepository(api: api, db: localDb),
             ),
           ),
         ),
         BlocProvider<HistoryCubit>(
           create: (context) => HistoryCubit(
             HistoryInteractor(
-              HistoryRepository(localDB),
+              HistoryRepository(localDb),
             ),
           ),
         ),

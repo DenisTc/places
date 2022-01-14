@@ -17,6 +17,12 @@ class PlaceInteractor {
     return _placeRepository.getPlaceDetails(id: id);
   }
 
+  // Get a list of favorite places
+  Future<List<Place>> getFavoritePlaces() async {
+    final places = await _placeRepository.getFavoritePlaces();
+    return places;
+  }
+
   // Upload image on remote server
   Future<String> uploadImage(String image) async {
     return await _placeRepository.uploadImage(image);
@@ -32,8 +38,28 @@ class PlaceInteractor {
     return _placeRepository.isFavoritePlace(place);
   }
 
-  // Change the favorite status for a place
-  Future<void> toggleToFavorites(Place place) async {
-    await _placeRepository.toggleToFavorites(place);
+  // Cache
+  // Add place to device cache
+  Future<void> addPlaceToCache(Place place) async {
+    await _placeRepository.addPlaceToCache(place);
   }
+
+  // Delete place from device cache
+  Future<void> deletePlaceFromCache(Place place) async {
+    await _placeRepository.deletePlaceFromCache(place);
+  }
+
+  // Favorites
+
+  // Add place to list of favorite places
+  Future<void> addPlaceToFavorites(Place place) async {
+    await _placeRepository.addPlaceToFavorites(place);
+  }
+
+  // Add place from list of favorite places
+  Future<void> deletePlaceFromFavorites(Place place) async {
+    await _placeRepository.deletePlaceFromFavorites(place);
+  }
+
+
 }

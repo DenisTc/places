@@ -7,14 +7,14 @@ import 'package:places/data/api/api_client.dart';
 import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/data/repository/mapper/place_mapper.dart';
+import 'package:places/database/database.dart';
 import 'package:places/domain/place.dart';
 
 class PlaceRepository {
   final ApiClient api;
-  final List<Place> favoritePlaces = [];
-  final Map<Place, DateTime> visitPlaces = {};
+  final LocalDatabase db;
 
-  PlaceRepository(this.api);
+  PlaceRepository({required this.api, required this.db});
 
   // Getting a list of all places
   Future<List<Place>> getPlaces() async {
@@ -45,21 +45,49 @@ class PlaceRepository {
     return response;
   }
 
+  //
+  Future<List<Place>> getFavoritePlaces() async {
+    final favoritePlaces = await db.favoritePlacesDao.loadFavoritePlaces();
+    return favoritePlaces;
+  }
+
   // Checking for a place on the list of favorite places
-  bool isFavoritePlace(Place place) {
-    final isFavorite = favoritePlaces.any((item) => item.id == place.id);
+  Future<bool> isFavoritePlace(Place place) async {
+    final isFavorite =
+        await db.favoritePlacesDao.isFavoritePlaceExist(place.id!);
     return isFavorite;
   }
 
-  // Add or remove a place from the list of favorite places
-  Future<void> toggleToFavorites(Place place) async {
-    bool isContain = isFavoritePlace(place);
+  // Add place to list of favorite places
+  Future<void> addPlaceToFavorites(Place place) async {
+    db.favoritePlacesDao.addPlaceToFavorites(place.id!);
+  }
 
-    if (isContain) {
-      favoritePlaces.remove(place);
-    } else {
-      favoritePlaces.add(place);
-    }
+  // Add place from list of favorite places
+  Future<void> deletePlaceFromFavorites(Place place) async {
+    db.favoritePlacesDao.deletePlaceFromFavorites(place.id!);
+  }
+
+  // Add place to device cache
+  Future<void> addPlaceToCache(Place place) async {
+    db.cachedPlacesDao.addPlaceToCache(place);
+  }
+
+  // Delete place from device cache
+  Future<void> deletePlaceFromCache(Place place) async {
+    db.cachedPlacesDao.deletePlaceFromCache(place.id!);
+  }
+
+  Future<List<Place?>> loadFavoritePlaces() async {
+    final favoritePlaces = await db.favoritePlacesDao.loadFavoritePlaces();
+    return favoritePlaces;
+  }
+
+  // Get a list of cached places on the device
+  Future<List<Place>> loadCachedPlaces() async {
+    final cachedPlaces = db.cachedPlacesDao.getAllCachedPlaces();
+    print(cachedPlaces);
+    return [];
   }
 
   // Upload image on remote server

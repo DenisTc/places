@@ -8,7 +8,6 @@ part 'favorite_place_state.dart';
 
 class FavoritePlaceBloc extends Bloc<FavoritePlaceEvent, FavoritePlaceState> {
   final PlaceInteractor _placeInteractor;
-  List<Place> favoriteList = [];
 
   FavoritePlaceBloc(this._placeInteractor) : super(FavoritePlaceInitial()) {
     on<LoadListFavoritePlaces>(
@@ -20,13 +19,13 @@ class FavoritePlaceBloc extends Bloc<FavoritePlaceEvent, FavoritePlaceState> {
     );
   }
 
-  void _loadListFavoritePlaces(
+  Future<void> _loadListFavoritePlaces(
     LoadListFavoritePlaces event,
     Emitter<FavoritePlaceState> emit,
-  ) {
-    emit(
-      ListFavoritePlacesLoaded(favoriteList),
-    );
+  ) async {
+    final favoriteList = await _placeInteractor.getFavoritePlaces();
+
+    emit(ListFavoritePlacesLoaded(favoriteList));
   }
 
   void _togglePlaceInFavorites(
@@ -35,17 +34,18 @@ class FavoritePlaceBloc extends Bloc<FavoritePlaceEvent, FavoritePlaceState> {
   ) async {
     emit(ListFavoritePlacesLoading());
 
-    await _placeInteractor.toggleToFavorites(event.place);
-    var status = await _placeInteractor.isFavoritePlace(event.place);
+    final isContain = await _placeInteractor.isFavoritePlace(event.place);
 
-    if (status) {
-      favoriteList.add(event.place);
+    if (isContain) {
+      await _placeInteractor.deletePlaceFromFavorites(event.place);
+      await _placeInteractor.deletePlaceFromCache(event.place);
     } else {
-      favoriteList.remove(event.place);
+      await _placeInteractor.addPlaceToFavorites(event.place);
+      await _placeInteractor.addPlaceToCache(event.place);
     }
 
-    emit(
-      ListFavoritePlacesLoaded(favoriteList),
-    );
+    final favoriteList = await _placeInteractor.getFavoritePlaces();
+
+    emit(ListFavoritePlacesLoaded(favoriteList));
   }
 }

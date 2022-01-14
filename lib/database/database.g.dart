@@ -7,6 +7,318 @@ part of 'database.dart';
 // **************************************************************************
 
 // ignore_for_file: unnecessary_brace_in_string_interps, unnecessary_this
+class CachedPlace extends DataClass implements Insertable<CachedPlace> {
+  final int id;
+  final Place? place;
+  CachedPlace({required this.id, this.place});
+  factory CachedPlace.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return CachedPlace(
+      id: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id'])!,
+      place: $CachedPlacesTable.$converter0.mapToDart(const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}place'])),
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    if (!nullToAbsent || place != null) {
+      final converter = $CachedPlacesTable.$converter0;
+      map['place'] = Variable<String?>(converter.mapToSql(place));
+    }
+    return map;
+  }
+
+  CachedPlacesCompanion toCompanion(bool nullToAbsent) {
+    return CachedPlacesCompanion(
+      id: Value(id),
+      place:
+          place == null && nullToAbsent ? const Value.absent() : Value(place),
+    );
+  }
+
+  factory CachedPlace.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CachedPlace(
+      id: serializer.fromJson<int>(json['id']),
+      place: serializer.fromJson<Place?>(json['place']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'place': serializer.toJson<Place?>(place),
+    };
+  }
+
+  CachedPlace copyWith({int? id, Place? place}) => CachedPlace(
+        id: id ?? this.id,
+        place: place ?? this.place,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('CachedPlace(')
+          ..write('id: $id, ')
+          ..write('place: $place')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, place);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CachedPlace &&
+          other.id == this.id &&
+          other.place == this.place);
+}
+
+class CachedPlacesCompanion extends UpdateCompanion<CachedPlace> {
+  final Value<int> id;
+  final Value<Place?> place;
+  const CachedPlacesCompanion({
+    this.id = const Value.absent(),
+    this.place = const Value.absent(),
+  });
+  CachedPlacesCompanion.insert({
+    this.id = const Value.absent(),
+    this.place = const Value.absent(),
+  });
+  static Insertable<CachedPlace> custom({
+    Expression<int>? id,
+    Expression<Place?>? place,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (place != null) 'place': place,
+    });
+  }
+
+  CachedPlacesCompanion copyWith({Value<int>? id, Value<Place?>? place}) {
+    return CachedPlacesCompanion(
+      id: id ?? this.id,
+      place: place ?? this.place,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (place.present) {
+      final converter = $CachedPlacesTable.$converter0;
+      map['place'] = Variable<String?>(converter.mapToSql(place.value));
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CachedPlacesCompanion(')
+          ..write('id: $id, ')
+          ..write('place: $place')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $CachedPlacesTable extends CachedPlaces
+    with TableInfo<$CachedPlacesTable, CachedPlace> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $CachedPlacesTable(this._db, [this._alias]);
+  final VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int?> id = GeneratedColumn<int?>(
+      'id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _placeMeta = const VerificationMeta('place');
+  @override
+  late final GeneratedColumnWithTypeConverter<Place, String?> place =
+      GeneratedColumn<String?>('place', aliasedName, true,
+              type: const StringType(), requiredDuringInsert: false)
+          .withConverter<Place>($CachedPlacesTable.$converter0);
+  @override
+  List<GeneratedColumn> get $columns => [id, place];
+  @override
+  String get aliasedName => _alias ?? 'cached_places';
+  @override
+  String get actualTableName => 'cached_places';
+  @override
+  VerificationContext validateIntegrity(Insertable<CachedPlace> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    context.handle(_placeMeta, const VerificationResult.success());
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  CachedPlace map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return CachedPlace.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $CachedPlacesTable createAlias(String alias) {
+    return $CachedPlacesTable(_db, alias);
+  }
+
+  static TypeConverter<Place, String> $converter0 = PlaceConverter();
+}
+
+class FavoritePlace extends DataClass implements Insertable<FavoritePlace> {
+  final int placeId;
+  FavoritePlace({required this.placeId});
+  factory FavoritePlace.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return FavoritePlace(
+      placeId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}place_id'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['place_id'] = Variable<int>(placeId);
+    return map;
+  }
+
+  FavoritePlacesCompanion toCompanion(bool nullToAbsent) {
+    return FavoritePlacesCompanion(
+      placeId: Value(placeId),
+    );
+  }
+
+  factory FavoritePlace.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FavoritePlace(
+      placeId: serializer.fromJson<int>(json['placeId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'placeId': serializer.toJson<int>(placeId),
+    };
+  }
+
+  FavoritePlace copyWith({int? placeId}) => FavoritePlace(
+        placeId: placeId ?? this.placeId,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('FavoritePlace(')
+          ..write('placeId: $placeId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => placeId.hashCode;
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FavoritePlace && other.placeId == this.placeId);
+}
+
+class FavoritePlacesCompanion extends UpdateCompanion<FavoritePlace> {
+  final Value<int> placeId;
+  const FavoritePlacesCompanion({
+    this.placeId = const Value.absent(),
+  });
+  FavoritePlacesCompanion.insert({
+    this.placeId = const Value.absent(),
+  });
+  static Insertable<FavoritePlace> custom({
+    Expression<int>? placeId,
+  }) {
+    return RawValuesInsertable({
+      if (placeId != null) 'place_id': placeId,
+    });
+  }
+
+  FavoritePlacesCompanion copyWith({Value<int>? placeId}) {
+    return FavoritePlacesCompanion(
+      placeId: placeId ?? this.placeId,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (placeId.present) {
+      map['place_id'] = Variable<int>(placeId.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FavoritePlacesCompanion(')
+          ..write('placeId: $placeId')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FavoritePlacesTable extends FavoritePlaces
+    with TableInfo<$FavoritePlacesTable, FavoritePlace> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $FavoritePlacesTable(this._db, [this._alias]);
+  final VerificationMeta _placeIdMeta = const VerificationMeta('placeId');
+  @override
+  late final GeneratedColumn<int?> placeId = GeneratedColumn<int?>(
+      'place_id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns => [placeId];
+  @override
+  String get aliasedName => _alias ?? 'favorite_places';
+  @override
+  String get actualTableName => 'favorite_places';
+  @override
+  VerificationContext validateIntegrity(Insertable<FavoritePlace> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('place_id')) {
+      context.handle(_placeIdMeta,
+          placeId.isAcceptableOrUnknown(data['place_id']!, _placeIdMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {placeId};
+  @override
+  FavoritePlace map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return FavoritePlace.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $FavoritePlacesTable createAlias(String alias) {
+    return $FavoritePlacesTable(_db, alias);
+  }
+}
+
 class SearchHistorie extends DataClass implements Insertable<SearchHistorie> {
   final int id;
   final String request;
@@ -183,12 +495,19 @@ class $SearchHistoriesTable extends SearchHistories
 
 abstract class _$LocalDatabase extends GeneratedDatabase {
   _$LocalDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
+  late final $CachedPlacesTable cachedPlaces = $CachedPlacesTable(this);
+  late final $FavoritePlacesTable favoritePlaces = $FavoritePlacesTable(this);
   late final $SearchHistoriesTable searchHistories =
       $SearchHistoriesTable(this);
+  late final CachedPlacesDao cachedPlacesDao =
+      CachedPlacesDao(this as LocalDatabase);
+  late final FavoritePlacesDao favoritePlacesDao =
+      FavoritePlacesDao(this as LocalDatabase);
   late final SearchHistoriesDao searchHistoriesDao =
       SearchHistoriesDao(this as LocalDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [searchHistories];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [cachedPlaces, favoritePlaces, searchHistories];
 }
