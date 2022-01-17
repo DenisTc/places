@@ -148,7 +148,8 @@ class __PlaceCardState extends State<PlaceCard> {
                             clipBehavior: Clip.antiAlias,
                             child: IconButton(
                               onPressed: () async {
-                                if (widget.visitDate == null || widget.visitDate!.isAfter(DateTime.now())) {
+                                if (widget.visitDate == null ||
+                                    widget.visitDate!.isAfter(DateTime.now())) {
                                   if (Platform.isAndroid) {
                                     await showDatePicker(
                                       context: context,
@@ -189,6 +190,7 @@ class __PlaceCardState extends State<PlaceCard> {
                                             date: date ?? DateTime.now(),
                                           ),
                                         );
+
                                         setState(() {});
                                       },
                                     );
@@ -197,8 +199,10 @@ class __PlaceCardState extends State<PlaceCard> {
                               },
                               icon: SvgPicture.asset(
                                 // If the scheduled date is not null, then...
-                                (widget.visitDate == null || widget.visitDate!.isAfter(DateTime.now()))
-                                    ?  iconCalendar
+                                (widget.visitDate == null ||
+                                        widget.visitDate!
+                                            .isAfter(DateTime.now()))
+                                    ? iconCalendar
                                     : iconShare,
                                 width: 25,
                                 color: Colors.white,
