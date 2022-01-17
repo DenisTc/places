@@ -7,6 +7,7 @@ import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
+import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/screens/place_details_screen.dart';
@@ -147,8 +148,7 @@ class __PlaceCardState extends State<PlaceCard> {
                             clipBehavior: Clip.antiAlias,
                             child: IconButton(
                               onPressed: () async {
-                                if (widget.visitDate != null) {
-                                } else {
+                                if (widget.visitDate == null || widget.visitDate!.isAfter(DateTime.now())) {
                                   if (Platform.isAndroid) {
                                     await showDatePicker(
                                       context: context,
@@ -173,6 +173,7 @@ class __PlaceCardState extends State<PlaceCard> {
                                       context: context,
                                       builder: (builder) {
                                         return PlaceCupertinoDatePicker(
+                                          initialDateTime: widget.visitDate,
                                           onValueChanged: (newDate) {
                                             date = newDate;
                                           },
@@ -196,9 +197,9 @@ class __PlaceCardState extends State<PlaceCard> {
                               },
                               icon: SvgPicture.asset(
                                 // If the scheduled date is not null, then...
-                                (widget.visitDate != null)
-                                    ? iconShare
-                                    : iconCalendar,
+                                (widget.visitDate == null || widget.visitDate!.isAfter(DateTime.now()))
+                                    ?  iconCalendar
+                                    : iconShare,
                                 width: 25,
                                 color: Colors.white,
                               ),
@@ -390,13 +391,13 @@ class FavoriteCardBottom extends StatelessWidget {
               textAlign: TextAlign.left,
               overflow: TextOverflow.ellipsis,
             ),
-            const SizedBox(height: 2),
+            const SizedBox(height: 6),
             if (visitDate != null)
               if (visitDate!.isBefore(DateTime.now()))
                 Text(
                   constants.textTheGoalIsAchieved + ' ' + date,
                   maxLines: 2,
-                  style: Theme.of(context).textTheme.bodyText1,
+                  style: TextStyle(color: myLightSecondaryTwo),
                   overflow: TextOverflow.ellipsis,
                 )
               else
@@ -407,14 +408,16 @@ class FavoriteCardBottom extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primaryVariant,
                       ),
                   overflow: TextOverflow.ellipsis,
-                )
-            else
-              Text(
+                ),
+            const SizedBox(height: 6),
+            Expanded(
+              child: Text(
                 place.description,
-                maxLines: 2,
-                style: Theme.of(context).textTheme.bodyText2,
+                maxLines: visitDate != null ? 1 : 2,
+                style: TextStyle(color: myLightSecondaryTwo),
                 overflow: TextOverflow.ellipsis,
               ),
+            ),
           ],
         ),
       ),

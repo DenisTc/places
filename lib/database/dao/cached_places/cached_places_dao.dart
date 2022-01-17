@@ -1,10 +1,8 @@
 import 'package:drift/drift.dart';
-import 'package:flutter/material.dart';
 import 'package:places/database/database.dart';
 import 'package:places/database/tables/cahced_places.dart';
 import 'package:places/database/tables/favorite_places.dart';
 import 'package:places/database/tables/visited_places.dart';
-import 'package:places/domain/place_with_date.dart';
 import 'package:places/domain/place.dart';
 
 part 'cached_places_dao.g.dart';
