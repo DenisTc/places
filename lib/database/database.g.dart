@@ -493,21 +493,196 @@ class $SearchHistoriesTable extends SearchHistories
   }
 }
 
+class VisitedPlace extends DataClass implements Insertable<VisitedPlace> {
+  final int placeId;
+  final DateTime date;
+  VisitedPlace({required this.placeId, required this.date});
+  factory VisitedPlace.fromData(Map<String, dynamic> data, {String? prefix}) {
+    final effectivePrefix = prefix ?? '';
+    return VisitedPlace(
+      placeId: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}place_id'])!,
+      date: const DateTimeType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}date'])!,
+    );
+  }
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['place_id'] = Variable<int>(placeId);
+    map['date'] = Variable<DateTime>(date);
+    return map;
+  }
+
+  VisitedPlacesCompanion toCompanion(bool nullToAbsent) {
+    return VisitedPlacesCompanion(
+      placeId: Value(placeId),
+      date: Value(date),
+    );
+  }
+
+  factory VisitedPlace.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return VisitedPlace(
+      placeId: serializer.fromJson<int>(json['placeId']),
+      date: serializer.fromJson<DateTime>(json['date']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'placeId': serializer.toJson<int>(placeId),
+      'date': serializer.toJson<DateTime>(date),
+    };
+  }
+
+  VisitedPlace copyWith({int? placeId, DateTime? date}) => VisitedPlace(
+        placeId: placeId ?? this.placeId,
+        date: date ?? this.date,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('VisitedPlace(')
+          ..write('placeId: $placeId, ')
+          ..write('date: $date')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(placeId, date);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is VisitedPlace &&
+          other.placeId == this.placeId &&
+          other.date == this.date);
+}
+
+class VisitedPlacesCompanion extends UpdateCompanion<VisitedPlace> {
+  final Value<int> placeId;
+  final Value<DateTime> date;
+  const VisitedPlacesCompanion({
+    this.placeId = const Value.absent(),
+    this.date = const Value.absent(),
+  });
+  VisitedPlacesCompanion.insert({
+    this.placeId = const Value.absent(),
+    required DateTime date,
+  }) : date = Value(date);
+  static Insertable<VisitedPlace> custom({
+    Expression<int>? placeId,
+    Expression<DateTime>? date,
+  }) {
+    return RawValuesInsertable({
+      if (placeId != null) 'place_id': placeId,
+      if (date != null) 'date': date,
+    });
+  }
+
+  VisitedPlacesCompanion copyWith(
+      {Value<int>? placeId, Value<DateTime>? date}) {
+    return VisitedPlacesCompanion(
+      placeId: placeId ?? this.placeId,
+      date: date ?? this.date,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (placeId.present) {
+      map['place_id'] = Variable<int>(placeId.value);
+    }
+    if (date.present) {
+      map['date'] = Variable<DateTime>(date.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('VisitedPlacesCompanion(')
+          ..write('placeId: $placeId, ')
+          ..write('date: $date')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $VisitedPlacesTable extends VisitedPlaces
+    with TableInfo<$VisitedPlacesTable, VisitedPlace> {
+  final GeneratedDatabase _db;
+  final String? _alias;
+  $VisitedPlacesTable(this._db, [this._alias]);
+  final VerificationMeta _placeIdMeta = const VerificationMeta('placeId');
+  @override
+  late final GeneratedColumn<int?> placeId = GeneratedColumn<int?>(
+      'place_id', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: false);
+  final VerificationMeta _dateMeta = const VerificationMeta('date');
+  @override
+  late final GeneratedColumn<DateTime?> date = GeneratedColumn<DateTime?>(
+      'date', aliasedName, false,
+      type: const IntType(), requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [placeId, date];
+  @override
+  String get aliasedName => _alias ?? 'visited_places';
+  @override
+  String get actualTableName => 'visited_places';
+  @override
+  VerificationContext validateIntegrity(Insertable<VisitedPlace> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('place_id')) {
+      context.handle(_placeIdMeta,
+          placeId.isAcceptableOrUnknown(data['place_id']!, _placeIdMeta));
+    }
+    if (data.containsKey('date')) {
+      context.handle(
+          _dateMeta, date.isAcceptableOrUnknown(data['date']!, _dateMeta));
+    } else if (isInserting) {
+      context.missing(_dateMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {placeId};
+  @override
+  VisitedPlace map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return VisitedPlace.fromData(data,
+        prefix: tablePrefix != null ? '$tablePrefix.' : null);
+  }
+
+  @override
+  $VisitedPlacesTable createAlias(String alias) {
+    return $VisitedPlacesTable(_db, alias);
+  }
+}
+
 abstract class _$LocalDatabase extends GeneratedDatabase {
   _$LocalDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   late final $CachedPlacesTable cachedPlaces = $CachedPlacesTable(this);
   late final $FavoritePlacesTable favoritePlaces = $FavoritePlacesTable(this);
   late final $SearchHistoriesTable searchHistories =
       $SearchHistoriesTable(this);
+  late final $VisitedPlacesTable visitedPlaces = $VisitedPlacesTable(this);
   late final CachedPlacesDao cachedPlacesDao =
       CachedPlacesDao(this as LocalDatabase);
   late final FavoritePlacesDao favoritePlacesDao =
       FavoritePlacesDao(this as LocalDatabase);
   late final SearchHistoriesDao searchHistoriesDao =
       SearchHistoriesDao(this as LocalDatabase);
+  late final VisitedPlacesDao visitedPlacesDao =
+      VisitedPlacesDao(this as LocalDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [cachedPlaces, favoritePlaces, searchHistories];
+      [cachedPlaces, favoritePlaces, searchHistories, visitedPlaces];
 }

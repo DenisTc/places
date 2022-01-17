@@ -9,6 +9,7 @@ import 'package:places/data/model/place_dto.dart';
 import 'package:places/data/repository/mapper/place_mapper.dart';
 import 'package:places/database/database.dart';
 import 'package:places/domain/place.dart';
+import 'package:places/domain/place_with_date.dart';
 
 class PlaceRepository {
   final ApiClient api;
@@ -78,7 +79,7 @@ class PlaceRepository {
     db.cachedPlacesDao.deletePlaceFromCache(place.id!);
   }
 
-  Future<List<Place?>> loadFavoritePlaces() async {
+  Future<List<Place>> loadFavoritePlaces() async {
     final favoritePlaces = await db.favoritePlacesDao.loadFavoritePlaces();
     return favoritePlaces;
   }
@@ -113,5 +114,19 @@ class PlaceRepository {
         await api.client.post(ApiConstants.uploadFile, data: formData);
 
     return '${ApiConstants.baseUrl}/${response.headers['location']!.first}';
+  }
+
+  // Visited
+
+  Future<List<PlaceWithDate>> getVisitedPlaces() async {
+    final favoritePlaces = await db.visitedPlacesDao.loadVisitedPlaces();
+    return favoritePlaces;
+  }
+
+  Future<void> addPlaceToVisitedList({
+    required int id,
+    required DateTime date,
+  }) async {
+     db.visitedPlacesDao.addPlaceToVisitedList(id: id, date: date);
   }
 }

@@ -7,21 +7,12 @@ abstract class FavoritePlaceEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class LoadListFavoritePlaces extends FavoritePlaceEvent {}
+
 class TogglePlaceInFavorites extends FavoritePlaceEvent {
   final Place place;
 
   TogglePlaceInFavorites(this.place);
-
-  @override
-  List<Object> get props => [place];
-}
-
-class LoadListFavoritePlaces extends FavoritePlaceEvent {}
-
-class RemovePlaceFromFavoritesList extends FavoritePlaceEvent {
-  final Place place;
-
-  RemovePlaceFromFavoritesList(this.place);
 
   @override
   List<Object> get props => [place];

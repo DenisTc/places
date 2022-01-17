@@ -63,6 +63,9 @@ const String textOnboardingScreenThirdTitle = 'Добавляй места,\nк�
 const String textOnboardingScreenThirdDesc = 'Делись самыми интересными\nи помоги нам стать лучше!';
 const String textFavoriteTab = 'Хочу посетить';
 const String textVisitedTab = 'Посетил';
+const String textScheduledFor = 'Запланировано на';
+const String textTheGoalIsAchieved = 'Цель достигнута';
+const String textIsEmpty = 'Пусто';
 const String pathLoader = 'res/images/loader.png';
 const List<Category> categories = [
     Category(type: 'other', name: 'прочее', icon: iconParticularPlace),

@@ -23,7 +23,7 @@ class FavoritePlaceBloc extends Bloc<FavoritePlaceEvent, FavoritePlaceState> {
     LoadListFavoritePlaces event,
     Emitter<FavoritePlaceState> emit,
   ) async {
-    final favoriteList = await _placeInteractor.getFavoritePlaces();
+    final List<Place> favoriteList = await _placeInteractor.getFavoritePlaces();
 
     emit(ListFavoritePlacesLoaded(favoriteList));
   }

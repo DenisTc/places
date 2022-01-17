@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/domain/place.dart';
+import 'package:places/domain/place_with_date.dart';
 
 class PlaceInteractor {
   final PlaceRepository _placeRepository;
@@ -61,5 +62,19 @@ class PlaceInteractor {
     await _placeRepository.deletePlaceFromFavorites(place);
   }
 
+  // Visited
 
+  
+  Future<List<PlaceWithDate>> getVisitedPlaces() async {
+    final places = await _placeRepository.getVisitedPlaces();
+    return places;
+  }
+
+  //
+  Future<void> addPlaceToVisitedList({
+    required int id,
+    required DateTime date,
+  }) async {
+    await _placeRepository.addPlaceToVisitedList(id: id, date: date);
+  }
 }

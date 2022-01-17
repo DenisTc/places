@@ -7,6 +7,7 @@ part of 'cached_places_dao.dart';
 // **************************************************************************
 
 mixin _$CachedPlacesDaoMixin on DatabaseAccessor<LocalDatabase> {
-  $FavoritePlacesTable get favoritePlaces => attachedDatabase.favoritePlaces;
   $CachedPlacesTable get cachedPlaces => attachedDatabase.cachedPlaces;
+  $FavoritePlacesTable get favoritePlaces => attachedDatabase.favoritePlaces;
+  $VisitedPlacesTable get visitedPlaces => attachedDatabase.visitedPlaces;
 }

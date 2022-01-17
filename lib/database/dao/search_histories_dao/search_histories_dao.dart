@@ -9,13 +9,13 @@ class SearchHistoriesDao extends DatabaseAccessor<LocalDatabase>
     with _$SearchHistoriesDaoMixin {
   SearchHistoriesDao(LocalDatabase db) : super(db);
 
+  // Read
+  Future<List<SearchHistorie>> get allRequests => select(searchHistories).get();
+
   // Create
   void saveSearchRequest(String request) => into(searchHistories)
       .insert(SearchHistoriesCompanion(request: Value(request)))
       .ignore();
-
-  // Read
-  Future<List<SearchHistorie>> get allRequests => select(searchHistories).get();
 
   // Delete
   Future<void> deleteSearchRequest(String text) async =>

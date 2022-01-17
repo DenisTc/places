@@ -5,6 +5,7 @@ import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/filter/bloc/filter_bloc.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/data/blocs/place/bloc/place_bloc.dart';
+import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
 import 'package:places/data/cubits/history/history_cubit.dart';
 import 'package:places/data/interactor/history_interactor.dart';
 import 'package:places/data/interactor/place_interactor.dart';
@@ -52,6 +53,13 @@ class App extends StatelessWidget {
         ),
         BlocProvider<FavoritePlaceBloc>(
           create: (context) => FavoritePlaceBloc(
+            PlaceInteractor(
+              PlaceRepository(api: api, db: localDb),
+            ),
+          ),
+        ),
+        BlocProvider<VisitedPlaceBloc>(
+          create: (context) => VisitedPlaceBloc(
             PlaceInteractor(
               PlaceRepository(api: api, db: localDb),
             ),

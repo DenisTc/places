@@ -4,23 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
+import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
+import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/screens/place_details_screen.dart';
-import 'package:places/ui/widgets/place_cupertino_date_picker.dart';
-import 'package:places/ui/widgets/visiting_screen/card/favorite_card_bottom.dart';
-import 'package:places/ui/widgets/visiting_screen/card/favorite_card_top.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class PlaceCard extends StatefulWidget {
   final GlobalKey globalKey;
-  final bool visited;
+  final DateTime? visitDate;
   final Place place;
   const PlaceCard({
-    required this.visited,
+    Key? key,
     required this.place,
     required this.globalKey,
-    Key? key,
+    this.visitDate,
   }) : super(key: key);
 
   @override
@@ -30,6 +32,7 @@ class PlaceCard extends StatefulWidget {
 class __PlaceCardState extends State<PlaceCard> {
   @override
   Widget build(BuildContext context) {
+    DateTime? date;
     return Material(
       borderRadius: const BorderRadius.all(Radius.circular(16)),
       child: Container(
@@ -83,7 +86,9 @@ class __PlaceCardState extends State<PlaceCard> {
               ),
               Dismissible(
                 key: ValueKey(widget.place),
-                direction: DismissDirection.endToStart,
+                direction: (widget.visitDate == null)
+                    ? DismissDirection.endToStart
+                    : DismissDirection.none,
                 onDismissed: (direction) {
                   BlocProvider.of<FavoritePlaceBloc>(context)
                       .add(TogglePlaceInFavorites(widget.place));
@@ -95,11 +100,11 @@ class __PlaceCardState extends State<PlaceCard> {
                       children: [
                         FavoriteCardTop(
                           place: widget.place,
-                          visited: widget.visited,
+                          visited: widget.visitDate != null,
                         ),
                         FavoriteCardBottom(
                           place: widget.place,
-                          visited: widget.visited,
+                          visitDate: widget.visitDate,
                         ),
                       ],
                     ),
@@ -134,6 +139,7 @@ class __PlaceCardState extends State<PlaceCard> {
                       right: 4,
                       child: Row(
                         children: [
+                          // Action buttons : planned or share
                           Material(
                             color: Colors.transparent,
                             borderRadius:
@@ -141,7 +147,7 @@ class __PlaceCardState extends State<PlaceCard> {
                             clipBehavior: Clip.antiAlias,
                             child: IconButton(
                               onPressed: () async {
-                                if (widget.visited) {
+                                if (widget.visitDate != null) {
                                 } else {
                                   if (Platform.isAndroid) {
                                     await showDatePicker(
@@ -166,36 +172,64 @@ class __PlaceCardState extends State<PlaceCard> {
                                     await showModalBottomSheet<void>(
                                       context: context,
                                       builder: (builder) {
-                                        return const PlaceCupertinoDatePicker();
+                                        return PlaceCupertinoDatePicker(
+                                          onValueChanged: (newDate) {
+                                            date = newDate;
+                                          },
+                                        );
+                                      },
+                                    ).whenComplete(
+                                      () {
+                                        BlocProvider.of<VisitedPlaceBloc>(
+                                                context)
+                                            .add(
+                                          AddPlaceToVisitedList(
+                                            place: widget.place,
+                                            date: date ?? DateTime.now(),
+                                          ),
+                                        );
+                                        setState(() {});
                                       },
                                     );
                                   }
                                 }
                               },
                               icon: SvgPicture.asset(
-                                widget.visited ? iconShare : iconCalendar,
+                                // If the scheduled date is not null, then...
+                                (widget.visitDate != null)
+                                    ? iconShare
+                                    : iconCalendar,
                                 width: 25,
                                 color: Colors.white,
                               ),
                             ),
                           ),
+
                           const SizedBox(width: 2),
-                          Material(
-                            color: Colors.transparent,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(50)),
-                            clipBehavior: Clip.antiAlias,
-                            child: IconButton(
-                              onPressed: () {
-                                BlocProvider.of<FavoritePlaceBloc>(context)
-                                    .add(TogglePlaceInFavorites(widget.place));
-                              },
-                              icon: const Icon(
-                                Icons.clear_outlined,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
+
+                          // Delete button.
+                          // Not shown in the place card where the planned date of visit has already passed.
+                          (widget.visitDate != null)
+                              ? SizedBox.shrink()
+                              : Material(
+                                  color: Colors.transparent,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(50)),
+                                  clipBehavior: Clip.antiAlias,
+                                  child: IconButton(
+                                    onPressed: () {
+                                      BlocProvider.of<FavoritePlaceBloc>(
+                                              context)
+                                          .add(TogglePlaceInFavorites(
+                                              widget.place));
+                                    },
+                                    icon: const Icon(
+                                      Icons.clear_outlined,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                          // : ,
                         ],
                       ),
                     ),
@@ -204,6 +238,184 @@ class __PlaceCardState extends State<PlaceCard> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class FavoriteCardTop extends StatefulWidget {
+  final Place place;
+  final bool visited;
+
+  const FavoriteCardTop({
+    required this.place,
+    required this.visited,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  _FavoriteCardTopState createState() => _FavoriteCardTopState();
+}
+
+class _FavoriteCardTopState extends State<FavoriteCardTop> {
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+        ),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                topRight: Radius.circular(16),
+              ),
+              child: Hero(
+                tag: widget.place.id.toString(),
+                child: CachedNetworkImage(
+                  imageUrl: widget.place.urls.first,
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                  placeholder: (context, url) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return ImagePlaceholder();
+                  },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      Category.getCategoryByType(widget.place.placeType).name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ImagePlaceholder extends StatelessWidget {
+  const ImagePlaceholder({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Theme.of(context).secondaryHeaderColor,
+      child: const Center(
+        child: Icon(
+          Icons.photo_size_select_actual_outlined,
+          color: Colors.grey,
+          size: 50.0,
+        ),
+      ),
+    );
+  }
+}
+
+class FavoriteCardBottom extends StatelessWidget {
+  final Place place;
+  final DateTime? visitDate;
+
+  const FavoriteCardBottom({
+    Key? key,
+    required this.place,
+    this.visitDate,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    initializeDateFormatting();
+
+    String date = '';
+
+    if (visitDate != null) {
+      date = DateFormat('d MMM. y', 'ru_RU').format(visitDate!).toString();
+    }
+
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(16),
+            bottomRight: Radius.circular(16),
+          ),
+          color: Theme.of(context).primaryColor,
+        ),
+        width: double.infinity,
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 16,
+          bottom: 16,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            Text(
+              place.name,
+              maxLines: 2,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline1
+                  ?.copyWith(fontSize: 16, fontWeight: FontWeight.w500),
+              textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
+            ),
+            const SizedBox(height: 2),
+            if (visitDate != null)
+              if (visitDate!.isBefore(DateTime.now()))
+                Text(
+                  constants.textTheGoalIsAchieved + ' ' + date,
+                  maxLines: 2,
+                  style: Theme.of(context).textTheme.bodyText1,
+                  overflow: TextOverflow.ellipsis,
+                )
+              else
+                Text(
+                  constants.textScheduledFor + ' ' + date,
+                  maxLines: 2,
+                  style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        color: Theme.of(context).colorScheme.primaryVariant,
+                      ),
+                  overflow: TextOverflow.ellipsis,
+                )
+            else
+              Text(
+                place.description,
+                maxLines: 2,
+                style: Theme.of(context).textTheme.bodyText2,
+                overflow: TextOverflow.ellipsis,
+              ),
+          ],
         ),
       ),
     );
