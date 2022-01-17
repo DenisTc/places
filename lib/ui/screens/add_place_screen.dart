@@ -64,7 +64,6 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
                       deleteImage(imgUrl);
                     },
                     images: images,
-                    // galleryState: wm.galleryState,
                   ),
                   const SizedBox(height: 24),
                   Text(
@@ -742,45 +741,48 @@ showAlertDialog(BuildContext context) {
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 5),
-                    child: Builder(builder: (context) {
-                      if (state is AddNewPlaceSuccess) {
-                        debugPrint(constants.textAddNewPlaceSuccess);
-                        Future.delayed(const Duration(seconds: 2)).then(
-                          (_) => Navigator.pop(context),
-                        );
-                      }
-                      if (state is AddNewPlaceError) {
-                        return Column(
-                          children: [
-                            Text(constants.textAddNewPlaceError),
-                            SizedBox(height: 16),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                constants.textBtnBackToMainScreen,
-                                style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primaryVariant,
+                    child: Builder(
+                      builder: (context) {
+                        if (state is AddNewPlaceSuccess) {
+                          debugPrint(constants.textAddNewPlaceSuccess);
+                          Future.delayed(const Duration(seconds: 2)).then(
+                            (_) => Navigator.pop(context),
+                          );
+                        }
+                        if (state is AddNewPlaceError) {
+                          return Column(
+                            children: [
+                              Text(constants.textAddNewPlaceError),
+                              SizedBox(height: 16),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  constants.textBtnBackToMainScreen,
+                                  style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryVariant,
+                                  ),
+                                ),
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
                                 ),
                               ),
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: Size.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                            ),
-                          ],
-                        );
-                      }
+                            ],
+                          );
+                        }
 
-                      if (state is AddNewPlaceSuccess) {
-                        return const Text(constants.textAddNewPlaceSuccess);
-                      }
-                      return const Text(constants.textAddNewPlaceInProcess);
-                    }),
+                        if (state is AddNewPlaceSuccess) {
+                          return const Text(constants.textAddNewPlaceSuccess);
+                        }
+                        return const Text(constants.textAddNewPlaceInProcess);
+                      },
+                    ),
                   ),
                 ),
               ],

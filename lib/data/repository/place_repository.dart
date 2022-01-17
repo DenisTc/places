@@ -41,6 +41,7 @@ class PlaceRepository {
   // Sending information about the new place to a remote server
   Future<dynamic> addNewPlace(Place place) async {
     final data = place.toJson();
+    data.remove('id');
     final response = await api.client.post(ApiConstants.placeUrl, data: data);
 
     return response;
