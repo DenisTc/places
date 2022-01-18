@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
 import 'package:places/domain/category.dart';
@@ -11,9 +14,6 @@ import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/screens/place_details_screen.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 class PlaceCard extends StatefulWidget {
   final GlobalKey globalKey;
@@ -34,6 +34,7 @@ class __PlaceCardState extends State<PlaceCard> {
   @override
   Widget build(BuildContext context) {
     DateTime? date;
+
     return Material(
       borderRadius: const BorderRadius.all(Radius.circular(16)),
       child: Container(
@@ -123,7 +124,8 @@ class __PlaceCardState extends State<PlaceCard> {
                                   place: widget.place,
                                 );
                               },
-                              transitionDuration: Duration(milliseconds: 200),
+                              transitionDuration:
+                                  const Duration(milliseconds: 200),
                               transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) {
                                 return FadeTransition(
@@ -183,8 +185,8 @@ class __PlaceCardState extends State<PlaceCard> {
                                     ).whenComplete(
                                       () {
                                         BlocProvider.of<VisitedPlaceBloc>(
-                                                context)
-                                            .add(
+                                          context,
+                                        ).add(
                                           AddPlaceToVisitedList(
                                             place: widget.place,
                                             date: date ?? DateTime.now(),
@@ -214,26 +216,27 @@ class __PlaceCardState extends State<PlaceCard> {
 
                           // Delete button.
                           // Not shown in the place card where the planned date of visit has already passed.
-                          (widget.visitDate != null)
-                              ? SizedBox.shrink()
-                              : Material(
-                                  color: Colors.transparent,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(50)),
-                                  clipBehavior: Clip.antiAlias,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      BlocProvider.of<FavoritePlaceBloc>(
-                                              context)
-                                          .add(TogglePlaceInFavorites(
-                                              widget.place));
-                                    },
-                                    icon: const Icon(
-                                      Icons.clear_outlined,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                          if (widget.visitDate != null)
+                            const SizedBox.shrink()
+                          else
+                            Material(
+                              color: Colors.transparent,
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(50)),
+                              clipBehavior: Clip.antiAlias,
+                              child: IconButton(
+                                onPressed: () {
+                                  BlocProvider.of<FavoritePlaceBloc>(context)
+                                      .add(
+                                    TogglePlaceInFavorites(widget.place),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.clear_outlined,
+                                  color: Colors.white,
                                 ),
+                              ),
+                            ),
                           // : ,
                         ],
                       ),
@@ -298,7 +301,7 @@ class _FavoriteCardTopState extends State<FavoriteCardTop> {
                     );
                   },
                   errorWidget: (context, url, error) {
-                    return ImagePlaceholder();
+                    return const ImagePlaceholder();
                   },
                 ),
               ),
@@ -401,7 +404,7 @@ class FavoriteCardBottom extends StatelessWidget {
                 Text(
                   constants.textTheGoalIsAchieved + ' ' + date,
                   maxLines: 2,
-                  style: TextStyle(color: myLightSecondaryTwo),
+                  style: const TextStyle(color: myLightSecondaryTwo),
                   overflow: TextOverflow.ellipsis,
                 )
               else
@@ -418,7 +421,7 @@ class FavoriteCardBottom extends StatelessWidget {
               child: Text(
                 place.description,
                 maxLines: visitDate != null ? 1 : 2,
-                style: TextStyle(color: myLightSecondaryTwo),
+                style: const TextStyle(color: myLightSecondaryTwo),
                 overflow: TextOverflow.ellipsis,
               ),
             ),

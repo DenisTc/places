@@ -23,13 +23,13 @@ class Place extends Equatable {
   });
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "lat": lat,
-        "lng": lng,
-        "name": name,
-        "urls": urls,
-        "placeType": placeType,
-        "description": description,
+        'id': id,
+        'lat': lat,
+        'lng': lng,
+        'name': name,
+        'urls': urls,
+        'placeType': placeType,
+        'description': description,
       };
 
   Place.fromJson(Map<String, dynamic> json)

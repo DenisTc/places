@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:places/domain/place.dart';
+part of 'filtered_places_bloc.dart';
 
 abstract class FilteredPlacesState extends Equatable {
   const FilteredPlacesState();
@@ -33,7 +32,7 @@ class PlaceCategoriesLoading extends FilteredPlacesState {}
 class PlaceCategoriesLoaded extends FilteredPlacesState {
   final List<String> categories;
 
-  PlaceCategoriesLoaded({required this.categories});
+  const PlaceCategoriesLoaded({required this.categories});
 
   @override
   List<Object> get props => [categories];

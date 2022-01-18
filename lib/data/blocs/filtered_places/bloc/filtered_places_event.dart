@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:places/domain/search_filter.dart';
+part of 'filtered_places_bloc.dart';
 
 class FilteredPlacesEvent extends Equatable {
   const FilteredPlacesEvent();
@@ -11,7 +10,7 @@ class FilteredPlacesEvent extends Equatable {
 class LoadFilteredPlaces extends FilteredPlacesEvent {
   final SearchFilter? filters;
 
-  LoadFilteredPlaces([this.filters]);
+  const LoadFilteredPlaces([this.filters]);
 
   @override
   List<Object> get props => [];

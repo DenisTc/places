@@ -47,18 +47,13 @@ class PlaceRepository {
     return response;
   }
 
-  //
-  Future<List<Place>> getFavoritePlaces() async {
-    final favoritePlaces = await db.favoritePlacesDao.loadFavoritePlaces();
-    return favoritePlaces;
-  }
+  // Get a list of favorite places
+  Future<List<Place>> getFavoritePlaces() async =>
+      db.favoritePlacesDao.loadFavoritePlaces();
 
   // Checking for a place on the list of favorite places
-  Future<bool> isFavoritePlace(Place place) async {
-    final isFavorite =
-        await db.favoritePlacesDao.isFavoritePlaceExist(place.id!);
-    return isFavorite;
-  }
+  Future<bool> isFavoritePlace(Place place) async =>
+      db.favoritePlacesDao.isFavoritePlaceExist(place.id!);
 
   // Add place to list of favorite places
   Future<void> addPlaceToFavorites(Place place) async {
@@ -66,31 +61,19 @@ class PlaceRepository {
   }
 
   // Add place from list of favorite places
-  Future<void> deletePlaceFromFavorites(Place place) async {
-    db.favoritePlacesDao.deletePlaceFromFavorites(place.id!);
-  }
+  Future<void> deletePlaceFromFavorites(Place place) async =>
+      db.favoritePlacesDao.deletePlaceFromFavorites(place.id!);
 
   // Add place to device cache
-  Future<void> addPlaceToCache(Place place) async {
-    db.cachedPlacesDao.addPlaceToCache(place);
-  }
+  Future<void> addPlaceToCache(Place place) async =>
+      db.cachedPlacesDao.addPlaceToCache(place);
 
   // Delete place from device cache
-  Future<void> deletePlaceFromCache(Place place) async {
-    db.cachedPlacesDao.deletePlaceFromCache(place.id!);
-  }
+  Future<void> deletePlaceFromCache(Place place) async =>
+      db.cachedPlacesDao.deletePlaceFromCache(place.id!);
 
-  Future<List<Place>> loadFavoritePlaces() async {
-    final favoritePlaces = await db.favoritePlacesDao.loadFavoritePlaces();
-    return favoritePlaces;
-  }
-
-  // Get a list of cached places on the device
-  Future<List<Place>> loadCachedPlaces() async {
-    final cachedPlaces = db.cachedPlacesDao.getAllCachedPlaces();
-    print(cachedPlaces);
-    return [];
-  }
+  Future<List<Place>> loadFavoritePlaces() async =>
+      db.favoritePlacesDao.loadFavoritePlaces();
 
   // Upload image on remote server
   Future<String> uploadImage(String image) async {
@@ -101,7 +84,7 @@ class PlaceRepository {
 
     FormData formData = FormData.fromMap(
       {
-        "image": [
+        'image': [
           await MultipartFile.fromFile(
             image,
             filename: fileName,
@@ -118,16 +101,14 @@ class PlaceRepository {
   }
 
   // Visited
+  // Get a list of places with a specified date of visit
+  Future<List<PlaceWithDate>> getVisitedPlaces() async =>
+      db.visitedPlacesDao.loadVisitedPlaces();
 
-  Future<List<PlaceWithDate>> getVisitedPlaces() async {
-    final favoritePlaces = await db.visitedPlacesDao.loadVisitedPlaces();
-    return favoritePlaces;
-  }
-
+  // Add a place to the list with a specified date of visit
   Future<void> addPlaceToVisitedList({
     required int id,
     required DateTime date,
-  }) async {
-     db.visitedPlacesDao.addPlaceToVisitedList(id: id, date: date);
-  }
+  }) async =>
+      db.visitedPlacesDao.addPlaceToVisitedList(id: id, date: date);
 }

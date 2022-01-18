@@ -6,7 +6,7 @@ class HistoryRepository {
   HistoryRepository(this._db);
 
   Future<List<String>> loadHistory() async {
-    final history = await _db.searchHistoriesDao.allRequests.then(
+    final history = await _db.searchHistoriesDao.allRequests().then(
       (history) => history
           .map(
             (text) => text.request,
@@ -16,15 +16,12 @@ class HistoryRepository {
     return history;
   }
 
-  void saveSearchRequest(String request) {
-    _db.searchHistoriesDao.saveSearchRequest(request);
-  }
+  Future<void> saveSearchRequest(String request) async =>
+      await _db.searchHistoriesDao.saveSearchRequest(request);
 
-  void deleteSearchRequest(String request) {
-    _db.searchHistoriesDao.deleteSearchRequest(request);
-  }
+  Future<void> deleteSearchRequest(String request) async =>
+      await _db.searchHistoriesDao.deleteSearchRequest(request);
 
-  void clearSearchHistory() {
-    _db.searchHistoriesDao.clearSearchHistory();
-  }
+  Future<void> clearSearchHistory() async =>
+      await _db.searchHistoriesDao.clearSearchHistory();
 }

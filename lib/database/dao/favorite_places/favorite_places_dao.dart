@@ -16,7 +16,9 @@ class FavoritePlacesDao extends DatabaseAccessor<LocalDatabase>
     return await (select(favoritePlaces).join(
       [
         leftOuterJoin(
-            cachedPlaces, cachedPlaces.id.equalsExp(favoritePlaces.placeId))
+          cachedPlaces,
+          cachedPlaces.id.equalsExp(favoritePlaces.placeId),
+        ),
       ],
     ).map(
       (resultRow) {
@@ -29,7 +31,7 @@ class FavoritePlacesDao extends DatabaseAccessor<LocalDatabase>
     final rows = await (select(favoritePlaces)
           ..where((tbl) => tbl.placeId.equals(id)))
         .get();
-    return rows.length > 0 ? true : false;
+    return rows.isNotEmpty ? true : false;
   }
 
   // Create
@@ -38,6 +40,5 @@ class FavoritePlacesDao extends DatabaseAccessor<LocalDatabase>
 
   // Delete
   Future<void> deletePlaceFromFavorites(int id) async =>
-      await (delete(favoritePlaces)..where((tbl) => tbl.placeId.equals(id)))
-          .go();
+      (delete(favoritePlaces)..where((tbl) => tbl.placeId.equals(id))).go();
 }

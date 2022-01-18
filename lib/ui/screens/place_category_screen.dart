@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
+
 import 'package:places/domain/category.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
@@ -45,6 +44,7 @@ class _SightCategoryScreenState extends State<PlaceCategoryScreen> {
                 builder: (context, state) {
                   if (state is PlaceCategoriesLoaded) {
                     final categories = state.categories;
+
                     return ListView.builder(
                       itemCount: categories.length,
                       itemBuilder: (context, index) {
@@ -52,6 +52,7 @@ class _SightCategoryScreenState extends State<PlaceCategoryScreen> {
                             Category.getCategoryByType(categories[index]).name;
                         final categoryType =
                             Category.getCategoryByType(categories[index]).type;
+                            
                         return InkWell(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -92,11 +93,7 @@ class _SightCategoryScreenState extends State<PlaceCategoryScreen> {
                           ),
                           onTap: () => {
                             setState(() {
-                              if (selectedType != categoryType) {
-                                selectedType = categoryType;
-                              } else {
-                                selectedType = null;
-                              }
+                              selectedType = selectedType != categoryType ? categoryType : null;
                             }),
                           },
                         );

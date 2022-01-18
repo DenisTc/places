@@ -64,31 +64,33 @@ class _FiltersScreenState extends State<FiltersScreen> {
             },
             builder: (context, state) {
               if (state is LoadFilterCategoriesSuccess) {
-                return Column(
-                  children: [
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Text(
-                          constants.textCategories,
-                          style: TextStyle(
-                            color: myLightSecondaryTwo.withOpacity(0.56),
+                return SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Text(
+                            constants.textCategories,
+                            style: TextStyle(
+                              color: myLightSecondaryTwo.withOpacity(0.56),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    _FiltersCategory(
-                      categories: state.categories,
-                    ),
-                    const SizedBox(height: 20),
-                    _Distance(),
-                    const SizedBox(height: 50),
-                    _ShowButton(
-                      countPlaces: countPlaces,
-                      filteredPlaces: filteredPlaces,
-                    ),
-                  ],
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      _FiltersCategory(
+                        categories: state.categories,
+                      ),
+                      const SizedBox(height: 20),
+                      _Distance(),
+                      const SizedBox(height: 50),
+                      _ShowButton(
+                        countPlaces: countPlaces,
+                        filteredPlaces: filteredPlaces,
+                      ),
+                    ],
+                  ),
                 );
               }
 

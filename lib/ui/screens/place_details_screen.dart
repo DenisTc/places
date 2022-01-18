@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
 import 'package:places/domain/category.dart';
@@ -14,7 +15,6 @@ import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/res/styles.dart';
 import 'package:places/ui/screens/place_map_screen.dart';
 import 'package:places/ui/widgets/place_details_screen/photo_view.dart';
-import 'package:intl/intl.dart';
 
 /// A screen with a detailed description of the place
 class PlaceDetails extends StatelessWidget {
@@ -27,7 +27,8 @@ class PlaceDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PageController _pageController = PageController();
+    final _pageController = PageController();
+
     return Material(
       child: Container(
         color: Theme.of(context).colorScheme.secondary,
@@ -299,7 +300,7 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
                 final visitedPlaces = state.visitedPlaces
                     .where((row) => row.place.id == widget.place.id);
                 date =
-                     visitedPlaces.isNotEmpty ? visitedPlaces.first.date : null;
+                    visitedPlaces.isNotEmpty ? visitedPlaces.first.date : null;
               }
 
               if (date != null) {
@@ -443,7 +444,7 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
 }
 
 class CreateRouteButton extends StatelessWidget {
-  final place;
+  final Place place;
   const CreateRouteButton({
     Key? key,
     required this.place,

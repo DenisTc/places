@@ -103,6 +103,7 @@ class _AppBarSettings extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
+      centerTitle: true,
       title: Padding(
         padding: const EdgeInsets.all(16),
         child: Text(

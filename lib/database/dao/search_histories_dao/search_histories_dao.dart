@@ -10,17 +10,16 @@ class SearchHistoriesDao extends DatabaseAccessor<LocalDatabase>
   SearchHistoriesDao(LocalDatabase db) : super(db);
 
   // Read
-  Future<List<SearchHistorie>> get allRequests => select(searchHistories).get();
+  Future<List<SearchHistorie>> allRequests() => select(searchHistories).get();
 
   // Create
-  void saveSearchRequest(String request) => into(searchHistories)
+  Future<void> saveSearchRequest(String request) async => into(searchHistories)
       .insert(SearchHistoriesCompanion(request: Value(request)))
       .ignore();
 
   // Delete
   Future<void> deleteSearchRequest(String text) async =>
-      await (delete(searchHistories)..where((tbl) => tbl.request.equals(text)))
-          .go();
+      (delete(searchHistories)..where((tbl) => tbl.request.equals(text))).go();
 
-  Future<void> clearSearchHistory() async => await delete(searchHistories).go();
+  Future<void> clearSearchHistory() async => delete(searchHistories).go();
 }

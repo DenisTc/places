@@ -13,12 +13,12 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Network
+  dio: ^4.0.0
+
   # State management
   flutter_bloc: ^8.0.1
   provider: ^6.0.1
-
-  # Network
-  dio: ^4.0.0
 
   # Storage
   shared_preferences: ^2.0.11
@@ -34,6 +34,9 @@ dependencies:
   image_picker: ^0.8.4+4
   cached_network_image: ^3.2.0
 
+  # Lint
+  #surf_lint_rules: ^1.4.1
+
   # Other
   equatable: ^2.0.3
   rxdart: ^0.27.3
@@ -45,8 +48,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
     
-  dart_code_metrics: ^4.6.0
   build_runner: ^2.1.4
+  dart_code_metrics: ^4.6.0
   drift_dev: ^1.2.1
 
 

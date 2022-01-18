@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
 import 'package:places/data/cubits/history/history_cubit.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';

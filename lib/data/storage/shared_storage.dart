@@ -8,13 +8,13 @@ class SharedStorage {
   late SharedPreferences _storage;
 
   Future<void> _init() async =>
-      this._storage = await SharedPreferences.getInstance();
+      _storage = await SharedPreferences.getInstance();
 
   Future<SearchFilter> getSearchFilter() async {
     await _init();
 
     if (_storage.containsKey(constants.keySPFilter)) {
-      final json = await _storage.getString(constants.keySPFilter)!;
+      final json = _storage.getString(constants.keySPFilter)!;
       final Map<String, dynamic> filter = jsonDecode(json);
 
       return SearchFilter.fromJson(filter);
@@ -38,7 +38,7 @@ class SharedStorage {
   Future<void> setSearchFilter(SearchFilter searchFilter) async {
     await _init();
 
-    final json = await jsonEncode(searchFilter);
+    final json = jsonEncode(searchFilter);
 
     await _storage.setString(constants.keySPFilter, json);
   }
@@ -50,16 +50,16 @@ class SharedStorage {
 
   Future<bool> getTheme() async {
     await _init();
-    return await _storage.getBool(constants.keySPTheme) ?? false;
+    return _storage.getBool(constants.keySPTheme) ?? false;
   }
 
   Future<bool> getOnboardingStatus() async{
     await _init();
-    return await _storage.getBool(constants.keySPOnboarding) ?? false;
+    return _storage.getBool(constants.keySPOnboarding) ?? false;
   }
 
   Future<bool> setOnboardingStatus() async{
     await _init();
-    return await _storage.setBool(constants.keySPOnboarding, true);
+    return _storage.setBool(constants.keySPOnboarding, true);
   }
 }

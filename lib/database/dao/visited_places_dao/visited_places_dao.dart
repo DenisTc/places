@@ -13,30 +13,29 @@ class VisitedPlacesDao extends DatabaseAccessor<LocalDatabase>
 
   // Read
   Future<List<PlaceWithDate>> loadVisitedPlaces() async {
-    return await (select(visitedPlaces).join(
+    return (select(visitedPlaces).join(
       [
         leftOuterJoin(
           cachedPlaces,
-          cachedPlaces.id.equalsExp(visitedPlaces.placeId) 
-          // & visitedPlaces.date.isSmallerThanValue(DateTime.now()),
-        )
+          cachedPlaces.id.equalsExp(visitedPlaces.placeId),
+        ),
       ],
     ).map(
       (resultRow) {
-          return PlaceWithDate(
-            place: resultRow.readTable(cachedPlaces).place!,
-            date: resultRow.readTable(visitedPlaces).date,
-          );
+        return PlaceWithDate(
+          place: resultRow.readTable(cachedPlaces).place!,
+          date: resultRow.readTable(visitedPlaces).date,
+        );
       },
     )).get();
   }
 
   // Create
   // Adding place. If a place already exists, method "insertOnConflictUpdate" update the data.
-  void addPlaceToVisitedList({
+  Future<void> addPlaceToVisitedList({
     required int id,
     required DateTime date,
-  }) =>
+  }) async =>
       into(visitedPlaces).insertOnConflictUpdate(
         VisitedPlacesCompanion(
           placeId: Value(id),

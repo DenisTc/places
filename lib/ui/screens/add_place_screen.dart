@@ -72,10 +72,11 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
                   ),
                   const SizedBox(height: 5),
                   _CategoryField(
-                      controllerCat: _controllerCat,
-                      checkFieldFills: () {
-                        checkFieldFills();
-                      }),
+                    controllerCat: _controllerCat,
+                    checkFieldFills: () {
+                      checkFieldFills();
+                    },
+                  ),
                   const SizedBox(height: 24),
                   const Text(
                     constants.textTitle,
@@ -706,7 +707,7 @@ class _CreatePlaceButtonState extends State<_CreatePlaceButton> {
   }
 }
 
-showAlertDialog(BuildContext context) {
+void showAlertDialog(BuildContext context) {
   showDialog(
     barrierDismissible: false,
     context: context,
