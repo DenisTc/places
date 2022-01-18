@@ -4,6 +4,27 @@
 Приложение разработано в рамках обучающего курса от компании [Surf](https://education.surf.ru/) на языке программирования [Dart](https://dart.dev/) с использованием кросплатформенного фреймворка [Flutter](https://flutter.dev/)
 
 Функционал приложения:
+
+<table>
+  <tr> <td>Экран загрузки приложения</td> <td>Экран инструкции(туториал) при входе в приложение</td></tr>
+  <tr>
+    <td><video src="https://user-images.githubusercontent.com/16900043/149887113-cacb7338-4eed-49c9-94ff-1669d5e16c1d.mp4" width="400" height="300"></video></td>
+    <td><video src="https://user-images.githubusercontent.com/16900043/149888435-01db6dc6-0a6b-42ee-8b1a-c8d5cdd99607.mp4" width="400" height="300"></video></td>
+  </tr>
+  <tr> <td>Экран "Список интересных мест"</td> <td>Экран "Карта интересных мест (находится в разработке)"</td></tr>
+  <tr>
+    <td><video src="https://user-images.githubusercontent.com/16900043/149889318-f6d3d2ce-18bc-42ec-a461-8a7a4d2cac79.mp4"></video></td>
+    <td><img src="https://user-images.githubusercontent.com/16900043/149889510-f8292e6c-cf63-4053-b29c-b1af6e58a0a0.png" width=270></td>
+  </tr>
+ </table>
+
+
+
+
+
+
+
+
 1) Экран со списком всех мест. Данные приходят с сервера.
 
 
