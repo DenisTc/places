@@ -7,12 +7,12 @@ import 'package:places/ui/screens/place_details_screen.dart';
 class SearchResult extends StatelessWidget {
   final Place place;
   final String searchString;
-  final Function(String name) addPlaceToSearchHistory;
+  final Function(String request) saveSearchRequest;
 
   const SearchResult({
     required this.place,
     required this.searchString,
-    required this.addPlaceToSearchHistory,
+    required this.saveSearchRequest,
     Key? key,
   }) : super(key: key);
 
@@ -30,7 +30,7 @@ class SearchResult extends StatelessWidget {
               ),
             ),
           );
-          addPlaceToSearchHistory(place.name);
+          saveSearchRequest(place.name);
         },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -3,7 +3,7 @@ import 'package:places/domain/category.dart';
 import 'package:places/domain/location.dart';
 import 'package:places/ui/res/icons.dart';
 
-const Location userLocation = Location(lat: 56.846271, lng: 53.2196675);
+const Location userLocation = Location(lat: 57.817029184, lng: 28.339347297);
 const RangeValues defaultDistanceRange = RangeValues(0, 10000.0);
 const String textToFavorite = 'В избранное';
 const String textInFavorite = 'В избранном';
@@ -63,6 +63,11 @@ const String textOnboardingScreenThirdTitle = 'Добавляй места,\nк�
 const String textOnboardingScreenThirdDesc = 'Делись самыми интересными\nи помоги нам стать лучше!';
 const String textFavoriteTab = 'Хочу посетить';
 const String textVisitedTab = 'Посетил';
+const String textScheduledFor = 'Запланировано на';
+const String textTheGoalIsAchieved = 'Цель достигнута';
+const String textIsEmpty = 'Пусто';
+const String textShare = 'Поделиться';
+const String textPassed = 'ПРОЙДЕНО';
 const String pathLoader = 'res/images/loader.png';
 const List<Category> categories = [
     Category(type: 'other', name: 'прочее', icon: iconParticularPlace),

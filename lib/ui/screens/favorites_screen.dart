@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
+import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/widgets/custom_loader_widget.dart';
@@ -39,6 +40,7 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
+    BlocProvider.of<VisitedPlaceBloc>(context).add(LoadListVisitedPlaces());
 
     return Container(
       margin: const EdgeInsets.only(top: 28),
@@ -54,44 +56,88 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
 
                 if (state is ListFavoritePlacesLoaded &&
                     state.places.isNotEmpty) {
-                  return PlaceVisitingPortrainWidget(
-                    places: state.places,
-                    visited: false,
-                    moveItemInList: (data, place, places, visited) {
-                      moveItemInList(data, place, state.places, visited);
+                  final isPortrait = MediaQuery.of(context).orientation ==
+                      Orientation.portrait;
+
+                  return GridView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    shrinkWrap: true,
+                    itemCount: state.places.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: isPortrait ? 1 : 2,
+                      mainAxisSpacing: 0,
+                      crossAxisSpacing: 36,
+                      childAspectRatio: 1.8,
+                    ),
+                    itemBuilder: (context, index) {
+                      final place = state.places[index];
+
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        child: FavoritePlaceCard(
+                          place: place,
+                          moveItemInList: (data, place, visited) {
+                            // moveItemInList(data, place, state.places, visited);
+                          },
+                        ),
+                      );
                     },
                   );
                 }
 
                 return const FavoritesEmpty(
                   icon: iconAddCard,
-                  title: 'Пусто',
+                  title: constants.textIsEmpty,
                   desc: constants.textScrWantToVisit,
                 );
               },
             ),
 
             // Places visited tab
-            BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
+            BlocBuilder<VisitedPlaceBloc, VisitedPlaceState>(
               builder: (context, state) {
-                if (state is ListFavoritePlacesLoading) {
+                if (state is ListVisitedPlacesLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                if (state is ListFavoritePlacesLoaded &&
-                    state.places.isNotEmpty) {
-                  return PlaceVisitingPortrainWidget(
-                    places: state.places,
-                    visited: true,
-                    moveItemInList: (data, place, places, visited) {
-                      moveItemInList(data, place, state.places, visited);
+                if (state is ListVisitedPlacesLoaded &&
+                    state.visitedPlaces.isNotEmpty) {
+                  final isPortrait = MediaQuery.of(context).orientation ==
+                      Orientation.portrait;
+
+                  return GridView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    shrinkWrap: true,
+                    itemCount: state.visitedPlaces.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: isPortrait ? 1 : 2,
+                      mainAxisSpacing: 0,
+                      crossAxisSpacing: 36,
+                      childAspectRatio: 1.8,
+                    ),
+                    itemBuilder: (context, index) {
+                      if (state.visitedPlaces.length > 0) {
+                        final place = state.visitedPlaces[index].place;
+                        final visitDate = state.visitedPlaces[index].date;
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 16),
+                          child: FavoritePlaceCard(
+                            place: place,
+                            visitDate: visitDate,
+                            moveItemInList: (data, place, visited) {
+                              // moveItemInList(data, place, places, visited);
+                            },
+                          ),
+                        );
+                      }
+                      return SizedBox.shrink();
                     },
                   );
                 }
 
                 return const FavoritesEmpty(
                   icon: iconAddCard,
-                  title: 'Пусто',
+                  title: constants.textIsEmpty,
                   desc: constants.textScrVisited,
                 );
               },
@@ -114,55 +160,6 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
           placeList.remove(data);
           placeList.insert(placeList.indexOf(place), data);
         }
-      },
-    );
-  }
-}
-
-class PlaceVisitingPortrainWidget extends StatelessWidget {
-  final List<Place> places;
-  final bool visited;
-  final Function(
-    Place data,
-    Place place,
-    List<Place> places,
-    bool visited,
-  ) moveItemInList;
-  const PlaceVisitingPortrainWidget({
-    required this.places,
-    required this.moveItemInList,
-    required this.visited,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final isPortrait =
-        MediaQuery.of(context).orientation == Orientation.portrait;
-
-    return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      shrinkWrap: true,
-      itemCount: places.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: isPortrait ? 1 : 2,
-        mainAxisSpacing: 0,
-        crossAxisSpacing: 36,
-        childAspectRatio: 1.8,
-      ),
-      itemBuilder: (context, index) {
-        final place = places[index];
-
-        return Container(
-          margin: const EdgeInsets.only(bottom: 16),
-          child: FavoritePlaceCard(
-            place: place,
-            visited: visited,
-            moveItemInList: (data, place, visited) {
-              moveItemInList(data, place, places, visited);
-            },
-          ),
-        );
       },
     );
   }

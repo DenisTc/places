@@ -1,8 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
+import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/res/colors.dart';
@@ -10,7 +14,6 @@ import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/res/styles.dart';
 import 'package:places/ui/screens/place_map_screen.dart';
-import 'package:places/ui/widgets/place_cupertino_date_picker.dart';
 import 'package:places/ui/widgets/place_details_screen/photo_view.dart';
 
 /// A screen with a detailed description of the place
@@ -24,7 +27,8 @@ class PlaceDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PageController _pageController = PageController();
+    final _pageController = PageController();
+
     return Material(
       child: Container(
         color: Theme.of(context).colorScheme.secondary,
@@ -251,7 +255,7 @@ class _Description extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyText1,
         ),
         const SizedBox(height: 24),
-        const _CreateRouteButton(),
+        CreateRouteButton(place: place),
         const SizedBox(height: 24),
         const Divider(
           height: 4,
@@ -265,7 +269,7 @@ class _Description extends StatelessWidget {
   }
 }
 
-class _FunctionButtons extends StatelessWidget {
+class _FunctionButtons extends StatefulWidget {
   final Place place;
 
   _FunctionButtons({
@@ -274,36 +278,40 @@ class _FunctionButtons extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<_FunctionButtons> createState() => _FunctionButtonsState();
+}
+
+class _FunctionButtonsState extends State<_FunctionButtons> {
+  DateTime? date;
+  bool isUpdate = false;
+  @override
   Widget build(BuildContext context) {
+    BlocProvider.of<VisitedPlaceBloc>(context).add(LoadListVisitedPlaces());
     BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
+    initializeDateFormatting();
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
-          child: InkWell(
-            onTap: () async {
-              await showModalBottomSheet<void>(
-                context: context,
-                builder: (builder) {
-                  return const PlaceCupertinoDatePicker();
-                },
-              );
+          child: BlocBuilder<VisitedPlaceBloc, VisitedPlaceState>(
+            builder: (context, state) {
+              if (state is ListVisitedPlacesLoaded &&
+                  state.visitedPlaces.isNotEmpty) {
+                final visitedPlaces = state.visitedPlaces
+                    .where((row) => row.place.id == widget.place.id);
+                date =
+                    visitedPlaces.isNotEmpty ? visitedPlaces.first.date : null;
+              }
+
+              if (date != null) {
+                if (date!.isBefore(DateTime.now())) {
+                  return shareButton();
+                }
+                return dateButton(date!);
+              } else {
+                return scheduleButton();
+              }
             },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                SvgPicture.asset(
-                  iconCalendar,
-                  color: Theme.of(context).iconTheme.color,
-                ),
-                const SizedBox(width: 9),
-                Text(
-                  constants.textBtnSchedule,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                const SizedBox(width: 14),
-              ],
-            ),
           ),
         ),
         Expanded(
@@ -325,16 +333,16 @@ class _FunctionButtons extends StatelessWidget {
                         child: TextButton.icon(
                           onPressed: () {
                             BlocProvider.of<FavoritePlaceBloc>(context)
-                                .add(TogglePlaceInFavorites(place));
+                                .add(TogglePlaceInFavorites(widget.place));
                           },
                           icon: SvgPicture.asset(
-                            state.places.contains(place)
+                            state.places.contains(widget.place)
                                 ? iconFavoriteSelected
                                 : iconFavorite,
                             color: Theme.of(context).iconTheme.color,
                           ),
                           label: Text(
-                            state.places.contains(place)
+                            state.places.contains(widget.place)
                                 ? constants.textInFavorite
                                 : constants.textToFavorite,
                             style: Theme.of(context).textTheme.bodyText1,
@@ -353,48 +361,189 @@ class _FunctionButtons extends StatelessWidget {
       ],
     );
   }
+
+  TextButton scheduleButton() => TextButton(
+        onPressed: shedulePlace,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              iconCalendar,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            const SizedBox(width: 9),
+            Text(
+              constants.textBtnSchedule,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+          ],
+        ),
+      );
+
+  TextButton dateButton(DateTime date) => TextButton(
+        onPressed: shedulePlace,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              iconCalendarFilled,
+              color: Theme.of(context).colorScheme.primaryVariant,
+            ),
+            const SizedBox(width: 9),
+            Text(
+              DateFormat('d MMM. y', 'ru_RU').format(date),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primaryVariant,
+              ),
+            ),
+          ],
+        ),
+      );
+
+  TextButton shareButton() => TextButton(
+        onPressed: () {},
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              iconShare,
+              color: Theme.of(context).iconTheme.color,
+            ),
+            const SizedBox(width: 9),
+            Text(
+              constants.textShare,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
+          ],
+        ),
+      );
+
+  Future<void> shedulePlace() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      builder: (builder) {
+        return PlaceCupertinoDatePicker(
+          initialDateTime: date,
+          onValueChanged: (newDate) {
+            date = newDate;
+          },
+        );
+      },
+    ).whenComplete(
+      () {
+        BlocProvider.of<VisitedPlaceBloc>(context).add(
+          AddPlaceToVisitedList(
+            place: widget.place,
+            date: date ?? DateTime.now(),
+          ),
+        );
+        setState(() {});
+      },
+    );
+  }
 }
 
-class _CreateRouteButton extends StatelessWidget {
-  const _CreateRouteButton({
+class CreateRouteButton extends StatelessWidget {
+  final Place place;
+  const CreateRouteButton({
     Key? key,
+    required this.place,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.pushReplacement<void, void>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const PlaceMapScreen(),
-          ),
+    bool isVisited = false;
+
+    return BlocBuilder<VisitedPlaceBloc, VisitedPlaceState>(
+      builder: (context, state) {
+        if (state is ListVisitedPlacesLoaded &&
+            state.visitedPlaces.isNotEmpty) {
+          final currentPlace =
+              state.visitedPlaces.where((row) => row.place.id == place.id);
+
+          isVisited = currentPlace.isNotEmpty &&
+              currentPlace.first.date != null &&
+              currentPlace.first.date!.isBefore(DateTime.now());
+        }
+
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  isVisited
+                      ? null
+                      : Navigator.pushReplacement<void, void>(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PlaceMapScreen(),
+                          ),
+                        );
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: isVisited
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).colorScheme.primaryVariant,
+                  fixedSize: const Size(double.infinity, 48),
+                  elevation: 0.0,
+                  shadowColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      isVisited ? iconCheck : iconRoute,
+                      width: 18,
+                      color: isVisited
+                          ? Theme.of(context).colorScheme.primaryVariant
+                          : Colors.white,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      isVisited ? constants.textPassed : constants.textBtnRoute,
+                      style: isVisited
+                          ? disableGreenBtnTextStyle
+                          : activeBtnTextStyle,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(width: isVisited ? 16 : 0),
+            isVisited
+                ? ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement<void, void>(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PlaceMapScreen(),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).colorScheme.primaryVariant,
+                      fixedSize: const Size(48, 48),
+                      elevation: 0.0,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: SvgPicture.asset(
+                      iconRoute,
+                      width: 22,
+                      height: 22,
+                      color: Colors.white,
+                    ),
+                  )
+                : SizedBox.shrink(),
+          ],
         );
       },
-      style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).colorScheme.primaryVariant,
-        fixedSize: const Size(double.infinity, 48),
-        elevation: 0.0,
-        shadowColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SvgPicture.asset(
-            iconRoute,
-            width: 22,
-            color: Colors.white,
-          ),
-          const SizedBox(width: 10),
-          Text(
-            constants.textBtnRoute,
-            style: activeBtnTextStyle,
-          ),
-        ],
-      ),
     );
   }
 }
@@ -487,6 +636,36 @@ class _ArrowBackButton extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class PlaceCupertinoDatePicker extends StatelessWidget {
+  final initialDateTime;
+  final ValueChanged<DateTime> onValueChanged;
+  const PlaceCupertinoDatePicker({
+    Key? key,
+    required this.onValueChanged,
+    this.initialDateTime,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Theme.of(context).colorScheme.secondary,
+      height: 250,
+      child: CupertinoTheme(
+        data: CupertinoThemeData(
+          textTheme: CupertinoTextThemeData(
+            dateTimePickerTextStyle:
+                Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 18),
+          ),
+        ),
+        child: CupertinoDatePicker(
+          initialDateTime: initialDateTime ?? DateTime.now(),
+          onDateTimeChanged: (date) => onValueChanged(date),
         ),
       ),
     );

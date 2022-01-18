@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
+import 'package:places/data/cubits/history/history_cubit.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/res/colors.dart';
@@ -35,6 +34,7 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
   @override
   void initState() {
     super.initState();
+
     BlocProvider.of<FilteredPlacesBloc>(context)
         .add(LoadFilteredPlaces(widget.settingsFilter));
   }
@@ -53,107 +53,93 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
             },
           ),
           const SizedBox(height: 38),
-          Expanded(
-            child: Builder(
-              builder: (context) {
-                if (historyList.isNotEmpty && _controllerSearch.text == '') {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Text(
-                          constants.textHistory,
-                          style: TextStyle(
-                            color: myLightSecondaryTwo.withOpacity(0.56),
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      Expanded(
+          (_controllerSearch.text == '')
+              // History
+              ? BlocBuilder<HistoryCubit, HistoryState>(
+                  builder: (context, state) {
+                    if (state is HistoryInitial) {
+                      context.read<HistoryCubit>().loadHistory();
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (state is HistoryLoadedState) {
+                      return Expanded(
                         child: ListView(
                           children: [
                             _HistoryList(
-                              historyList: historyList.toList(),
-                              deletePlaceFromHistory: (name) {
-                                _deletePlaceFromHistory(name);
+                              historyList: state.history,
+                              deleteSearchRequest: (name) {
+                                _deleteSearchRequest(name);
                               },
                               controllerSearch: _controllerSearch,
                               notifyParent: () {
                                 setState(() {});
                               },
                             ),
-                            _ClearHistoryButton(
-                              historyList: historyList.toList(),
-                              clearHistory: _clearHistory,
-                            ),
+                            state.history.isNotEmpty
+                                ? _ClearHistoryButton(
+                                    historyList: historyList.toList(),
+                                    clearSearchHistory: _clearSearchHistory,
+                                  )
+                                : SizedBox.shrink(),
                           ],
                         ),
-                      ),
-                    ],
-                  );
-                } else if (historyList.isEmpty &&
-                    _controllerSearch.text.isEmpty) {
-                  return const SizedBox.shrink();
-                }
-
-                return BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
-                  builder: (context, state) {
-                    if (state is LoadFilteredPlacesInProgress) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    if (state is LoadFilteredPlacesSuccess) {
-                      final searchRes = _filterPlacesByName(
-                        _controllerSearch.text,
-                        state.places,
-                      );
-
-                      if (searchRes.length == 0)
-                        return const EmptySearchResult();
-
-                      return SearchResultList(
-                        filteredPlaces: searchRes,
-                        searchString: _controllerSearch.text,
-                        addPlaceToSearchHistory: (name) {
-                          _addPlaceToSearchHistory(name);
-                        },
                       );
                     }
 
-                    if (state is LoadFilteredPlacesError) {
-                      return const SliverFillRemaining(
-                        child: NetworkException(),
-                      );
-                    }
-
-                    return const EmptySearchResult();
+                    return SizedBox.shrink();
                   },
-                );
-              },
-            ),
-          ),
+                )
+              // Searching results
+              : Expanded(
+                  child: BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
+                    builder: (context, state) {
+                      if (state is LoadFilteredPlacesInProgress) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (state is LoadFilteredPlacesSuccess) {
+                        final searchRes = _filterPlacesByName(
+                          _controllerSearch.text,
+                          state.places,
+                        );
+
+                        if (searchRes.length == 0)
+                          return Center(child: const EmptySearchResult());
+
+                        return SearchResultList(
+                          filteredPlaces: searchRes,
+                          searchString: _controllerSearch.text,
+                          saveSearchRequest: (request) {
+                            _saveSearchRequest(request);
+                          },
+                        );
+                      }
+
+                      if (state is LoadFilteredPlacesError) {
+                        return const SliverFillRemaining(
+                          child: NetworkException(),
+                        );
+                      }
+
+                      return const EmptySearchResult();
+                    },
+                  ),
+                ),
         ],
       ),
     );
   }
 
-  void _addPlaceToSearchHistory(String name) {
-    setState(() {
-      if (!historyList.contains(name)) historyList.add(name);
-    });
+  void _saveSearchRequest(String request) {
+    context.read<HistoryCubit>().saveSearchRequest(request);
   }
 
-  void _deletePlaceFromHistory(String name) {
-    setState(() {
-      historyList.remove(name);
-    });
+  void _deleteSearchRequest(String text) {
+    context.read<HistoryCubit>().deleteSearchRequest(text);
   }
 
-  void _clearHistory() {
-    setState(() {
-      historyList.clear();
-    });
+  void _clearSearchHistory() {
+    context.read<HistoryCubit>().clearSearchHistory();
   }
 
   List<Place> _filterPlacesByName(String name, List<Place> places) {
@@ -173,12 +159,12 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
 class _HistoryList extends StatefulWidget {
   final List<String> historyList;
   final TextEditingController controllerSearch;
-  final Function(String) deletePlaceFromHistory;
+  final Function(String) deleteSearchRequest;
   final Function() notifyParent;
 
   const _HistoryList({
     required this.historyList,
-    required this.deletePlaceFromHistory,
+    required this.deleteSearchRequest,
     required this.controllerSearch,
     required this.notifyParent,
     Key? key,
@@ -239,8 +225,7 @@ class _HistoryListState extends State<_HistoryList> {
                     child: IconButton(
                       padding: EdgeInsets.zero,
                       onPressed: () {
-                        widget
-                            .deletePlaceFromHistory(widget.historyList[index]);
+                        widget.deleteSearchRequest(widget.historyList[index]);
                       },
                       icon: SvgPicture.asset(
                         iconClose,
@@ -264,11 +249,11 @@ class _HistoryListState extends State<_HistoryList> {
 
 class _ClearHistoryButton extends StatefulWidget {
   final List<String> historyList;
-  final Function() clearHistory;
+  final Function() clearSearchHistory;
 
   const _ClearHistoryButton({
     required this.historyList,
-    required this.clearHistory,
+    required this.clearSearchHistory,
     Key? key,
   }) : super(key: key);
 
@@ -285,7 +270,7 @@ class __ClearHistoryButtonState extends State<_ClearHistoryButton> {
         onPressed: () {
           setState(
             () {
-              widget.clearHistory();
+              widget.clearSearchHistory();
             },
           );
         },

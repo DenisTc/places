@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_event.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_state.dart';
+import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/list_screen/add_place_button.dart';
 import 'package:places/ui/widgets/list_screen/sliver_app_bar_list.dart';
 import 'package:places/ui/widgets/list_screen/sliver_places.dart';
-import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 
 class PlaceListScreen extends StatelessWidget {

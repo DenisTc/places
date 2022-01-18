@@ -5,10 +5,15 @@ import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/filter/bloc/filter_bloc.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/data/blocs/place/bloc/place_bloc.dart';
+import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
+import 'package:places/data/cubits/history/history_cubit.dart';
+import 'package:places/data/interactor/history_interactor.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/search_interactor.dart';
+import 'package:places/data/repository/history_repository.dart';
 import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/repository/search_repository.dart';
+import 'package:places/database/database.dart';
 import 'package:places/domain/theme_app.dart';
 import 'package:places/ui/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +24,7 @@ void main() {
 
 class App extends StatelessWidget {
   final api = ApiClient();
+  final localDb = LocalDatabase();
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +47,28 @@ class App extends StatelessWidget {
         BlocProvider<PlaceBloc>(
           create: (context) => PlaceBloc(
             PlaceInteractor(
-              PlaceRepository(api),
+              PlaceRepository(api: api, db: localDb),
             ),
           ),
         ),
         BlocProvider<FavoritePlaceBloc>(
           create: (context) => FavoritePlaceBloc(
             PlaceInteractor(
-              PlaceRepository(api),
+              PlaceRepository(api: api, db: localDb),
+            ),
+          ),
+        ),
+        BlocProvider<VisitedPlaceBloc>(
+          create: (context) => VisitedPlaceBloc(
+            PlaceInteractor(
+              PlaceRepository(api: api, db: localDb),
+            ),
+          ),
+        ),
+        BlocProvider<HistoryCubit>(
+          create: (context) => HistoryCubit(
+            HistoryInteractor(
+              HistoryRepository(localDb),
             ),
           ),
         ),

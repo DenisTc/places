@@ -5,8 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/ui/screens/place_details_screen.dart';
 import 'package:places/ui/res/icons.dart';
+import 'package:places/ui/screens/place_details_screen.dart';
 
 class SliverPlaces extends StatelessWidget {
   final List<Place> places;
@@ -32,6 +32,7 @@ class SliverPlaces extends StatelessWidget {
         delegate: SliverChildBuilderDelegate(
           (context, index) {
             final place = places[index];
+
             return Padding(
               padding: const EdgeInsets.only(top: 15),
               child: PlaceCard(place: place),
@@ -52,6 +53,7 @@ class PlaceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
+    
     return Stack(
       children: [
         Hero(
@@ -238,7 +240,7 @@ class _PlaceCardTop extends StatelessWidget {
                   );
                 },
                 errorWidget: (context, url, error) {
-                  return ImagePlaceholder();
+                  return const ImagePlaceholder();
                 },
               ),
             ),

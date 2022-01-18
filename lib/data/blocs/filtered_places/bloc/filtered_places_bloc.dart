@@ -1,35 +1,38 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/storage/shared_storage.dart';
+import 'package:places/domain/place.dart';
+import 'package:places/domain/search_filter.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'filtered_places_event.dart';
-import 'filtered_places_state.dart';
+part 'filtered_places_event.dart';
+part 'filtered_places_state.dart';
 
 class FilteredPlacesBloc
     extends Bloc<FilteredPlacesEvent, FilteredPlacesState> {
   final SearchInteractor _searchInteractor;
   final SharedStorage _storage = SharedStorage();
 
-  EventTransformer<GetProductosEvent> debounce<GetProductosEvent>(
-      Duration duration) {
-    return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
-  }
-
   FilteredPlacesBloc(this._searchInteractor)
       : super(LoadFilteredPlacesInProgress()) {
     on<LoadFilteredPlaces>(
-      (event, emit) => _loadFilteredPlaces(event, emit),
+      (event, emit) => _loadFilteredPlaces(emit),
     );
 
     on<LoadPlaceCategoriesEvent>(
-      (event, emit) => _loadPlaceCategories(event, emit),
+      (event, emit) => _loadPlaceCategories(emit),
     );
   }
 
+  EventTransformer<GetProductosEvent> debounce<GetProductosEvent>(
+    Duration duration,
+  ) {
+    return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
+  }
+
   // Get the list of filtered places
-  void _loadFilteredPlaces(
-    LoadFilteredPlaces event,
+  Future<void> _loadFilteredPlaces(
     Emitter<FilteredPlacesState> emit,
   ) async {
     try {
@@ -38,21 +41,20 @@ class FilteredPlacesBloc
       final _filteredPlaces = await _searchInteractor.getFiltredPlaces(_filter);
 
       emit(LoadFilteredPlacesSuccess(_filteredPlaces));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(LoadFilteredPlacesError(e.toString()));
     }
   }
 
   // Get the list of categories
-  void _loadPlaceCategories(
-    LoadPlaceCategoriesEvent event,
+  Future<void> _loadPlaceCategories(
     Emitter<FilteredPlacesState> emit,
   ) async {
     try {
-      var allCategories = await _searchInteractor.getCategories();
+      final allCategories = await _searchInteractor.getCategories();
 
       emit(PlaceCategoriesLoaded(categories: allCategories));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(LoadPlaceCategoriesError(e.toString()));
     }
   }

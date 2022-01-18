@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/storage/shared_storage.dart';
 import 'package:places/domain/search_filter.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:places/ui/res/constants.dart' as constants;
+import 'package:rxdart/rxdart.dart';
 
 part 'filter_event.dart';
 part 'filter_state.dart';
@@ -32,7 +32,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     );
 
     on<SaveFilterEvent>(
-      (event, emit) => _saveFilter(event, emit),
+      (event, emit) => _saveFilter(),
     );
 
     on<ClearFilterEvent>(
@@ -41,7 +41,8 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
   }
 
   EventTransformer<GetProductosEvent> debounce<GetProductosEvent>(
-      Duration duration) {
+    Duration duration,
+  ) {
     return (events, mapper) => events.debounceTime(duration).flatMap(mapper);
   }
 
@@ -49,7 +50,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     LoadFilterEvent event,
     Emitter<FilterState> emit,
   ) async {
-    List<String> allCategories = await _searchInteractor.getCategories();
+    final allCategories = await _searchInteractor.getCategories();
 
     emit(LoadFilterCategoriesSuccess(allCategories));
 
@@ -63,7 +64,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     emit(LoadCountFilteredPlacesSuccess(filteredPlaces.length));
   }
 
-  void _clearFilter(
+  Future<void> _clearFilter(
     ClearFilterEvent event,
     Emitter<FilterState> emit,
   ) async {
@@ -115,10 +116,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     emit(LoadCountFilteredPlacesSuccess(filteredPlaces.length));
   }
 
-  void _saveFilter(
-    SaveFilterEvent event,
-    Emitter<FilterState> emit,
-  ) async {
+  Future<void> _saveFilter() async {
     await _storage.setSearchFilter(_currentFilter!);
   }
 }

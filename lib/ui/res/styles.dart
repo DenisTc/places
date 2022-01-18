@@ -48,3 +48,9 @@ TextStyle disableBtnTextStyle = _text.copyWith(
   color: myInactiveBlack.withOpacity(0.56),
 );
 
+TextStyle disableGreenBtnTextStyle = _text.copyWith(
+  fontSize: 14,
+  fontWeight: FontWeight.w700,
+  color: myLightGreen,
+);
+

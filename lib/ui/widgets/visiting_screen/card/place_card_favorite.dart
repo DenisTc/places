@@ -3,16 +3,15 @@ import 'package:places/domain/place.dart';
 import 'package:places/ui/widgets/visiting_screen/card/place_card.dart';
 
 class FavoritePlaceCard extends StatefulWidget {
-  final bool visited;
+  final DateTime? visitDate;
   final Place place;
   final Function(Place data, Place place, bool visited) moveItemInList;
 
   const FavoritePlaceCard({
-    required this.visited,
+    Key? key,
     required this.place,
     required this.moveItemInList,
-    Key? key,
-    
+    this.visitDate,
   }) : super(key: key);
 
   @override
@@ -58,7 +57,7 @@ class _FavoritePlaceCardState extends State<FavoritePlaceCard> {
               child: PlaceCard(
                 globalKey: globalKey,
                 place: widget.place,
-                visited: widget.visited,
+                visitDate: widget.visitDate,
               ),
             ),
           ),
@@ -67,7 +66,7 @@ class _FavoritePlaceCardState extends State<FavoritePlaceCard> {
               : PlaceCard(
                   globalKey: globalKey,
                   place: widget.place,
-                  visited: widget.visited,
+                  visitDate: widget.visitDate,
                 ),
         );
       },
@@ -77,11 +76,11 @@ class _FavoritePlaceCardState extends State<FavoritePlaceCard> {
       onAccept: (data) {
         setState(
           () {
-            widget.moveItemInList(
-              data,
-              widget.place,
-              widget.visited,
-            );
+            // widget.moveItemInList(
+            //   data,
+            //   widget.place,
+            //   widget.visited,
+            // );
           },
         );
       },
