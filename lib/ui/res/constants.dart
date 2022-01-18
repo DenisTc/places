@@ -68,6 +68,7 @@ const String textTheGoalIsAchieved = 'Цель достигнута';
 const String textIsEmpty = 'Пусто';
 const String textShare = 'Поделиться';
 const String textPassed = 'ПРОЙДЕНО';
+const String textMap = 'Карта';
 const String pathLoader = 'res/images/loader.png';
 const List<Category> categories = [
     Category(type: 'other', name: 'прочее', icon: iconParticularPlace),
