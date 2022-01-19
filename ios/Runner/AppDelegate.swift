@@ -9,7 +9,7 @@ import YandexMapsMobile
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     YMKMapKit.setLocale("ru_RU") 
-    YMKMapKit.setApiKey("key")
+    YMKMapKit.setApiKey("")
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

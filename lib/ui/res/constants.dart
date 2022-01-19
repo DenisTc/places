@@ -3,8 +3,7 @@ import 'package:places/domain/category.dart';
 import 'package:places/domain/location.dart';
 import 'package:places/ui/res/icons.dart';
 
-const Location userLocation = Location(lat: 57.817029184, lng: 28.339347297);
-const RangeValues defaultDistanceRange = RangeValues(0, 10000.0);
+// String constants
 const String textToFavorite = 'В избранное';
 const String textInFavorite = 'В избранном';
 const String textFavorite = 'Избранное';
@@ -69,7 +68,16 @@ const String textIsEmpty = 'Пусто';
 const String textShare = 'Поделиться';
 const String textPassed = 'ПРОЙДЕНО';
 const String textMap = 'Карта';
+
+// Images
 const String pathLoader = 'res/images/loader.png';
+const String pathIconPlaceMap = 'res/images/place.png';
+
+// Location
+const Location userLocation = Location(lat: 57.817029184, lng: 28.339347297);
+
+// For FiltersScreen
+const RangeValues defaultDistanceRange = RangeValues(0, 10000.0);
 const List<Category> categories = [
     Category(type: 'other', name: 'прочее', icon: iconParticularPlace),
     Category(type: 'monument', name: 'памятник', icon: iconParticularPlace),
@@ -81,7 +89,11 @@ const List<Category> categories = [
     Category(type: 'temple', name: 'храм', icon: iconParticularPlace),
     Category(type: 'restaurant', name: 'ресторан', icon: iconRestourant),
   ];
+
+// For SearchFilter
+const List<String> selectedCategories = ['monument', 'other', 'theatre'];
+
+// Key for Shared preferences plugin
 const String keySPFilter = 'SearchFilter';
 const String keySPTheme = 'Theme';
 const String keySPOnboarding = 'Onboarding';
-const List<String> selectedCategories = ['monument', 'other', 'theatre'];

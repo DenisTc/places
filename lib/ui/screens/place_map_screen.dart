@@ -21,7 +21,7 @@ class _PlaceMapScreenState extends State<PlaceMapScreen> {
         point: Point(latitude: 57.817029184, longitude: 28.339347297),
         icon: PlacemarkIcon.single(
           PlacemarkIconStyle(
-            image: BitmapDescriptor.fromAssetImage('res/images/place.png'),
+            image: BitmapDescriptor.fromAssetImage(constants.pathIconPlaceMap),
             scale: 2,
           ),
         ),
