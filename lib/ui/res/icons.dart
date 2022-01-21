@@ -34,3 +34,5 @@ const iconSettingsSelected = 'res/icons/settings_selected.svg';
 const iconErrorRound = 'res/icons/error_round.svg';
 const iconImgPlaceholder = 'res/icons/image_placeholder.svg';
 const iconCalendarFilled = 'res/icons/calendar_filled.svg';
+const iconRefresh = 'res/icons/refresh.svg';
+const iconGeolocation = 'res/icons/geolocation.svg';

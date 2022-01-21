@@ -71,10 +71,13 @@ const String textMap = 'Карта';
 
 // Images
 const String pathLoader = 'res/images/loader.png';
-const String pathIconPlaceMap = 'res/images/place.png';
+const String pathIconLightDotMap = 'res/images/map/light_dot.png';
+const String pathIconDarkDotMap = 'res/images/map/dark_dot.png';
+const String pathIconSelectedPlaceMap = 'res/images/map/selected_place.png';
+const String pathIconUserMap = 'res/images/map/user.png';
 
 // Location
-const Location userLocation = Location(lat: 57.817029184, lng: 28.339347297);
+const Location userLocation = Location(lat: 57.81929846395932, lng: 28.332799972367415); // [57,81929846395932,28,332799972367415] 57.817029184, lng: 28.339347297
 
 // For FiltersScreen
 const RangeValues defaultDistanceRange = RangeValues(0, 10000.0);
@@ -97,3 +100,55 @@ const List<String> selectedCategories = ['monument', 'other', 'theatre'];
 const String keySPFilter = 'SearchFilter';
 const String keySPTheme = 'Theme';
 const String keySPOnboarding = 'Onboarding';
+
+// Yandex map styles
+const String lightStyleYandexMap = '''
+      [
+        {
+          "stylers": {
+            "saturation": -1,
+            "lightness": 0.1
+          }
+        }
+      ]
+    ''';
+const String darkStyleYandexMap = '''
+    [
+        {
+          "stylers": {
+            "hue": "202031",
+            "saturation": 0,
+            "lightness": 0
+          }
+        },
+        {
+          "tags": {
+            "all": ["road"]
+          },
+          "stylers": {
+            "color": "3b3e5b",
+            "saturation": 0.5,
+            "lightness": 0
+          }
+        },
+        {
+          "tags": {
+            "all": ["transit"]
+          },
+          "stylers": {
+            "color": "3b3e5b",
+            "saturation": 0.5,
+            "lightness": 0
+          }
+        },
+        {
+          "tags": {
+            "all": ["water"]
+          },
+          "stylers": {
+            "color": "2d2c45",
+            "lightness": 0
+          }
+        }
+      ]
+      ''';

@@ -54,7 +54,10 @@ class PlaceListScreen extends StatelessWidget {
               ],
             ),
           ),
-          const AddPlaceButton(),
+          const Positioned(
+            bottom: 16,
+            child:  AddPlaceButton(),
+          ),
         ],
       ),
     );
