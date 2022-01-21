@@ -20,10 +20,16 @@ class LocationServices {
       return constants.userLocation;
     }
 
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    ).timeout(const Duration(seconds: 5));
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      ).timeout(const Duration(seconds: 15));
 
-    return Location(lat: position.latitude, lng: position.longitude);
+      return Location(lat: position.latitude, lng: position.longitude);
+    } catch (e) {
+      print(e);
+    }
+
+    return constants.userLocation;
   }
 }

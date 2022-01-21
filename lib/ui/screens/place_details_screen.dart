@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
+import 'package:places/data/extensions/open_map_sheet.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/res/colors.dart';
@@ -472,14 +474,19 @@ class CreateRouteButton extends StatelessWidget {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  isVisited
-                      ? null
-                      : Navigator.pushReplacement<void, void>(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PlaceMapScreen(),
-                          ),
-                        );
+                  if (!isVisited) {
+                    openMapsSheet(
+                      context: context,
+                      target: Coords(place.lat!, place.lng!),
+                      name: place.name,
+                    );
+                    BlocProvider.of<VisitedPlaceBloc>(context).add(
+                      AddPlaceToVisitedList(
+                        place: place,
+                        date: DateTime.now(),
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   primary: isVisited
@@ -517,10 +524,15 @@ class CreateRouteButton extends StatelessWidget {
             isVisited
                 ? ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement<void, void>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PlaceMapScreen(),
+                      openMapsSheet(
+                        context: context,
+                        target: Coords(place.lat!, place.lng!),
+                        name: place.name,
+                      );
+                      BlocProvider.of<VisitedPlaceBloc>(context).add(
+                        AddPlaceToVisitedList(
+                          place: place,
+                          date: DateTime.now(),
                         ),
                       );
                     },

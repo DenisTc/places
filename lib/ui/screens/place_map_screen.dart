@@ -2,8 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:map_launcher/map_launcher.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/map/places_map_bloc.dart';
+import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
+import 'package:places/data/extensions/open_map_sheet.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/theme_app.dart';
@@ -294,232 +297,6 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                   tag: place.id.toString(),
                   child: Stack(
                     children: [
-                      Column(
-                        children: [
-                          // Card Top
-                          Expanded(
-                            flex: 3,
-                            child: Material(
-                              color: Colors.transparent,
-                              child: Stack(
-                                alignment: Alignment.topCenter,
-                                children: [
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(16),
-                                        topRight: Radius.circular(16),
-                                      ),
-                                    ),
-                                    child: Stack(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(16),
-                                            topRight: Radius.circular(16),
-                                          ),
-                                          child: CachedNetworkImage(
-                                            imageUrl: place.urls.first,
-                                            fadeOutDuration: const Duration(
-                                                milliseconds: 200),
-                                            imageBuilder:
-                                                (context, imageProvider) {
-                                              return Container(
-                                                decoration: BoxDecoration(
-                                                  image: DecorationImage(
-                                                    image: imageProvider,
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            placeholder: (context, url) {
-                                              return Center(
-                                                child: Icon(
-                                                  Icons
-                                                      .photo_size_select_actual_outlined,
-                                                  color: Colors.grey[300],
-                                                  size: 70.0,
-                                                ),
-                                              );
-                                            },
-                                            errorWidget: (context, url, error) {
-                                              return const ImagePlaceholder();
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 8,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          Category.getCategoryByType(
-                                                  place.placeType)
-                                              .name,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        BlocBuilder<FavoritePlaceBloc,
-                                            FavoritePlaceState>(
-                                          buildWhen: (context, state) {
-                                            return state !=
-                                                ListFavoritePlacesLoaded;
-                                          },
-                                          builder: (context, state) {
-                                            if (state
-                                                is ListFavoritePlacesLoaded) {
-                                              return Material(
-                                                color: Colors.transparent,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(50)),
-                                                clipBehavior: Clip.antiAlias,
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    BlocProvider.of<
-                                                                FavoritePlaceBloc>(
-                                                            context)
-                                                        .add(
-                                                      TogglePlaceInFavorites(
-                                                          place),
-                                                    );
-                                                  },
-                                                  child: AnimatedSwitcher(
-                                                    duration: const Duration(
-                                                      milliseconds: 400,
-                                                    ),
-                                                    child: SvgPicture.asset(
-                                                      state.places
-                                                              .contains(place)
-                                                          ? iconFavoriteSelected
-                                                          : iconFavorite,
-                                                      key: UniqueKey(),
-                                                      width: 24,
-                                                      height: 24,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            }
-
-                                            return const SizedBox.shrink();
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 6,
-                                    child: Container(
-                                      width: 30,
-                                      height: 5,
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey[50],
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(12.0),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          // Card Bottom
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(16),
-                                  bottomRight: Radius.circular(16),
-                                ),
-                                color: Theme.of(context).cardColor,
-                              ),
-                              width: MediaQuery.of(context).size.width,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 14),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    // Place description
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            place.name,
-                                            maxLines: 1,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline1
-                                                ?.copyWith(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                            textAlign: TextAlign.left,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Text(
-                                            place.description,
-                                            maxLines: 1,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    // RouteButton
-                                    ElevatedButton(
-                                      onPressed: () {},
-                                      style: ElevatedButton.styleFrom(
-                                        minimumSize: Size.zero,
-                                        padding: EdgeInsets.zero,
-                                        primary: Theme.of(context)
-                                            .colorScheme
-                                            .primaryVariant,
-                                        fixedSize: const Size(40, 40),
-                                        elevation: 0.0,
-                                        shadowColor: Colors.transparent,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                      ),
-                                      child: SvgPicture.asset(
-                                        iconRoute,
-                                        width: 22,
-                                        height: 22,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                       Material(
                         color: Colors.transparent,
                         child: InkWell(
@@ -543,6 +320,256 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                               ),
                             );
                           },
+                          child: Column(
+                            children: [
+                              // Card Top
+                              Expanded(
+                                flex: 3,
+                                child: Material(
+                                  color: Colors.transparent,
+                                  child: Stack(
+                                    alignment: Alignment.topCenter,
+                                    children: [
+                                      Container(
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(16),
+                                            topRight: Radius.circular(16),
+                                          ),
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(16),
+                                                topRight: Radius.circular(16),
+                                              ),
+                                              child: CachedNetworkImage(
+                                                imageUrl: place.urls.first,
+                                                fadeOutDuration: const Duration(
+                                                    milliseconds: 200),
+                                                imageBuilder:
+                                                    (context, imageProvider) {
+                                                  return Container(
+                                                    decoration: BoxDecoration(
+                                                      image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                placeholder: (context, url) {
+                                                  return Center(
+                                                    child: Icon(
+                                                      Icons
+                                                          .photo_size_select_actual_outlined,
+                                                      color: Colors.grey[300],
+                                                      size: 70.0,
+                                                    ),
+                                                  );
+                                                },
+                                                errorWidget:
+                                                    (context, url, error) {
+                                                  return const ImagePlaceholder();
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 8,
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              Category.getCategoryByType(
+                                                      place.placeType)
+                                                  .name,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            BlocBuilder<FavoritePlaceBloc,
+                                                FavoritePlaceState>(
+                                              buildWhen: (context, state) {
+                                                return state !=
+                                                    ListFavoritePlacesLoaded;
+                                              },
+                                              builder: (context, state) {
+                                                if (state
+                                                    is ListFavoritePlacesLoaded) {
+                                                  return Material(
+                                                    color: Colors.transparent,
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                50)),
+                                                    clipBehavior:
+                                                        Clip.antiAlias,
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        BlocProvider.of<
+                                                                    FavoritePlaceBloc>(
+                                                                context)
+                                                            .add(
+                                                          TogglePlaceInFavorites(
+                                                              place),
+                                                        );
+                                                      },
+                                                      child: AnimatedSwitcher(
+                                                        duration:
+                                                            const Duration(
+                                                          milliseconds: 400,
+                                                        ),
+                                                        child: SvgPicture.asset(
+                                                          state.places.contains(
+                                                                  place)
+                                                              ? iconFavoriteSelected
+                                                              : iconFavorite,
+                                                          key: UniqueKey(),
+                                                          width: 24,
+                                                          height: 24,
+                                                          color: Colors.white,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                }
+
+                                                return const SizedBox.shrink();
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 6,
+                                        child: Container(
+                                          width: 30,
+                                          height: 5,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[50],
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(12.0),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              // Card Bottom
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                      bottomLeft: Radius.circular(16),
+                                      bottomRight: Radius.circular(16),
+                                    ),
+                                    color: Theme.of(context).cardColor,
+                                  ),
+                                  width: MediaQuery.of(context).size.width,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        // Place description
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                place.name,
+                                                maxLines: 1,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headline1
+                                                    ?.copyWith(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                textAlign: TextAlign.left,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(height: 2),
+                                              Text(
+                                                place.description,
+                                                maxLines: 1,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        // RouteButton
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            openMapsSheet(
+                                              context: context,
+                                              target: Coords(
+                                                place.lat!,
+                                                place.lng!,
+                                              ),
+                                              name: place.name,
+                                            );
+
+                                            BlocProvider.of<VisitedPlaceBloc>(
+                                                    context)
+                                                .add(
+                                              AddPlaceToVisitedList(
+                                                place: place,
+                                                date: DateTime.now(),
+                                              ),
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            primary: Theme.of(context)
+                                                .colorScheme
+                                                .primaryVariant,
+                                            fixedSize: const Size(40, 40),
+                                            elevation: 0.0,
+                                            shadowColor: Colors.transparent,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                          ),
+                                          child: SvgPicture.asset(
+                                            iconRoute,
+                                            width: 22,
+                                            height: 22,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

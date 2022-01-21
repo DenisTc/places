@@ -39,6 +39,7 @@ dependencies:
 
   # Map
   yandex_mapkit: ^2.0.1
+  map_launcher: ^2.1.2
   geolocator: ^8.0.3
 
   # Other
