@@ -16,12 +16,12 @@ openMapsSheet({
       context: context,
       builder: (BuildContext context) {
         return Container(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.secondary,
           child: SafeArea(
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  SizedBox(height: 10),
+                  const SizedBox(height: 5),
                   Container(
                     width: 30,
                     height: 5,
@@ -32,21 +32,36 @@ openMapsSheet({
                       ),
                     ),
                   ),
+                  const SizedBox(height: 5),
                   Container(
-                    color: Colors.white,
                     child: Wrap(
-                      children: <Widget>[
+                      children: [
                         for (var map in availableMaps)
-                          ListTile(
-                            onTap: () => map.showMarker(
-                              coords: coords,
-                              title: title,
-                            ),
-                            title: Text(map.mapName),
-                            leading: SvgPicture.asset(
-                              map.icon,
-                              height: 30.0,
-                              width: 30.0,
+                          Material(
+                            color: Colors.transparent,
+                            child: InkWell(
+                              onTap: () {},
+                              child: ListTile(
+                                onTap: () => map.showMarker(
+                                  coords: coords,
+                                  title: title,
+                                ),
+                                title: Text(
+                                  map.mapName,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline1
+                                      ?.copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                ),
+                                leading: SvgPicture.asset(
+                                  map.icon,
+                                  height: 30.0,
+                                  width: 30.0,
+                                ),
+                              ),
                             ),
                           ),
                       ],
