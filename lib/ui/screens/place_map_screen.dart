@@ -34,10 +34,11 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
     type: MapAnimationType.smooth,
     duration: 2.0,
   );
-
   final List<MapObject> mapObjects = [];
+
   bool nightModeEnabled = false;
   int? selectedPlaceId;
+  Placemark? userPmk;
 
   late YandexMapController controller;
 
@@ -45,9 +46,15 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
   bool get wantKeepAlive => true;
 
   @override
+  void initState() {
+    BlocProvider.of<PlacesMapBloc>(context).add(LoadPlacesMapEvent());
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
-    BlocProvider.of<PlacesMapBloc>(context).add(LoadPlacesMapEvent());
+
     final String style = nightModeEnabled
         ? constants.darkStyleYandexMap
         : constants.lightStyleYandexMap;
@@ -80,12 +87,9 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
                       if (state is LoadPlacesMapSuccess) {
                         mapObjects.clear();
 
-                        mapObjects.add(
-                          userPlacemark(
-                            lat: state.userLocation.lat,
-                            lng: state.userLocation.lng,
-                          ),
-                        );
+                        if (userPmk != null) {
+                          mapObjects.add(userPmk!);
+                        }
 
                         state.places.forEach(
                           (place) {
@@ -96,30 +100,22 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
                         return YandexMap(
                           mapObjects: mapObjects,
                           nightModeEnabled: nightModeEnabled,
-                          onCameraPositionChanged:
-                              (CameraPosition cameraPosition, _, __) async {
-                            final placemark = mapObjects.firstWhere(
-                                    (el) => el.mapId == cameraMapObjectId)
-                                as Placemark;
-
-                            setState(() {
-                              mapObjects[mapObjects.indexOf(placemark)] =
-                                  placemark.copyWith(
-                                      point: cameraPosition.target);
-                            });
-                          },
                           onMapCreated:
                               (YandexMapController yandexMapController) async {
-                            final placemark = mapObjects.firstWhere(
-                                    (el) => el.mapId == cameraMapObjectId)
-                                as Placemark;
+                            final defaultPosition =
+                                mapObjects.first as Placemark;
 
                             controller = yandexMapController;
                             controller.setMapStyle(style);
 
                             await controller.moveCamera(
-                                CameraUpdate.newCameraPosition(CameraPosition(
-                                    target: placemark.point, zoom: 14)));
+                              CameraUpdate.newCameraPosition(
+                                CameraPosition(
+                                  target: defaultPosition.point,
+                                  zoom: 14,
+                                ),
+                              ),
+                            );
                           },
                         );
                       }
@@ -163,6 +159,14 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
     return RawMaterialButton(
       onPressed: () async {
         final userLocation = await geolocation.getCurrentLocation();
+
+        setState(() {
+          userPmk = userPlacemark(
+            lat: userLocation.lat,
+            lng: userLocation.lng,
+          );
+        });
+
         await controller.moveCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(

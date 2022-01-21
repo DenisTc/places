@@ -15,7 +15,6 @@ import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/res/styles.dart';
-import 'package:places/ui/screens/place_map_screen.dart';
 import 'package:places/ui/widgets/place_details_screen/photo_view.dart';
 
 /// A screen with a detailed description of the place

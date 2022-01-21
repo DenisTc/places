@@ -59,6 +59,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return Scaffold(
       body: TabBarView(
         controller: _tabController,
+        physics: NeverScrollableScrollPhysics(),
         children: pages,
       ),
       bottomNavigationBar: PlaceBottomNavBar(
