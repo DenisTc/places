@@ -4,7 +4,6 @@ import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/storage/shared_storage.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
-import 'package:places/services/location_services.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'filtered_places_event.dart';
@@ -37,14 +36,7 @@ class FilteredPlacesBloc
     Emitter<FilteredPlacesState> emit,
   ) async {
     try {
-      LocationServices geolocation = LocationServices();
-      final userLocation = await geolocation.getCurrentLocation();
-
-      final _filter = await _storage.getSearchFilter();
-
-      _filter.lat = userLocation.lat;
-      _filter.lng = userLocation.lng;
-
+      final _filter = await _storage.getSavedSearchFilter();
       final _filteredPlaces = await _searchInteractor.getFiltredPlaces(_filter);
 
       emit(LoadFilteredPlacesSuccess(_filteredPlaces));
@@ -61,7 +53,7 @@ class FilteredPlacesBloc
       final allCategories = await _searchInteractor.getCategories();
 
       emit(PlaceCategoriesLoaded(categories: allCategories));
-    } on Exception catch (e) {
+    } catch (e) {
       emit(LoadPlaceCategoriesError(e.toString()));
     }
   }

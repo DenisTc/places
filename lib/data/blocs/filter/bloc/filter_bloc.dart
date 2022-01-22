@@ -50,32 +50,34 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     LoadFilterEvent event,
     Emitter<FilterState> emit,
   ) async {
-    final allCategories = await _searchInteractor.getCategories();
+    try {
+      // Return categories
+      final allCategories = await _searchInteractor.getCategories();
+      emit(LoadFilterCategoriesSuccess(allCategories));
 
-    emit(LoadFilterCategoriesSuccess(allCategories));
+      // Get filter
+      final _filters = await _storage.getSavedSearchFilter();
+      if (_filters.lat != null) {
+        _currentFilter = _filters;
+      } else {
+        _currentFilter = SearchFilter();
+      }
 
-    final _filters = await _storage.getSearchFilter();
-    _currentFilter = _filters;
+      emit(LoadFiltersSuccess(_filters));
 
-    emit(LoadFiltersSuccess(_filters));
-
-    final filteredPlaces = await _searchInteractor.getFiltredPlaces(_filters);
-
-    emit(LoadCountFilteredPlacesSuccess(filteredPlaces.length));
+      // Return count filtered places
+      final filteredPlaces = await _searchInteractor.getFiltredPlaces(_filters);
+      emit(LoadCountFilteredPlacesSuccess(filteredPlaces.length));
+    } on Exception catch (e) {
+      emit(LoadFiltersError(e.toString()));
+    }
   }
 
   Future<void> _clearFilter(
     ClearFilterEvent event,
     Emitter<FilterState> emit,
   ) async {
-    _currentFilter = SearchFilter(
-      lat: constants.userLocation.lat,
-      lng: constants.userLocation.lng,
-      distance: constants.defaultDistanceRange,
-      typeFilter: [],
-    );
-
-    await _storage.setSearchFilter(_currentFilter!);
+    _currentFilter = SearchFilter(typeFilter: []);
 
     emit(LoadFiltersSuccess(_currentFilter!));
 
@@ -89,10 +91,15 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     ToggleCategoryEvent event,
     Emitter<FilterState> emit,
   ) async {
-    if (_currentFilter!.typeFilter!.contains(event.name)) {
+    if (_currentFilter?.lat == null) {
+      _currentFilter = await _storage.getSearchFilter();
+    }
+
+    if (_currentFilter!.typeFilter != null &&
+        _currentFilter!.typeFilter!.contains(event.name)) {
       _currentFilter!.typeFilter!.remove(event.name);
     } else {
-      _currentFilter!.typeFilter!.add(event.name);
+      _currentFilter!.typeFilter?.add(event.name);
     }
 
     emit(LoadFiltersSuccess(_currentFilter!));
@@ -117,6 +124,10 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
   }
 
   Future<void> _saveFilter() async {
-    await _storage.setSearchFilter(_currentFilter!);
+    if (_currentFilter?.lat == null) {
+      _storage.deleteKey(constants.keySPFilter);
+    } else {
+      _storage.setSearchFilter(_currentFilter!);
+    }
   }
 }

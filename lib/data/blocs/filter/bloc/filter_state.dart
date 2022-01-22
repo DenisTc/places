@@ -18,6 +18,15 @@ class LoadFiltersSuccess extends FilterState {
   List<Object> get props => [filter];
 }
 
+class LoadFiltersError extends FilterState {
+  final String message;
+
+  LoadFiltersError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class LoadFilterCategoriesSuccess extends FilterState {
   final List<String> categories;
 

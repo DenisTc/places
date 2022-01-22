@@ -19,6 +19,7 @@ import 'package:places/database/database.dart';
 import 'package:places/domain/theme_app.dart';
 import 'package:places/ui/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 
 void main() {
   runApp(App());
@@ -79,6 +80,11 @@ class App extends StatelessWidget {
             searchInteractor: SearchInteractor(
               SearchRepository(api),
             ),
+            storage: SharedStorage(),
+          ),
+        ),
+        BlocProvider<GeolocationBloc>(
+          create: (context) => GeolocationBloc(
             storage: SharedStorage(),
           ),
         ),

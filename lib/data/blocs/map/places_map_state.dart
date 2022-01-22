@@ -10,16 +10,14 @@ abstract class PlacesMapState extends Equatable {
 class PlacesMapInitial extends PlacesMapState {}
 
 class LoadPlacesMapSuccess extends PlacesMapState {
-  final Location userLocation;
   final List<Place> places;
 
   LoadPlacesMapSuccess({
-    required this.userLocation,
     required this.places,
   });
 
   @override
-  List<Object> get props => [userLocation, places];
+  List<Object> get props => [places];
 }
 
 class LoadPlaceCardSuccess extends PlacesMapState {

@@ -26,21 +26,34 @@ class SearchFilter {
     };
   }
 
-  Map<String, dynamic> toJson() => {
-        'lat': lat,
-        'lng': lng,
-        'distance': [distance!.start, distance!.end],
-        'typeFilter': typeFilter,
-      };
+  Map<String, dynamic> toJson() {
+    if (lat == null) {
+      return {};
+    }
 
-  SearchFilter.fromJson(Map<String, dynamic> json)
-      : lng = json['lng'] as double,
-        lat = json['lat'] as double,
-        distance = RangeValues(
+    return {
+      'lat': lat,
+      'lng': lng,
+      'distance': [distance!.start, distance!.end],
+      'typeFilter': typeFilter,
+    };
+  }
+
+  factory SearchFilter.fromJson(Map<String, dynamic> json) {
+    if(json['lat'] == null){
+      return SearchFilter(typeFilter: []);
+    }
+
+    return SearchFilter(
+      lng : json['lng'] as double,
+        lat : json['lat'] as double,
+        distance : RangeValues(
           (json['distance'][0] as num).toDouble(),
           (json['distance'][1] as num).toDouble(),
         ),
-        typeFilter = List<String>.from(
+        typeFilter : List<String>.from(
           json['typeFilter'] as List<dynamic>,
-        );
+        ),
+    );
+  }
 }

@@ -103,8 +103,9 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
                           state.places,
                         );
 
-                        if (searchRes.length == 0)
+                        if (searchRes.length == 0) {
                           return Center(child: const EmptySearchResult());
+                        }
 
                         return SearchResultList(
                           filteredPlaces: searchRes,
@@ -116,9 +117,7 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
                       }
 
                       if (state is LoadFilteredPlacesError) {
-                        return const SliverFillRemaining(
-                          child: NetworkException(),
-                        );
+                        return NetworkException();
                       }
 
                       return const EmptySearchResult();

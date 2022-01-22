@@ -4,7 +4,6 @@ import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/storage/shared_storage.dart';
 import 'package:places/domain/location.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/services/location_services.dart';
 
 part 'places_map_event.dart';
 part 'places_map_state.dart';
@@ -38,16 +37,11 @@ class PlacesMapBloc extends Bloc<PlacesMapEvent, PlacesMapState> {
     LoadPlacesMapEvent event,
     Emitter<PlacesMapState> emit,
   ) async {
-    final _filter = await storage.getSearchFilter();
-
+    final _filter = await storage.getSavedSearchFilter();
     final _filteredPlaces = await searchInteractor.getFiltredPlaces(_filter);
-
-    LocationServices geolocation = LocationServices();
-    final userLocation = await geolocation.getCurrentLocation();
 
     emit(
       LoadPlacesMapSuccess(
-        userLocation: userLocation,
         places: _filteredPlaces,
       ),
     );

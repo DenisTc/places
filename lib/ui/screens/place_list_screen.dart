@@ -25,7 +25,8 @@ class PlaceListScreen extends StatelessWidget {
                 const SliverAppBarList(),
                 BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
                   buildWhen: (context, state) {
-                    return state is LoadFilteredPlacesSuccess;
+                    return state is LoadFilteredPlacesSuccess ||
+                        state is LoadFilteredPlacesError;
                   },
                   builder: (context, state) {
                     if (state is LoadFilteredPlacesInProgress) {
@@ -56,7 +57,7 @@ class PlaceListScreen extends StatelessWidget {
           ),
           const Positioned(
             bottom: 16,
-            child:  AddPlaceButton(),
+            child: AddPlaceButton(),
           ),
         ],
       ),

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/blocs/filter/bloc/filter_bloc.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
+import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 
 class FiltersScreen extends StatefulWidget {
@@ -60,9 +62,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
           ),
           child: BlocBuilder<FilterBloc, FilterState>(
             buildWhen: (context, state) {
-              return state is LoadFilterCategoriesSuccess;
+              return state is LoadFilterCategoriesSuccess ||
+                  state is LoadFiltersError;
             },
             builder: (context, state) {
+              if (state is LoadFiltersError) {
+                return NetworkException();
+              }
+
               if (state is LoadFilterCategoriesSuccess) {
                 return SingleChildScrollView(
                   child: Column(
@@ -94,11 +101,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 );
               }
 
-              if(state is LoadFilterCategoriesError){
-                return const NetworkException();
-              }
-
-              return const SizedBox.shrink();
+              return const CustomLoaderWidget();
             },
           ),
         ),
@@ -121,7 +124,8 @@ class _DistanceState extends State<_Distance> {
     return BlocBuilder<FilterBloc, FilterState>(
       builder: (context, state) {
         if (state is LoadFiltersSuccess) {
-          _rangeValues = state.filter.distance!;
+          _rangeValues =
+              state.filter.distance ?? constants.defaultDistanceRange;
         }
 
         return Column(
@@ -211,6 +215,8 @@ class _ShowButton extends StatelessWidget {
             onPressed: () {
               if (count != 0) {
                 BlocProvider.of<FilterBloc>(context).add(SaveFilterEvent());
+                BlocProvider.of<FilteredPlacesBloc>(context)
+                    .add(LoadFilteredPlaces());
                 Navigator.pop(context);
               }
             },
@@ -406,9 +412,11 @@ class _CategoryCircle extends StatelessWidget {
                     return state is LoadFiltersSuccess;
                   },
                   builder: (context, state) {
-                    if (state is LoadFiltersSuccess) {
-                      if (state.filter.typeFilter!
-                          .contains(category.type.toLowerCase())) {
+                    if (state is LoadFiltersSuccess &&
+                        state.filter.typeFilter != null) {
+                      if (state.filter.typeFilter!.contains(
+                        category.type.toLowerCase(),
+                      )) {
                         return IconCheck(checkSize: checkSize);
                       }
                     }

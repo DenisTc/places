@@ -68,6 +68,8 @@ const String textIsEmpty = 'Пусто';
 const String textShare = 'Поделиться';
 const String textPassed = 'ПРОЙДЕНО';
 const String textMap = 'Карта';
+const String textErrorGeolocation = '-\nДля того чтобы применить фильтр, необходимо определить ваше местоположение.\n-\nПерейдите в настройки и разрешите данному приложению использовать геолокацию и перезапустите данное приложение.';
+const String textSearch = 'Поиск';
 
 // Images
 const String pathLoader = 'res/images/loader.png';
@@ -100,6 +102,7 @@ const List<String> selectedCategories = ['monument', 'other', 'theatre'];
 const String keySPFilter = 'SearchFilter';
 const String keySPTheme = 'Theme';
 const String keySPOnboarding = 'Onboarding';
+const String keySPUserLocation = 'UserLocation';
 
 // Yandex map styles
 const String lightStyleYandexMap = '''

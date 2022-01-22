@@ -10,7 +10,6 @@ import 'package:places/data/extensions/open_map_sheet.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/theme_app.dart';
-import 'package:places/services/location_services.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/screens/place_details_screen.dart';
@@ -18,6 +17,7 @@ import 'package:places/ui/widgets/list_screen/add_place_button.dart';
 import 'package:places/ui/widgets/list_screen/search_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
+import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 
 class PlaceMapScreen extends StatefulWidget {
   const PlaceMapScreen({Key? key}) : super(key: key);
@@ -28,7 +28,6 @@ class PlaceMapScreen extends StatefulWidget {
 
 class _PlaceMapScreenState extends State<PlaceMapScreen>
     with AutomaticKeepAliveClientMixin {
-  LocationServices geolocation = LocationServices();
   final MapObjectId cameraMapObjectId = MapObjectId('camera_placemark');
   final animation = const MapAnimation(
     type: MapAnimationType.smooth,
@@ -155,37 +154,29 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
     );
   }
 
-  RawMaterialButton geolocationButton() {
-    return RawMaterialButton(
-      onPressed: () async {
-        final userLocation = await geolocation.getCurrentLocation();
-
-        setState(() {
-          userPmk = userPlacemark(
-            lat: userLocation.lat,
-            lng: userLocation.lng,
-          );
-        });
-
-        await controller.moveCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              target: Point(
-                latitude: userLocation.lat,
-                longitude: userLocation.lng,
-              ),
+  BlocBuilder geolocationButton() {
+    return BlocBuilder<GeolocationBloc, GeolocationState>(
+      builder: (context, state) {
+        if (state is LoadGeolocationSuccess) {
+          return RawMaterialButton(
+            onPressed: () async {
+              BlocProvider.of<GeolocationBloc>(context)
+                  .add(LoadUserGeolocationEvent());
+            },
+            shape: CircleBorder(),
+            fillColor: Theme.of(context).cardColor,
+            constraints: BoxConstraints(minWidth: 48, minHeight: 48),
+            child: SvgPicture.asset(
+              iconGeolocation,
+              color: Theme.of(context)
+                  .bottomNavigationBarTheme
+                  .unselectedItemColor,
             ),
-          ),
-          animation: animation,
-        );
+          );
+        }
+
+        return SizedBox(width: 48);
       },
-      shape: CircleBorder(),
-      fillColor: Theme.of(context).cardColor,
-      constraints: BoxConstraints(minWidth: 48, minHeight: 48),
-      child: SvgPicture.asset(
-        iconGeolocation,
-        color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
-      ),
     );
   }
 
