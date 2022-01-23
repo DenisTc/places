@@ -27,7 +27,7 @@ class SliverPlaces extends StatelessWidget {
           crossAxisCount: isPortrait ? 1 : 2,
           mainAxisSpacing: 0,
           crossAxisSpacing: 36,
-          childAspectRatio: 1.8,
+          mainAxisExtent: 190,
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) {
