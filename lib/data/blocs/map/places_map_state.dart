@@ -4,20 +4,24 @@ abstract class PlacesMapState extends Equatable {
   const PlacesMapState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class PlacesMapInitial extends PlacesMapState {}
 
 class LoadPlacesMapSuccess extends PlacesMapState {
   final List<Place> places;
+  final Location? userLocation;
 
   LoadPlacesMapSuccess({
     required this.places,
+    this.userLocation,
   });
 
+  // @override
+  // List<Object?> get props => [places, userLocation];
   @override
-  List<Object> get props => [places];
+  List<Object?> get props => [places, userLocation];
 }
 
 class LoadPlaceCardSuccess extends PlacesMapState {

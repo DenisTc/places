@@ -70,6 +70,11 @@ const String textPassed = 'ПРОЙДЕНО';
 const String textMap = 'Карта';
 const String textErrorGeolocation = '-\nДля того чтобы применить фильтр, необходимо определить ваше местоположение.\n-\nПерейдите в настройки и разрешите данному приложению использовать геолокацию и перезапустите данное приложение.';
 const String textSearch = 'Поиск';
+const String textLocation = 'Местоположение';
+const String textReady = 'Готово';
+const String textDescLocationScreen = 'потяните карту чтобы выбрать правильное местоположение';
+const String textGeolocationError = 'Не удалось определить геолокацию. Проверьте настройки геолокации для данного приложения!';
+const String textCameraMapObjectId = 'camera_placemark';
 
 // Images
 const String pathLoader = 'res/images/loader.png';
@@ -77,9 +82,11 @@ const String pathIconLightDotMap = 'res/images/map/light_dot.png';
 const String pathIconDarkDotMap = 'res/images/map/dark_dot.png';
 const String pathIconSelectedPlaceMap = 'res/images/map/selected_place.png';
 const String pathIconUserMap = 'res/images/map/user.png';
+const String pathIconPlusLight = 'res/images/map/plus_light.png';
+const String pathIconPlusDark = 'res/images/map/plus_dark.png';
 
 // Location
-const Location userLocation = Location(lat: 57.81929846395932, lng: 28.332799972367415); // [57,81929846395932,28,332799972367415] 57.817029184, lng: 28.339347297
+const Location defaultLocation = Location(lat: 55.753223,lng: 37.621506);
 
 // For FiltersScreen
 const RangeValues defaultDistanceRange = RangeValues(0, 10000.0);

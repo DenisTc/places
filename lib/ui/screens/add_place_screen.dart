@@ -5,10 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:places/data/blocs/place/bloc/place_bloc.dart';
 import 'package:places/domain/category.dart';
+import 'package:places/domain/location.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
+import 'package:places/ui/screens/location_screen.dart';
 import 'package:places/ui/screens/place_category_screen.dart';
 import 'package:places/ui/widgets/add_place_screen/gallery/place_gallery.dart';
 import 'package:places/ui/widgets/add_place_screen/new_place_app_bar.dart';
@@ -102,7 +104,8 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
                       checkFieldFills();
                     },
                   ),
-                  const _SelectOnMapButton(),
+                   _SelectOnMapButton(controllerLat: _controllerLat,
+                    controllerLng: _controllerLng,),
                   const SizedBox(height: 30),
                   const Text(
                     constants.textDescription,
@@ -174,14 +177,27 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
 }
 
 class _SelectOnMapButton extends StatelessWidget {
+  final TextEditingController controllerLat;
+  final TextEditingController controllerLng;
   const _SelectOnMapButton({
     Key? key,
+    required this.controllerLat,
+    required this.controllerLng,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: () async {
+        final Location location = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LocationScreen(),
+          ),
+        );
+        controllerLat.text = location.lat.toString();
+        controllerLng.text = location.lng.toString();
+      },
       child: Text(
         constants.textBtnShowOnMap,
         style: TextStyle(

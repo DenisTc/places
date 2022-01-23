@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/storage/shared_storage.dart';
 import 'package:places/domain/location.dart';
 import 'package:places/domain/place.dart';
+import 'package:places/services/location_service.dart';
 
 part 'places_map_event.dart';
 part 'places_map_state.dart';
@@ -29,7 +31,7 @@ class PlacesMapBloc extends Bloc<PlacesMapEvent, PlacesMapState> {
     );
 
     on<LoadCurrentUserLocationEvent>(
-      (event, emit) => emit(HidePlaceCardState()),
+      (event, emit) => _loadUserLocation(event, emit),
     );
   }
 
@@ -43,6 +45,27 @@ class PlacesMapBloc extends Bloc<PlacesMapEvent, PlacesMapState> {
     emit(
       LoadPlacesMapSuccess(
         places: _filteredPlaces,
+      ),
+    );
+  }
+
+  Future<void> _loadUserLocation(
+    LoadCurrentUserLocationEvent event,
+    Emitter<PlacesMapState> emit,
+  ) async {
+    final _filter = await storage.getSavedSearchFilter();
+    final _filteredPlaces = await searchInteractor.getFiltredPlaces(_filter);
+
+    Position position =
+        await LocationService.getCurrentUserPosition(timeout: 15);
+
+    emit(
+      LoadPlacesMapSuccess(
+        places: _filteredPlaces,
+        userLocation: Location(
+          lat: position.latitude,
+          lng: position.longitude,
+        ),
       ),
     );
   }

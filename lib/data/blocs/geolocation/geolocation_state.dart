@@ -20,6 +20,7 @@ class LoadGeolocationSuccess extends GeolocationState {
 
 class LoadGeolocationError extends GeolocationState {}
 
+
 class LoadUserGeolocationSuccess extends GeolocationState {
   final Location userLocation;
 
