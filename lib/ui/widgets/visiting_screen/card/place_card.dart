@@ -379,12 +379,9 @@ class FavoriteCardBottom extends StatelessWidget {
           color: Theme.of(context).primaryColor,
         ),
         width: double.infinity,
-        padding: const EdgeInsets.only(
-          left: 16,
-          right: 16,
-          bottom: 16,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
@@ -416,15 +413,18 @@ class FavoriteCardBottom extends StatelessWidget {
                       ),
                   overflow: TextOverflow.ellipsis,
                 ),
-            const SizedBox(height: 6),
-            Expanded(
-              child: Text(
-                place.description,
-                maxLines: visitDate != null ? 1 : 2,
-                style: const TextStyle(color: myLightSecondaryTwo),
-                overflow: TextOverflow.ellipsis,
+            const SizedBox(height: 4),
+            Container(
+              child: Expanded(
+                child: Text(
+                  place.description,
+                  maxLines: visitDate != null ? 1 : 2,
+                  style: const TextStyle(color: myLightSecondaryTwo),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
+            const SizedBox(height: 10),
           ],
         ),
       ),
