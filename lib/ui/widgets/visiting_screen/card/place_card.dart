@@ -394,7 +394,7 @@ class FavoriteCardBottom extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               place.name,
-              maxLines: 2,
+              maxLines: 1,
               style: Theme.of(context)
                   .textTheme
                   .headline1
