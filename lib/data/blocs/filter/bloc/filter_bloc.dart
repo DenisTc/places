@@ -17,17 +17,15 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
 
   FilterBloc(this._searchInteractor) : super(FilterInitial()) {
     on<LoadFilterEvent>(
-      (event, emit) => _loadFilter(event, emit),
+      (event, emit) => _loadFilter(emit),
     );
 
-    on<ToggleCategoryEvent>(
-      (event, emit) => _toggleCategory(event, emit),
-    );
+    on<ToggleCategoryEvent>(_toggleCategory);
 
     on<UpdateFilterDistanceEvent>(
-      (event, emit) => _updateDistance(event, emit),
+      _updateDistance,
       transformer: debounce(
-        Duration(milliseconds: 500),
+        const Duration(milliseconds: 500),
       ),
     );
 
@@ -36,7 +34,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     );
 
     on<ClearFilterEvent>(
-      (event, emit) => _clearFilter(event, emit),
+      (event, emit) => _clearFilter(emit),
     );
   }
 
@@ -47,7 +45,6 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
   }
 
   Future<void> _loadFilter(
-    LoadFilterEvent event,
     Emitter<FilterState> emit,
   ) async {
     try {
@@ -57,11 +54,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
 
       // Get filter
       final _filters = await _storage.getSavedSearchFilter();
-      if (_filters.lat != null) {
-        _currentFilter = _filters;
-      } else {
-        _currentFilter = SearchFilter();
-      }
+      _currentFilter = _filters.lat != null ? _filters : SearchFilter();
 
       emit(LoadFiltersSuccess(_filters));
 
@@ -74,7 +67,6 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
   }
 
   Future<void> _clearFilter(
-    ClearFilterEvent event,
     Emitter<FilterState> emit,
   ) async {
     _currentFilter = SearchFilter(typeFilter: []);
@@ -82,7 +74,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     emit(LoadFiltersSuccess(_currentFilter!));
 
     final filteredPlaces =
-        await _searchInteractor.getFiltredPlaces(_currentFilter!);
+        await _searchInteractor.getFiltredPlaces(_currentFilter);
 
     emit(LoadCountFilteredPlacesSuccess(filteredPlaces.length));
   }
@@ -105,7 +97,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     emit(LoadFiltersSuccess(_currentFilter!));
 
     final filteredPlaces =
-        await _searchInteractor.getFiltredPlaces(_currentFilter!);
+        await _searchInteractor.getFiltredPlaces(_currentFilter);
 
     emit(LoadCountFilteredPlacesSuccess(filteredPlaces.length));
   }
@@ -117,7 +109,7 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
     _currentFilter!.distance = event.distance;
 
     final filteredPlaces =
-        await _searchInteractor.getFiltredPlaces(_currentFilter!);
+        await _searchInteractor.getFiltredPlaces(_currentFilter);
     emit(LoadFilterDistanceSuccess(event.distance));
 
     emit(LoadCountFilteredPlacesSuccess(filteredPlaces.length));
@@ -125,9 +117,9 @@ class FilterBloc extends Bloc<FilterEvent, FilterState> {
 
   Future<void> _saveFilter() async {
     if (_currentFilter?.lat == null) {
-      _storage.deleteKey(constants.keySPFilter);
+      await _storage.deleteKey(constants.keySPFilter);
     } else {
-      _storage.setSearchFilter(_currentFilter!);
+      await _storage.setSearchFilter(_currentFilter!);
     }
   }
 }

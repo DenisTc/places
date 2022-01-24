@@ -67,7 +67,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
             },
             builder: (context, state) {
               if (state is LoadFiltersError) {
-                return NetworkException();
+                return const NetworkException();
               }
 
               if (state is LoadFilterCategoriesSuccess) {
@@ -90,7 +90,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                         categories: state.categories,
                       ),
                       const SizedBox(height: 20),
-                      _Distance(),
+                      const _Distance(),
                       const SizedBox(height: 50),
                       _ShowButton(
                         countPlaces: countPlaces,
@@ -210,13 +210,14 @@ class _ShowButton extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is LoadCountFilteredPlacesSuccess) {
-          int count = state.count;
+          final count = state.count;
+
           return ElevatedButton(
             onPressed: () {
               if (count != 0) {
                 BlocProvider.of<FilterBloc>(context).add(SaveFilterEvent());
                 BlocProvider.of<FilteredPlacesBloc>(context)
-                    .add(LoadFilteredPlaces());
+                    .add(const LoadFilteredPlaces());
                 Navigator.pop(context);
               }
             },
@@ -247,7 +248,8 @@ class _ShowButton extends StatelessWidget {
             ),
           );
         } else if (state is LoadCountFilteredPlacesSuccess) {
-          int count = state.count;
+          final count = state.count;
+
           return ElevatedButton(
             onPressed: () {
               if (count != 0) {
@@ -281,6 +283,7 @@ class _ShowButton extends StatelessWidget {
             ),
           );
         }
+
         return ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(
@@ -373,8 +376,8 @@ class _CategoryCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayHeight = MediaQuery.of(context).size.height;
-    final double iconSize = displayHeight > 600 ? 90 : 60;
-    final double checkSize = displayHeight > 600 ? 22 : 17;
+    final iconSize = displayHeight > 600.0 ? 90.0 : 60.0;
+    final checkSize = displayHeight > 600.0 ? 22.0 : 17.0;
 
     return InkWell(
       borderRadius: const BorderRadius.all(Radius.circular(40)),
@@ -420,7 +423,8 @@ class _CategoryCircle extends StatelessWidget {
                         return IconCheck(checkSize: checkSize);
                       }
                     }
-                    return SizedBox.shrink();
+
+                    return const SizedBox.shrink();
                   },
                 ),
               ],
@@ -444,12 +448,12 @@ class _CategoryCircle extends StatelessWidget {
 }
 
 class IconCheck extends StatelessWidget {
+  final double checkSize;
+
   const IconCheck({
     Key? key,
     required this.checkSize,
   }) : super(key: key);
-
-  final double checkSize;
 
   @override
   Widget build(BuildContext context) {

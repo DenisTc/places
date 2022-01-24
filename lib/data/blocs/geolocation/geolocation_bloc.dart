@@ -14,12 +14,11 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
 
   GeolocationBloc({required this.storage}) : super(GeolocationInitial()) {
     on<LoadGeolocationEvent>(
-      (event, emit) => _loadGeolocation(event, emit),
+      (event, emit) => _loadGeolocation(emit),
     );
   }
 
   Future<void> _loadGeolocation(
-    LoadGeolocationEvent event,
     Emitter<GeolocationState> emit,
   ) async {
     final permission = await LocationService.checkGeoPermission();
@@ -27,10 +26,10 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
     if (permission != LocationPermission.denied &&
         permission != LocationPermission.deniedForever) {
       try {
-        Position position =
+        final position =
             await LocationService.getCurrentUserPosition(timeout: 15);
 
-        storage.setUserLocation(
+        await storage.setUserLocation(
           lat: position.latitude,
           lng: position.longitude,
         );

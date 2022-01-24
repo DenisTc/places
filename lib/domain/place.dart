@@ -22,16 +22,6 @@ class Place extends Equatable {
     required this.description,
   });
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'lat': lat,
-        'lng': lng,
-        'name': name,
-        'urls': urls,
-        'placeType': placeType,
-        'description': description,
-      };
-
   Place.fromJson(Map<String, dynamic> json)
       : id = json['id'] as int,
         lat = json['lat'] as double,
@@ -40,4 +30,14 @@ class Place extends Equatable {
         urls = (json['urls'] as List<dynamic>).cast<String>(),
         placeType = json['placeType'] as String,
         description = json['description'] as String;
+
+  Map<String, dynamic> toJson() => <String, dynamic>{
+        'id': id,
+        'lat': lat,
+        'lng': lng,
+        'name': name,
+        'urls': urls,
+        'placeType': placeType,
+        'description': description,
+      };
 }

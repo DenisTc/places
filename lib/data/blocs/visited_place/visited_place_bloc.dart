@@ -12,16 +12,15 @@ class VisitedPlaceBloc extends Bloc<VisitedPlaceEvent, VisitedPlaceState> {
 
   VisitedPlaceBloc(this._placeInteractor) : super(VisitedPlaceInitial()) {
     on<LoadListVisitedPlaces>(
-      (event, emit) => _loadListVisitedPlaces(event, emit),
+      (event, emit) => _loadListVisitedPlaces(emit),
     );
 
     on<AddPlaceToVisitedList>(
-      (event, emit) => _addPlaceToVisitedList(event, emit),
+      (event, emit) => _addPlaceToVisitedList(event),
     );
   }
 
   Future<void> _loadListVisitedPlaces(
-    LoadListVisitedPlaces event,
     Emitter<VisitedPlaceState> emit,
   ) async {
     final visitedPlaces = await _placeInteractor.getVisitedPlaces();
@@ -31,7 +30,6 @@ class VisitedPlaceBloc extends Bloc<VisitedPlaceEvent, VisitedPlaceState> {
 
   Future<void> _addPlaceToVisitedList(
     AddPlaceToVisitedList event,
-    Emitter<VisitedPlaceState> emit,
   ) async {
     await _placeInteractor.addPlaceToCache(event.place);
     await _placeInteractor.addPlaceToVisitedList(

@@ -12,7 +12,7 @@ class GeolocationInitial extends GeolocationState {}
 class LoadGeolocationSuccess extends GeolocationState {
   final Location userLocation;
 
-  LoadGeolocationSuccess(this.userLocation);
+  const LoadGeolocationSuccess(this.userLocation);
 
   @override
   List<Object> get props => [userLocation];
@@ -20,11 +20,10 @@ class LoadGeolocationSuccess extends GeolocationState {
 
 class LoadGeolocationError extends GeolocationState {}
 
-
 class LoadUserGeolocationSuccess extends GeolocationState {
   final Location userLocation;
 
-  LoadUserGeolocationSuccess(this.userLocation);
+  const LoadUserGeolocationSuccess(this.userLocation);
 
   @override
   List<Object> get props => [userLocation];

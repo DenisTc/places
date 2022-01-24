@@ -12,7 +12,7 @@ class LoadListFavoritePlaces extends FavoritePlaceEvent {}
 class TogglePlaceInFavorites extends FavoritePlaceEvent {
   final Place place;
 
-  TogglePlaceInFavorites(this.place);
+  const TogglePlaceInFavorites(this.place);
 
   @override
   List<Object> get props => [place];

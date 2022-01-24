@@ -4,6 +4,7 @@ import 'package:places/data/api/api_client.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/filter/bloc/filter_bloc.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
+import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 import 'package:places/data/blocs/map/places_map_bloc.dart';
 import 'package:places/data/blocs/place/bloc/place_bloc.dart';
 import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
@@ -19,7 +20,6 @@ import 'package:places/database/database.dart';
 import 'package:places/domain/theme_app.dart';
 import 'package:places/ui/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 
 void main() {
   runApp(App());
@@ -28,6 +28,8 @@ void main() {
 class App extends StatelessWidget {
   final api = ApiClient();
   final localDb = LocalDatabase();
+
+  App({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

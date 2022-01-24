@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 import 'package:places/data/blocs/map/places_map_bloc.dart';
 import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/res/colors.dart';
+import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/search_screen.dart';
-import 'package:places/ui/res/constants.dart' as constants;
-import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 
 class SearchBar extends StatefulWidget {
   final textFieldFocusNode = FocusNode();
@@ -94,7 +94,7 @@ class _SearchBarState extends State<SearchBar> {
               );
             }
 
-            return SizedBox.shrink();
+            return const SizedBox.shrink();
           },
         ),
         border: const OutlineInputBorder(
@@ -126,9 +126,9 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   Future<void> _navigateGetDataFromFilters(BuildContext context) async {
-    await Navigator.push(
+    await Navigator.push<dynamic>(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<dynamic>(
         builder: (context) => const FiltersScreen(),
       ),
     ).whenComplete(

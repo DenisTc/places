@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/ui/screens/add_place_screen.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
+import 'package:places/ui/screens/add_place_screen.dart';
 
 class AddPlaceButton extends StatelessWidget {
   const AddPlaceButton({
@@ -22,7 +22,7 @@ class AddPlaceButton extends StatelessWidget {
           Navigator.push<void>(
             context,
             MaterialPageRoute(
-              builder: (context) => AddPlaceScreen(),
+              builder: (context) => const AddPlaceScreen(),
             ),
           );
         },

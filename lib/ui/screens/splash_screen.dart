@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/storage/shared_storage.dart';
-import 'package:places/ui/screens/home.dart';
-import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/icons.dart';
+import 'package:places/ui/screens/home.dart';
+import 'package:places/ui/screens/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -19,13 +19,16 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   final SharedStorage _storage = SharedStorage();
   late Future<void> isInitialized;
-  late AnimationController _animationController;
   late Animation<double> rotation;
+  late AnimationController _animationController;
+  
 
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 3000));
+      vsync: this,
+      duration: const Duration(milliseconds: 3000),
+    );
     rotation = Tween(begin: 0.0, end: -pi * 2).animate(
       CurvedAnimation(
         parent: _animationController,
@@ -81,6 +84,7 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> _navigateToNext() async {
     final isOnboardingComplete = await _storage.getOnboardingStatus();
+
     return Future.delayed(
       const Duration(seconds: 3),
       () => {
@@ -88,8 +92,8 @@ class _SplashScreenState extends State<SplashScreen>
           context,
           MaterialPageRoute(
             builder: (context) => isOnboardingComplete
-                ? Home()
-                : OnboardingScreen(fromSettings: false),
+                ? const Home()
+                : const OnboardingScreen(fromSettings: false),
           ),
         ),
       },

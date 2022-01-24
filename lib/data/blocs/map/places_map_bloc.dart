@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/storage/shared_storage.dart';
 import 'package:places/domain/location.dart';
@@ -19,7 +18,7 @@ class PlacesMapBloc extends Bloc<PlacesMapEvent, PlacesMapState> {
     required this.storage,
   }) : super(PlacesMapInitial()) {
     on<LoadPlacesMapEvent>(
-      (event, emit) => _loadPlacesMap(event, emit),
+      (event, emit) => _loadPlacesMap(emit),
     );
 
     on<LoadPlaceCardEvent>(
@@ -31,12 +30,11 @@ class PlacesMapBloc extends Bloc<PlacesMapEvent, PlacesMapState> {
     );
 
     on<LoadCurrentUserLocationEvent>(
-      (event, emit) => _loadUserLocation(event, emit),
+      (event, emit) => _loadUserLocation(emit),
     );
   }
 
   Future<void> _loadPlacesMap(
-    LoadPlacesMapEvent event,
     Emitter<PlacesMapState> emit,
   ) async {
     final _filter = await storage.getSavedSearchFilter();
@@ -50,14 +48,12 @@ class PlacesMapBloc extends Bloc<PlacesMapEvent, PlacesMapState> {
   }
 
   Future<void> _loadUserLocation(
-    LoadCurrentUserLocationEvent event,
     Emitter<PlacesMapState> emit,
   ) async {
     final _filter = await storage.getSavedSearchFilter();
     final _filteredPlaces = await searchInteractor.getFiltredPlaces(_filter);
 
-    Position position =
-        await LocationService.getCurrentUserPosition(timeout: 15);
+    final position = await LocationService.getCurrentUserPosition(timeout: 15);
 
     emit(
       LoadPlacesMapSuccess(

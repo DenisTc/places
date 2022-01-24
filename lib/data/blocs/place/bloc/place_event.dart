@@ -10,7 +10,7 @@ abstract class PlaceEvent extends Equatable {
 class LoadPlaceDetails extends PlaceEvent {
   final int id;
 
-  LoadPlaceDetails(this.id);
+  const LoadPlaceDetails(this.id);
 
   @override
   List<Object> get props => [id];
@@ -20,7 +20,7 @@ class AddNewPlace extends PlaceEvent {
   final Place place;
   final List<String> images;
 
-  AddNewPlace({required this.place, required this.images});
+  const AddNewPlace({required this.place, required this.images});
 
   @override
   List<Object> get props => [place];
@@ -29,9 +29,8 @@ class AddNewPlace extends PlaceEvent {
 class UpdatePlaceImages extends PlaceEvent {
   final List<String> images;
 
-  UpdatePlaceImages(this.images);
+  const UpdatePlaceImages(this.images);
 
   @override
   List<Object> get props => [images];
 }
-

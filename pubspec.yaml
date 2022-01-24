@@ -35,7 +35,7 @@ dependencies:
   cached_network_image: ^3.2.0
 
   # Lint
-  #surf_lint_rules: ^1.4.1
+  surf_lint_rules: ^1.4.1
 
   # Map
   yandex_mapkit: ^2.0.1
@@ -50,13 +50,12 @@ dependencies:
 
 dev_dependencies:
   
-  flutter_test:
-    sdk: flutter
-    
   build_runner: ^2.1.4
   dart_code_metrics: ^4.6.0
   drift_dev: ^1.2.1
 
+  flutter_test:
+    sdk: flutter
 
 flutter:
   uses-material-design: true

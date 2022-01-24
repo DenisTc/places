@@ -12,7 +12,7 @@ class LoadPlacesMapEvent extends PlacesMapEvent {}
 class LoadPlaceCardEvent extends PlacesMapEvent {
   final Place place;
 
-  LoadPlaceCardEvent(this.place);
+  const LoadPlaceCardEvent(this.place);
 }
 
 class HidePlaceCardEvent extends PlacesMapEvent {}

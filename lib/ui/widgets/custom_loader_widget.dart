@@ -14,7 +14,7 @@ class CustomLoaderWidget extends StatefulWidget {
 class _CustomLoaderWidgetState extends State<CustomLoaderWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation<double> rotation;
+  late Animation<double> _rotation;
 
   @override
   void initState() {
@@ -22,7 +22,7 @@ class _CustomLoaderWidgetState extends State<CustomLoaderWidget>
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     );
-    rotation = Tween(begin: 0.0, end: -pi * 2).animate(
+    _rotation = Tween(begin: 0.0, end: -pi * 2).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: Curves.linear,
@@ -47,8 +47,8 @@ class _CustomLoaderWidgetState extends State<CustomLoaderWidget>
         animation: _animationController,
         builder: (context, child) {
           return Transform.rotate(
-            angle: rotation.value,
-            child: Image(
+            angle: _rotation.value,
+            child: const Image(
               image: AssetImage(constants.pathLoader),
               height: 50,
               width: 50,

@@ -12,7 +12,7 @@ class PlaceListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<FilteredPlacesBloc>(context).add(LoadFilteredPlaces());
+    BlocProvider.of<FilteredPlacesBloc>(context).add(const LoadFilteredPlaces());
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -30,7 +30,7 @@ class PlaceListScreen extends StatelessWidget {
                   },
                   builder: (context, state) {
                     if (state is LoadFilteredPlacesInProgress) {
-                      return SliverFillRemaining(
+                      return const SliverFillRemaining(
                         child: CustomLoaderWidget(),
                       );
                     }

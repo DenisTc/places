@@ -13,7 +13,7 @@ class AddPlaceToVisitedList extends VisitedPlaceEvent {
   final Place place;
   final DateTime date;
 
-  AddPlaceToVisitedList({
+  const AddPlaceToVisitedList({
     required this.place,
     required this.date,
   });
@@ -23,7 +23,7 @@ class UpdateVisitedPlace extends VisitedPlaceEvent {
   final Place place;
   final DateTime date;
 
-  UpdateVisitedPlace({
+  const UpdateVisitedPlace({
     required this.place,
     required this.date,
   });

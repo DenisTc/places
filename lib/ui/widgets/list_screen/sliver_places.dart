@@ -48,12 +48,12 @@ class SliverPlaces extends StatelessWidget {
 
 class PlaceCard extends StatelessWidget {
   final Place place;
-  PlaceCard({required this.place, Key? key}) : super(key: key);
+  const PlaceCard({required this.place, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
-    
+
     return Stack(
       children: [
         Hero(
@@ -71,12 +71,12 @@ class PlaceCard extends StatelessWidget {
           child: InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(16)),
             onTap: () {
-              Navigator.of(context).push(
-                PageRouteBuilder(
+              Navigator.of(context).push<dynamic>(
+                PageRouteBuilder<dynamic>(
                   pageBuilder: (context, animation, secondaryAnimation) {
                     return PlaceDetails(place: place);
                   },
-                  transitionDuration: Duration(milliseconds: 200),
+                  transitionDuration: const Duration(milliseconds: 200),
                   transitionsBuilder:
                       (context, animation, secondaryAnimation, child) {
                     return FadeTransition(
@@ -103,6 +103,7 @@ class PlaceCard extends StatelessWidget {
               ),
               BlocBuilder<FavoritePlaceBloc, FavoritePlaceState>(
                 buildWhen: (context, state) {
+                  // ignore: unrelated_type_equality_checks
                   return state != ListFavoritePlacesLoaded;
                 },
                 builder: (context, state) {
@@ -239,7 +240,8 @@ class _PlaceCardTop extends StatelessWidget {
                     ),
                   );
                 },
-                errorWidget: (context, url, error) {
+                // ignore: avoid_annotating_with_dynamic
+                errorWidget: (context, url, dynamic error) {
                   return const ImagePlaceholder();
                 },
               ),

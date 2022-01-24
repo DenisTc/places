@@ -75,6 +75,10 @@ const String textReady = 'Готово';
 const String textDescLocationScreen = 'потяните карту чтобы выбрать правильное местоположение';
 const String textGeolocationError = 'Не удалось определить геолокацию. Проверьте настройки геолокации для данного приложения!';
 const String textCameraMapObjectId = 'camera_placemark';
+const String textRequestIsSent = 'Запрос отправляется';
+const String textResponseReceived = 'Получен ответ';
+const String textLocale = 'ru_RU';
+const String textDateFormat = 'd MMM. y';
 
 // Images
 const String pathLoader = 'res/images/loader.png';

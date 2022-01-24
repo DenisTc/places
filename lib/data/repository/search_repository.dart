@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:places/data/api/api_client.dart';
 import 'package:places/data/api/api_constants.dart';
 import 'package:places/data/model/place_dto.dart';
 import 'package:places/data/repository/mapper/place_mapper.dart';
@@ -8,7 +9,7 @@ import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
 
 class SearchRepository {
-  final api;
+  final ApiClient api;
 
   SearchRepository(this.api);
 

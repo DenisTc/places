@@ -13,7 +13,7 @@ class LoadPlacesMapSuccess extends PlacesMapState {
   final List<Place> places;
   final Location? userLocation;
 
-  LoadPlacesMapSuccess({
+  const LoadPlacesMapSuccess({
     required this.places,
     this.userLocation,
   });
@@ -27,7 +27,7 @@ class LoadPlacesMapSuccess extends PlacesMapState {
 class LoadPlaceCardSuccess extends PlacesMapState {
   final Place place;
 
-  LoadPlaceCardSuccess(this.place);
+  const LoadPlaceCardSuccess(this.place);
 
   @override
   List<Object> get props => [place];
@@ -38,7 +38,7 @@ class HidePlaceCardState extends PlacesMapState {}
 class LoadCurrentUserLocationSuccess extends PlacesMapState {
   final Location userLocation;
 
-  LoadCurrentUserLocationSuccess(this.userLocation);
+  const LoadCurrentUserLocationSuccess(this.userLocation);
 
   @override
   List<Object> get props => [userLocation];

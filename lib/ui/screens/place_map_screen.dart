@@ -29,11 +29,9 @@ class PlaceMapScreen extends StatefulWidget {
 
 class _PlaceMapScreenState extends State<PlaceMapScreen>
     with AutomaticKeepAliveClientMixin {
-  final MapObjectId cameraMapObjectId = MapObjectId(constants.textCameraMapObjectId);
-  final animation = const MapAnimation(
-    type: MapAnimationType.smooth,
-    duration: 2.0,
-  );
+  final MapObjectId cameraMapObjectId =
+      const MapObjectId(constants.textCameraMapObjectId);
+  final animation = const MapAnimation();
   final List<MapObject> mapObjects = [];
 
   bool nightModeEnabled = false;
@@ -54,19 +52,14 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-
-    final String style = nightModeEnabled
-        ? constants.darkStyleYandexMap
-        : constants.lightStyleYandexMap;
-
     nightModeEnabled = Provider.of<ThemeApp>(context).isDark;
+    final style = constants.lightStyleYandexMap;
 
     return Scaffold(
       appBar: const MapAppBar(),
       backgroundColor: Theme.of(context).colorScheme.secondary,
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.only(
@@ -90,22 +83,19 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
                         if (userPmk != null) {
                           mapObjects.add(userPmk!);
                         }
-                        state.places.forEach(
-                          (place) {
-                            mapObjects.add(placePlacemark(place));
-                          },
-                        );
+                        for (final place in state.places) {
+                          mapObjects.add(placePlacemark(place));
+                        }
 
                         return YandexMap(
                           mapObjects: mapObjects,
                           nightModeEnabled: nightModeEnabled,
-                          onMapCreated:
-                              (YandexMapController yandexMapController) async {
+                          onMapCreated: (yandexMapController) async {
                             final defaultPosition =
                                 mapObjects.first as Placemark;
 
                             controller = yandexMapController;
-                            controller.setMapStyle(style);
+                            await controller.setMapStyle(style);
 
                             await controller.moveCamera(
                               CameraUpdate.newCameraPosition(
@@ -119,7 +109,7 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
                         );
                       }
 
-                      return SizedBox.shrink();
+                      return const SizedBox.shrink();
                     },
                   ),
                   Positioned(
@@ -131,13 +121,84 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
                             children: [
-                              refreshButton(),
-                              selectedPlaceId == null
-                                  ? AddPlaceButton()
-                                  : SizedBox.shrink(),
-                              geolocationButton(),
+                              // RefreshButton
+                              RawMaterialButton(
+                                onPressed: () {
+                                  BlocProvider.of<PlacesMapBloc>(context)
+                                      .add(LoadPlacesMapEvent());
+                                },
+                                shape: const CircleBorder(),
+                                fillColor: Theme.of(context).cardColor,
+                                constraints: const BoxConstraints(
+                                  minWidth: 48,
+                                  minHeight: 48,
+                                ),
+                                child: SvgPicture.asset(
+                                  iconRefresh,
+                                  color: Theme.of(context)
+                                      .bottomNavigationBarTheme
+                                      .unselectedItemColor,
+                                ),
+                              ),
+                              if (selectedPlaceId == null)
+                                const AddPlaceButton()
+                              else
+                                const SizedBox.shrink(),
+                              // GeolocationButton
+                              RawMaterialButton(
+                                onPressed: () async {
+                                  await LocationService.checkGeoPermission();
+                                  final permission = await LocationService
+                                      .checkGeoPermission();
+                                  if (permission != LocationPermission.denied &&
+                                      permission !=
+                                          LocationPermission.deniedForever) {
+                                    final location = await LocationService
+                                        .getCurrentUserPosition(timeout: 15);
+                                    setState(() {
+                                      userPmk = userPlacemark(
+                                        lat: location.latitude,
+                                        lng: location.longitude,
+                                      );
+                                    });
+
+                                    await controller.moveCamera(
+                                      CameraUpdate.newCameraPosition(
+                                        CameraPosition(
+                                          target: Point(
+                                            latitude: location.latitude,
+                                            longitude: location.longitude,
+                                          ),
+                                        ),
+                                      ),
+                                      animation: animation,
+                                    );
+                                  } else {
+                                    const snackBar = SnackBar(
+                                      content: Text(
+                                        constants.textGeolocationError,
+                                      ),
+                                    );
+
+                                    // ignore: use_build_context_synchronously
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(snackBar);
+                                  }
+                                },
+                                shape: const CircleBorder(),
+                                fillColor: Theme.of(context).cardColor,
+                                constraints: const BoxConstraints(
+                                  minWidth: 48,
+                                  minHeight: 48,
+                                ),
+                                child: SvgPicture.asset(
+                                  iconGeolocation,
+                                  color: Theme.of(context)
+                                      .bottomNavigationBarTheme
+                                      .unselectedItemColor,
+                                ),
+                              ),
                             ],
                           ),
                           const MapPlaceCard(),
@@ -154,73 +215,11 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
     );
   }
 
-  RawMaterialButton geolocationButton() {
-    return RawMaterialButton(
-      onPressed: () async {
-        LocationService.checkGeoPermission();
-        Future.delayed(Duration(seconds: 5));
-        final permission = await LocationService.checkGeoPermission();
-        if (permission != LocationPermission.denied &&
-            permission != LocationPermission.deniedForever) {
-          final location =
-              await LocationService.getCurrentUserPosition(timeout: 15);
-          setState(() {
-            userPmk = userPlacemark(
-              lat: location.latitude,
-              lng: location.longitude,
-            );
-          });
-
-          controller.moveCamera(
-            CameraUpdate.newCameraPosition(
-              CameraPosition(
-                target: Point(
-                  latitude: location.latitude,
-                  longitude: location.longitude,
-                ),
-              ),
-            ),
-            animation: animation,
-          );
-        } else {
-          const snackBar = SnackBar(
-            content: Text(
-              constants.textGeolocationError,
-            ),
-          );
-
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-      },
-      shape: CircleBorder(),
-      fillColor: Theme.of(context).cardColor,
-      constraints: BoxConstraints(minWidth: 48, minHeight: 48),
-      child: SvgPicture.asset(
-        iconGeolocation,
-        color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
-      ),
-    );
-  }
-
-  RawMaterialButton refreshButton() {
-    return RawMaterialButton(
-      onPressed: () {
-        BlocProvider.of<PlacesMapBloc>(context).add(LoadPlacesMapEvent());
-      },
-      shape: CircleBorder(),
-      fillColor: Theme.of(context).cardColor,
-      constraints: BoxConstraints(minWidth: 48, minHeight: 48),
-      child: SvgPicture.asset(
-        iconRefresh,
-        color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
-      ),
-    );
-  }
-
   Placemark placePlacemark(Place place) {
     final isSelectedPlace = selectedPlaceId == place.id;
+
     return Placemark(
-      onTap: (Placemark self, Point point) {
+      onTap: (self, point) {
         selectedPlaceId = place.id;
         setState(() {});
         BlocProvider.of<PlacesMapBloc>(context).add(LoadPlaceCardEvent(place));
@@ -251,7 +250,7 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
     required double lng,
   }) {
     return Placemark(
-      mapId: MapObjectId('camera_placemark'),
+      mapId: const MapObjectId('camera_placemark'),
       point: Point(
         latitude: lat,
         longitude: lng,
@@ -306,7 +305,7 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                       color: Colors.grey.withOpacity(0.2),
                       spreadRadius: 5,
                       blurRadius: 7,
-                      offset: Offset(0, 2),
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -320,15 +319,20 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                           borderRadius:
                               const BorderRadius.all(Radius.circular(16)),
                           onTap: () {
-                            Navigator.of(context).push(
-                              PageRouteBuilder(
+                            Navigator.of(context).push<dynamic>(
+                              PageRouteBuilder<dynamic>(
                                 pageBuilder:
                                     (context, animation, secondaryAnimation) {
                                   return PlaceDetails(place: place);
                                 },
-                                transitionDuration: Duration(milliseconds: 200),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
+                                transitionDuration:
+                                    const Duration(milliseconds: 200),
+                                transitionsBuilder: (
+                                  context,
+                                  animation,
+                                  secondaryAnimation,
+                                  child,
+                                ) {
                                   return FadeTransition(
                                     opacity: animation,
                                     child: child,
@@ -366,7 +370,8 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                                               child: CachedNetworkImage(
                                                 imageUrl: place.urls.first,
                                                 fadeOutDuration: const Duration(
-                                                    milliseconds: 200),
+                                                  milliseconds: 200,
+                                                ),
                                                 imageBuilder:
                                                     (context, imageProvider) {
                                                   return Container(
@@ -388,8 +393,11 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                                                     ),
                                                   );
                                                 },
-                                                errorWidget:
-                                                    (context, url, error) {
+                                                errorWidget: (
+                                                  context,
+                                                  url,
+                                                  dynamic error,
+                                                ) {
                                                   return const ImagePlaceholder();
                                                 },
                                               ),
@@ -408,8 +416,8 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                                           children: [
                                             Text(
                                               Category.getCategoryByType(
-                                                      place.placeType)
-                                                  .name,
+                                                place.placeType,
+                                              ).name,
                                               style: const TextStyle(
                                                 color: Colors.white,
                                                 fontWeight: FontWeight.w700,
@@ -418,6 +426,7 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                                             BlocBuilder<FavoritePlaceBloc,
                                                 FavoritePlaceState>(
                                               buildWhen: (context, state) {
+                                                // ignore: unrelated_type_equality_checks
                                                 return state !=
                                                     ListFavoritePlacesLoaded;
                                               },
@@ -428,18 +437,19 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                                                     color: Colors.transparent,
                                                     borderRadius:
                                                         const BorderRadius.all(
-                                                            Radius.circular(
-                                                                50)),
+                                                      Radius.circular(50),
+                                                    ),
                                                     clipBehavior:
                                                         Clip.antiAlias,
                                                     child: GestureDetector(
                                                       onTap: () {
                                                         BlocProvider.of<
-                                                                    FavoritePlaceBloc>(
-                                                                context)
-                                                            .add(
+                                                            FavoritePlaceBloc>(
+                                                          context,
+                                                        ).add(
                                                           TogglePlaceInFavorites(
-                                                              place),
+                                                            place,
+                                                          ),
                                                         );
                                                       },
                                                       child: AnimatedSwitcher(
@@ -449,7 +459,8 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                                                         ),
                                                         child: SvgPicture.asset(
                                                           state.places.contains(
-                                                                  place)
+                                                            place,
+                                                          )
                                                               ? iconFavoriteSelected
                                                               : iconFavorite,
                                                           key: UniqueKey(),
@@ -475,7 +486,8 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                                           height: 5,
                                           decoration: BoxDecoration(
                                             color: Colors.grey[50],
-                                            borderRadius: BorderRadius.all(
+                                            borderRadius:
+                                                const BorderRadius.all(
                                               Radius.circular(12.0),
                                             ),
                                           ),
@@ -498,10 +510,12 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                                   ),
                                   width: MediaQuery.of(context).size.width,
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 16),
+                                    horizontal: 16,
+                                  ),
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 14),
+                                      vertical: 14,
+                                    ),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -551,8 +565,8 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                                             );
 
                                             BlocProvider.of<VisitedPlaceBloc>(
-                                                    context)
-                                                .add(
+                                              context,
+                                            ).add(
                                               AddPlaceToVisitedList(
                                                 place: place,
                                                 date: DateTime.now(),
@@ -579,7 +593,7 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
                                             height: 22,
                                             color: Colors.white,
                                           ),
-                                        )
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -597,7 +611,7 @@ class _MapPlaceCardState extends State<MapPlaceCard> {
           );
         }
 
-        return SizedBox.shrink();
+        return const SizedBox.shrink();
       },
     );
   }

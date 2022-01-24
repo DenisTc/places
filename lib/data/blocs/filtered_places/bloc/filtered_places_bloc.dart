@@ -53,7 +53,7 @@ class FilteredPlacesBloc
       final allCategories = await _searchInteractor.getCategories();
 
       emit(PlaceCategoriesLoaded(categories: allCategories));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(LoadPlaceCategoriesError(e.toString()));
     }
   }

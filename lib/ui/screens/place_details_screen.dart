@@ -273,7 +273,7 @@ class _Description extends StatelessWidget {
 class _FunctionButtons extends StatefulWidget {
   final Place place;
 
-  _FunctionButtons({
+  const _FunctionButtons({
     required this.place,
     Key? key,
   }) : super(key: key);
@@ -290,6 +290,7 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
     BlocProvider.of<VisitedPlaceBloc>(context).add(LoadListVisitedPlaces());
     BlocProvider.of<FavoritePlaceBloc>(context).add(LoadListFavoritePlaces());
     initializeDateFormatting();
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -306,11 +307,65 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
 
               if (date != null) {
                 if (date!.isBefore(DateTime.now())) {
-                  return shareButton();
+                  return TextButton(
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          iconShare,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                        const SizedBox(width: 9),
+                        Text(
+                          constants.textShare,
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      ],
+                    ),
+                  );
                 }
-                return dateButton(date!);
+
+                return TextButton(
+                  onPressed: shedulePlace,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        iconCalendarFilled,
+                        color: Theme.of(context).colorScheme.primaryVariant,
+                      ),
+                      const SizedBox(width: 9),
+                      Text(
+                        DateFormat(
+                          constants.textDateFormat,
+                          constants.textLocale,
+                        ).format(date!),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.primaryVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
               } else {
-                return scheduleButton();
+                return TextButton(
+                  onPressed: shedulePlace,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        iconCalendar,
+                        color: Theme.of(context).iconTheme.color,
+                      ),
+                      const SizedBox(width: 9),
+                      Text(
+                        constants.textBtnSchedule,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                    ],
+                  ),
+                );
               }
             },
           ),
@@ -363,62 +418,6 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
     );
   }
 
-  TextButton scheduleButton() => TextButton(
-        onPressed: shedulePlace,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              iconCalendar,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            const SizedBox(width: 9),
-            Text(
-              constants.textBtnSchedule,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-          ],
-        ),
-      );
-
-  TextButton dateButton(DateTime date) => TextButton(
-        onPressed: shedulePlace,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              iconCalendarFilled,
-              color: Theme.of(context).colorScheme.primaryVariant,
-            ),
-            const SizedBox(width: 9),
-            Text(
-              DateFormat('d MMM. y', 'ru_RU').format(date),
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primaryVariant,
-              ),
-            ),
-          ],
-        ),
-      );
-
-  TextButton shareButton() => TextButton(
-        onPressed: () {},
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              iconShare,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            const SizedBox(width: 9),
-            Text(
-              constants.textShare,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-          ],
-        ),
-      );
-
   Future<void> shedulePlace() async {
     await showModalBottomSheet<void>(
       context: context,
@@ -453,7 +452,7 @@ class CreateRouteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isVisited = false;
+    var isVisited = false;
 
     return BlocBuilder<VisitedPlaceBloc, VisitedPlaceState>(
       builder: (context, state) {
@@ -468,7 +467,6 @@ class CreateRouteButton extends StatelessWidget {
         }
 
         return Row(
-          mainAxisSize: MainAxisSize.max,
           children: [
             Expanded(
               child: ElevatedButton(
@@ -520,38 +518,39 @@ class CreateRouteButton extends StatelessWidget {
               ),
             ),
             SizedBox(width: isVisited ? 16 : 0),
-            isVisited
-                ? ElevatedButton(
-                    onPressed: () {
-                      openMapsSheet(
-                        context: context,
-                        target: Coords(place.lat!, place.lng!),
-                        name: place.name,
-                      );
-                      BlocProvider.of<VisitedPlaceBloc>(context).add(
-                        AddPlaceToVisitedList(
-                          place: place,
-                          date: DateTime.now(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).colorScheme.primaryVariant,
-                      fixedSize: const Size(48, 48),
-                      elevation: 0.0,
-                      shadowColor: Colors.transparent,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+            if (isVisited)
+              ElevatedButton(
+                onPressed: () {
+                  openMapsSheet(
+                    context: context,
+                    target: Coords(place.lat!, place.lng!),
+                    name: place.name,
+                  );
+                  BlocProvider.of<VisitedPlaceBloc>(context).add(
+                    AddPlaceToVisitedList(
+                      place: place,
+                      date: DateTime.now(),
                     ),
-                    child: SvgPicture.asset(
-                      iconRoute,
-                      width: 22,
-                      height: 22,
-                      color: Colors.white,
-                    ),
-                  )
-                : SizedBox.shrink(),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).colorScheme.primaryVariant,
+                  fixedSize: const Size(48, 48),
+                  elevation: 0.0,
+                  shadowColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: SvgPicture.asset(
+                  iconRoute,
+                  width: 22,
+                  height: 22,
+                  color: Colors.white,
+                ),
+              )
+            else
+              const SizedBox.shrink(),
           ],
         );
       },
@@ -586,8 +585,8 @@ class _PlaceImage extends StatelessWidget {
           child: CircularProgressIndicator(),
         );
       },
-      errorWidget: (context, url, error) {
-        return ImagePlaceholder();
+      errorWidget: (context, url, dynamic error) {
+        return const ImagePlaceholder();
       },
     );
   }
@@ -654,7 +653,7 @@ class _ArrowBackButton extends StatelessWidget {
 }
 
 class PlaceCupertinoDatePicker extends StatelessWidget {
-  final initialDateTime;
+  final DateTime? initialDateTime;
   final ValueChanged<DateTime> onValueChanged;
   const PlaceCupertinoDatePicker({
     Key? key,
@@ -676,7 +675,7 @@ class PlaceCupertinoDatePicker extends StatelessWidget {
         ),
         child: CupertinoDatePicker(
           initialDateTime: initialDateTime ?? DateTime.now(),
-          onDateTimeChanged: (date) => onValueChanged(date),
+          onDateTimeChanged: onValueChanged,
         ),
       ),
     );

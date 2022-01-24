@@ -30,12 +30,13 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
   final _controllerDesc = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  List<String> images = [];
+
   FocusNode latFocusNode = FocusNode();
   FocusNode lngFocusNode = FocusNode();
   FocusNode descFocusNode = FocusNode();
   FocusNode nameFocusNode = FocusNode();
   bool _isButtonEnabled = false;
-  List<String> images = [];
 
   @override
   Widget build(BuildContext context) {
@@ -59,10 +60,10 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
                   ),
                   const SizedBox(height: 24),
                   PlaceGallery(
-                    addImage: (List<XFile>? xFileList) {
+                    addImage: (xFileList) {
                       addImage(xFileList);
                     },
-                    deleteImage: (String imgUrl) {
+                    deleteImage: (imgUrl) {
                       deleteImage(imgUrl);
                     },
                     images: images,
@@ -104,8 +105,10 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
                       checkFieldFills();
                     },
                   ),
-                   _SelectOnMapButton(controllerLat: _controllerLat,
-                    controllerLng: _controllerLng,),
+                  _SelectOnMapButton(
+                    controllerLat: _controllerLat,
+                    controllerLng: _controllerLng,
+                  ),
                   const SizedBox(height: 30),
                   const Text(
                     constants.textDescription,
@@ -125,7 +128,6 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
                     formKey: _formKey,
                     images: images,
                     newPlace: Place(
-                      id: null,
                       name: _controllerName.text,
                       lat: _controllerLat.text.isNotEmpty
                           ? double.parse(_controllerLat.text)
@@ -189,12 +191,13 @@ class _SelectOnMapButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () async {
-        final Location location = await Navigator.push(
+        final location = await Navigator.push<dynamic>(
           context,
-          MaterialPageRoute(
+          MaterialPageRoute<dynamic>(
             builder: (context) => const LocationScreen(),
           ),
-        );
+        ) as Location;
+
         controllerLat.text = location.lat.toString();
         controllerLng.text = location.lng.toString();
       },
@@ -723,11 +726,12 @@ class _CreatePlaceButtonState extends State<_CreatePlaceButton> {
   }
 }
 
+// ignore: long-method
 void showAlertDialog(BuildContext context) {
-  showDialog(
+  showDialog<dynamic>(
     barrierDismissible: false,
     context: context,
-    builder: (BuildContext context) {
+    builder: (context) {
       return BlocBuilder<PlaceBloc, PlaceState>(
         builder: (context, state) {
           return AlertDialog(
@@ -735,26 +739,29 @@ void showAlertDialog(BuildContext context) {
             backgroundColor: Theme.of(context).colorScheme.secondary,
             content: Row(
               children: [
-                state is AddNewPlaceInProcess
-                    ? CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.primaryVariant,
-                      )
-                    : SizedBox.shrink(),
-                state is AddNewPlaceError
-                    ? Icon(
-                        Icons.error_outline,
-                        color: Colors.red,
-                        size: 50.0,
-                      )
-                    : SizedBox.shrink(),
-                state is AddNewPlaceSuccess
-                    ? Icon(
-                        Icons.check,
-                        color: Theme.of(context).colorScheme.primaryVariant,
-                        size: 50.0,
-                      )
-                    : SizedBox.shrink(),
-                SizedBox(width: 10),
+                if (state is AddNewPlaceInProcess)
+                  CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primaryVariant,
+                  )
+                else
+                  const SizedBox.shrink(),
+                if (state is AddNewPlaceError)
+                  const Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 50.0,
+                  )
+                else
+                  const SizedBox.shrink(),
+                if (state is AddNewPlaceSuccess)
+                  Icon(
+                    Icons.check,
+                    color: Theme.of(context).colorScheme.primaryVariant,
+                    size: 50.0,
+                  )
+                else
+                  const SizedBox.shrink(),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 5),
@@ -762,15 +769,17 @@ void showAlertDialog(BuildContext context) {
                       builder: (context) {
                         if (state is AddNewPlaceSuccess) {
                           debugPrint(constants.textAddNewPlaceSuccess);
-                          Future.delayed(const Duration(seconds: 2)).then(
-                            (_) => Navigator.pop(context),
+
+                          Future<dynamic>.delayed(const Duration(seconds: 2))
+                              .then(
+                            (dynamic _) => Navigator.pop(context),
                           );
                         }
                         if (state is AddNewPlaceError) {
                           return Column(
                             children: [
-                              Text(constants.textAddNewPlaceError),
-                              SizedBox(height: 16),
+                              const Text(constants.textAddNewPlaceError),
+                              const SizedBox(height: 16),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
@@ -797,6 +806,7 @@ void showAlertDialog(BuildContext context) {
                         if (state is AddNewPlaceSuccess) {
                           return const Text(constants.textAddNewPlaceSuccess);
                         }
+                        // ignore: newline-before-return
                         return const Text(constants.textAddNewPlaceInProcess);
                       },
                     ),

@@ -5,10 +5,10 @@ import 'package:places/domain/location.dart';
 import 'package:places/domain/theme_app.dart';
 import 'package:places/services/location_service.dart';
 import 'package:places/ui/res/colors.dart';
+import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:provider/provider.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
-import 'package:places/ui/res/constants.dart' as constants;
 
 class LocationScreen extends StatefulWidget {
   const LocationScreen({Key? key}) : super(key: key);
@@ -18,39 +18,43 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _LocationScreenState extends State<LocationScreen> {
-  late YandexMapController controller;
-  bool nightModeEnabled = false;
-  final MapObjectId cameraMapObjectId = MapObjectId(constants.textCameraMapObjectId);
+  final MapObjectId cameraMapObjectId =
+      const MapObjectId(constants.textCameraMapObjectId);
+
   final animation = const MapAnimation(
+    // ignore: avoid_redundant_argument_values
     type: MapAnimationType.smooth,
+    // ignore: avoid_redundant_argument_values
     duration: 2.0,
   );
-  late List<MapObject> mapObjects = [
-    Placemark(
-      mapId: cameraMapObjectId,
-      point: Point(
-        latitude: constants.defaultLocation.lat,
-        longitude: constants.defaultLocation.lng,
-      ),
-      icon: PlacemarkIcon.single(
-        PlacemarkIconStyle(
-          image: BitmapDescriptor.fromAssetImage(
-            constants.pathIconPlusDark,
-          ),
-          scale: 3,
-        ),
-      ),
-      opacity: 1,
-    )
-  ];
 
-  late String style = nightModeEnabled
-      ? constants.darkStyleYandexMap
-      : constants.lightStyleYandexMap;
+  late YandexMapController controller;
+  bool nightModeEnabled = false;
 
   @override
   Widget build(BuildContext context) {
     nightModeEnabled = Provider.of<ThemeApp>(context).isDark;
+    final style = constants.lightStyleYandexMap;
+    final mapObjects = [
+      Placemark(
+        mapId: cameraMapObjectId,
+        point: Point(
+          latitude: constants.defaultLocation.lat,
+          longitude: constants.defaultLocation.lng,
+        ),
+        icon: PlacemarkIcon.single(
+          PlacemarkIconStyle(
+            image: BitmapDescriptor.fromAssetImage(
+              nightModeEnabled
+                  ? constants.pathIconPlusLight
+                  : constants.pathIconPlusDark,
+            ),
+            scale: 3,
+          ),
+        ),
+        opacity: 1,
+      ),
+    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -79,6 +83,8 @@ class _LocationScreenState extends State<LocationScreen> {
           TextButton(
             onPressed: () async {
               final cameraPosition = await controller.getCameraPosition();
+
+              // ignore: use_build_context_synchronously
               Navigator.of(context).pop(
                 Location(
                   lat: cameraPosition.target.latitude,
@@ -104,10 +110,10 @@ class _LocationScreenState extends State<LocationScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
+          const SizedBox(
             height: 68,
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16),
               child: Text(
                 constants.textDescLocationScreen,
               ),
@@ -119,76 +125,84 @@ class _LocationScreenState extends State<LocationScreen> {
               children: [
                 YandexMap(
                   mapObjects: mapObjects,
-                  onCameraPositionChanged: (CameraPosition cameraPosition,
-                      CameraUpdateReason _, bool __) async {
+                  nightModeEnabled: nightModeEnabled,
+                  onCameraPositionChanged: (cameraPosition, _, __) async {
                     final placemark = mapObjects.firstWhere(
-                        (el) => el.mapId == cameraMapObjectId) as Placemark;
+                      (el) => el.mapId == cameraMapObjectId,
+                    ) as Placemark;
 
                     setState(() {
                       mapObjects[mapObjects.indexOf(placemark)] =
                           placemark.copyWith(point: cameraPosition.target);
                     });
                   },
-                  onMapCreated:
-                      (YandexMapController yandexMapController) async {
+                  onMapCreated: (yandexMapController) async {
                     final placemark = mapObjects.firstWhere(
-                        (el) => el.mapId == cameraMapObjectId) as Placemark;
+                      (el) => el.mapId == cameraMapObjectId,
+                    ) as Placemark;
 
                     controller = yandexMapController;
-                    controller.setMapStyle(style);
+                    await controller.setMapStyle(style);
 
-                    await controller.moveCamera(CameraUpdate.newCameraPosition(
-                        CameraPosition(target: placemark.point, zoom: 14)));
+                    await controller.moveCamera(
+                      CameraUpdate.newCameraPosition(
+                        CameraPosition(target: placemark.point, zoom: 14),
+                      ),
+                    );
                   },
                 ),
-                geolocationButton(),
+                // GeolocationButton
+                Positioned(
+                  bottom: 26,
+                  right: 16,
+                  child: RawMaterialButton(
+                    onPressed: () async {
+                      final permission =
+                          await LocationService.checkGeoPermission();
+                      if (permission != LocationPermission.denied &&
+                          permission != LocationPermission.deniedForever) {
+                        final location =
+                            await LocationService.getCurrentUserPosition(
+                          timeout: 15,
+                        );
+                        await controller.moveCamera(
+                          CameraUpdate.newCameraPosition(
+                            CameraPosition(
+                              target: Point(
+                                latitude: location.latitude,
+                                longitude: location.longitude,
+                              ),
+                            ),
+                          ),
+                          animation: animation,
+                        );
+                      } else {
+                        const snackBar = SnackBar(
+                          content: Text(
+                            constants.textGeolocationError,
+                          ),
+                        );
+
+                        // ignore: use_build_context_synchronously
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      }
+                    },
+                    shape: const CircleBorder(),
+                    fillColor: Theme.of(context).cardColor,
+                    constraints:
+                        const BoxConstraints(minWidth: 48, minHeight: 48),
+                    child: SvgPicture.asset(
+                      iconGeolocation,
+                      color: Theme.of(context)
+                          .bottomNavigationBarTheme
+                          .unselectedItemColor,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget geolocationButton() {
-    return Positioned(
-      bottom: 26,
-      right: 16,
-      child: RawMaterialButton(
-        onPressed: () async {
-          final permission = await LocationService.checkGeoPermission();
-          if (permission != LocationPermission.denied &&
-              permission != LocationPermission.deniedForever) {
-            final location =
-                await LocationService.getCurrentUserPosition(timeout: 15);
-            controller.moveCamera(
-              CameraUpdate.newCameraPosition(
-                CameraPosition(
-                  target: Point(
-                    latitude: location.latitude,
-                    longitude: location.longitude,
-                  ),
-                ),
-              ),
-              animation: animation,
-            );
-          } else {
-            const snackBar = SnackBar(
-              content: Text(
-                constants.textGeolocationError,
-              ),
-            );
-
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          }
-        },
-        shape: CircleBorder(),
-        fillColor: Theme.of(context).cardColor,
-        constraints: BoxConstraints(minWidth: 48, minHeight: 48),
-        child: SvgPicture.asset(
-          iconGeolocation,
-          color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
-        ),
       ),
     );
   }

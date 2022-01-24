@@ -25,6 +25,7 @@ class _FavoritePlaceCardState extends State<FavoritePlaceCard> {
   Widget build(BuildContext context) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
+        
     return DragTarget<Place>(
       builder: (context, candidateItems, rejectedItems) {
         return LongPressDraggable<Place>(

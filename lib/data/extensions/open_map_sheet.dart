@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:map_launcher/map_launcher.dart';
 
-openMapsSheet({
+// ignore: long-method
+Future<void> openMapsSheet({
   required BuildContext context,
   required Coords target,
   required String name,
@@ -12,9 +13,9 @@ openMapsSheet({
     final title = name;
     final availableMaps = await MapLauncher.installedMaps;
 
-    showModalBottomSheet(
+    await showModalBottomSheet<dynamic>(
       context: context,
-      builder: (BuildContext context) {
+      builder: (context) {
         return Container(
           color: Theme.of(context).colorScheme.secondary,
           child: SafeArea(
@@ -27,45 +28,43 @@ openMapsSheet({
                     height: 5,
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
-                      borderRadius: BorderRadius.all(
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(12.0),
                       ),
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Container(
-                    child: Wrap(
-                      children: [
-                        for (var map in availableMaps)
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              onTap: () {},
-                              child: ListTile(
-                                onTap: () => map.showMarker(
-                                  coords: coords,
-                                  title: title,
-                                ),
-                                title: Text(
-                                  map.mapName,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1
-                                      ?.copyWith(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                ),
-                                leading: SvgPicture.asset(
-                                  map.icon,
-                                  height: 30.0,
-                                  width: 30.0,
-                                ),
+                  Wrap(
+                    children: [
+                      for (var map in availableMaps)
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {},
+                            child: ListTile(
+                              onTap: () => map.showMarker(
+                                coords: coords,
+                                title: title,
+                              ),
+                              title: Text(
+                                map.mapName,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1
+                                    ?.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                              ),
+                              leading: SvgPicture.asset(
+                                map.icon,
+                                height: 30.0,
+                                width: 30.0,
                               ),
                             ),
                           ),
-                      ],
-                    ),
+                        ),
+                    ],
                   ),
                 ],
               ),
@@ -74,7 +73,7 @@ openMapsSheet({
         );
       },
     );
-  } catch (e) {
-    print(e);
+  } on Exception catch (e) {
+    debugPrint(e.toString());
   }
 }

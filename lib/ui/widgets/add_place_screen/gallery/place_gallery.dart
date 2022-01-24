@@ -20,14 +20,12 @@ class PlaceGallery extends StatelessWidget {
     return Row(
       children: [
         AddPlaceImageButton(
-          addImage: (xFileList) {
-            addImage(xFileList);
-          },
+          addImage: addImage,
         ),
         Expanded(
           child: Container(
             padding: const EdgeInsets.only(left: 5),
-            width: MediaQuery.of(context).size.width * .75,
+            width: MediaQuery.of(context).size.width * 0.75,
             height: 72,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -42,9 +40,7 @@ class PlaceGallery extends StatelessWidget {
                   background: Container(),
                   child: PlaceImage(
                     image: images[index],
-                    deleteImage: (imgUrl) {
-                      deleteImage(imgUrl);
-                    },
+                    deleteImage: deleteImage,
                   ),
                 );
               },

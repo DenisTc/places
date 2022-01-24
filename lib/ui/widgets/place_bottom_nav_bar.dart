@@ -112,6 +112,6 @@ class _PlaceBottomNavBarState extends State<PlaceBottomNavBar> {
               ),
             ],
           )
-        : SizedBox.shrink();
+        : const SizedBox.shrink();
   }
 }

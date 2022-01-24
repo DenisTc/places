@@ -17,6 +17,7 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
   Widget build(BuildContext context) {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
+
     return SliverAppBar(
       centerTitle: false,
       pinned: true,
@@ -26,6 +27,7 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
       flexibleSpace: LayoutBuilder(
         builder: (context, constraints) {
           final top = constraints.biggest.height;
+
           return FlexibleSpaceBar(
             title: top < 60 ? const MiniTitle() : const SizedBox.shrink(),
             background: Column(
@@ -38,7 +40,9 @@ class _SliverAppBarListState extends State<SliverAppBarList> {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      vertical: 8.0, horizontal: 16.0),
+                    vertical: 8.0,
+                    horizontal: 16.0,
+                  ),
                   child: SearchBar(),
                 ),
               ],

@@ -1,14 +1,12 @@
 import 'dart:convert';
+
 import 'package:places/domain/search_filter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:places/ui/res/constants.dart' as constants;
+import 'package:shared_preferences/shared_preferences.dart';
 
 // Class fow work with shared preferences storage
 class SharedStorage {
   late SharedPreferences _storage;
-
-  Future<void> _init() async =>
-      _storage = await SharedPreferences.getInstance();
 
   Future<SearchFilter> getSearchFilter() async {
     await _init();
@@ -17,7 +15,7 @@ class SharedStorage {
     if (_storage.containsKey(constants.keySPFilter)) {
       // If there is, then decode it and return it.
       final json = _storage.getString(constants.keySPFilter)!;
-      final Map<String, dynamic> filter = jsonDecode(json);
+      final filter = jsonDecode(json) as Map<String, dynamic>;
 
       return SearchFilter.fromJson(filter);
     } else {
@@ -26,7 +24,7 @@ class SharedStorage {
       if (_storage.containsKey(constants.keySPUserLocation)) {
         // If the SP has a saved geolocation, then create a filter based on it
         final userLocation = await getCurrentLocation();
-        
+
         return SearchFilter(
           lat: double.parse(userLocation![0]),
           lng: double.parse(userLocation[1]),
@@ -46,7 +44,7 @@ class SharedStorage {
     if (_storage.containsKey(constants.keySPFilter)) {
       // If there is, then decode it and return it.
       final json = _storage.getString(constants.keySPFilter)!;
-      final Map<String, dynamic> filter = jsonDecode(json);
+      final filter = jsonDecode(json) as Map<String, dynamic>;
 
       return SearchFilter.fromJson(filter);
     } else {
@@ -62,23 +60,26 @@ class SharedStorage {
     await _storage.setString(constants.keySPFilter, json);
   }
 
-  Future<void> setTheme(bool isDark) async {
+  Future<void> setTheme({required bool isDark}) async {
     await _init();
     await _storage.setBool(constants.keySPTheme, isDark);
   }
 
   Future<bool> getTheme() async {
     await _init();
+
     return _storage.getBool(constants.keySPTheme) ?? false;
   }
 
   Future<bool> getOnboardingStatus() async {
     await _init();
+
     return _storage.getBool(constants.keySPOnboarding) ?? false;
   }
 
   Future<bool> setOnboardingStatus() async {
     await _init();
+
     return _storage.setBool(constants.keySPOnboarding, true);
   }
 
@@ -95,16 +96,16 @@ class SharedStorage {
         lng.toString(),
       ],
     );
-
-    print('Save UserLocation in SP');
   }
 
   Future<List<String>?> getCurrentLocation() async {
     await _init();
+
     return _storage.getStringList(constants.keySPUserLocation);
   }
 
-  Future<void> deleteKey(String name) async {
-    _storage.remove(name);
-  }
+  Future<void> deleteKey(String name) => _storage.remove(name);
+
+  Future<void> _init() async =>
+      _storage = await SharedPreferences.getInstance();
 }

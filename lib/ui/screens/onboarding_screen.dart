@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/storage/shared_storage.dart';
-import 'package:places/ui/screens/home.dart';
 import 'package:places/ui/res/colors.dart';
-import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/res/constants.dart' as constants;
+import 'package:places/ui/res/icons.dart';
+import 'package:places/ui/screens/home.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final bool fromSettings;
@@ -128,7 +128,8 @@ class OnboardingAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int index = fromSettings ? 3 : 0;
+    final index = fromSettings ? 3 : 0;
+
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
@@ -293,7 +294,8 @@ class HomeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final int index = fromSettings ? 3 : 0;
+    final index = fromSettings ? 3 : 0;
+
     return ElevatedButton(
       onPressed: () {
         Navigator.pushReplacement<void, void>(
