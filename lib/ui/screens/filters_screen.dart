@@ -380,7 +380,8 @@ class _CategoryCircle extends StatelessWidget {
     final checkSize = displayHeight > 600.0 ? 22.0 : 17.0;
 
     return InkWell(
-      borderRadius: const BorderRadius.all(Radius.circular(40)),
+      borderRadius: const BorderRadius.all(Radius.circular(100)),
+      highlightColor: Colors.transparent,
       onTap: () {
         BlocProvider.of<FilterBloc>(context)
             .add(ToggleCategoryEvent(category.type.toLowerCase()));
@@ -389,7 +390,7 @@ class _CategoryCircle extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
-            height: iconSize,
+            height: 90,
             width: iconSize,
             decoration: BoxDecoration(
               color: Theme.of(context)
@@ -430,7 +431,6 @@ class _CategoryCircle extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 10),
           Center(
             child: Text(
               capitalize(category.name),
