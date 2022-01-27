@@ -54,7 +54,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           ),
         ],
       ),
-      body: Center(
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
             left: 16,
@@ -349,7 +349,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
     }
 
     return SizedBox(
-      height: 100,
+      height: 110,
       width: MediaQuery.of(context).size.width,
       child: ListView.builder(
         shrinkWrap: true,
@@ -387,6 +387,7 @@ class _CategoryCircle extends StatelessWidget {
             .add(ToggleCategoryEvent(category.type.toLowerCase()));
       },
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
