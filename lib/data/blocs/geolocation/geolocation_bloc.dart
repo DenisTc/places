@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/storage/shared_storage.dart';
@@ -21,6 +20,8 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
   Future<void> _loadGeolocation(
     Emitter<GeolocationState> emit,
   ) async {
+    emit(LoadGeolocationInProgress());
+
     final permission = await LocationService.checkGeoPermission();
 
     if (permission != LocationPermission.denied &&
@@ -42,8 +43,8 @@ class GeolocationBloc extends Bloc<GeolocationEvent, GeolocationState> {
             ),
           ),
         );
-      } on Exception catch (e) {
-        debugPrint(e.toString());
+      } on Exception catch (_) {
+        emit(LoadGeolocationError());
       }
     } else {
       emit(LoadGeolocationError());

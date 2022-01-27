@@ -36,7 +36,7 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
     super.initState();
 
     BlocProvider.of<FilteredPlacesBloc>(context)
-        .add(LoadFilteredPlaces(widget.settingsFilter));
+        .add(LoadFilteredPlaces(filters: widget.settingsFilter));
   }
 
   @override

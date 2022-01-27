@@ -11,17 +11,15 @@ class PlacesMapInitial extends PlacesMapState {}
 
 class LoadPlacesMapSuccess extends PlacesMapState {
   final List<Place> places;
-  final Location? userLocation;
+  final Position? userPosition;
 
   const LoadPlacesMapSuccess({
     required this.places,
-    this.userLocation,
+    this.userPosition,
   });
 
-  // @override
-  // List<Object?> get props => [places, userLocation];
   @override
-  List<Object?> get props => [places, userLocation];
+  List<Object?> get props => [places, userPosition];
 }
 
 class LoadPlaceCardSuccess extends PlacesMapState {

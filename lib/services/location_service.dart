@@ -1,5 +1,6 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:places/data/storage/shared_storage.dart';
+import 'package:places/ui/res/constants.dart' as constants;
 
 class LocationService {
   // Function for determining the availability status of geolocation on the device
@@ -29,5 +30,34 @@ class LocationService {
     );
 
     return currentPosition;
+  }
+
+  static Future<Position> getLastKnownUserPosition() async {
+    final permission = await checkGeoPermission();
+    if (permission != LocationPermission.denied &&
+        permission != LocationPermission.deniedForever) {
+      return await Geolocator.getLastKnownPosition() ??
+          Position(
+            latitude: constants.defaultLocation.lat,
+            longitude: constants.defaultLocation.lng,
+            heading: 0.0,
+            speed: 0.0,
+            accuracy: 0.0,
+            speedAccuracy: 0.0,
+            altitude: 0.0,
+            timestamp: DateTime.now(),
+          );
+    }
+
+    return Position(
+      latitude: constants.defaultLocation.lat,
+      longitude: constants.defaultLocation.lng,
+      heading: 0.0,
+      speed: 0.0,
+      accuracy: 0.0,
+      speedAccuracy: 0.0,
+      altitude: 0.0,
+      timestamp: DateTime.now(),
+    );
   }
 }

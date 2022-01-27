@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:places/data/blocs/map/places_map_bloc.dart';
 import 'package:places/domain/location.dart';
 import 'package:places/domain/theme_app.dart';
-import 'package:places/services/location_service.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:provider/provider.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
+import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 
 class LocationScreen extends StatefulWidget {
   const LocationScreen({Key? key}) : super(key: key);
@@ -22,9 +23,7 @@ class _LocationScreenState extends State<LocationScreen> {
       const MapObjectId(constants.textCameraMapObjectId);
 
   final animation = const MapAnimation(
-    // ignore: avoid_redundant_argument_values
     type: MapAnimationType.smooth,
-    // ignore: avoid_redundant_argument_values
     duration: 2.0,
   );
 
@@ -33,9 +32,11 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // BlocProvider.of<PlacesMapBloc>(context)
+    //     .add(const LoadPlacesMapEvent(defineUserLocation: true));
     nightModeEnabled = Provider.of<ThemeApp>(context).isDark;
     final style = constants.lightStyleYandexMap;
-    final mapObjects = [
+    final mapObjects = <Placemark>[
       Placemark(
         mapId: cameraMapObjectId,
         point: Point(
@@ -45,9 +46,7 @@ class _LocationScreenState extends State<LocationScreen> {
         icon: PlacemarkIcon.single(
           PlacemarkIconStyle(
             image: BitmapDescriptor.fromAssetImage(
-              nightModeEnabled
-                  ? constants.pathIconPlusLight
-                  : constants.pathIconPlusDark,
+              constants.pathIconPlusDark,
             ),
             scale: 3,
           ),
@@ -123,87 +122,122 @@ class _LocationScreenState extends State<LocationScreen> {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                YandexMap(
-                  mapObjects: mapObjects,
-                  nightModeEnabled: nightModeEnabled,
-                  onCameraPositionChanged: (cameraPosition, _, __) async {
-                    final placemark = mapObjects.firstWhere(
-                      (el) => el.mapId == cameraMapObjectId,
-                    ) as Placemark;
-
-                    setState(() {
-                      mapObjects[mapObjects.indexOf(placemark)] =
-                          placemark.copyWith(point: cameraPosition.target);
-                    });
+                BlocBuilder<PlacesMapBloc, PlacesMapState>(
+                  buildWhen: (context, state) {
+                    return state is LoadPlacesMapSuccess;
                   },
-                  onMapCreated: (yandexMapController) async {
-                    final placemark = mapObjects.firstWhere(
-                      (el) => el.mapId == cameraMapObjectId,
-                    ) as Placemark;
+                  builder: (context, state) {
+                    if (state is LoadPlacesMapSuccess) {
+                      mapObjects.clear();
 
-                    controller = yandexMapController;
-                    await controller.setMapStyle(style);
-
-                    await controller.moveCamera(
-                      CameraUpdate.newCameraPosition(
-                        CameraPosition(target: placemark.point, zoom: 14),
-                      ),
-                    );
-                  },
-                ),
-                // GeolocationButton
-                Positioned(
-                  bottom: 26,
-                  right: 16,
-                  child: RawMaterialButton(
-                    onPressed: () async {
-                      final permission =
-                          await LocationService.checkGeoPermission();
-                      if (permission != LocationPermission.denied &&
-                          permission != LocationPermission.deniedForever) {
-                        final location =
-                            await LocationService.getCurrentUserPosition(
-                          timeout: 15,
+                      if (state.userPosition != null) {
+                        mapObjects.add(
+                          Placemark(
+                            mapId: cameraMapObjectId,
+                            point: Point(
+                              latitude: state.userPosition!.latitude,
+                              longitude: state.userPosition!.longitude,
+                            ),
+                            icon: PlacemarkIcon.single(
+                              PlacemarkIconStyle(
+                                image: BitmapDescriptor.fromAssetImage(
+                                  nightModeEnabled
+                                      ? constants.pathIconPlusLight
+                                      : constants.pathIconPlusDark,
+                                ),
+                                scale: 3,
+                              ),
+                            ),
+                            opacity: 1,
+                          ),
                         );
-                        await controller.moveCamera(
+
+                        controller.moveCamera(
                           CameraUpdate.newCameraPosition(
                             CameraPosition(
-                              target: Point(
-                                latitude: location.latitude,
-                                longitude: location.longitude,
-                              ),
+                              target: mapObjects.first.point,
+                              zoom: 14,
                             ),
                           ),
                           animation: animation,
                         );
-                      } else {
-                        const snackBar = SnackBar(
-                          content: Text(
-                            constants.textGeolocationError,
+                      }
+                    }
+
+                    return YandexMap(
+                      mapObjects: mapObjects,
+                      nightModeEnabled: nightModeEnabled,
+                      onMapCreated: (yandexMapController) async {
+                        final placemark = mapObjects
+                            .firstWhere((el) => el.mapId == cameraMapObjectId);
+
+                        controller = yandexMapController;
+                        await controller.setMapStyle(style);
+
+                        await controller.moveCamera(
+                          CameraUpdate.newCameraPosition(
+                            CameraPosition(
+                              target: placemark.point,
+                              zoom: 17,
+                            ),
                           ),
                         );
-
-                        // ignore: use_build_context_synchronously
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    shape: const CircleBorder(),
-                    fillColor: Theme.of(context).cardColor,
-                    constraints:
-                        const BoxConstraints(minWidth: 48, minHeight: 48),
-                    child: SvgPicture.asset(
-                      iconGeolocation,
-                      color: Theme.of(context)
-                          .bottomNavigationBarTheme
-                          .unselectedItemColor,
-                    ),
-                  ),
+                      },
+                    );
+                  },
                 ),
+                GeolocationButton(),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class GeolocationButton extends StatelessWidget {
+  const GeolocationButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<GeolocationBloc, GeolocationState>(
+      builder: (context, state) {
+        return Positioned(
+          bottom: 26,
+          right: 16,
+          child: RawMaterialButton(
+            onPressed: () async {
+              if (state is LoadGeolocationSuccess) {
+                BlocProvider.of<PlacesMapBloc>(context)
+                    .add(const LoadPlacesMapEvent(defineUserLocation: true));
+              } else {
+                const snackBar = SnackBar(
+                  content: Text(
+                    constants.textGeolocationError,
+                  ),
+                );
+
+                // ignore: use_build_context_synchronously
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            },
+            shape: const CircleBorder(),
+            fillColor: Theme.of(context).cardColor,
+            constraints: const BoxConstraints(minWidth: 48, minHeight: 48),
+            child: SvgPicture.asset(
+              iconGeolocation,
+              color: (state is LoadGeolocationSuccess)
+                  ? Theme.of(context)
+                      .bottomNavigationBarTheme
+                      .unselectedItemColor
+                  : myLightSecondaryTwo.withOpacity(0.56),
+            ),
+          ),
+        );
+      },
     );
   }
 }

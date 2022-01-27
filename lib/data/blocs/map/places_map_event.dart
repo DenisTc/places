@@ -7,7 +7,18 @@ class PlacesMapEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadPlacesMapEvent extends PlacesMapEvent {}
+class LoadPlacesMapEvent extends PlacesMapEvent {
+  final bool defaultGeo;
+  final bool defineUserLocation;
+
+  const LoadPlacesMapEvent({
+    this.defaultGeo = false,
+    this.defineUserLocation = false,
+  });
+
+  @override
+  List<Object?> get props => [defaultGeo, defineUserLocation];
+}
 
 class LoadPlaceCardEvent extends PlacesMapEvent {
   final Place place;
@@ -16,5 +27,3 @@ class LoadPlaceCardEvent extends PlacesMapEvent {
 }
 
 class HidePlaceCardEvent extends PlacesMapEvent {}
-
-class LoadCurrentUserLocationEvent extends PlacesMapEvent {}

@@ -29,10 +29,10 @@ class SharedStorage {
           lat: double.parse(userLocation![0]),
           lng: double.parse(userLocation[1]),
           distance: constants.defaultDistanceRange,
-          typeFilter: [],
+          typeFilter: [...constants.selectedCategories],
         );
       } else {
-        return SearchFilter(typeFilter: []);
+        return SearchFilter(typeFilter: [...constants.selectedCategories]);
       }
     }
   }
@@ -48,7 +48,7 @@ class SharedStorage {
 
       return SearchFilter.fromJson(filter);
     } else {
-      return SearchFilter(typeFilter: []);
+      return SearchFilter(typeFilter: constants.selectedCategories);
     }
   }
 

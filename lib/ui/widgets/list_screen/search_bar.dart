@@ -63,39 +63,50 @@ class _SearchBarState extends State<SearchBar> {
             color: myLightSecondaryTwo.withOpacity(0.56),
           ),
         ),
-        suffixIcon: BlocBuilder<GeolocationBloc, GeolocationState>(
-          builder: (context, state) {
-            if (state is LoadGeolocationSuccess) {
-              return Material(
-                color: Colors.transparent,
-                borderRadius: const BorderRadius.all(Radius.circular(50)),
-                clipBehavior: Clip.antiAlias,
-                child: GestureDetector(
-                  child: IconButton(
-                    icon: SvgPicture.asset(
-                      iconOptions,
-                      height: 15,
-                      width: 15,
-                      color: Theme.of(context).colorScheme.primaryVariant,
-                    ),
-                    onPressed: () {
-                      widget.textFieldFocusNode.unfocus();
-                      widget.textFieldFocusNode.canRequestFocus = false;
-                      _navigateGetDataFromFilters(context);
-                      Future.delayed(
-                        const Duration(milliseconds: 100),
-                        () {
-                          widget.textFieldFocusNode.canRequestFocus = true;
-                        },
-                      );
-                    },
+        suffixIcon: Material(
+          color: Colors.transparent,
+          borderRadius: const BorderRadius.all(Radius.circular(50)),
+          child: BlocBuilder<GeolocationBloc, GeolocationState>(
+            builder: (context, state) {
+              var snakBarMessage = constants.textGeolocationLoading;
+
+              if (state is LoadGeolocationSuccess) {
+                return IconButton(
+                  onPressed: () {
+                    _navigateGetDataFromFilters(context);
+                  },
+                  splashRadius: 20,
+                  icon: SvgPicture.asset(
+                    iconOptions,
+                    height: 15,
+                    width: 15,
+                    color: Theme.of(context).colorScheme.primaryVariant,
                   ),
+                );
+              }
+
+              if (state is LoadGeolocationError) {
+                snakBarMessage = constants.textGeolocationError;
+              }
+
+              final snackBar = SnackBar(
+                content: Text(snakBarMessage),
+              );
+
+              return IconButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                },
+                splashRadius: 20,
+                icon: SvgPicture.asset(
+                  iconOptions,
+                  height: 15,
+                  width: 15,
+                  color: myLightSecondaryTwo.withOpacity(0.56),
                 ),
               );
-            }
-
-            return const SizedBox.shrink();
-          },
+            },
+          ),
         ),
         border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(12)),

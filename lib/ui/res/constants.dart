@@ -74,6 +74,7 @@ const String textLocation = 'Местоположение';
 const String textReady = 'Готово';
 const String textDescLocationScreen = 'потяните карту чтобы выбрать правильное местоположение';
 const String textGeolocationError = 'Не удалось определить геолокацию. Проверьте настройки геолокации для данного приложения!';
+const String textGeolocationLoading = 'Страница фильтров недоступна пока выполняется определение геолокации.';
 const String textCameraMapObjectId = 'camera_placemark';
 const String textRequestIsSent = 'Запрос отправляется';
 const String textResponseReceived = 'Получен ответ';
@@ -89,8 +90,8 @@ const String pathIconUserMap = 'res/images/map/user.png';
 const String pathIconPlusLight = 'res/images/map/plus_light.png';
 const String pathIconPlusDark = 'res/images/map/plus_dark.png';
 
-// Location
-const Location defaultLocation = Location(lat: 55.753223,lng: 37.621506);
+// Location (Moscow, Red Square)
+const Location defaultLocation = Location(lat: 55.75387608651473,lng: 37.62069527409506);
 
 // For FiltersScreen
 const RangeValues defaultDistanceRange = RangeValues(0, 10000.0);
@@ -126,43 +127,3 @@ const String lightStyleYandexMap = '''
         }
       ]
     ''';
-const String darkStyleYandexMap = '''
-    [
-        {
-          "stylers": {
-            "hue": "202031",
-            "saturation": 0,
-            "lightness": 0
-          }
-        },
-        {
-          "tags": {
-            "all": ["road"]
-          },
-          "stylers": {
-            "color": "3b3e5b",
-            "saturation": 0.5,
-            "lightness": 0
-          }
-        },
-        {
-          "tags": {
-            "all": ["transit"]
-          },
-          "stylers": {
-            "color": "3b3e5b",
-            "saturation": 0.5,
-            "lightness": 0
-          }
-        },
-        {
-          "tags": {
-            "all": ["water"]
-          },
-          "stylers": {
-            "color": "2d2c45",
-            "lightness": 0
-          }
-        }
-      ]
-      ''';

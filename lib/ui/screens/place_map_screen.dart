@@ -5,16 +5,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:map_launcher/map_launcher.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
+import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 import 'package:places/data/blocs/map/places_map_bloc.dart';
 import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
 import 'package:places/data/extensions/open_map_sheet.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/theme_app.dart';
-import 'package:places/services/location_service.dart';
+import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/screens/place_details_screen.dart';
+import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/list_screen/add_place_button.dart';
 import 'package:places/ui/widgets/list_screen/search_bar.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +38,6 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
 
   bool nightModeEnabled = false;
   int? selectedPlaceId;
-  Placemark? userPmk;
 
   late YandexMapController controller;
 
@@ -45,15 +46,18 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
 
   @override
   void initState() {
-    BlocProvider.of<PlacesMapBloc>(context).add(LoadPlacesMapEvent());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    Position? userPosition;
     nightModeEnabled = Provider.of<ThemeApp>(context).isDark;
     final style = constants.lightStyleYandexMap;
+    const animationCreate = MapAnimation(duration: 2.0);
+    const animationUserPosition =
+        MapAnimation(type: MapAnimationType.linear, duration: 2.0);
 
     return Scaffold(
       appBar: const MapAppBar(),
@@ -73,43 +77,82 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
             Expanded(
               child: Stack(
                 children: [
-                  BlocBuilder<PlacesMapBloc, PlacesMapState>(
-                    buildWhen: (context, state) {
-                      return state is LoadPlacesMapSuccess;
-                    },
+                  BlocBuilder<GeolocationBloc, GeolocationState>(
                     builder: (context, state) {
-                      if (state is LoadPlacesMapSuccess) {
-                        mapObjects.clear();
-                        if (userPmk != null) {
-                          mapObjects.add(userPmk!);
-                        }
-                        for (final place in state.places) {
-                          mapObjects.add(placePlacemark(place));
-                        }
-
-                        return YandexMap(
-                          mapObjects: mapObjects,
-                          nightModeEnabled: nightModeEnabled,
-                          onMapCreated: (yandexMapController) async {
-                            final defaultPosition =
-                                mapObjects.first as Placemark;
-
-                            controller = yandexMapController;
-                            await controller.setMapStyle(style);
-
-                            await controller.moveCamera(
-                              CameraUpdate.newCameraPosition(
-                                CameraPosition(
-                                  target: defaultPosition.point,
-                                  zoom: 14,
-                                ),
-                              ),
-                            );
-                          },
-                        );
+                      if (state is LoadGeolocationSuccess) {
+                        BlocProvider.of<PlacesMapBloc>(context)
+                            .add(const LoadPlacesMapEvent());
                       }
 
-                      return const SizedBox.shrink();
+                      if (state is LoadGeolocationError) {
+                        BlocProvider.of<PlacesMapBloc>(context)
+                            .add(const LoadPlacesMapEvent(defaultGeo: true));
+                      }
+
+                      if (state is LoadGeolocationInProgress) {
+                        return const CustomLoaderWidget();
+                      }
+
+                      return BlocBuilder<PlacesMapBloc, PlacesMapState>(
+                        buildWhen: (context, state) {
+                          return state is LoadPlacesMapSuccess;
+                        },
+                        builder: (context, state) {
+                          if (state is LoadPlacesMapSuccess) {
+                            mapObjects.clear();
+
+                            if (state.userPosition != null) {
+                              userPosition = state.userPosition;
+                            }
+
+                            if (userPosition != null) {
+                              mapObjects.add(userPlacemark(
+                                lat: userPosition!.latitude,
+                                lng: userPosition!.longitude,
+                              ));
+                            }
+
+                            if (state.userPosition != null) {
+                              controller.moveCamera(
+                                CameraUpdate.newCameraPosition(
+                                  CameraPosition(
+                                    target:
+                                        (mapObjects.first as Placemark).point,
+                                    zoom: 14,
+                                  ),
+                                ),
+                                animation: animationUserPosition,
+                              );
+                            }
+
+                            for (final place in state.places) {
+                              mapObjects.add(placePlacemark(place));
+                            }
+
+                            return YandexMap(
+                              mapObjects: mapObjects,
+                              nightModeEnabled: nightModeEnabled,
+                              onMapCreated: (yandexMapController) async {
+                                controller = yandexMapController;
+                                await controller.setMapStyle(style);
+
+                                await controller.moveCamera(
+                                  CameraUpdate.newCameraPosition(
+                                    CameraPosition(
+                                      target:
+                                          (mapObjects.first as Placemark).point,
+                                      zoom: 8,
+                                    ),
+                                  ),
+                                  animation: animationCreate,
+                                );
+                              },
+                            );
+                          }
+
+                          return const SizedBox.shrink();
+                        },
+                      );
                     },
                   ),
                   Positioned(
@@ -121,84 +164,10 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              // RefreshButton
-                              RawMaterialButton(
-                                onPressed: () {
-                                  BlocProvider.of<PlacesMapBloc>(context)
-                                      .add(LoadPlacesMapEvent());
-                                },
-                                shape: const CircleBorder(),
-                                fillColor: Theme.of(context).cardColor,
-                                constraints: const BoxConstraints(
-                                  minWidth: 48,
-                                  minHeight: 48,
-                                ),
-                                child: SvgPicture.asset(
-                                  iconRefresh,
-                                  color: Theme.of(context)
-                                      .bottomNavigationBarTheme
-                                      .unselectedItemColor,
-                                ),
-                              ),
-                              if (selectedPlaceId == null)
-                                const AddPlaceButton()
-                              else
-                                const SizedBox.shrink(),
-                              // GeolocationButton
-                              RawMaterialButton(
-                                onPressed: () async {
-                                  await LocationService.checkGeoPermission();
-                                  final permission = await LocationService
-                                      .checkGeoPermission();
-                                  if (permission != LocationPermission.denied &&
-                                      permission !=
-                                          LocationPermission.deniedForever) {
-                                    final location = await LocationService
-                                        .getCurrentUserPosition(timeout: 15);
-                                    setState(() {
-                                      userPmk = userPlacemark(
-                                        lat: location.latitude,
-                                        lng: location.longitude,
-                                      );
-                                    });
-
-                                    await controller.moveCamera(
-                                      CameraUpdate.newCameraPosition(
-                                        CameraPosition(
-                                          target: Point(
-                                            latitude: location.latitude,
-                                            longitude: location.longitude,
-                                          ),
-                                        ),
-                                      ),
-                                      animation: animation,
-                                    );
-                                  } else {
-                                    const snackBar = SnackBar(
-                                      content: Text(
-                                        constants.textGeolocationError,
-                                      ),
-                                    );
-
-                                    // ignore: use_build_context_synchronously
-                                    ScaffoldMessenger.of(context)
-                                        .showSnackBar(snackBar);
-                                  }
-                                },
-                                shape: const CircleBorder(),
-                                fillColor: Theme.of(context).cardColor,
-                                constraints: const BoxConstraints(
-                                  minWidth: 48,
-                                  minHeight: 48,
-                                ),
-                                child: SvgPicture.asset(
-                                  iconGeolocation,
-                                  color: Theme.of(context)
-                                      .bottomNavigationBarTheme
-                                      .unselectedItemColor,
-                                ),
-                              ),
+                            children: const [
+                              RefreshButton(),
+                              AddPlaceButton(),
+                              GeolocationButton(),
                             ],
                           ),
                           const MapPlaceCard(),
@@ -262,6 +231,72 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
         ),
       ),
       opacity: 1,
+    );
+  }
+}
+
+class RefreshButton extends StatelessWidget {
+  const RefreshButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RawMaterialButton(
+      onPressed: () {
+        BlocProvider.of<PlacesMapBloc>(context).add(const LoadPlacesMapEvent());
+      },
+      shape: const CircleBorder(),
+      fillColor: Theme.of(context).cardColor,
+      constraints: const BoxConstraints(
+        minWidth: 48,
+        minHeight: 48,
+      ),
+      child: SvgPicture.asset(
+        iconRefresh,
+        color: Theme.of(context).bottomNavigationBarTheme.unselectedItemColor,
+      ),
+    );
+  }
+}
+
+class GeolocationButton extends StatelessWidget {
+  const GeolocationButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<GeolocationBloc, GeolocationState>(
+      builder: (context, state) {
+        return RawMaterialButton(
+          onPressed: () async {
+            if (state is LoadGeolocationSuccess) {
+              BlocProvider.of<PlacesMapBloc>(context)
+                  .add(const LoadPlacesMapEvent(defineUserLocation: true));
+            } else {
+              const snackBar = SnackBar(
+                content: Text(
+                  constants.textGeolocationError,
+                ),
+              );
+
+              // ignore: use_build_context_synchronously
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
+          },
+          shape: const CircleBorder(),
+          fillColor: Theme.of(context).cardColor,
+          constraints: const BoxConstraints(
+            minWidth: 48,
+            minHeight: 48,
+          ),
+          child: SvgPicture.asset(
+            iconGeolocation,
+            color: (state is LoadGeolocationSuccess)
+                ? Theme.of(context).bottomNavigationBarTheme.unselectedItemColor
+                : myLightSecondaryTwo.withOpacity(0.56),
+          ),
+        );
+      },
     );
   }
 }

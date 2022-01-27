@@ -152,15 +152,13 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
   void checkFieldFills() {
     setState(
       () {
-        if (_controllerCat.text.isNotEmpty &&
-            _controllerName.text.isNotEmpty &&
-            _controllerLat.text.isNotEmpty &&
-            _controllerLng.text.isNotEmpty &&
-            _controllerDesc.text.isNotEmpty) {
-          _isButtonEnabled = true;
-        } else {
-          _isButtonEnabled = false;
-        }
+        _isButtonEnabled = _controllerCat.text.isNotEmpty &&
+                _controllerName.text.isNotEmpty &&
+                _controllerLat.text.isNotEmpty &&
+                _controllerLng.text.isNotEmpty &&
+                _controllerDesc.text.isNotEmpty
+            ? true
+            : false;
       },
     );
   }

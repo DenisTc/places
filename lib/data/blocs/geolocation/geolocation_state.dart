@@ -9,6 +9,8 @@ abstract class GeolocationState extends Equatable {
 
 class GeolocationInitial extends GeolocationState {}
 
+class LoadGeolocationInProgress extends GeolocationState {}
+
 class LoadGeolocationSuccess extends GeolocationState {
   final Location userLocation;
 
