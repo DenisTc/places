@@ -23,6 +23,7 @@ class SearchResultList extends StatelessWidget {
       itemCount: _filteredPlaces.length,
       itemBuilder: (context, index) {
         final place = _filteredPlaces[index];
+        
         return SearchResult(
           place: place,
           searchString: searchString,

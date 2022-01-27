@@ -12,16 +12,25 @@ class FilterInitial extends FilterState {}
 class LoadFiltersSuccess extends FilterState {
   final SearchFilter filter;
 
-  LoadFiltersSuccess(this.filter);
+  const LoadFiltersSuccess(this.filter);
 
   @override
   List<Object> get props => [filter];
 }
 
+class LoadFiltersError extends FilterState {
+  final String message;
+
+  const LoadFiltersError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class LoadFilterCategoriesSuccess extends FilterState {
   final List<String> categories;
 
-  LoadFilterCategoriesSuccess(this.categories);
+  const LoadFilterCategoriesSuccess(this.categories);
 
   @override
   List<Object> get props => [categories];
@@ -30,7 +39,7 @@ class LoadFilterCategoriesSuccess extends FilterState {
 class LoadFilterCategoriesError extends FilterState {
   final String message;
 
-  LoadFilterCategoriesError(this.message);
+  const LoadFilterCategoriesError(this.message);
 
   @override
   List<Object> get props => [message];
@@ -39,7 +48,7 @@ class LoadFilterCategoriesError extends FilterState {
 class LoadFilterDistanceSuccess extends FilterState {
   final RangeValues _distance;
 
-  LoadFilterDistanceSuccess(this._distance);
+  const LoadFilterDistanceSuccess(this._distance);
 
   @override
   List<Object> get props => [_distance];
@@ -48,7 +57,7 @@ class LoadFilterDistanceSuccess extends FilterState {
 class LoadCountFilteredPlacesSuccess extends FilterState {
   final int count;
 
-  LoadCountFilteredPlacesSuccess(this.count);
+  const LoadCountFilteredPlacesSuccess(this.count);
 
   @override
   List<Object> get props => [count];

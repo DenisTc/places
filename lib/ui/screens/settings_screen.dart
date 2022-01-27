@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:places/domain/theme_app.dart';
-import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
+import 'package:places/ui/screens/onboarding_screen.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {

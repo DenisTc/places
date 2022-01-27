@@ -116,8 +116,8 @@ class __PlaceCardState extends State<PlaceCard> {
                         borderRadius:
                             const BorderRadius.all(Radius.circular(16)),
                         onTap: () {
-                          Navigator.of(context).push(
-                            PageRouteBuilder(
+                          Navigator.of(context).push<dynamic>(
+                            PageRouteBuilder<dynamic>(
                               pageBuilder:
                                   (context, animation, secondaryAnimation) {
                                 return PlaceDetails(
@@ -126,8 +126,12 @@ class __PlaceCardState extends State<PlaceCard> {
                               },
                               transitionDuration:
                                   const Duration(milliseconds: 200),
-                              transitionsBuilder: (context, animation,
-                                  secondaryAnimation, child) {
+                              transitionsBuilder: (
+                                context,
+                                animation,
+                                secondaryAnimation,
+                                child,
+                              ) {
                                 return FadeTransition(
                                   opacity: animation,
                                   child: child,
@@ -300,7 +304,8 @@ class _FavoriteCardTopState extends State<FavoriteCardTop> {
                       child: CircularProgressIndicator(),
                     );
                   },
-                  errorWidget: (context, url, error) {
+                  // ignore: avoid_annotating_with_dynamic
+                  errorWidget: (context, url, dynamic error) {
                     return const ImagePlaceholder();
                   },
                 ),
@@ -363,10 +368,13 @@ class FavoriteCardBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     initializeDateFormatting();
 
-    String date = '';
+    var date = '';
 
     if (visitDate != null) {
-      date = DateFormat('d MMM. y', 'ru_RU').format(visitDate!).toString();
+      date = DateFormat(
+        constants.textDateFormat,
+        constants.textLocale,
+      ).format(visitDate!).toString();
     }
 
     return Expanded(
@@ -379,18 +387,14 @@ class FavoriteCardBottom extends StatelessWidget {
           color: Theme.of(context).primaryColor,
         ),
         width: double.infinity,
-        padding: const EdgeInsets.only(
-          left: 16,
-          right: 16,
-          bottom: 16,
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
             Text(
               place.name,
-              maxLines: 2,
+              maxLines: 1,
               style: Theme.of(context)
                   .textTheme
                   .headline1
@@ -402,21 +406,21 @@ class FavoriteCardBottom extends StatelessWidget {
             if (visitDate != null)
               if (visitDate!.isBefore(DateTime.now()))
                 Text(
-                  constants.textTheGoalIsAchieved + ' ' + date,
+                  '${constants.textTheGoalIsAchieved} $date',
                   maxLines: 2,
                   style: const TextStyle(color: myLightSecondaryTwo),
                   overflow: TextOverflow.ellipsis,
                 )
               else
                 Text(
-                  constants.textScheduledFor + ' ' + date,
+                  '${constants.textScheduledFor} $date',
                   maxLines: 2,
                   style: Theme.of(context).textTheme.bodyText2?.copyWith(
                         color: Theme.of(context).colorScheme.primaryVariant,
                       ),
                   overflow: TextOverflow.ellipsis,
                 ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Expanded(
               child: Text(
                 place.description,
@@ -425,6 +429,7 @@ class FavoriteCardBottom extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
+            const SizedBox(height: 10),
           ],
         ),
       ),

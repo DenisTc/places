@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
+import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
+import 'package:places/data/blocs/map/places_map_bloc.dart';
 import 'package:places/domain/search_filter.dart';
 import 'package:places/ui/res/colors.dart';
+import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/screens/filters_screen.dart';
 import 'package:places/ui/screens/search_screen.dart';
@@ -46,7 +48,7 @@ class _SearchBarState extends State<SearchBar> {
         filled: true,
         contentPadding: EdgeInsets.zero,
         fillColor: Theme.of(context).primaryColor,
-        hintText: 'Поиск',
+        hintText: constants.textSearch,
         hintStyle: const TextStyle(
           color: myLightSecondaryTwo,
           fontSize: 16,
@@ -64,24 +66,46 @@ class _SearchBarState extends State<SearchBar> {
         suffixIcon: Material(
           color: Colors.transparent,
           borderRadius: const BorderRadius.all(Radius.circular(50)),
-          clipBehavior: Clip.antiAlias,
-          child: GestureDetector(
-            child: IconButton(
-              icon: SvgPicture.asset(
-                iconOptions,
-                height: 15,
-                width: 15,
-                color: Theme.of(context).colorScheme.primaryVariant,
-              ),
-              onPressed: () {
-                widget.textFieldFocusNode.unfocus();
-                widget.textFieldFocusNode.canRequestFocus = false;
-                _navigateGetDataFromFilters(context);
-                Future.delayed(const Duration(milliseconds: 100), () {
-                  widget.textFieldFocusNode.canRequestFocus = true;
-                });
-              },
-            ),
+          child: BlocBuilder<GeolocationBloc, GeolocationState>(
+            builder: (context, state) {
+              var snakBarMessage = constants.textGeolocationLoading;
+
+              if (state is LoadGeolocationSuccess) {
+                return IconButton(
+                  onPressed: () {
+                    _navigateGetDataFromFilters(context);
+                  },
+                  splashRadius: 20,
+                  icon: SvgPicture.asset(
+                    iconOptions,
+                    height: 15,
+                    width: 15,
+                    color: Theme.of(context).colorScheme.primaryVariant,
+                  ),
+                );
+              }
+
+              if (state is LoadGeolocationError) {
+                snakBarMessage = constants.textGeolocationError;
+              }
+
+              final snackBar = SnackBar(
+                content: Text(snakBarMessage),
+              );
+
+              return IconButton(
+                onPressed: () {
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                },
+                splashRadius: 20,
+                icon: SvgPicture.asset(
+                  iconOptions,
+                  height: 15,
+                  width: 15,
+                  color: myLightSecondaryTwo.withOpacity(0.56),
+                ),
+              );
+            },
           ),
         ),
         border: const OutlineInputBorder(
@@ -113,14 +137,15 @@ class _SearchBarState extends State<SearchBar> {
   }
 
   Future<void> _navigateGetDataFromFilters(BuildContext context) async {
-    await Navigator.push(
+    await Navigator.push<dynamic>(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<dynamic>(
         builder: (context) => const FiltersScreen(),
       ),
     ).whenComplete(
-      () => BlocProvider.of<FilteredPlacesBloc>(context)
-          .add(LoadFilteredPlaces()),
+      () {
+        BlocProvider.of<PlacesMapBloc>(context).add(LoadPlacesMapEvent());
+      },
     );
   }
 }

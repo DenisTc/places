@@ -3,8 +3,7 @@ import 'package:places/domain/category.dart';
 import 'package:places/domain/location.dart';
 import 'package:places/ui/res/icons.dart';
 
-const Location userLocation = Location(lat: 57.817029184, lng: 28.339347297);
-const RangeValues defaultDistanceRange = RangeValues(0, 10000.0);
+// String constants
 const String textToFavorite = 'В избранное';
 const String textInFavorite = 'В избранном';
 const String textFavorite = 'Избранное';
@@ -68,7 +67,34 @@ const String textTheGoalIsAchieved = 'Цель достигнута';
 const String textIsEmpty = 'Пусто';
 const String textShare = 'Поделиться';
 const String textPassed = 'ПРОЙДЕНО';
+const String textMap = 'Карта';
+const String textErrorGeolocation = '-\nДля того чтобы применить фильтр, необходимо определить ваше местоположение.\n-\nПерейдите в настройки и разрешите данному приложению использовать геолокацию и перезапустите данное приложение.';
+const String textSearch = 'Поиск';
+const String textLocation = 'Местоположение';
+const String textReady = 'Готово';
+const String textDescLocationScreen = 'потяните карту чтобы выбрать правильное местоположение';
+const String textGeolocationError = 'Не удалось определить геолокацию. Проверьте настройки геолокации для данного приложения!';
+const String textGeolocationLoading = 'Страница фильтров недоступна пока выполняется определение геолокации.';
+const String textCameraMapObjectId = 'camera_placemark';
+const String textRequestIsSent = 'Запрос отправляется';
+const String textResponseReceived = 'Получен ответ';
+const String textLocale = 'ru_RU';
+const String textDateFormat = 'd MMM. y';
+
+// Images
 const String pathLoader = 'res/images/loader.png';
+const String pathIconLightDotMap = 'res/images/map/light_dot.png';
+const String pathIconDarkDotMap = 'res/images/map/dark_dot.png';
+const String pathIconSelectedPlaceMap = 'res/images/map/selected_place.png';
+const String pathIconUserMap = 'res/images/map/user.png';
+const String pathIconPlusLight = 'res/images/map/plus_light.png';
+const String pathIconPlusDark = 'res/images/map/plus_dark.png';
+
+// Location (Moscow, Red Square)
+const Location defaultLocation = Location(lat: 55.75387608651473,lng: 37.62069527409506);
+
+// For FiltersScreen
+const RangeValues defaultDistanceRange = RangeValues(0, 10000.0);
 const List<Category> categories = [
     Category(type: 'other', name: 'прочее', icon: iconParticularPlace),
     Category(type: 'monument', name: 'памятник', icon: iconParticularPlace),
@@ -80,7 +106,24 @@ const List<Category> categories = [
     Category(type: 'temple', name: 'храм', icon: iconParticularPlace),
     Category(type: 'restaurant', name: 'ресторан', icon: iconRestourant),
   ];
+
+// For SearchFilter
+const List<String> selectedCategories = ['monument', 'other', 'theatre'];
+
+// Key for Shared preferences plugin
 const String keySPFilter = 'SearchFilter';
 const String keySPTheme = 'Theme';
 const String keySPOnboarding = 'Onboarding';
-const List<String> selectedCategories = ['monument', 'other', 'theatre'];
+const String keySPUserLocation = 'UserLocation';
+
+// Yandex map styles
+const String lightStyleYandexMap = '''
+      [
+        {
+          "stylers": {
+            "saturation": -1,
+            "lightness": 0.1
+          }
+        }
+      ]
+    ''';

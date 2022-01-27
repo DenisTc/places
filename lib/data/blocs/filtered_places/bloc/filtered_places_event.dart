@@ -9,8 +9,9 @@ class FilteredPlacesEvent extends Equatable {
 
 class LoadFilteredPlaces extends FilteredPlacesEvent {
   final SearchFilter? filters;
+  final bool defaultGeo;
 
-  const LoadFilteredPlaces([this.filters]);
+  const LoadFilteredPlaces({this.filters, this.defaultGeo = false});
 
   @override
   List<Object> get props => [];

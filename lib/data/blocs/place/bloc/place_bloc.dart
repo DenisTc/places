@@ -11,16 +11,12 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
   final PlaceInteractor placeInteractor;
 
   PlaceBloc(this.placeInteractor) : super(PlaceInitial()) {
-    on<LoadPlaceDetails>(
-      (event, emit) => _loadPlaceDetails(event, emit),
-    );
+    on<LoadPlaceDetails>(_loadPlaceDetails);
 
-    on<AddNewPlace>(
-      (event, emit) => _addNewPlace(event, emit),
-    );
+    on<AddNewPlace>(_addNewPlace);
   }
 
-  void _loadPlaceDetails(
+  Future<void> _loadPlaceDetails(
     LoadPlaceDetails event,
     Emitter<PlaceState> emit,
   ) async {
@@ -30,28 +26,27 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
       final place = await placeInteractor.getPlaceDetails(id: event.id);
 
       emit(PlaceDetailsLoaded(place));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(PlaceDetailsLoadError(e.toString()));
     }
   }
 
-  void _addNewPlace(
+  Future<void> _addNewPlace(
     AddNewPlace event,
     Emitter<PlaceState> emit,
   ) async {
     emit(AddNewPlaceInProcess());
-    
-    try {
-      List<String> uploadImages = [];
 
-      for (int i = 0; i < event.images.length; i++) {
+    try {
+      final uploadImages = <String>[];
+
+      for (var i = 0; i < event.images.length; i++) {
         final url = await placeInteractor.uploadImage(event.images[i]);
         uploadImages.add(url);
       }
 
       final placeType = Category.getCategoryByName(event.place.placeType).type;
       final newPlace = Place(
-        id: null,
         lat: event.place.lat,
         lng: event.place.lng,
         name: event.place.name,
@@ -63,7 +58,7 @@ class PlaceBloc extends Bloc<PlaceEvent, PlaceState> {
       await placeInteractor.addNewPlace(newPlace);
 
       emit(AddNewPlaceSuccess());
-    } catch (e) {
+    } on Exception catch (e) {
       emit(AddNewPlaceError(e.toString()));
     }
   }

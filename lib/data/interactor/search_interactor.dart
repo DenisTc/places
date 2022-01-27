@@ -11,7 +11,7 @@ class SearchInteractor {
 
   // Get a list of filtered places
   Future<List<Place>> getFiltredPlaces(SearchFilter? filter) async =>
-      await _searchRepository.getFiltredPlaces(filter);
+      _searchRepository.getFiltredPlaces(filter);
 
   // Get a list of all categories
   Future<List<String>> getCategories() async {

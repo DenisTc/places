@@ -14,7 +14,7 @@ class ListVisitedPlacesLoading extends VisitedPlaceState {}
 class ListVisitedPlacesLoaded extends VisitedPlaceState {
   final List<PlaceWithDate> visitedPlaces;
 
-  ListVisitedPlacesLoaded(this.visitedPlaces);
+  const ListVisitedPlacesLoaded(this.visitedPlaces);
 
   @override
   List<Object> get props => [visitedPlaces];

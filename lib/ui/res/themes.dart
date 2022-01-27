@@ -4,9 +4,10 @@ import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/styles.dart';
 
 final lightTheme = ThemeData(
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     systemOverlayStyle: SystemUiOverlayStyle.dark,
   ),
+  cardColor: Colors.white,
   scaffoldBackgroundColor: Colors.white,
   primaryColor: myLightBackground,
   primaryColorLight: myLightSecondaryTwo.withOpacity(0),
@@ -44,6 +45,7 @@ final lightTheme = ThemeData(
 
 final darkTheme = ThemeData(
   iconTheme: const IconThemeData(color: Colors.white),
+  cardColor: myLightSecondaryOne,
   scaffoldBackgroundColor: nightRider,
   primaryColor: myDark,
   errorColor: myDarkRed,

@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:places/database/database.dart';
-import 'package:places/database/tables/favorite_places.dart';
 import 'package:places/database/tables/cahced_places.dart';
+import 'package:places/database/tables/favorite_places.dart';
 import 'package:places/domain/place.dart';
 
 part 'favorite_places_dao.g.dart';
@@ -13,7 +13,7 @@ class FavoritePlacesDao extends DatabaseAccessor<LocalDatabase>
 
   // Read
   Future<List<Place>> loadFavoritePlaces() async {
-    return await (select(favoritePlaces).join(
+    return (select(favoritePlaces).join(
       [
         leftOuterJoin(
           cachedPlaces,
@@ -31,6 +31,8 @@ class FavoritePlacesDao extends DatabaseAccessor<LocalDatabase>
     final rows = await (select(favoritePlaces)
           ..where((tbl) => tbl.placeId.equals(id)))
         .get();
+
+    // ignore: avoid_bool_literals_in_conditional_expressions
     return rows.isNotEmpty ? true : false;
   }
 

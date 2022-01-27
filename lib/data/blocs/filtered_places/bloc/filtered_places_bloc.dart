@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/interactor/search_interactor.dart';
 import 'package:places/data/storage/shared_storage.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/domain/search_filter.dart';
+import 'package:places/services/location_service.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'filtered_places_event.dart';
@@ -16,9 +18,7 @@ class FilteredPlacesBloc
 
   FilteredPlacesBloc(this._searchInteractor)
       : super(LoadFilteredPlacesInProgress()) {
-    on<LoadFilteredPlaces>(
-      (event, emit) => _loadFilteredPlaces(emit),
-    );
+    on<LoadFilteredPlaces>(_loadFilteredPlaces);
 
     on<LoadPlaceCategoriesEvent>(
       (event, emit) => _loadPlaceCategories(emit),
@@ -33,10 +33,22 @@ class FilteredPlacesBloc
 
   // Get the list of filtered places
   Future<void> _loadFilteredPlaces(
+    LoadFilteredPlaces event,
     Emitter<FilteredPlacesState> emit,
   ) async {
     try {
-      final _filter = await _storage.getSearchFilter();
+      var _filter = await _storage.getSavedSearchFilter();
+      final userPosition = await LocationService.getLastKnownUserPosition();
+      _filter
+        ..lat = userPosition.latitude
+        ..lng = userPosition.longitude
+        ..distance = _filter.distance ?? const RangeValues(0.0, 10000.0);
+
+      if (event.defaultGeo) {
+        _filter = SearchFilter(typeFilter: []);
+      }
+
+      await _storage.setSearchFilter(_filter);
 
       final _filteredPlaces = await _searchInteractor.getFiltredPlaces(_filter);
 

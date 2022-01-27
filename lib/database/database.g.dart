@@ -177,7 +177,7 @@ class $CachedPlacesTable extends CachedPlaces
     return $CachedPlacesTable(_db, alias);
   }
 
-  static TypeConverter<Place, String> $converter0 = PlaceConverter();
+  static TypeConverter<Place, String> $converter0 = const PlaceConverter();
 }
 
 class FavoritePlace extends DataClass implements Insertable<FavoritePlace> {

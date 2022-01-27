@@ -14,7 +14,7 @@ class ListFavoritePlacesLoading extends FavoritePlaceState {}
 class ListFavoritePlacesLoaded extends FavoritePlaceState {
   final List<Place> places;
 
-  ListFavoritePlacesLoaded(this.places);
+  const ListFavoritePlacesLoaded(this.places);
 
   @override
   List<Object> get props => [places];

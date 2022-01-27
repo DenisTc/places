@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 import 'package:places/ui/screens/favorites_screen.dart';
 import 'package:places/ui/screens/place_list_screen.dart';
 import 'package:places/ui/screens/place_map_screen.dart';
@@ -14,19 +16,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with TickerProviderStateMixin {
-  static List<Widget> pages = [
+  static List<Widget> pages = const [
     PlaceListScreen(),
     PlaceMapScreen(),
     FavoritesScreen(),
     SettingsScreen(),
   ];
 
-  late TabController _tabController;
-
   int initialIndex = 0;
+
+  late TabController _tabController;
 
   @override
   void initState() {
+    BlocProvider.of<GeolocationBloc>(context).add(LoadGeolocationEvent());
+
     initialIndex = widget.selectedTab ?? 0;
 
     _tabController = TabController(
@@ -38,7 +42,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _tabController.addListener(() {
       onSelectTab(_tabController.index);
     });
-    
+
     super.initState();
   }
 
@@ -59,6 +63,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     return Scaffold(
       body: TabBarView(
         controller: _tabController,
+        physics: const NeverScrollableScrollPhysics(),
         children: pages,
       ),
       bottomNavigationBar: PlaceBottomNavBar(

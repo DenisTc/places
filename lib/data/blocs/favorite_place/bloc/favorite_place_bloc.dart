@@ -11,16 +11,13 @@ class FavoritePlaceBloc extends Bloc<FavoritePlaceEvent, FavoritePlaceState> {
 
   FavoritePlaceBloc(this._placeInteractor) : super(FavoritePlaceInitial()) {
     on<LoadListFavoritePlaces>(
-      (event, emit) => _loadListFavoritePlaces(event, emit),
+      (event, emit) => _loadListFavoritePlaces(emit),
     );
 
-    on<TogglePlaceInFavorites>(
-      (event, emit) => _togglePlaceInFavorites(event, emit),
-    );
+    on<TogglePlaceInFavorites>(_togglePlaceInFavorites);
   }
 
   Future<void> _loadListFavoritePlaces(
-    LoadListFavoritePlaces event,
     Emitter<FavoritePlaceState> emit,
   ) async {
     final favoriteList = await _placeInteractor.getFavoritePlaces();

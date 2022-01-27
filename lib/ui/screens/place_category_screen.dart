@@ -11,7 +11,8 @@ import 'package:places/ui/widgets/network_exception.dart';
 
 class PlaceCategoryScreen extends StatefulWidget {
   final String? placeType;
-  PlaceCategoryScreen([this.placeType]);
+  // ignore: use_key_in_widget_constructors
+  const PlaceCategoryScreen([this.placeType]);
 
   @override
   _SightCategoryScreenState createState() => _SightCategoryScreenState();

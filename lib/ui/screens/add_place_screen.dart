@@ -5,10 +5,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:places/data/blocs/place/bloc/place_bloc.dart';
 import 'package:places/domain/category.dart';
+import 'package:places/domain/location.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
+import 'package:places/ui/screens/location_screen.dart';
 import 'package:places/ui/screens/place_category_screen.dart';
 import 'package:places/ui/widgets/add_place_screen/gallery/place_gallery.dart';
 import 'package:places/ui/widgets/add_place_screen/new_place_app_bar.dart';
@@ -28,12 +30,13 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
   final _controllerDesc = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  List<String> images = [];
+
   FocusNode latFocusNode = FocusNode();
   FocusNode lngFocusNode = FocusNode();
   FocusNode descFocusNode = FocusNode();
   FocusNode nameFocusNode = FocusNode();
   bool _isButtonEnabled = false;
-  List<String> images = [];
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +60,10 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
                   ),
                   const SizedBox(height: 24),
                   PlaceGallery(
-                    addImage: (List<XFile>? xFileList) {
+                    addImage: (xFileList) {
                       addImage(xFileList);
                     },
-                    deleteImage: (String imgUrl) {
+                    deleteImage: (imgUrl) {
                       deleteImage(imgUrl);
                     },
                     images: images,
@@ -102,7 +105,10 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
                       checkFieldFills();
                     },
                   ),
-                  const _SelectOnMapButton(),
+                  _SelectOnMapButton(
+                    controllerLat: _controllerLat,
+                    controllerLng: _controllerLng,
+                  ),
                   const SizedBox(height: 30),
                   const Text(
                     constants.textDescription,
@@ -122,7 +128,6 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
                     formKey: _formKey,
                     images: images,
                     newPlace: Place(
-                      id: null,
                       name: _controllerName.text,
                       lat: _controllerLat.text.isNotEmpty
                           ? double.parse(_controllerLat.text)
@@ -147,15 +152,13 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
   void checkFieldFills() {
     setState(
       () {
-        if (_controllerCat.text.isNotEmpty &&
-            _controllerName.text.isNotEmpty &&
-            _controllerLat.text.isNotEmpty &&
-            _controllerLng.text.isNotEmpty &&
-            _controllerDesc.text.isNotEmpty) {
-          _isButtonEnabled = true;
-        } else {
-          _isButtonEnabled = false;
-        }
+        _isButtonEnabled = _controllerCat.text.isNotEmpty &&
+                _controllerName.text.isNotEmpty &&
+                _controllerLat.text.isNotEmpty &&
+                _controllerLng.text.isNotEmpty &&
+                _controllerDesc.text.isNotEmpty
+            ? true
+            : false;
       },
     );
   }
@@ -174,14 +177,28 @@ class _AddSightScreenState extends State<AddPlaceScreen> {
 }
 
 class _SelectOnMapButton extends StatelessWidget {
+  final TextEditingController controllerLat;
+  final TextEditingController controllerLng;
   const _SelectOnMapButton({
     Key? key,
+    required this.controllerLat,
+    required this.controllerLng,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: () async {
+        final location = await Navigator.push<dynamic>(
+          context,
+          MaterialPageRoute<dynamic>(
+            builder: (context) => const LocationScreen(),
+          ),
+        ) as Location;
+
+        controllerLat.text = location.lat.toString();
+        controllerLng.text = location.lng.toString();
+      },
       child: Text(
         constants.textBtnShowOnMap,
         style: TextStyle(
@@ -707,11 +724,12 @@ class _CreatePlaceButtonState extends State<_CreatePlaceButton> {
   }
 }
 
+// ignore: long-method
 void showAlertDialog(BuildContext context) {
-  showDialog(
+  showDialog<dynamic>(
     barrierDismissible: false,
     context: context,
-    builder: (BuildContext context) {
+    builder: (context) {
       return BlocBuilder<PlaceBloc, PlaceState>(
         builder: (context, state) {
           return AlertDialog(
@@ -719,26 +737,29 @@ void showAlertDialog(BuildContext context) {
             backgroundColor: Theme.of(context).colorScheme.secondary,
             content: Row(
               children: [
-                state is AddNewPlaceInProcess
-                    ? CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.primaryVariant,
-                      )
-                    : SizedBox.shrink(),
-                state is AddNewPlaceError
-                    ? Icon(
-                        Icons.error_outline,
-                        color: Colors.red,
-                        size: 50.0,
-                      )
-                    : SizedBox.shrink(),
-                state is AddNewPlaceSuccess
-                    ? Icon(
-                        Icons.check,
-                        color: Theme.of(context).colorScheme.primaryVariant,
-                        size: 50.0,
-                      )
-                    : SizedBox.shrink(),
-                SizedBox(width: 10),
+                if (state is AddNewPlaceInProcess)
+                  CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primaryVariant,
+                  )
+                else
+                  const SizedBox.shrink(),
+                if (state is AddNewPlaceError)
+                  const Icon(
+                    Icons.error_outline,
+                    color: Colors.red,
+                    size: 50.0,
+                  )
+                else
+                  const SizedBox.shrink(),
+                if (state is AddNewPlaceSuccess)
+                  Icon(
+                    Icons.check,
+                    color: Theme.of(context).colorScheme.primaryVariant,
+                    size: 50.0,
+                  )
+                else
+                  const SizedBox.shrink(),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Container(
                     margin: const EdgeInsets.only(left: 5),
@@ -746,15 +767,17 @@ void showAlertDialog(BuildContext context) {
                       builder: (context) {
                         if (state is AddNewPlaceSuccess) {
                           debugPrint(constants.textAddNewPlaceSuccess);
-                          Future.delayed(const Duration(seconds: 2)).then(
-                            (_) => Navigator.pop(context),
+
+                          Future<dynamic>.delayed(const Duration(seconds: 2))
+                              .then(
+                            (dynamic _) => Navigator.pop(context),
                           );
                         }
                         if (state is AddNewPlaceError) {
                           return Column(
                             children: [
-                              Text(constants.textAddNewPlaceError),
-                              SizedBox(height: 16),
+                              const Text(constants.textAddNewPlaceError),
+                              const SizedBox(height: 16),
                               TextButton(
                                 onPressed: () {
                                   Navigator.pop(context);
@@ -781,6 +804,7 @@ void showAlertDialog(BuildContext context) {
                         if (state is AddNewPlaceSuccess) {
                           return const Text(constants.textAddNewPlaceSuccess);
                         }
+                        // ignore: newline-before-return
                         return const Text(constants.textAddNewPlaceInProcess);
                       },
                     ),

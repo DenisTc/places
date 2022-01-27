@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/blocs/filter/bloc/filter_bloc.dart';
+import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
+import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/network_exception.dart';
 
 class FiltersScreen extends StatefulWidget {
@@ -52,7 +54,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
           ),
         ],
       ),
-      body: Center(
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(
             left: 16,
@@ -60,9 +62,14 @@ class _FiltersScreenState extends State<FiltersScreen> {
           ),
           child: BlocBuilder<FilterBloc, FilterState>(
             buildWhen: (context, state) {
-              return state is LoadFilterCategoriesSuccess;
+              return state is LoadFilterCategoriesSuccess ||
+                  state is LoadFiltersError;
             },
             builder: (context, state) {
+              if (state is LoadFiltersError) {
+                return const NetworkException();
+              }
+
               if (state is LoadFilterCategoriesSuccess) {
                 return SingleChildScrollView(
                   child: Column(
@@ -83,7 +90,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                         categories: state.categories,
                       ),
                       const SizedBox(height: 20),
-                      _Distance(),
+                      const _Distance(),
                       const SizedBox(height: 50),
                       _ShowButton(
                         countPlaces: countPlaces,
@@ -94,11 +101,7 @@ class _FiltersScreenState extends State<FiltersScreen> {
                 );
               }
 
-              if(state is LoadFilterCategoriesError){
-                return const NetworkException();
-              }
-
-              return const SizedBox.shrink();
+              return const CustomLoaderWidget();
             },
           ),
         ),
@@ -121,7 +124,8 @@ class _DistanceState extends State<_Distance> {
     return BlocBuilder<FilterBloc, FilterState>(
       builder: (context, state) {
         if (state is LoadFiltersSuccess) {
-          _rangeValues = state.filter.distance!;
+          _rangeValues =
+              state.filter.distance ?? constants.defaultDistanceRange;
         }
 
         return Column(
@@ -206,11 +210,14 @@ class _ShowButton extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is LoadCountFilteredPlacesSuccess) {
-          int count = state.count;
+          final count = state.count;
+
           return ElevatedButton(
             onPressed: () {
               if (count != 0) {
                 BlocProvider.of<FilterBloc>(context).add(SaveFilterEvent());
+                BlocProvider.of<FilteredPlacesBloc>(context)
+                    .add(const LoadFilteredPlaces());
                 Navigator.pop(context);
               }
             },
@@ -241,7 +248,8 @@ class _ShowButton extends StatelessWidget {
             ),
           );
         } else if (state is LoadCountFilteredPlacesSuccess) {
-          int count = state.count;
+          final count = state.count;
+
           return ElevatedButton(
             onPressed: () {
               if (count != 0) {
@@ -275,6 +283,7 @@ class _ShowButton extends StatelessWidget {
             ),
           );
         }
+
         return ElevatedButton(
           onPressed: () {},
           style: ElevatedButton.styleFrom(
@@ -340,7 +349,7 @@ class _FiltersCategoryState extends State<_FiltersCategory> {
     }
 
     return SizedBox(
-      height: 100,
+      height: 110,
       width: MediaQuery.of(context).size.width,
       child: ListView.builder(
         shrinkWrap: true,
@@ -367,20 +376,22 @@ class _CategoryCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final displayHeight = MediaQuery.of(context).size.height;
-    final double iconSize = displayHeight > 600 ? 90 : 60;
-    final double checkSize = displayHeight > 600 ? 22 : 17;
+    final iconSize = displayHeight > 600.0 ? 90.0 : 60.0;
+    final checkSize = displayHeight > 600.0 ? 22.0 : 17.0;
 
     return InkWell(
-      borderRadius: const BorderRadius.all(Radius.circular(40)),
+      borderRadius: const BorderRadius.all(Radius.circular(100)),
+      highlightColor: Colors.transparent,
       onTap: () {
         BlocProvider.of<FilterBloc>(context)
             .add(ToggleCategoryEvent(category.type.toLowerCase()));
       },
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
-            height: iconSize,
+            height: 90,
             width: iconSize,
             decoration: BoxDecoration(
               color: Theme.of(context)
@@ -406,19 +417,21 @@ class _CategoryCircle extends StatelessWidget {
                     return state is LoadFiltersSuccess;
                   },
                   builder: (context, state) {
-                    if (state is LoadFiltersSuccess) {
-                      if (state.filter.typeFilter!
-                          .contains(category.type.toLowerCase())) {
+                    if (state is LoadFiltersSuccess &&
+                        state.filter.typeFilter != null) {
+                      if (state.filter.typeFilter!.contains(
+                        category.type.toLowerCase(),
+                      )) {
                         return IconCheck(checkSize: checkSize);
                       }
                     }
-                    return SizedBox.shrink();
+
+                    return const SizedBox.shrink();
                   },
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 10),
           Center(
             child: Text(
               capitalize(category.name),
@@ -436,12 +449,12 @@ class _CategoryCircle extends StatelessWidget {
 }
 
 class IconCheck extends StatelessWidget {
+  final double checkSize;
+
   const IconCheck({
     Key? key,
     required this.checkSize,
   }) : super(key: key);
-
-  final double checkSize;
 
   @override
   Widget build(BuildContext context) {

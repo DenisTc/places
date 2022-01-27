@@ -41,8 +41,10 @@ class PlaceRepository {
   // Sending information about the new place to a remote server
   Future<dynamic> addNewPlace(Place place) async {
     final data = place.toJson();
+    // ignore: cascade_invocations
     data.remove('id');
-    final response = await api.client.post(ApiConstants.placeUrl, data: data);
+    final response =
+        await api.client.post<dynamic>(ApiConstants.placeUrl, data: data);
 
     return response;
   }
@@ -82,8 +84,8 @@ class PlaceRepository {
     String subtype = mimeType.split('/')[1];
     String fileName = image.split('/').last;
 
-    FormData formData = FormData.fromMap(
-      {
+    final formData = FormData.fromMap(
+      <String, dynamic>{
         'image': [
           await MultipartFile.fromFile(
             image,
@@ -95,7 +97,7 @@ class PlaceRepository {
     );
 
     final response =
-        await api.client.post(ApiConstants.uploadFile, data: formData);
+        await api.client.post<dynamic>(ApiConstants.uploadFile, data: formData);
 
     return '${ApiConstants.baseUrl}/${response.headers['location']!.first}';
   }

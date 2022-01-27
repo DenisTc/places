@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
 import 'package:places/domain/place.dart';
+import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/visiting_screen/card/place_card_favorite.dart';
 import 'package:places/ui/widgets/visiting_screen/favorites_empty.dart';
 import 'package:places/ui/widgets/visiting_screen/visiting_app_bar.dart';
-import 'package:places/ui/res/constants.dart' as constants;
 
 // Screen for displaying planned and visited places
 class FavoritesScreen extends StatelessWidget {
@@ -116,9 +116,10 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                       childAspectRatio: 1.8,
                     ),
                     itemBuilder: (context, index) {
-                      if (state.visitedPlaces.length > 0) {
+                      if (state.visitedPlaces.isNotEmpty) {
                         final place = state.visitedPlaces[index].place;
                         final visitDate = state.visitedPlaces[index].date;
+
                         return Container(
                           margin: const EdgeInsets.only(bottom: 16),
                           child: FavoritePlaceCard(
@@ -130,7 +131,8 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
                           ),
                         );
                       }
-                      return SizedBox.shrink();
+
+                      return const SizedBox.shrink();
                     },
                   );
                 }
@@ -152,13 +154,16 @@ class __FavoriteTabBarViewState extends State<_FavoriteTabBarView> {
     Place data,
     Place place,
     List<Place> placeList,
-    bool visited,
   ) {
     setState(
       () {
         if (placeList.indexOf(data) != placeList.indexOf(place)) {
-          placeList.remove(data);
-          placeList.insert(placeList.indexOf(place), data);
+          placeList
+            ..remove(data)
+            ..insert(
+              placeList.indexOf(place),
+              data,
+            );
         }
       },
     );

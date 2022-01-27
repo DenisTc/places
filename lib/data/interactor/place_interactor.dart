@@ -9,58 +9,58 @@ class PlaceInteractor {
   PlaceInteractor(this._placeRepository);
 
   // Get a list of all places
-  Future<List<Place>> getPlaces() async => await _placeRepository.getPlaces();
+  Future<List<Place>> getPlaces() async => _placeRepository.getPlaces();
 
   // Get a detailed description of the place
   Future<Place> getPlaceDetails({required int id}) async =>
-      await _placeRepository.getPlaceDetails(id: id);
+      _placeRepository.getPlaceDetails(id: id);
 
   // Get a list of favorite places
   Future<List<Place>> getFavoritePlaces() async =>
-      await _placeRepository.getFavoritePlaces();
+      _placeRepository.getFavoritePlaces();
 
   // Upload image on remote server
   Future<String> uploadImage(String image) async =>
-      await _placeRepository.uploadImage(image);
+      _placeRepository.uploadImage(image);
 
   // Add a new place
   Future<dynamic> addNewPlace(Place place) async =>
-      await _placeRepository.addNewPlace(place);
+      _placeRepository.addNewPlace(place);
 
   // Checking if the place is a favorite
   Future<bool> isFavoritePlace(Place place) async =>
-      await _placeRepository.isFavoritePlace(place);
+      _placeRepository.isFavoritePlace(place);
 
   // Cache
 
   // Add place to device cache
   Future<void> addPlaceToCache(Place place) async =>
-      await _placeRepository.addPlaceToCache(place);
+      _placeRepository.addPlaceToCache(place);
 
   // Delete place from device cache
   Future<void> deletePlaceFromCache(Place place) async =>
-      await _placeRepository.deletePlaceFromCache(place);
+      _placeRepository.deletePlaceFromCache(place);
 
   // Favorites
 
   // Add place to list of favorite places
   Future<void> addPlaceToFavorites(Place place) async =>
-      await _placeRepository.addPlaceToFavorites(place);
+      _placeRepository.addPlaceToFavorites(place);
 
   // Add place from list of favorite places
   Future<void> deletePlaceFromFavorites(Place place) async =>
-      await _placeRepository.deletePlaceFromFavorites(place);
+      _placeRepository.deletePlaceFromFavorites(place);
 
   // Visited
 
   // Get a list of places with a specified date of visit
   Future<List<PlaceWithDate>> getVisitedPlaces() async =>
-      await _placeRepository.getVisitedPlaces();
+      _placeRepository.getVisitedPlaces();
 
   // Add a place to the list with a specified date of visit
   Future<void> addPlaceToVisitedList({
     required int id,
     required DateTime date,
   }) async =>
-      await _placeRepository.addPlaceToVisitedList(id: id, date: date);
+      _placeRepository.addPlaceToVisitedList(id: id, date: date);
 }

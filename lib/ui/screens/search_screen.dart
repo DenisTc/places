@@ -36,7 +36,7 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
     super.initState();
 
     BlocProvider.of<FilteredPlacesBloc>(context)
-        .add(LoadFilteredPlaces(widget.settingsFilter));
+        .add(LoadFilteredPlaces(filters: widget.settingsFilter));
   }
 
   @override
@@ -53,78 +53,78 @@ class _PlaceSearchScreenState extends State<SearchScreen> {
             },
           ),
           const SizedBox(height: 38),
-          (_controllerSearch.text == '')
-              // History
-              ? BlocBuilder<HistoryCubit, HistoryState>(
-                  builder: (context, state) {
-                    if (state is HistoryInitial) {
-                      context.read<HistoryCubit>().loadHistory();
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (state is HistoryLoadedState) {
-                      return Expanded(
-                        child: ListView(
-                          children: [
-                            _HistoryList(
-                              historyList: state.history,
-                              deleteSearchRequest: (name) {
-                                _deleteSearchRequest(name);
-                              },
-                              controllerSearch: _controllerSearch,
-                              notifyParent: () {
-                                setState(() {});
-                              },
-                            ),
-                            state.history.isNotEmpty
-                                ? _ClearHistoryButton(
-                                    historyList: historyList.toList(),
-                                    clearSearchHistory: _clearSearchHistory,
-                                  )
-                                : SizedBox.shrink(),
-                          ],
-                        ),
-                      );
-                    }
+          if (_controllerSearch.text == '')
+            BlocBuilder<HistoryCubit, HistoryState>(
+              builder: (context, state) {
+                if (state is HistoryInitial) {
+                  context.read<HistoryCubit>().loadHistory();
 
-                    return SizedBox.shrink();
-                  },
-                )
-              // Searching results
-              : Expanded(
-                  child: BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
-                    builder: (context, state) {
-                      if (state is LoadFilteredPlacesInProgress) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-
-                      if (state is LoadFilteredPlacesSuccess) {
-                        final searchRes = _filterPlacesByName(
-                          _controllerSearch.text,
-                          state.places,
-                        );
-
-                        if (searchRes.length == 0)
-                          return Center(child: const EmptySearchResult());
-
-                        return SearchResultList(
-                          filteredPlaces: searchRes,
-                          searchString: _controllerSearch.text,
-                          saveSearchRequest: (request) {
-                            _saveSearchRequest(request);
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (state is HistoryLoadedState) {
+                  return Expanded(
+                    child: ListView(
+                      children: [
+                        _HistoryList(
+                          historyList: state.history,
+                          deleteSearchRequest: (name) {
+                            _deleteSearchRequest(name);
                           },
-                        );
-                      }
+                          controllerSearch: _controllerSearch,
+                          notifyParent: () {
+                            setState(() {});
+                          },
+                        ),
+                        if (state.history.isNotEmpty)
+                          _ClearHistoryButton(
+                            historyList: historyList.toList(),
+                            clearSearchHistory: _clearSearchHistory,
+                          )
+                        else
+                          const SizedBox.shrink(),
+                      ],
+                    ),
+                  );
+                }
 
-                      if (state is LoadFilteredPlacesError) {
-                        return const SliverFillRemaining(
-                          child: NetworkException(),
-                        );
-                      }
+                return const SizedBox.shrink();
+              },
+            )
+          else
+            Expanded(
+              child: BlocBuilder<FilteredPlacesBloc, FilteredPlacesState>(
+                builder: (context, state) {
+                  if (state is LoadFilteredPlacesInProgress) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-                      return const EmptySearchResult();
-                    },
-                  ),
-                ),
+                  if (state is LoadFilteredPlacesSuccess) {
+                    final searchRes = _filterPlacesByName(
+                      _controllerSearch.text,
+                      state.places,
+                    );
+
+                    if (searchRes.isEmpty) {
+                      return const Center(child: EmptySearchResult());
+                    }
+
+                    return SearchResultList(
+                      filteredPlaces: searchRes,
+                      searchString: _controllerSearch.text,
+                      saveSearchRequest: (request) {
+                        _saveSearchRequest(request);
+                      },
+                    );
+                  }
+
+                  if (state is LoadFilteredPlacesError) {
+                    return const NetworkException();
+                  }
+
+                  return const EmptySearchResult();
+                },
+              ),
+            ),
         ],
       ),
     );

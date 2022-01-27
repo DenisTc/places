@@ -11,36 +11,36 @@ class HistoryCubit extends Cubit<HistoryState> {
     try {
       final history = await _historyInteractor.loadHistory();
       emit(HistoryLoadedState(history));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(HistoryErrorState(e.toString()));
     }
   }
 
   Future<void> clearSearchHistory() async {
     try {
-      _historyInteractor.clearSearchHistory();
+      await _historyInteractor.clearSearchHistory();
       emit(HistoryLoadedState([]));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(HistoryErrorState(e.toString()));
     }
   }
 
   Future<void> deleteSearchRequest(String request) async {
     try {
-      _historyInteractor.deleteSearchRequest(request);
+      await _historyInteractor.deleteSearchRequest(request);
       final history = await _historyInteractor.loadHistory();
       emit(HistoryLoadedState(history));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(HistoryErrorState(e.toString()));
     }
   }
 
   Future<void> saveSearchRequest(String request) async {
     try {
-      _historyInteractor.saveSearchRequest(request);
+      await _historyInteractor.saveSearchRequest(request);
       final history = await _historyInteractor.loadHistory();
       emit(HistoryLoadedState(history));
-    } catch (e) {
+    } on Exception catch (e) {
       emit(HistoryErrorState(e.toString()));
     }
   }

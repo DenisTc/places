@@ -13,10 +13,7 @@ class CachedPlacesDao extends DatabaseAccessor<LocalDatabase>
   CachedPlacesDao(LocalDatabase db) : super(db);
 
   // Read
-  Future<List<CachedPlace>> getAllCachedPlaces() async {
-    final places = await select(cachedPlaces).get();
-    return places;
-  }
+  Future<List<CachedPlace>> getAllCachedPlaces() => select(cachedPlaces).get();
 
   // Create
   Future<void> addPlaceToCache(Place place) async => into(cachedPlaces)
@@ -29,10 +26,9 @@ class CachedPlacesDao extends DatabaseAccessor<LocalDatabase>
   // The place will be deleted only if it is not in the list of visited places
   Future<void> deletePlaceFromCache(int id) async {
     final isVisited = (await (select(visitedPlaces)
-                  ..where((tbl) => tbl.placeId.equals(id)))
-                .get())
-            .length >
-        0;
+              ..where((tbl) => tbl.placeId.equals(id)))
+            .get())
+        .isNotEmpty;
 
     if (!isVisited) {
       await (delete(cachedPlaces)..where((tbl) => tbl.id.equals(id))).go();

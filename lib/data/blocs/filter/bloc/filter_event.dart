@@ -12,7 +12,7 @@ class LoadFilterEvent extends FilterEvent {}
 class ToggleCategoryEvent extends FilterEvent {
   final String name;
 
-  ToggleCategoryEvent(this.name);
+  const ToggleCategoryEvent(this.name);
 
   @override
   List<Object> get props => [name];
@@ -21,7 +21,7 @@ class ToggleCategoryEvent extends FilterEvent {
 class UpdateFilterDistanceEvent extends FilterEvent {
   final RangeValues distance;
 
-  UpdateFilterDistanceEvent(this.distance);
+  const UpdateFilterDistanceEvent(this.distance);
 
   @override
   List<Object> get props => [distance];

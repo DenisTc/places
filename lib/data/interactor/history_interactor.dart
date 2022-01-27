@@ -5,15 +5,14 @@ class HistoryInteractor {
 
   HistoryInteractor(this._historyRepository);
 
-  Future<List<String>> loadHistory() async =>
-      await _historyRepository.loadHistory();
+  Future<List<String>> loadHistory() async => _historyRepository.loadHistory();
 
   Future<void> saveSearchRequest(String request) async =>
-      await _historyRepository.saveSearchRequest(request);
+      _historyRepository.saveSearchRequest(request);
 
   Future<void> deleteSearchRequest(String request) async =>
-      await _historyRepository.deleteSearchRequest(request);
+      _historyRepository.deleteSearchRequest(request);
 
   Future<void> clearSearchHistory() async =>
-      await _historyRepository.clearSearchHistory();
+      _historyRepository.clearSearchHistory();
 }
