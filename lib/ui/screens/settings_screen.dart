@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:places/domain/theme_app.dart';
+import 'package:places/data/cubits/theme/theme_cubit.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/screens/onboarding_screen.dart';
-import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -30,8 +30,8 @@ class SettingsScreen extends StatelessWidget {
                         ),
                   ),
                 ),
-                Consumer<ThemeApp>(
-                  builder: (context, theme, child) {
+                BlocBuilder<ThemeCubit, ThemeState>(
+                  builder: (context, state) {
                     return FlutterSwitch(
                       height: 32.0,
                       width: 56.0,
@@ -40,9 +40,9 @@ class SettingsScreen extends StatelessWidget {
                       borderRadius: 16.0,
                       inactiveColor: myInactiveBlack.withOpacity(0.56),
                       activeColor: myDarkGreen,
-                      value: theme.isDark,
+                      value: state.themeStatus,
                       onToggle: (value) {
-                        Provider.of<ThemeApp>(context, listen: false).switchTheme();
+                        BlocProvider.of<ThemeCubit>(context).switchTheme();
                       },
                     );
                   },

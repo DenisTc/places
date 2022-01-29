@@ -20,12 +20,10 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final SharedStorage _storage = SharedStorage();
   double currentPage = 0;
-  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
     _storage.setOnboardingStatus();
   }
 
@@ -37,13 +35,14 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         currentPage: currentPage,
         fromSettings: widget.fromSettings,
       ),
-      body: OnboardingScreens(
-        pageController: _pageController,
-        setCurrentPage: (page) {
-          setCurrentPage(page);
-        },
-        currentPage: currentPage,
-        fromSettings: widget.fromSettings,
+      body: SafeArea(
+        child: OnboardingScreens(
+          setCurrentPage: (page) {
+            setCurrentPage(page);
+          },
+          currentPage: currentPage,
+          fromSettings: widget.fromSettings,
+        ),
       ),
     );
   }
@@ -56,13 +55,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 }
 
 class OnboardingScreens extends StatefulWidget {
-  final PageController pageController;
   final Function(double page) setCurrentPage;
   final double currentPage;
   final bool fromSettings;
 
   const OnboardingScreens({
-    required this.pageController,
     required this.setCurrentPage,
     required this.currentPage,
     required this.fromSettings,
@@ -76,38 +73,45 @@ class OnboardingScreens extends StatefulWidget {
 class _OnboardingScreensState extends State<OnboardingScreens> {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      alignment: AlignmentDirectional.center,
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        PageView(
-          onPageChanged: (page) {
-            setState(() {
-              widget.setCurrentPage(page.toDouble());
-            });
-          },
-          controller: widget.pageController,
-          children: const [
-            Screen(
-              icon: iconPointer,
-              title: constants.textOnboardingScreenFirstTitle,
-              description: constants.textOnboardingScreenFirstDesc,
-            ),
-            Screen(
-              icon: iconBackpack,
-              title: constants.textOnboardingScreenSecondTitle,
-              description: constants.textOnboardingScreenSecondDesc,
-            ),
-            Screen(
-              icon: iconHandTouch,
-              title: constants.textOnboardingScreenThirdTitle,
-              description: constants.textOnboardingScreenThirdDesc,
-            ),
-          ],
+        Expanded(
+          child: PageView(
+            onPageChanged: (page) {
+              setState(() {
+                widget.setCurrentPage(page.toDouble());
+              });
+            },
+            children: const [
+              Screen(
+                icon: iconPointer,
+                title: constants.textOnboardingScreenFirstTitle,
+                description: constants.textOnboardingScreenFirstDesc,
+              ),
+              Screen(
+                icon: iconBackpack,
+                title: constants.textOnboardingScreenSecondTitle,
+                description: constants.textOnboardingScreenSecondDesc,
+              ),
+              Screen(
+                icon: iconHandTouch,
+                title: constants.textOnboardingScreenThirdTitle,
+                description: constants.textOnboardingScreenThirdDesc,
+              ),
+            ],
+          ),
         ),
         PageIndicator(
           currentPage: widget.currentPage,
-          fromSettings: widget.fromSettings,
         ),
+        SizedBox(height: 32),
+        if (widget.currentPage == 2)
+          HomeButton(fromSettings: widget.fromSettings)
+        else
+          SizedBox(height: 48),
+        SizedBox(height: 16),
       ],
     );
   }
@@ -242,45 +246,38 @@ class _ScreenState extends State<Screen> with SingleTickerProviderStateMixin {
 
 class PageIndicator extends StatelessWidget {
   final double currentPage;
-  final bool fromSettings;
   const PageIndicator({
     required this.currentPage,
-    required this.fromSettings,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 90,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              for (int i = 0; i < 3; i++)
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(5),
-                      width: i == currentPage ? 24 : 8,
-                      height: 8,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: i == currentPage
-                            ? Theme.of(context).colorScheme.primaryVariant
-                            : myLightSecondaryTwo.withOpacity(0.56),
-                      ),
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            for (int i = 0; i < 3; i++)
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    width: i == currentPage ? 24 : 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: i == currentPage
+                          ? Theme.of(context).colorScheme.primaryVariant
+                          : myLightSecondaryTwo.withOpacity(0.56),
                     ),
-                    const SizedBox(width: 8),
-                  ],
-                ),
-            ],
-          ),
-          SizedBox(height: (currentPage == 2) ? 32 : 80),
-          if (currentPage == 2) HomeButton(fromSettings: fromSettings),
-        ],
-      ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -296,29 +293,32 @@ class HomeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final index = fromSettings ? 3 : 0;
 
-    return ElevatedButton(
-      onPressed: () {
-        Navigator.pushReplacement<void, void>(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Home(selectedTab: index),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.pushReplacement<void, void>(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Home(selectedTab: index),
+            ),
+          );
+        },
+        style: ElevatedButton.styleFrom(
+          primary: Theme.of(context).colorScheme.primaryVariant,
+          fixedSize: const Size(328, 48),
+          elevation: 0.0,
+          shadowColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).colorScheme.primaryVariant,
-        fixedSize: const Size(328, 48),
-        elevation: 0.0,
-        shadowColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
         ),
-      ),
-      child: const Text(
-        constants.textBtnStart,
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.w700,
+        child: const Text(
+          constants.textBtnStart,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w700,
+          ),
         ),
       ),
     );

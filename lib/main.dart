@@ -9,6 +9,7 @@ import 'package:places/data/blocs/map/places_map_bloc.dart';
 import 'package:places/data/blocs/place/bloc/place_bloc.dart';
 import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
 import 'package:places/data/cubits/history/history_cubit.dart';
+import 'package:places/data/cubits/theme/theme_cubit.dart';
 import 'package:places/data/interactor/history_interactor.dart';
 import 'package:places/data/interactor/place_interactor.dart';
 import 'package:places/data/interactor/search_interactor.dart';
@@ -17,7 +18,6 @@ import 'package:places/data/repository/place_repository.dart';
 import 'package:places/data/repository/search_repository.dart';
 import 'package:places/data/storage/shared_storage.dart';
 import 'package:places/database/database.dart';
-import 'package:places/domain/theme_app.dart';
 import 'package:places/ui/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -28,6 +28,7 @@ void main() {
 class App extends StatelessWidget {
   final api = ApiClient();
   final localDb = LocalDatabase();
+  final storage = SharedStorage();
 
   App({Key? key}) : super(key: key);
 
@@ -82,27 +83,27 @@ class App extends StatelessWidget {
             searchInteractor: SearchInteractor(
               SearchRepository(api),
             ),
-            storage: SharedStorage(),
+            storage: storage,
           ),
         ),
         BlocProvider<GeolocationBloc>(
           create: (context) => GeolocationBloc(
-            storage: SharedStorage(),
+            storage: storage,
           ),
         ),
-      ],
-      child: ChangeNotifierProvider<ThemeApp>(
-        create: (_) => ThemeApp(),
-        child: Consumer<ThemeApp>(
-          builder: (context, value, child) {
-            return MaterialApp(
-              title: 'Places',
-              theme: value.getTheme,
-              debugShowCheckedModeBanner: false,
-              home: const SplashScreen(),
-            );
-          },
+        BlocProvider<ThemeCubit>(
+          create: (context) => ThemeCubit(storage),
         ),
+      ],
+      child: BlocBuilder<ThemeCubit, ThemeState>(
+        builder: (context, state) {
+          return MaterialApp(
+            title: 'Places',
+            theme: state.theme,
+            debugShowCheckedModeBanner: false,
+            home: const SplashScreen(),
+          );
+        },
       ),
     );
   }
