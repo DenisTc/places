@@ -1,9 +1,8 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter/material.dart';
 import 'package:flutter/material.dart'
     hide RefreshIndicator, RefreshIndicatorState;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
+import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/list_screen/add_place_button.dart';
@@ -47,7 +46,21 @@ class _PlaceListScreenState extends State<PlaceListScreen>
                 SliverFillRemaining(
                   child: SmartRefresher(
                     controller: _refreshController,
-                    header: GifHeader1(),
+                    header: CustomHeader(
+                      refreshStyle: RefreshStyle.Behind,
+                      onOffsetChange: (offset) {},
+                      builder: (c, m) {
+                        if (m == RefreshStatus.idle) {
+                          return Image(
+                            image: AssetImage(constants.pathLoader),
+                            height: 30,
+                            width: 30,
+                          );
+                        }
+
+                        return CustomLoaderWidget();
+                      },
+                    ),
                     onRefresh: _onRefresh,
                     child: CustomScrollView(
                       slivers: [
@@ -120,19 +133,4 @@ class _PlaceListScreenState extends State<PlaceListScreen>
 
   @override
   bool get wantKeepAlive => true;
-}
-
-class GifHeader1 extends RefreshIndicator {
-  @override
-  State<StatefulWidget> createState() {
-    return GifHeader1State();
-  }
-}
-
-class GifHeader1State extends RefreshIndicatorState<GifHeader1>
-    with SingleTickerProviderStateMixin {
-  @override
-  Widget buildContent(BuildContext context, RefreshStatus mode) {
-    return CustomLoaderWidget();
-  }
 }
