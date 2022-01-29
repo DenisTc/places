@@ -8,10 +8,10 @@ import 'package:places/data/blocs/favorite_place/bloc/favorite_place_bloc.dart';
 import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 import 'package:places/data/blocs/map/places_map_bloc.dart';
 import 'package:places/data/blocs/visited_place/visited_place_bloc.dart';
+import 'package:places/data/cubits/theme/theme_cubit.dart';
 import 'package:places/data/extensions/open_map_sheet.dart';
 import 'package:places/domain/category.dart';
 import 'package:places/domain/place.dart';
-import 'package:places/domain/theme_app.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
@@ -19,7 +19,6 @@ import 'package:places/ui/screens/place_details_screen.dart';
 import 'package:places/ui/widgets/custom_loader_widget.dart';
 import 'package:places/ui/widgets/list_screen/add_place_button.dart';
 import 'package:places/ui/widgets/list_screen/search_bar.dart';
-import 'package:provider/provider.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 
 class PlaceMapScreen extends StatefulWidget {
@@ -53,7 +52,7 @@ class _PlaceMapScreenState extends State<PlaceMapScreen>
   Widget build(BuildContext context) {
     super.build(context);
     Position? userPosition;
-    nightModeEnabled = Provider.of<ThemeApp>(context).isDark;
+    nightModeEnabled = context.read<ThemeCubit>().themeStatus;
     final style = constants.lightStyleYandexMap;
     const animationCreate = MapAnimation(duration: 2.0);
     const animationUserPosition =

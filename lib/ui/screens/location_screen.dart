@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:places/data/blocs/map/places_map_bloc.dart';
+import 'package:places/data/cubits/theme/theme_cubit.dart';
 import 'package:places/domain/location.dart';
-import 'package:places/domain/theme_app.dart';
 import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
-import 'package:provider/provider.dart';
 import 'package:yandex_mapkit/yandex_mapkit.dart';
 import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 
@@ -32,9 +31,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // BlocProvider.of<PlacesMapBloc>(context)
-    //     .add(const LoadPlacesMapEvent(defineUserLocation: true));
-    nightModeEnabled = Provider.of<ThemeApp>(context).isDark;
+    nightModeEnabled = context.read<ThemeCubit>().themeStatus;
     final style = constants.lightStyleYandexMap;
     final mapObjects = <Placemark>[
       Placemark(
