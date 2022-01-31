@@ -2,6 +2,7 @@ import 'package:flutter/material.dart'
     hide RefreshIndicator, RefreshIndicatorState;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:places/data/blocs/filtered_places/bloc/filtered_places_bloc.dart';
+import 'package:places/environment/environment.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/data/blocs/geolocation/geolocation_bloc.dart';
 import 'package:places/ui/widgets/custom_loader_widget.dart';
@@ -20,6 +21,8 @@ class PlaceListScreen extends StatefulWidget {
 
 class _PlaceListScreenState extends State<PlaceListScreen>
     with AutomaticKeepAliveClientMixin {
+  final String envString = Environment.instance().buildConfig.envString ?? '';
+
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
 
@@ -125,6 +128,14 @@ class _PlaceListScreenState extends State<PlaceListScreen>
               bottom: 16,
               child: AddPlaceButton(),
             ),
+            if (envString.isNotEmpty)
+              Text(
+                envString,
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
           ],
         ),
       ),
