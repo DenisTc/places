@@ -14,6 +14,8 @@ import 'package:places/ui/res/colors.dart';
 import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/screens/place_details_screen.dart';
+import 'package:places/utils/share_place_func.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PlaceCard extends StatefulWidget {
   final GlobalKey globalKey;
@@ -156,51 +158,9 @@ class __PlaceCardState extends State<PlaceCard> {
                               onPressed: () async {
                                 if (widget.visitDate == null ||
                                     widget.visitDate!.isAfter(DateTime.now())) {
-                                  if (Platform.isAndroid) {
-                                    await showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime.now(),
-                                      lastDate: DateTime(2101),
-                                      builder: (context, child) {
-                                        return Theme(
-                                          data: ThemeData.light().copyWith(
-                                            colorScheme: ColorScheme.light(
-                                              primary: Theme.of(context)
-                                                  .colorScheme
-                                                  .primaryVariant,
-                                            ),
-                                          ),
-                                          child: child!,
-                                        );
-                                      },
-                                    );
-                                  } else {
-                                    await showModalBottomSheet<void>(
-                                      context: context,
-                                      builder: (builder) {
-                                        return PlaceCupertinoDatePicker(
-                                          initialDateTime: widget.visitDate,
-                                          onValueChanged: (newDate) {
-                                            date = newDate;
-                                          },
-                                        );
-                                      },
-                                    ).whenComplete(
-                                      () {
-                                        BlocProvider.of<VisitedPlaceBloc>(
-                                          context,
-                                        ).add(
-                                          AddPlaceToVisitedList(
-                                            place: widget.place,
-                                            date: date ?? DateTime.now(),
-                                          ),
-                                        );
-
-                                        setState(() {});
-                                      },
-                                    );
-                                  }
+                                  scheduleVisit(date);
+                                } else {
+                                  sharePlace(widget.place);
                                 }
                               },
                               icon: SvgPicture.asset(
@@ -241,7 +201,6 @@ class __PlaceCardState extends State<PlaceCard> {
                                 ),
                               ),
                             ),
-                          // : ,
                         ],
                       ),
                     ),
@@ -254,6 +213,54 @@ class __PlaceCardState extends State<PlaceCard> {
       ),
     );
   }
+
+  Future<void> scheduleVisit(date) async {
+    if (Platform.isAndroid) {
+      await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now(),
+        lastDate: DateTime(2101),
+        builder: (context, child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light(
+                primary: Theme.of(context).colorScheme.primaryVariant,
+              ),
+            ),
+            child: child!,
+          );
+        },
+      );
+    } else {
+      await showModalBottomSheet<void>(
+        context: context,
+        builder: (builder) {
+          return PlaceCupertinoDatePicker(
+            initialDateTime: widget.visitDate,
+            onValueChanged: (newDate) {
+              date = newDate;
+            },
+          );
+        },
+      ).whenComplete(
+        () {
+          BlocProvider.of<VisitedPlaceBloc>(
+            context,
+          ).add(
+            AddPlaceToVisitedList(
+              place: widget.place,
+              date: date ?? DateTime.now(),
+            ),
+          );
+
+          setState(() {});
+        },
+      );
+    }
+  }
+
+  
 }
 
 class FavoriteCardTop extends StatefulWidget {

@@ -16,6 +16,7 @@ import 'package:places/ui/res/constants.dart' as constants;
 import 'package:places/ui/res/icons.dart';
 import 'package:places/ui/res/styles.dart';
 import 'package:places/ui/widgets/place_details_screen/photo_view.dart';
+import 'package:places/utils/share_place_func.dart';
 
 /// A screen with a detailed description of the place
 class PlaceDetails extends StatelessWidget {
@@ -308,7 +309,9 @@ class _FunctionButtonsState extends State<_FunctionButtons> {
               if (date != null) {
                 if (date!.isBefore(DateTime.now())) {
                   return TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      sharePlace(widget.place);
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
