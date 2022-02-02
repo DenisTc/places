@@ -26,7 +26,7 @@ flutter run
   </tr>
   <tr>
     <td><video src="https://user-images.githubusercontent.com/16900043/149889318-f6d3d2ce-18bc-42ec-a461-8a7a4d2cac79.mp4"></video></td>
-    <td><img src="https://user-images.githubusercontent.com/16900043/149889510-f8292e6c-cf63-4053-b29c-b1af6e58a0a0.png" width=270></td>
+    <td><video src="https://user-images.githubusercontent.com/16900043/152118683-0d8a49c4-e4c1-44ce-879d-cae82864512d.mp4"></video></td>
   </tr>
   <tr> 
       <td>Location Description screen Part 1</td> 
